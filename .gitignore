@@ -1,1 +1,18 @@
- 
+# Hugo
+public/
+.hugo_build.lock
+
+# Hugo module cache (local)
+_vendor/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+*.swp
+
+# Environment
+.env
