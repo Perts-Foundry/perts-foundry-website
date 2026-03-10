@@ -1,0 +1,27 @@
+baseURL = "https://pertsfoundry.com/"
+title = "Perts Foundry"
+languageCode = "en-us"
+defaultContentLanguage = "en"
+
+enableRobotsTXT = true
+enableGitInfo = true
+
+[build]
+  writeStats = true
+
+[permalinks]
+  [permalinks.page]
+    blog = "/blog/:slug/"
+    services = "/services/:slug/"
+    case-studies = "/case-studies/:slug/"
+  [permalinks.section]
+    blog = "/blog/"
+    services = "/services/"
+    case-studies = "/case-studies/"
+
+[sitemap]
+  changefreq = ""
+  priority = -1
+
+[outputs]
+  home = ["HTML", "RSS", "JSON"]
