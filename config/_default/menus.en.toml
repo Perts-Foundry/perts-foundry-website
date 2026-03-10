@@ -1,0 +1,24 @@
+[[main]]
+  name = "Services"
+  pageRef = "services"
+  weight = 10
+
+[[main]]
+  name = "Case Studies"
+  pageRef = "case-studies"
+  weight = 20
+
+[[main]]
+  name = "Blog"
+  pageRef = "blog"
+  weight = 30
+
+[[main]]
+  name = "About"
+  pageRef = "about"
+  weight = 40
+
+[[main]]
+  name = "Contact"
+  pageRef = "contact"
+  weight = 50

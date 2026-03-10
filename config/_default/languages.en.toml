@@ -1,0 +1,13 @@
+languageCode = "en"
+languageName = "English"
+weight = 1
+title = "Perts Foundry"
+
+[params]
+  displayName = "EN"
+  isoCode = "en"
+
+[params.author]
+  name = "Perts Foundry"
+  email = "contact@pertsfoundry.com"
+  links = []
