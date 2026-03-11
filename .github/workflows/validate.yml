@@ -206,9 +206,11 @@ jobs:
               ? '> [!NOTE]\n> **All checks passed** — this PR is ready for review.'
               : `> [!CAUTION]\n> **${fail} check(s) failed** — please review the details below.`;
 
-            const icon = (code, skipCondition) => {
-              if (skipCondition) return '\`skipped\`';
-              return code === '0' ? '\`passed\`' : '\`failed\`';
+            const status = (code, skipCondition) => {
+              if (skipCondition) return '$\\color{gray}{\\textsf{skipped}}$';
+              return code === '0'
+                ? '$\\color{green}{\\textsf{passed}}$'
+                : '$\\color{red}{\\textsf{failed}}$';
             };
 
             const hugoBuild = '${{ steps.hugo-build.outputs.exit_code }}';
@@ -231,28 +233,28 @@ jobs:
               '',
               '### Build & Output',
               '',
-              `| Check | Description | Result |`,
-              `|:------|:------------|:------:|`,
-              `| **Hugo Build** | Site compiles without errors | ${icon(hugoBuild)} |`,
-              `| **htmltest** | Internal links and images are valid | ${icon(htmltest, htmlSkipped)} |`,
+              `| Check | Tool | Result |`,
+              `|:------|:-----|:------:|`,
+              `| **Site Compilation** | hugo | ${status(hugoBuild)} |`,
+              `| **Link & Image Validation** | htmltest | ${status(htmltest, htmlSkipped)} |`,
               '',
               '### Code Quality',
               '',
-              `| Check | Description | Result |`,
-              `|:------|:------------|:------:|`,
-              `| **markdownlint** | Content follows markdown conventions | ${icon(mdlint)} |`,
-              `| **Prettier** | Files are consistently formatted | ${icon(prettier)} |`,
-              `| **actionlint** | Workflow files are valid | ${icon(actionlint)} |`,
+              `| Check | Tool | Result |`,
+              `|:------|:-----|:------:|`,
+              `| **Markdown Style** | markdownlint | ${status(mdlint)} |`,
+              `| **Code Formatting** | prettier | ${status(prettier)} |`,
+              `| **Workflow Validation** | actionlint | ${status(actionlint)} |`,
               '',
               '### Security',
               '',
-              `| Check | Description | Result |`,
-              `|:------|:------------|:------:|`,
-              `| **Gitleaks** | No secrets detected in source | ${icon(gitleaks)} |`,
+              `| Check | Tool | Result |`,
+              `|:------|:-----|:------:|`,
+              `| **Secret Detection** | gitleaks | ${status(gitleaks)} |`,
               '',
               '---',
               '',
-              '<details><summary><strong>Hugo Build</strong> — site compilation output</summary>',
+              '<details><summary><strong>Site Compilation</strong> <code>hugo</code></summary>',
               '',
               '```',
               `${{ steps.hugo-build.outputs.output }}`,
@@ -260,7 +262,7 @@ jobs:
               '',
               '</details>',
               '',
-              `<details><summary><strong>htmltest</strong> — link and image validation</summary>`,
+              `<details><summary><strong>Link & Image Validation</strong> <code>htmltest</code></summary>`,
               '',
               '```',
               `${{ steps.htmltest.outputs.output || 'Skipped (build failed)' }}`,
@@ -268,7 +270,7 @@ jobs:
               '',
               '</details>',
               '',
-              '<details><summary><strong>Gitleaks</strong> — secret detection scan</summary>',
+              '<details><summary><strong>Secret Detection</strong> <code>gitleaks</code></summary>',
               '',
               '```',
               `${{ steps.gitleaks.outputs.output || 'No issues found' }}`,
@@ -276,7 +278,7 @@ jobs:
               '',
               '</details>',
               '',
-              '<details><summary><strong>markdownlint</strong> — markdown style checks</summary>',
+              '<details><summary><strong>Markdown Style</strong> <code>markdownlint</code></summary>',
               '',
               '```',
               `${{ steps.markdownlint.outputs.output || 'No issues found' }}`,
@@ -284,7 +286,7 @@ jobs:
               '',
               '</details>',
               '',
-              '<details><summary><strong>Prettier</strong> — formatting checks</summary>',
+              '<details><summary><strong>Code Formatting</strong> <code>prettier</code></summary>',
               '',
               '```',
               `${{ steps.prettier.outputs.output || 'No issues found' }}`,
@@ -292,7 +294,7 @@ jobs:
               '',
               '</details>',
               '',
-              '<details><summary><strong>actionlint</strong> — workflow validation</summary>',
+              '<details><summary><strong>Workflow Validation</strong> <code>actionlint</code></summary>',
               '',
               '```',
               `${{ steps.actionlint.outputs.output || 'No issues found' }}`,
