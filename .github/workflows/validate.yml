@@ -9,6 +9,9 @@ permissions:
   contents: read
   pull-requests: write
 
+env:
+  NO_COLOR: "1"
+
 jobs:
   validate:
     runs-on: ubuntu-latest
@@ -53,7 +56,7 @@ jobs:
           echo "exit_code=$EXIT_CODE" >> "$GITHUB_OUTPUT"
           {
             echo "output<<GHEOF"
-            echo "$OUTPUT" | tail -20
+            echo "$OUTPUT" | sed 's/\x1b\[[0-9;]*m//g' | tail -20
             echo "GHEOF"
           } >> "$GITHUB_OUTPUT"
         env:
@@ -77,18 +80,29 @@ jobs:
           echo "exit_code=$EXIT_CODE" >> "$GITHUB_OUTPUT"
           {
             echo "output<<GHEOF"
-            echo "$OUTPUT" | tail -30
+            echo "$OUTPUT" | sed 's/\x1b\[[0-9;]*m//g' | tail -30
             echo "GHEOF"
           } >> "$GITHUB_OUTPUT"
 
       # ── Gitleaks ────────────────────────────────────────────────
-      - name: Gitleaks
+      - name: Install Gitleaks
+        run: |
+          curl -fsSL https://github.com/gitleaks/gitleaks/releases/download/v8.24.3/gitleaks_8.24.3_linux_x64.tar.gz \
+            | tar -xz -C /usr/local/bin gitleaks
+
+      - name: Run Gitleaks
         id: gitleaks
-        uses: gitleaks/gitleaks-action@v2
-        continue-on-error: true
-        env:
-          GITLEAKS_LICENSE: ${{ secrets.GITLEAKS_LICENSE }}
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set +e
+          OUTPUT=$(gitleaks git --log-opts="--all" --no-banner 2>&1)
+          EXIT_CODE=$?
+          echo "$OUTPUT"
+          echo "exit_code=$EXIT_CODE" >> "$GITHUB_OUTPUT"
+          {
+            echo "output<<GHEOF"
+            echo "$OUTPUT" | sed 's/\x1b\[[0-9;]*m//g' | tail -30
+            echo "GHEOF"
+          } >> "$GITHUB_OUTPUT"
 
       # ── markdownlint ────────────────────────────────────────────
       - name: Run markdownlint
@@ -99,7 +113,7 @@ jobs:
           echo "exit_code=$EXIT_CODE" >> "$GITHUB_OUTPUT"
           {
             echo "output<<GHEOF"
-            tail -30 /tmp/mdlint.txt
+            sed 's/\x1b\[[0-9;]*m//g' /tmp/mdlint.txt | tail -30
             echo "GHEOF"
           } >> "$GITHUB_OUTPUT"
 
@@ -107,14 +121,14 @@ jobs:
       - name: Run Prettier check
         id: prettier
         run: |
-          npx --yes prettier --check \
+          npx --yes prettier --no-color --check \
             "content/**/*.md" \
             ".github/**/*.yml" 2>&1 | tee /tmp/prettier.txt || true
           EXIT_CODE=${PIPESTATUS[0]}
           echo "exit_code=$EXIT_CODE" >> "$GITHUB_OUTPUT"
           {
             echo "output<<GHEOF"
-            tail -30 /tmp/prettier.txt
+            sed 's/\x1b\[[0-9;]*m//g' /tmp/prettier.txt | tail -30
             echo "GHEOF"
           } >> "$GITHUB_OUTPUT"
 
@@ -125,13 +139,13 @@ jobs:
           curl -fsSL https://raw.githubusercontent.com/rhysd/actionlint/main/scripts/download-actionlint.bash \
             | bash -s -- latest /usr/local/bin
           set +e
-          OUTPUT=$(actionlint 2>&1)
+          OUTPUT=$(actionlint -no-color 2>&1)
           EXIT_CODE=$?
           echo "$OUTPUT"
           echo "exit_code=$EXIT_CODE" >> "$GITHUB_OUTPUT"
           {
             echo "output<<GHEOF"
-            echo "$OUTPUT" | tail -20
+            echo "$OUTPUT" | sed 's/\x1b\[[0-9;]*m//g' | tail -20
             echo "GHEOF"
           } >> "$GITHUB_OUTPUT"
 
@@ -149,7 +163,7 @@ jobs:
             |-------|--------|
             | Hugo Build | ${{ steps.hugo-build.outputs.exit_code == '0' && '✅ Pass' || '❌ Fail' }} |
             | htmltest | ${{ steps.htmltest.outputs.exit_code == '0' && '✅ Pass' || (steps.hugo-build.outputs.exit_code != '0' && '⏭️ Skipped' || '❌ Fail') }} |
-            | Gitleaks | ${{ steps.gitleaks.outcome == 'success' && '✅ Pass' || '⚠️ Warning' }} |
+            | Gitleaks | ${{ steps.gitleaks.outputs.exit_code == '0' && '✅ Pass' || '❌ Fail' }} |
             | markdownlint | ${{ steps.markdownlint.outputs.exit_code == '0' && '✅ Pass' || '❌ Fail' }} |
             | Prettier | ${{ steps.prettier.outputs.exit_code == '0' && '✅ Pass' || '⚠️ Warning' }} |
             | actionlint | ${{ steps.actionlint.outputs.exit_code == '0' && '✅ Pass' || '❌ Fail' }} |
@@ -166,6 +180,14 @@ jobs:
 
             \`\`\`
             ${{ steps.htmltest.outputs.output || 'Skipped (build failed)' }}
+            \`\`\`
+
+            </details>
+
+            <details><summary>Gitleaks Output</summary>
+
+            \`\`\`
+            ${{ steps.gitleaks.outputs.output || 'No issues' }}
             \`\`\`
 
             </details>
@@ -226,7 +248,7 @@ jobs:
           if [ "${{ steps.hugo-build.outputs.exit_code }}" == "0" ] && [ "${{ steps.htmltest.outputs.exit_code }}" != "0" ]; then
             echo "::error::htmltest failed" && FAILED=1
           fi
-          [ "${{ steps.gitleaks.outcome }}" == "failure" ] && echo "::warning::Gitleaks detected potential secrets"
+          [ "${{ steps.gitleaks.outputs.exit_code }}" != "0" ] && echo "::error::Gitleaks detected potential secrets" && FAILED=1
           [ "${{ steps.markdownlint.outputs.exit_code }}" != "0" ] && echo "::error::markdownlint failed" && FAILED=1
           [ "${{ steps.actionlint.outputs.exit_code }}" != "0" ] && echo "::error::actionlint failed" && FAILED=1
           # Prettier is advisory-only (does not fail the build)
