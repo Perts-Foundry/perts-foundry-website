@@ -1,0 +1,9 @@
+DirectoryPath: "public"
+CheckExternal: false
+CheckInternal: true
+CheckMailto: false
+CheckTelephone: false
+IgnoreURLs:
+  - "https://pertsfoundry.com"
+IgnoreInternalEmptyHash: true
+IgnoreDirectoryMissingTrailingSlash: true
