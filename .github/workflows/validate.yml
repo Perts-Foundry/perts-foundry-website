@@ -165,7 +165,7 @@ jobs:
             | htmltest | ${{ steps.htmltest.outputs.exit_code == '0' && '✅ Pass' || (steps.hugo-build.outputs.exit_code != '0' && '⏭️ Skipped' || '❌ Fail') }} |
             | Gitleaks | ${{ steps.gitleaks.outputs.exit_code == '0' && '✅ Pass' || '❌ Fail' }} |
             | markdownlint | ${{ steps.markdownlint.outputs.exit_code == '0' && '✅ Pass' || '❌ Fail' }} |
-            | Prettier | ${{ steps.prettier.outputs.exit_code == '0' && '✅ Pass' || '⚠️ Warning' }} |
+            | Prettier | ${{ steps.prettier.outputs.exit_code == '0' && '✅ Pass' || '❌ Fail' }} |
             | actionlint | ${{ steps.actionlint.outputs.exit_code == '0' && '✅ Pass' || '❌ Fail' }} |
 
             <details><summary>Hugo Build Output</summary>
@@ -251,8 +251,7 @@ jobs:
           [ "${{ steps.gitleaks.outputs.exit_code }}" != "0" ] && echo "::error::Gitleaks detected potential secrets" && FAILED=1
           [ "${{ steps.markdownlint.outputs.exit_code }}" != "0" ] && echo "::error::markdownlint failed" && FAILED=1
           [ "${{ steps.actionlint.outputs.exit_code }}" != "0" ] && echo "::error::actionlint failed" && FAILED=1
-          # Prettier is advisory-only (does not fail the build)
-          [ "${{ steps.prettier.outputs.exit_code }}" != "0" ] && echo "::warning::Prettier found formatting issues"
+          [ "${{ steps.prettier.outputs.exit_code }}" != "0" ] && echo "::error::Prettier found formatting issues" && FAILED=1
           if [ "$FAILED" -eq 1 ]; then
             exit 1
           fi
