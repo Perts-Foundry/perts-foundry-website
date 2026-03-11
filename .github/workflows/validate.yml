@@ -204,7 +204,7 @@ jobs:
 
             const banner = allPassed
               ? '> [!NOTE]\n> **All checks passed** — this PR is ready for review.'
-              : `> [!CAUTION]\n> **${fail} check(s) failed** — please review the details below.`;
+              : `> [!CAUTION]\n> **${fail} Failure(s)** — please review the details below.`;
 
             const status = (code, skipCondition) => {
               if (skipCondition) return '⏭️';
@@ -268,14 +268,6 @@ jobs:
               '',
               '</details>',
               '',
-              '<details><summary><strong>Secret Detection</strong> (<code>gitleaks</code>)</summary>',
-              '',
-              '```',
-              `${{ steps.gitleaks.outputs.output || 'No issues found' }}`,
-              '```',
-              '',
-              '</details>',
-              '',
               '<details><summary><strong>Markdown Style</strong> (<code>markdownlint</code>)</summary>',
               '',
               '```',
@@ -296,6 +288,14 @@ jobs:
               '',
               '```',
               `${{ steps.actionlint.outputs.output || 'No issues found' }}`,
+              '```',
+              '',
+              '</details>',
+              '',
+              '<details><summary><strong>Secret Detection</strong> (<code>gitleaks</code>)</summary>',
+              '',
+              '```',
+              `${{ steps.gitleaks.outputs.output || 'No issues found' }}`,
               '```',
               '',
               '</details>',
