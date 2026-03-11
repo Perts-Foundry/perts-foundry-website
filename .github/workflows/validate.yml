@@ -207,10 +207,10 @@ jobs:
               : `> [!CAUTION]\n> **${fail} check(s) failed** — please review the details below.`;
 
             const status = (code, skipCondition) => {
-              if (skipCondition) return '$\\color{gray}{\\textsf{skipped}}$';
+              if (skipCondition) return '$\\Large\\color{gray}{\\textbf{SKIPPED}}$';
               return code === '0'
-                ? '$\\color{green}{\\textsf{passed}}$'
-                : '$\\color{red}{\\textsf{failed}}$';
+                ? '$\\Large\\color{green}{\\textbf{PASSED}}$'
+                : '$\\Large\\color{red}{\\textbf{FAILED}}$';
             };
 
             const hugoBuild = '${{ steps.hugo-build.outputs.exit_code }}';
@@ -254,7 +254,7 @@ jobs:
               '',
               '---',
               '',
-              '<details><summary><strong>Site Compilation</strong> <code>hugo</code></summary>',
+              '<details><summary><strong>Site Compilation</strong> (hugo)</summary>',
               '',
               '```',
               `${{ steps.hugo-build.outputs.output }}`,
@@ -262,7 +262,7 @@ jobs:
               '',
               '</details>',
               '',
-              `<details><summary><strong>Link & Image Validation</strong> <code>htmltest</code></summary>`,
+              `<details><summary><strong>Link & Image Validation</strong> (htmltest)</summary>`,
               '',
               '```',
               `${{ steps.htmltest.outputs.output || 'Skipped (build failed)' }}`,
@@ -270,7 +270,7 @@ jobs:
               '',
               '</details>',
               '',
-              '<details><summary><strong>Secret Detection</strong> <code>gitleaks</code></summary>',
+              '<details><summary><strong>Secret Detection</strong> (gitleaks)</summary>',
               '',
               '```',
               `${{ steps.gitleaks.outputs.output || 'No issues found' }}`,
@@ -278,7 +278,7 @@ jobs:
               '',
               '</details>',
               '',
-              '<details><summary><strong>Markdown Style</strong> <code>markdownlint</code></summary>',
+              '<details><summary><strong>Markdown Style</strong> (markdownlint)</summary>',
               '',
               '```',
               `${{ steps.markdownlint.outputs.output || 'No issues found' }}`,
@@ -286,7 +286,7 @@ jobs:
               '',
               '</details>',
               '',
-              '<details><summary><strong>Code Formatting</strong> <code>prettier</code></summary>',
+              '<details><summary><strong>Code Formatting</strong> (prettier)</summary>',
               '',
               '```',
               `${{ steps.prettier.outputs.output || 'No issues found' }}`,
@@ -294,7 +294,7 @@ jobs:
               '',
               '</details>',
               '',
-              '<details><summary><strong>Workflow Validation</strong> <code>actionlint</code></summary>',
+              '<details><summary><strong>Workflow Validation</strong> (actionlint)</summary>',
               '',
               '```',
               `${{ steps.actionlint.outputs.output || 'No issues found' }}`,
