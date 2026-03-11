@@ -203,8 +203,8 @@ jobs:
             const allPassed = fail === '0' && skip === '0';
 
             const banner = allPassed
-              ? '> [!NOTE]\n> **All checks passed** — this PR is ready for review.'
-              : `> [!CAUTION]\n> **${fail} Failure(s)** — please review the details below.`;
+              ? '✅ **All checks passed** — this PR is ready for review.'
+              : `❌ **${fail} Failure(s)** — please review the details below. All checks must pass before this PR can be merged.`;
 
             const status = (code, skipCondition) => {
               if (skipCondition) return '⏭️';
