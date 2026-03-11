@@ -1,0 +1,344 @@
+name: Validate
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+  pull-requests: write
+
+env:
+  NO_COLOR: "1"
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Read Hugo version
+        id: hugo-version
+        run: echo "version=$(cat .hugo-version)" >> "$GITHUB_OUTPUT"
+
+      - name: Setup Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: "1.22"
+
+      - name: Setup Hugo
+        uses: peaceiris/actions-hugo@v3
+        with:
+          hugo-version: ${{ steps.hugo-version.outputs.version }}
+          extended: true
+
+      - name: Cache Hugo resources
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cache/hugo_cache
+            resources/_gen
+          key: ${{ runner.os }}-hugo-${{ hashFiles('go.sum') }}
+          restore-keys: |
+            ${{ runner.os }}-hugo-
+
+      # ── Hugo Build ──────────────────────────────────────────────
+      - name: Hugo build
+        id: hugo-build
+        run: |
+          set +e
+          OUTPUT=$(hugo --gc --minify --cleanDestinationDir 2>&1)
+          EXIT_CODE=$?
+          echo "$OUTPUT"
+          echo "exit_code=$EXIT_CODE" >> "$GITHUB_OUTPUT"
+          {
+            echo "output<<GHEOF"
+            echo "$OUTPUT" | sed 's/\x1b\[[0-9;]*m//g' | tail -20
+            echo "GHEOF"
+          } >> "$GITHUB_OUTPUT"
+        env:
+          HUGO_ENVIRONMENT: production
+
+      # ── htmltest ────────────────────────────────────────────────
+      - name: Install htmltest
+        if: steps.hugo-build.outputs.exit_code == '0'
+        run: |
+          curl -fsSL https://github.com/wjdp/htmltest/releases/download/v0.17.0/htmltest_0.17.0_linux_amd64.tar.gz \
+            | tar -xz -C /usr/local/bin htmltest
+
+      - name: Run htmltest
+        id: htmltest
+        if: steps.hugo-build.outputs.exit_code == '0'
+        run: |
+          set +e
+          OUTPUT=$(htmltest 2>&1)
+          EXIT_CODE=$?
+          echo "$OUTPUT"
+          echo "exit_code=$EXIT_CODE" >> "$GITHUB_OUTPUT"
+          {
+            echo "output<<GHEOF"
+            echo "$OUTPUT" | sed 's/\x1b\[[0-9;]*m//g' | tail -30
+            echo "GHEOF"
+          } >> "$GITHUB_OUTPUT"
+
+      # ── Gitleaks ────────────────────────────────────────────────
+      - name: Install Gitleaks
+        run: |
+          curl -fsSL https://github.com/gitleaks/gitleaks/releases/download/v8.24.3/gitleaks_8.24.3_linux_x64.tar.gz \
+            | tar -xz -C /usr/local/bin gitleaks
+
+      - name: Run Gitleaks
+        id: gitleaks
+        run: |
+          set +e
+          OUTPUT=$(gitleaks git --log-opts="--all" --no-banner 2>&1)
+          EXIT_CODE=$?
+          echo "$OUTPUT"
+          echo "exit_code=$EXIT_CODE" >> "$GITHUB_OUTPUT"
+          {
+            echo "output<<GHEOF"
+            echo "$OUTPUT" | sed 's/\x1b\[[0-9;]*m//g' | tail -30
+            echo "GHEOF"
+          } >> "$GITHUB_OUTPUT"
+
+      # ── markdownlint ────────────────────────────────────────────
+      - name: Run markdownlint
+        id: markdownlint
+        run: |
+          npx --yes markdownlint-cli2 "content/**/*.md" 2>&1 | tee /tmp/mdlint.txt || true
+          EXIT_CODE=${PIPESTATUS[0]}
+          echo "exit_code=$EXIT_CODE" >> "$GITHUB_OUTPUT"
+          {
+            echo "output<<GHEOF"
+            sed 's/\x1b\[[0-9;]*m//g' /tmp/mdlint.txt | tail -30
+            echo "GHEOF"
+          } >> "$GITHUB_OUTPUT"
+
+      # ── Prettier ────────────────────────────────────────────────
+      - name: Run Prettier check
+        id: prettier
+        run: |
+          npx --yes prettier --no-color --check \
+            "content/**/*.md" \
+            ".github/**/*.yml" 2>&1 | tee /tmp/prettier.txt || true
+          EXIT_CODE=${PIPESTATUS[0]}
+          echo "exit_code=$EXIT_CODE" >> "$GITHUB_OUTPUT"
+          {
+            echo "output<<GHEOF"
+            sed 's/\x1b\[[0-9;]*m//g' /tmp/prettier.txt | tail -30
+            echo "GHEOF"
+          } >> "$GITHUB_OUTPUT"
+
+      # ── actionlint ──────────────────────────────────────────────
+      - name: Run actionlint
+        id: actionlint
+        run: |
+          curl -fsSL https://raw.githubusercontent.com/rhysd/actionlint/main/scripts/download-actionlint.bash \
+            | bash -s -- latest /usr/local/bin
+          set +e
+          OUTPUT=$(actionlint -no-color 2>&1)
+          EXIT_CODE=$?
+          echo "$OUTPUT"
+          echo "exit_code=$EXIT_CODE" >> "$GITHUB_OUTPUT"
+          {
+            echo "output<<GHEOF"
+            echo "$OUTPUT" | sed 's/\x1b\[[0-9;]*m//g' | tail -20
+            echo "GHEOF"
+          } >> "$GITHUB_OUTPUT"
+
+      # ── Aggregate & Comment ─────────────────────────────────────
+      - name: Collect results
+        id: results
+        if: always()
+        run: |
+          PASS=0
+          FAIL=0
+          SKIP=0
+
+          checks=(
+            "hugo-build:Build:${{ steps.hugo-build.outputs.exit_code }}"
+            "htmltest:HTML:${{ steps.htmltest.outputs.exit_code }}"
+            "gitleaks:Security:${{ steps.gitleaks.outputs.exit_code }}"
+            "markdownlint:Lint:${{ steps.markdownlint.outputs.exit_code }}"
+            "prettier:Format:${{ steps.prettier.outputs.exit_code }}"
+            "actionlint:CI:${{ steps.actionlint.outputs.exit_code }}"
+          )
+
+          for check in "${checks[@]}"; do
+            code="${check##*:}"
+            if [ -z "$code" ]; then
+              SKIP=$((SKIP + 1))
+            elif [ "$code" = "0" ]; then
+              PASS=$((PASS + 1))
+            else
+              FAIL=$((FAIL + 1))
+            fi
+          done
+
+          TOTAL=$((PASS + FAIL + SKIP))
+          {
+            echo "pass=$PASS"
+            echo "fail=$FAIL"
+            echo "skip=$SKIP"
+            echo "total=$TOTAL"
+          } >> "$GITHUB_OUTPUT"
+
+      - name: Post PR comment
+        if: github.event_name == 'pull_request' && always()
+        uses: actions/github-script@v7
+        env:
+          PASS_COUNT: ${{ steps.results.outputs.pass }}
+          FAIL_COUNT: ${{ steps.results.outputs.fail }}
+          SKIP_COUNT: ${{ steps.results.outputs.skip }}
+          TOTAL_COUNT: ${{ steps.results.outputs.total }}
+        with:
+          script: |
+            const marker = '<!-- validation-results -->';
+            const sha = context.payload.pull_request.head.sha.substring(0, 7);
+            const runUrl = `${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}`;
+            const pass = process.env.PASS_COUNT;
+            const fail = process.env.FAIL_COUNT;
+            const skip = process.env.SKIP_COUNT;
+            const allPassed = fail === '0' && skip === '0';
+
+            const banner = allPassed
+              ? '✅ **All checks passed** — this PR is ready for review.'
+              : `❌ **${fail} Failure(s)** — please review the details below. All checks must pass before this PR can be merged.`;
+
+            const status = (code, skipCondition) => {
+              if (skipCondition) return '⏭️';
+              return code === '0' ? '✅' : '❌';
+            };
+
+            const hugoBuild = '${{ steps.hugo-build.outputs.exit_code }}';
+            const htmltest = '${{ steps.htmltest.outputs.exit_code }}';
+            const gitleaks = '${{ steps.gitleaks.outputs.exit_code }}';
+            const mdlint = '${{ steps.markdownlint.outputs.exit_code }}';
+            const prettier = '${{ steps.prettier.outputs.exit_code }}';
+            const actionlint = '${{ steps.actionlint.outputs.exit_code }}';
+            const htmlSkipped = hugoBuild !== '0';
+
+            const body = [
+              marker,
+              `# Validation Report`,
+              '',
+              banner,
+              '',
+              `**Commit:** \`${sha}\` | **Run:** [#${context.runNumber}](${runUrl}) | **Results:** ${pass} passed, ${fail} failed, ${skip} skipped`,
+              '',
+              '---',
+              '',
+              '### Build & Output',
+              '',
+              `| Check | Tool | Result |`,
+              `|:------|:-----|:------:|`,
+              `| **Site Compilation** | \`hugo\` | ${status(hugoBuild)} |`,
+              `| **Link & Image Validation** | \`htmltest\` | ${status(htmltest, htmlSkipped)} |`,
+              '',
+              '### Code Quality',
+              '',
+              `| Check | Tool | Result |`,
+              `|:------|:-----|:------:|`,
+              `| **Markdown Style** | \`markdownlint\` | ${status(mdlint)} |`,
+              `| **Code Formatting** | \`prettier\` | ${status(prettier)} |`,
+              `| **Workflow Validation** | \`actionlint\` | ${status(actionlint)} |`,
+              '',
+              '### Security',
+              '',
+              `| Check | Tool | Result |`,
+              `|:------|:-----|:------:|`,
+              `| **Secret Detection** | \`gitleaks\` | ${status(gitleaks)} |`,
+              '',
+              '---',
+              '',
+              '<details><summary><strong>Site Compilation</strong> (<code>hugo</code>)</summary>',
+              '',
+              '```',
+              `${{ steps.hugo-build.outputs.output }}`,
+              '```',
+              '',
+              '</details>',
+              '',
+              `<details><summary><strong>Link & Image Validation</strong> (<code>htmltest</code>)</summary>`,
+              '',
+              '```',
+              `${{ steps.htmltest.outputs.output || 'Skipped (build failed)' }}`,
+              '```',
+              '',
+              '</details>',
+              '',
+              '<details><summary><strong>Markdown Style</strong> (<code>markdownlint</code>)</summary>',
+              '',
+              '```',
+              `${{ steps.markdownlint.outputs.output || 'No issues found' }}`,
+              '```',
+              '',
+              '</details>',
+              '',
+              '<details><summary><strong>Code Formatting</strong> (<code>prettier</code>)</summary>',
+              '',
+              '```',
+              `${{ steps.prettier.outputs.output || 'No issues found' }}`,
+              '```',
+              '',
+              '</details>',
+              '',
+              '<details><summary><strong>Workflow Validation</strong> (<code>actionlint</code>)</summary>',
+              '',
+              '```',
+              `${{ steps.actionlint.outputs.output || 'No issues found' }}`,
+              '```',
+              '',
+              '</details>',
+              '',
+              '<details><summary><strong>Secret Detection</strong> (<code>gitleaks</code>)</summary>',
+              '',
+              '```',
+              `${{ steps.gitleaks.outputs.output || 'No issues found' }}`,
+              '```',
+              '',
+              '</details>',
+            ].join('\n');
+
+            const { data: comments } = await github.rest.issues.listComments({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+            });
+            const existing = comments.find(c => c.body.includes(marker));
+
+            if (existing) {
+              await github.rest.issues.updateComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                comment_id: existing.id,
+                body,
+              });
+            } else {
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: context.issue.number,
+                body,
+              });
+            }
+
+      # ── Final status gate ───────────────────────────────────────
+      - name: Check for failures
+        if: always()
+        run: |
+          FAILED=0
+          [ "${{ steps.hugo-build.outputs.exit_code }}" != "0" ] && echo "::error::Hugo build failed" && FAILED=1
+          if [ "${{ steps.hugo-build.outputs.exit_code }}" == "0" ] && [ "${{ steps.htmltest.outputs.exit_code }}" != "0" ]; then
+            echo "::error::htmltest failed" && FAILED=1
+          fi
+          [ "${{ steps.gitleaks.outputs.exit_code }}" != "0" ] && echo "::error::Gitleaks detected potential secrets" && FAILED=1
+          [ "${{ steps.markdownlint.outputs.exit_code }}" != "0" ] && echo "::error::markdownlint failed" && FAILED=1
+          [ "${{ steps.actionlint.outputs.exit_code }}" != "0" ] && echo "::error::actionlint failed" && FAILED=1
+          [ "${{ steps.prettier.outputs.exit_code }}" != "0" ] && echo "::error::Prettier found formatting issues" && FAILED=1
+          if [ "$FAILED" -eq 1 ]; then
+            exit 1
+          fi

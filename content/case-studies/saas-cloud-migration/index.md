@@ -14,7 +14,7 @@ tags:
   - ci-cd
 ---
 
-*This case study has been anonymized at the client's request.*
+_This case study has been anonymized at the client's request._
 
 ## The Challenge
 
