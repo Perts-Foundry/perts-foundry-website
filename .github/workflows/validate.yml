@@ -150,71 +150,156 @@ jobs:
           } >> "$GITHUB_OUTPUT"
 
       # ── Aggregate & Comment ─────────────────────────────────────
+      - name: Collect results
+        id: results
+        if: always()
+        run: |
+          PASS=0
+          FAIL=0
+          SKIP=0
+
+          checks=(
+            "hugo-build:Build:${{ steps.hugo-build.outputs.exit_code }}"
+            "htmltest:HTML:${{ steps.htmltest.outputs.exit_code }}"
+            "gitleaks:Security:${{ steps.gitleaks.outputs.exit_code }}"
+            "markdownlint:Lint:${{ steps.markdownlint.outputs.exit_code }}"
+            "prettier:Format:${{ steps.prettier.outputs.exit_code }}"
+            "actionlint:CI:${{ steps.actionlint.outputs.exit_code }}"
+          )
+
+          for check in "${checks[@]}"; do
+            code="${check##*:}"
+            if [ -z "$code" ]; then
+              SKIP=$((SKIP + 1))
+            elif [ "$code" = "0" ]; then
+              PASS=$((PASS + 1))
+            else
+              FAIL=$((FAIL + 1))
+            fi
+          done
+
+          TOTAL=$((PASS + FAIL + SKIP))
+          echo "pass=$PASS" >> "$GITHUB_OUTPUT"
+          echo "fail=$FAIL" >> "$GITHUB_OUTPUT"
+          echo "skip=$SKIP" >> "$GITHUB_OUTPUT"
+          echo "total=$TOTAL" >> "$GITHUB_OUTPUT"
+
       - name: Post PR comment
         if: github.event_name == 'pull_request' && always()
         uses: actions/github-script@v7
+        env:
+          PASS_COUNT: ${{ steps.results.outputs.pass }}
+          FAIL_COUNT: ${{ steps.results.outputs.fail }}
+          SKIP_COUNT: ${{ steps.results.outputs.skip }}
+          TOTAL_COUNT: ${{ steps.results.outputs.total }}
         with:
           script: |
             const marker = '<!-- validation-results -->';
-            const body = `${marker}
-            ## Validation Results
+            const sha = context.payload.pull_request.head.sha.substring(0, 7);
+            const runUrl = `${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}`;
+            const pass = process.env.PASS_COUNT;
+            const fail = process.env.FAIL_COUNT;
+            const skip = process.env.SKIP_COUNT;
+            const allPassed = fail === '0' && skip === '0';
 
-            | Check | Status |
-            |-------|--------|
-            | Hugo Build | ${{ steps.hugo-build.outputs.exit_code == '0' && '✅ Pass' || '❌ Fail' }} |
-            | htmltest | ${{ steps.htmltest.outputs.exit_code == '0' && '✅ Pass' || (steps.hugo-build.outputs.exit_code != '0' && '⏭️ Skipped' || '❌ Fail') }} |
-            | Gitleaks | ${{ steps.gitleaks.outputs.exit_code == '0' && '✅ Pass' || '❌ Fail' }} |
-            | markdownlint | ${{ steps.markdownlint.outputs.exit_code == '0' && '✅ Pass' || '❌ Fail' }} |
-            | Prettier | ${{ steps.prettier.outputs.exit_code == '0' && '✅ Pass' || '❌ Fail' }} |
-            | actionlint | ${{ steps.actionlint.outputs.exit_code == '0' && '✅ Pass' || '❌ Fail' }} |
+            const banner = allPassed
+              ? '> [!NOTE]\n> **All checks passed** — this PR is ready for review.'
+              : `> [!CAUTION]\n> **${fail} check(s) failed** — please review the details below.`;
 
-            <details><summary>Hugo Build Output</summary>
+            const icon = (code, skipCondition) => {
+              if (skipCondition) return '\`skipped\`';
+              return code === '0' ? '\`passed\`' : '\`failed\`';
+            };
 
-            \`\`\`
-            ${{ steps.hugo-build.outputs.output }}
-            \`\`\`
+            const hugoBuild = '${{ steps.hugo-build.outputs.exit_code }}';
+            const htmltest = '${{ steps.htmltest.outputs.exit_code }}';
+            const gitleaks = '${{ steps.gitleaks.outputs.exit_code }}';
+            const mdlint = '${{ steps.markdownlint.outputs.exit_code }}';
+            const prettier = '${{ steps.prettier.outputs.exit_code }}';
+            const actionlint = '${{ steps.actionlint.outputs.exit_code }}';
+            const htmlSkipped = hugoBuild !== '0';
 
-            </details>
-
-            <details><summary>htmltest Output</summary>
-
-            \`\`\`
-            ${{ steps.htmltest.outputs.output || 'Skipped (build failed)' }}
-            \`\`\`
-
-            </details>
-
-            <details><summary>Gitleaks Output</summary>
-
-            \`\`\`
-            ${{ steps.gitleaks.outputs.output || 'No issues' }}
-            \`\`\`
-
-            </details>
-
-            <details><summary>markdownlint Output</summary>
-
-            \`\`\`
-            ${{ steps.markdownlint.outputs.output || 'No issues' }}
-            \`\`\`
-
-            </details>
-
-            <details><summary>Prettier Output</summary>
-
-            \`\`\`
-            ${{ steps.prettier.outputs.output || 'No issues' }}
-            \`\`\`
-
-            </details>
-
-            <details><summary>actionlint Output</summary>
-
-            \`\`\`
-            ${{ steps.actionlint.outputs.output || 'No issues' }}
-            \`\`\`
-
-            </details>`;
+            const body = [
+              marker,
+              `# Validation Report`,
+              '',
+              banner,
+              '',
+              `**Commit:** \`${sha}\` | **Run:** [#${context.runNumber}](${runUrl}) | **Results:** ${pass} passed, ${fail} failed, ${skip} skipped`,
+              '',
+              '---',
+              '',
+              '### Build & Output',
+              '',
+              `| Check | Description | Result |`,
+              `|:------|:------------|:------:|`,
+              `| **Hugo Build** | Site compiles without errors | ${icon(hugoBuild)} |`,
+              `| **htmltest** | Internal links and images are valid | ${icon(htmltest, htmlSkipped)} |`,
+              '',
+              '### Code Quality',
+              '',
+              `| Check | Description | Result |`,
+              `|:------|:------------|:------:|`,
+              `| **markdownlint** | Content follows markdown conventions | ${icon(mdlint)} |`,
+              `| **Prettier** | Files are consistently formatted | ${icon(prettier)} |`,
+              `| **actionlint** | Workflow files are valid | ${icon(actionlint)} |`,
+              '',
+              '### Security',
+              '',
+              `| Check | Description | Result |`,
+              `|:------|:------------|:------:|`,
+              `| **Gitleaks** | No secrets detected in source | ${icon(gitleaks)} |`,
+              '',
+              '---',
+              '',
+              '<details><summary><strong>Hugo Build</strong> — site compilation output</summary>',
+              '',
+              '```',
+              `${{ steps.hugo-build.outputs.output }}`,
+              '```',
+              '',
+              '</details>',
+              '',
+              `<details><summary><strong>htmltest</strong> — link and image validation</summary>`,
+              '',
+              '```',
+              `${{ steps.htmltest.outputs.output || 'Skipped (build failed)' }}`,
+              '```',
+              '',
+              '</details>',
+              '',
+              '<details><summary><strong>Gitleaks</strong> — secret detection scan</summary>',
+              '',
+              '```',
+              `${{ steps.gitleaks.outputs.output || 'No issues found' }}`,
+              '```',
+              '',
+              '</details>',
+              '',
+              '<details><summary><strong>markdownlint</strong> — markdown style checks</summary>',
+              '',
+              '```',
+              `${{ steps.markdownlint.outputs.output || 'No issues found' }}`,
+              '```',
+              '',
+              '</details>',
+              '',
+              '<details><summary><strong>Prettier</strong> — formatting checks</summary>',
+              '',
+              '```',
+              `${{ steps.prettier.outputs.output || 'No issues found' }}`,
+              '```',
+              '',
+              '</details>',
+              '',
+              '<details><summary><strong>actionlint</strong> — workflow validation</summary>',
+              '',
+              '```',
+              `${{ steps.actionlint.outputs.output || 'No issues found' }}`,
+              '```',
+              '',
+              '</details>',
+            ].join('\n');
 
             const { data: comments } = await github.rest.issues.listComments({
               owner: context.repo.owner,
