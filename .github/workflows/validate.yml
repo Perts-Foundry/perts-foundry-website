@@ -179,10 +179,12 @@ jobs:
           done
 
           TOTAL=$((PASS + FAIL + SKIP))
-          echo "pass=$PASS" >> "$GITHUB_OUTPUT"
-          echo "fail=$FAIL" >> "$GITHUB_OUTPUT"
-          echo "skip=$SKIP" >> "$GITHUB_OUTPUT"
-          echo "total=$TOTAL" >> "$GITHUB_OUTPUT"
+          {
+            echo "pass=$PASS"
+            echo "fail=$FAIL"
+            echo "skip=$SKIP"
+            echo "total=$TOTAL"
+          } >> "$GITHUB_OUTPUT"
 
       - name: Post PR comment
         if: github.event_name == 'pull_request' && always()
