@@ -6,3 +6,4 @@ CheckTelephone: false
 IgnoreURLs:
   - "https://pertsfoundry.com"
 IgnoreInternalEmptyHash: true
+IgnoreDirectoryMissingTrailingSlash: true
