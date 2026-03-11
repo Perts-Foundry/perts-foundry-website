@@ -1,19 +1,107 @@
-name: Deploy Hugo to Cloudflare Workers
+name: Deploy
 
 on:
-  workflow_dispatch:
+  issue_comment:
+    types: [created]
+
+concurrency:
+  group: deploy-production
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+  pull-requests: write
+  checks: read
+
+env:
+  NO_COLOR: "1"
 
 jobs:
   deploy:
+    if: github.event.issue.pull_request && github.event.comment.body == 'deploy'
     runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      deployments: write
-      pull-requests: write
     steps:
+      - name: React with eyes
+        continue-on-error: true
+        uses: actions/github-script@v7
+        with:
+          script: |
+            await github.rest.reactions.createForIssueComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              comment_id: context.payload.comment.id,
+              content: 'eyes',
+            });
+
+      - name: Validate deployer permissions
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const { data } = await github.rest.repos.getCollaboratorPermissionLevel({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              username: context.payload.comment.user.login,
+            });
+            if (!['admin', 'write'].includes(data.permission)) {
+              core.setFailed(
+                `@${context.payload.comment.user.login} does not have write access.`
+              );
+            }
+
+      - name: Get PR details
+        id: pr
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const { data: pr } = await github.rest.pulls.get({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number: context.issue.number,
+            });
+            if (pr.state !== 'open') {
+              core.setFailed('This PR is not open.');
+              return;
+            }
+            core.setOutput('sha', pr.head.sha);
+            core.setOutput('short_sha', pr.head.sha.substring(0, 7));
+            core.setOutput('ref', pr.head.ref);
+            core.setOutput('base_ref', pr.base.ref);
+
+      - name: Verify validation passed
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const { data } = await github.rest.checks.listForRef({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              ref: '${{ steps.pr.outputs.sha }}',
+            });
+            const validate = data.check_runs.find(
+              (cr) => cr.name === 'validate'
+            );
+            if (!validate) {
+              core.setFailed(
+                'No validation run found for this commit. Push to trigger validation first.'
+              );
+              return;
+            }
+            if (
+              validate.status !== 'completed' ||
+              validate.conclusion !== 'success'
+            ) {
+              core.setFailed(
+                `Validation has not passed (${validate.status}/${validate.conclusion}). All checks must pass before deploying.`
+              );
+            }
+
       - uses: actions/checkout@v6
         with:
+          ref: ${{ steps.pr.outputs.ref }}
           fetch-depth: 0
+
+      - name: Read Hugo version
+        id: hugo-version
+        run: echo "version=$(cat .hugo-version)" >> "$GITHUB_OUTPUT"
 
       - name: Setup Go
         uses: actions/setup-go@v6
@@ -23,36 +111,232 @@ jobs:
       - name: Cache Hugo resources
         uses: actions/cache@v5
         with:
-          path: resources/_gen
-          key: ${{ runner.os }}-hugo-${{ github.ref_name }}-${{ github.sha }}
+          path: |
+            ~/.cache/hugo_cache
+            resources/_gen
+          key: ${{ runner.os }}-hugo-${{ hashFiles('go.sum') }}
           restore-keys: |
-            ${{ runner.os }}-hugo-${{ github.ref_name }}-
-            ${{ runner.os }}-hugo-main-
+            ${{ runner.os }}-hugo-
 
       - name: Setup Hugo
         uses: peaceiris/actions-hugo@v3
         with:
-          hugo-version: "0.157.0"
+          hugo-version: ${{ steps.hugo-version.outputs.version }}
           extended: true
 
       - name: Build
-        run: hugo --gc --minify --cleanDestinationDir
+        id: build
+        run: |
+          set +e
+          OUTPUT=$(hugo --gc --minify --cleanDestinationDir 2>&1)
+          EXIT_CODE=$?
+          echo "$OUTPUT"
+          echo "exit_code=$EXIT_CODE" >> "$GITHUB_OUTPUT"
+          {
+            echo "output<<GHEOF"
+            echo "$OUTPUT" | sed 's/\x1b\[[0-9;]*m//g' | tail -20
+            echo "GHEOF"
+          } >> "$GITHUB_OUTPUT"
+          exit "$EXIT_CODE"
         env:
           HUGO_ENVIRONMENT: production
 
-      - name: Deploy to production
-        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+      - name: Deploy to Cloudflare Workers
+        id: wrangler
         uses: cloudflare/wrangler-action@v3
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           command: deploy
 
-      - name: Deploy preview
-        id: preview
-        if: github.event_name == 'pull_request'
-        uses: cloudflare/wrangler-action@v3
+      # ── Success: comment, merge, delete branch ──────────────────
+      - name: Merge PR and report success
+        if: success()
+        uses: actions/github-script@v7
+        env:
+          BUILD_OUTPUT: ${{ steps.build.outputs.output }}
+          DEPLOY_OUTPUT: ${{ steps.wrangler.outputs.command-output }}
         with:
-          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          command: versions upload
+          script: |
+            const marker = '<!-- deploy-result -->';
+            const prNumber = context.issue.number;
+            const sha = '${{ steps.pr.outputs.short_sha }}';
+            const ref = '${{ steps.pr.outputs.ref }}';
+            const baseRef = '${{ steps.pr.outputs.base_ref }}';
+            const runUrl = `${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}`;
+            const deployer = context.payload.comment.user.login;
+            const buildOutput = process.env.BUILD_OUTPUT || 'No output captured.';
+            const deployOutput = process.env.DEPLOY_OUTPUT || 'No output captured.';
+
+            // React with rocket on success
+            try {
+              await github.rest.reactions.createForIssueComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                comment_id: context.payload.comment.id,
+                content: 'rocket',
+              });
+            } catch (e) {
+              // Non-critical
+            }
+
+            // Merge the PR
+            let merged = true;
+            let mergeError = '';
+            try {
+              await github.rest.pulls.merge({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                pull_number: prNumber,
+                merge_method: 'squash',
+              });
+            } catch (e) {
+              merged = false;
+              mergeError = e.message;
+            }
+
+            // Delete the branch
+            let branchDeleted = false;
+            if (merged) {
+              try {
+                await github.rest.git.deleteRef({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  ref: `heads/${ref}`,
+                });
+                branchDeleted = true;
+              } catch (e) {
+                // Branch may already be deleted by repo settings
+              }
+            }
+
+            const mergeStatus = merged
+              ? `🔀 Merged \`${ref}\` → \`${baseRef}\`${branchDeleted ? ' and deleted the branch.' : '.'}`
+              : `⚠️ **Merge failed:** ${mergeError}\n\nThe deployment is live, but the PR must be merged manually.`;
+
+            const body = [
+              marker,
+              '# Deployment Report',
+              '',
+              '✅ **Deployed successfully** — changes are now live.',
+              '',
+              '| | |',
+              '|:--|:--|',
+              `| **Commit** | \`${sha}\` |`,
+              `| **Branch** | \`${ref}\` → \`${baseRef}\` |`,
+              `| **Deployed by** | @${deployer} |`,
+              `| **Workflow run** | [#${context.runNumber}](${runUrl}) |`,
+              '',
+              '---',
+              '',
+              '<details><summary><strong>Build output</strong> (<code>hugo</code>)</summary>',
+              '',
+              '```',
+              buildOutput,
+              '```',
+              '',
+              '</details>',
+              '',
+              '<details><summary><strong>Deploy output</strong> (<code>wrangler</code>)</summary>',
+              '',
+              '```',
+              deployOutput,
+              '```',
+              '',
+              '</details>',
+              '',
+              '---',
+              '',
+              mergeStatus,
+            ].join('\n');
+
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: prNumber,
+              body,
+            });
+
+      # ── Failure: comment with error details ─────────────────────
+      - name: Report failure
+        if: failure() && steps.pr.outcome == 'success'
+        uses: actions/github-script@v7
+        env:
+          BUILD_EXIT: ${{ steps.build.outputs.exit_code }}
+          BUILD_OUTPUT: ${{ steps.build.outputs.output }}
+          DEPLOY_OUTPUT: ${{ steps.wrangler.outputs.command-output }}
+          DEPLOY_STDERR: ${{ steps.wrangler.outputs.command-stderr }}
+        with:
+          script: |
+            const marker = '<!-- deploy-result -->';
+            const prNumber = context.issue.number;
+            const sha = '${{ steps.pr.outputs.short_sha }}';
+            const ref = '${{ steps.pr.outputs.ref }}';
+            const runUrl = `${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}`;
+
+            // React with -1 on failure
+            try {
+              await github.rest.reactions.createForIssueComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                comment_id: context.payload.comment.id,
+                content: '-1',
+              });
+            } catch (e) {
+              // Non-critical
+            }
+
+            const buildExit = process.env.BUILD_EXIT || '';
+            const buildOutput = process.env.BUILD_OUTPUT || '';
+            const deployOutput = process.env.DEPLOY_OUTPUT || '';
+            const deployStderr = process.env.DEPLOY_STDERR || '';
+
+            let failStage, errorDetail;
+            if (buildExit === '') {
+              failStage = 'Pre-deploy Checks';
+              errorDetail =
+                'Validation or permission checks failed before the build started. See the workflow run for details.';
+            } else if (buildExit !== '0') {
+              failStage = 'Hugo Build';
+              errorDetail =
+                buildOutput || 'Build did not produce output. See the workflow run for details.';
+            } else {
+              failStage = 'Cloudflare Workers Deploy';
+              errorDetail =
+                deployStderr || deployOutput || 'See the workflow run for details.';
+            }
+
+            const body = [
+              marker,
+              '# Deployment Report',
+              '',
+              `❌ **Deployment failed** at **${failStage}** — the PR remains open.`,
+              '',
+              '| | |',
+              '|:--|:--|',
+              `| **Commit** | \`${sha}\` |`,
+              `| **Branch** | \`${ref}\` |`,
+              `| **Failed stage** | ${failStage} |`,
+              `| **Workflow run** | [#${context.runNumber}](${runUrl}) |`,
+              '',
+              '---',
+              '',
+              '<details open><summary><strong>Error details</strong></summary>',
+              '',
+              '```',
+              errorDetail,
+              '```',
+              '',
+              '</details>',
+              '',
+              '---',
+              '',
+              '⚠️ Fix the issue, push a new commit, wait for validation to pass, then comment `deploy` to retry.',
+            ].join('\n');
+
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: prNumber,
+              body,
+            });
