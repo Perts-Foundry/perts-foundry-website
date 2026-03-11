@@ -84,6 +84,10 @@ archetypes/          # Content templates (blog.md, case-studies.md)
 - TOML for all Hugo configuration
 - Never commit secrets or credentials — Gitleaks scans the full history
 
+## Infrastructure
+
+All infrastructure changes (DNS, Workers config, R2 buckets, etc.) must be codified in Terraform in the [Perts-Foundry/infrastructure](https://github.com/Perts-Foundry/infrastructure) repo. Never make manual infrastructure changes — always create a PR in that repo instead.
+
 ## Git Workflow
 
 - Main branch: `main`
