@@ -1,0 +1,9 @@
+.logo svg {
+  height: 12rem;
+  width: 12rem;
+}
+
+.logo img {
+  max-height: 12rem;
+  max-width: 12rem;
+}

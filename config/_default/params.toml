@@ -1,8 +1,10 @@
-colorScheme = "blowfish"
+colorScheme = "perts-forge-blue"
 defaultAppearance = "light"
 autoSwitchAppearance = true
 enableSearch = true
 enableCodeCopy = true
+logo = "img/logo/perts-foundry-horizontal-light.svg"
+secondaryLogo = "img/logo/perts-foundry-horizontal-dark.svg"
 
 [homepage]
   layout = "background"
