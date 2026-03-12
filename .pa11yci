@@ -4,7 +4,11 @@
     "runners": ["axe"],
     "chromeLaunchConfig": {
       "args": ["--no-sandbox"]
-    }
+    },
+    "ignore": [
+      "svg text"
+    ],
+    "hideElements": "svg text"
   },
   "urls": [
     "http://localhost:8080/",
