@@ -137,6 +137,26 @@ jobs:
             echo "GHEOF"
           } >> "$GITHUB_OUTPUT"
 
+      # ── pa11y-ci (accessibility) ────────────────────────────────
+      - name: Run pa11y-ci
+        id: pa11y
+        if: steps.hugo-build.outputs.exit_code == '0'
+        run: |
+          npx --yes serve public -l 8080 --no-clipboard &
+          SERVER_PID=$!
+          sleep 2
+          set +e
+          OUTPUT=$(npx --yes pa11y-ci 2>&1)
+          EXIT_CODE=$?
+          kill $SERVER_PID 2>/dev/null || true
+          echo "$OUTPUT"
+          echo "exit_code=$EXIT_CODE" >> "$GITHUB_OUTPUT"
+          {
+            echo "output<<GHEOF"
+            echo "$OUTPUT" | sed 's/\x1b\[[0-9;]*m//g' | tail -40
+            echo "GHEOF"
+          } >> "$GITHUB_OUTPUT"
+
       # ── Gitleaks ────────────────────────────────────────────────
       - name: Install Gitleaks
         run: |
@@ -214,6 +234,7 @@ jobs:
           checks=(
             "hugo-build:Build:${{ steps.hugo-build.outputs.exit_code }}"
             "htmltest:HTML:${{ steps.htmltest.outputs.exit_code }}"
+            "pa11y:A11y:${{ steps.pa11y.outputs.exit_code }}"
             "gitleaks:Security:${{ steps.gitleaks.outputs.exit_code }}"
             "markdownlint:Lint:${{ steps.markdownlint.outputs.exit_code }}"
             "prettier:Format:${{ steps.prettier.outputs.exit_code }}"
@@ -271,6 +292,7 @@ jobs:
 
             const hugoBuild = '${{ steps.hugo-build.outputs.exit_code }}';
             const htmltest = '${{ steps.htmltest.outputs.exit_code }}';
+            const pa11y = '${{ steps.pa11y.outputs.exit_code }}';
             const gitleaks = '${{ steps.gitleaks.outputs.exit_code }}';
             const mdlint = '${{ steps.markdownlint.outputs.exit_code }}';
             const prettier = '${{ steps.prettier.outputs.exit_code }}';
@@ -293,6 +315,7 @@ jobs:
               `|:------|:-----|:------:|`,
               `| **Site Compilation** | \`hugo\` | ${status(hugoBuild)} |`,
               `| **Link & Image Validation** | \`htmltest\` | ${status(htmltest, htmlSkipped)} |`,
+              `| **Accessibility (WCAG 2.1 AA)** | \`pa11y-ci\` | ${status(pa11y, htmlSkipped)} |`,
               '',
               '### Code Quality',
               '',
@@ -322,6 +345,14 @@ jobs:
               '',
               '```',
               `${{ steps.htmltest.outputs.output || 'Skipped (build failed)' }}`,
+              '```',
+              '',
+              '</details>',
+              '',
+              '<details><summary><strong>Accessibility</strong> (<code>pa11y-ci</code>)</summary>',
+              '',
+              '```',
+              `${{ steps.pa11y.outputs.output || 'Skipped (build failed)' }}`,
               '```',
               '',
               '</details>',
@@ -390,6 +421,9 @@ jobs:
           [ "${{ steps.hugo-build.outputs.exit_code }}" != "0" ] && echo "::error::Hugo build failed" && FAILED=1
           if [ "${{ steps.hugo-build.outputs.exit_code }}" == "0" ] && [ "${{ steps.htmltest.outputs.exit_code }}" != "0" ]; then
             echo "::error::htmltest failed" && FAILED=1
+          fi
+          if [ "${{ steps.hugo-build.outputs.exit_code }}" == "0" ] && [ "${{ steps.pa11y.outputs.exit_code }}" != "0" ]; then
+            echo "::error::pa11y-ci accessibility check failed" && FAILED=1
           fi
           [ "${{ steps.gitleaks.outputs.exit_code }}" != "0" ] && echo "::error::Gitleaks detected potential secrets" && FAILED=1
           [ "${{ steps.markdownlint.outputs.exit_code }}" != "0" ] && echo "::error::markdownlint failed" && FAILED=1
