@@ -1,0 +1,17 @@
+<svg width="512" height="512" viewBox="0 0 72 72" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="72" height="72" rx="14" fill="#0A0A0A"/>
+  <path d="M25 15 Q17 15 17 24 L17 30 Q17 36 12 36 Q17 36 17 42 L17 48 Q17 57 25 57" stroke="#FFFFFF" stroke-width="3" stroke-linecap="round" fill="none" opacity="0.9"/>
+  <path d="M47 15 Q55 15 55 24 L55 30 Q55 36 60 36 Q55 36 55 42 L55 48 Q55 57 47 57" stroke="#FFFFFF" stroke-width="3" stroke-linecap="round" fill="none" opacity="0.9"/>
+  <circle cx="36" cy="38" r="16" fill="#3B82F6" opacity="0.12"/>
+  <circle cx="36" cy="38" r="12" fill="#7C3AED" opacity="0.2"/>
+  <circle cx="36" cy="38" r="8" fill="#9333EA" opacity="0.35"/>
+  <circle cx="36" cy="38" r="5.5" fill="url(#emberFav)" opacity="0.9"/>
+  <circle cx="36" cy="38" r="2.5" fill="#FFFFFF" opacity="0.55"/>
+  <defs>
+    <radialGradient id="emberFav" cx="36" cy="38" r="5.5" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#FFFFFF" stop-opacity="0.6"/>
+      <stop offset="40%" stop-color="#EF4444"/>
+      <stop offset="100%" stop-color="#DC2626"/>
+    </radialGradient>
+  </defs>
+</svg>
