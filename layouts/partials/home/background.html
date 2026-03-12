@@ -84,7 +84,7 @@
                     {{ $isEmail := eq $name "email" }}
                     <a
                       class="{{ cond $isEmail "email-link" "" }} hover:text-primary-400 text-primary-800 dark:text-primary-200 px-1"
-                      href="{{ cond $isEmail "#" ($url | safeURL) }}"
+                      href="{{ cond $isEmail "/contact/" ($url | safeURL) }}"
                       {{ if $isEmail }}
                         data-email="{{ $url | base64Encode }}"
                         data-subject="Contact"

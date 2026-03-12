@@ -1,0 +1,21 @@
+{
+  "defaults": {
+    "standard": "WCAG2AA",
+    "runners": ["axe"],
+    "chromeLaunchConfig": {
+      "args": ["--no-sandbox"]
+    }
+  },
+  "urls": [
+    "http://localhost:8080/",
+    "http://localhost:8080/about/",
+    "http://localhost:8080/services/",
+    "http://localhost:8080/services/cloud-infrastructure/",
+    "http://localhost:8080/services/cicd-pipelines/",
+    "http://localhost:8080/blog/",
+    "http://localhost:8080/case-studies/",
+    "http://localhost:8080/case-studies/saas-cloud-migration/",
+    "http://localhost:8080/contact/",
+    "http://localhost:8080/accessibility/"
+  ]
+}

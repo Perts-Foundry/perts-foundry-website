@@ -1,4 +1,5 @@
-<svg width="292" height="72" viewBox="0 0 292 72" fill="none" xmlns="http://www.w3.org/2000/svg">
+<svg width="292" height="72" viewBox="0 0 292 72" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="logo-title-dark">
+  <title id="logo-title-dark">Perts Foundry</title>
   <!-- E11 Icon -->
   <rect width="72" height="72" rx="14" fill="#0A0A0A"/>
   <path d="M25 15 Q17 15 17 24 L17 30 Q17 36 12 36 Q17 36 17 42 L17 48 Q17 57 25 57" stroke="#FFFFFF" stroke-width="3" stroke-linecap="round" fill="none" opacity="0.9"/>
