@@ -31,12 +31,12 @@ We ran a 10-week engagement focused on three parallel workstreams:
 
 ## Results
 
-| Metric | Before | After |
-|---|---|---|
-| Deploy time | 2+ hours | 8 minutes |
-| Deploy frequency | Weekly | Multiple times daily |
-| Failed deploys (monthly) | 4-6 | < 1 |
-| Infrastructure cost | $14,200/mo | $9,800/mo |
-| Recovery time (incidents) | 45+ minutes | < 5 minutes |
+| Metric                    | Before      | After                |
+| ------------------------- | ----------- | -------------------- |
+| Deploy time               | 2+ hours    | 8 minutes            |
+| Deploy frequency          | Weekly      | Multiple times daily |
+| Failed deploys (monthly)  | 4-6         | < 1                  |
+| Infrastructure cost       | $14,200/mo  | $9,800/mo            |
+| Recovery time (incidents) | 45+ minutes | < 5 minutes          |
 
 The team went from dreading deploy day to shipping multiple times daily with confidence. Infrastructure costs dropped 31% thanks to right-sizing and autoscaling, and the on-call burden dropped significantly with automated rollbacks catching issues before customers noticed.
