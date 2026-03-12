@@ -7,27 +7,24 @@ showTableOfContents: false
 
 ## Our Commitment
 
-Perts Foundry is committed to making our website accessible to everyone, including people with disabilities. We aim to conform to the [Web Content Accessibility Guidelines (WCAG) 2.1](https://www.w3.org/TR/WCAG21/) Level AA standard.
+Perts Foundry is committed to making our website accessible to everyone, including people with disabilities. This site conforms to the [Web Content Accessibility Guidelines (WCAG) 2.1](https://www.w3.org/TR/WCAG21/) Level AA standard.
 
-## Current Status
-
-We are actively working to improve the accessibility of this site. Our efforts include:
+## What We Do
 
 - Semantic HTML structure with proper heading hierarchy
 - Keyboard navigable interface with visible focus indicators
-- Text alternatives for meaningful images
-- Sufficient color contrast for readability
+- Text alternatives for meaningful images; decorative images marked appropriately
+- Color contrast tested across all color schemes to meet WCAG AA ratios
 - Skip navigation for keyboard and screen reader users
-
-## Known Limitations
-
-We are aware that some areas of the site may not yet fully meet WCAG 2.1 AA. We are working to identify and resolve these issues on an ongoing basis.
+- Screen reader announcements for external links that open in new tabs
+- Reduced motion support for users who prefer minimal animation
+- Automated WCAG 2.1 AA testing on every pull request
 
 ## Feedback
 
-If you encounter an accessibility barrier on this site, we want to hear about it. Please contact us:
+If you encounter an accessibility barrier on this site, please let us know:
 
-- **Email:** [hello@pertsfoundry.com](mailto:hello@pertsfoundry.com)
+- **Email:** [contact@pertsfoundry.com](mailto:contact@pertsfoundry.com)
 - **GitHub:** [Open an issue](https://github.com/Perts-Foundry/perts-foundry-website/issues)
 
 We aim to respond to accessibility feedback within two business days.

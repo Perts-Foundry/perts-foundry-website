@@ -17,7 +17,7 @@ Whether you're dealing with a specific infrastructure challenge or just want to 
 
 ### Get in Touch
 
-- **Email:** [hello@pertsfoundry.com](mailto:hello@pertsfoundry.com)
+- **Email:** [contact@pertsfoundry.com](mailto:contact@pertsfoundry.com)
 - **GitHub:** [Perts-Foundry](https://github.com/Perts-Foundry)
 
 We typically respond within one business day.
