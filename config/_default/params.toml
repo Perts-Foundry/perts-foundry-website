@@ -1,13 +1,15 @@
 colorScheme = "perts-forge-blue"
-defaultAppearance = "light"
-autoSwitchAppearance = true
+defaultAppearance = "dark"
+autoSwitchAppearance = false
 enableSearch = true
 enableCodeCopy = true
-logo = "img/logo/perts-foundry-horizontal-light.svg"
-secondaryLogo = "img/logo/perts-foundry-horizontal-dark.svg"
+logo = "img/logo/perts-foundry-horizontal-dark.svg"
+secondaryLogo = "img/logo/perts-foundry-horizontal-light.svg"
+disableTextInHeader = true
 
 [homepage]
   layout = "background"
+  homepageImage = "img/background.jpg"
   showRecent = true
   showRecentItems = 3
   showMoreLink = true
@@ -27,7 +29,7 @@ secondaryLogo = "img/logo/perts-foundry-horizontal-dark.svg"
   groupByYear = false
 
 [header]
-  layout = "basic"
+  layout = "fixed-fill-blur"
 
 [footer]
   showCopyright = true
