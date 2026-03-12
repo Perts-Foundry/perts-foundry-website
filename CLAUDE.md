@@ -17,7 +17,7 @@ hugo --gc --minify --cleanDestinationDir
 
 ## PR Validation Checks
 
-All six checks must pass before a PR can merge. Run these locally before pushing:
+All seven checks must pass before a PR can merge. Run these locally before pushing:
 
 ### 1. Hugo Build
 ```bash
@@ -31,26 +31,34 @@ Only checks internal links — external URLs are skipped.
 htmltest
 ```
 
-### 3. markdownlint
+### 3. pa11y-ci (accessibility)
+Runs WCAG 2.1 AA checks (via axe-core) against the built site. Config: `.pa11yci`.
+Requires a local server on port 8080 serving `public/`.
+```bash
+npx serve public -l 8080 &
+npx pa11y-ci
+```
+
+### 4. markdownlint
 Lints all content markdown. Config: `.markdownlint-cli2.jsonc`.
 Disabled rules: MD041 (first-line heading), MD013 (line length), MD033 (inline HTML).
 ```bash
 npx markdownlint-cli2 "content/**/*.md"
 ```
 
-### 4. Prettier
+### 5. Prettier
 Checks formatting of content markdown and workflow YAML. Config: `.prettierrc.toml`.
 ```bash
 npx prettier --check "content/**/*.md" ".github/**/*.yml"
 ```
 
-### 5. actionlint
+### 6. actionlint
 Validates GitHub Actions workflow files.
 ```bash
 actionlint
 ```
 
-### 6. Gitleaks (secret detection)
+### 7. Gitleaks (secret detection)
 Scans the full git history for leaked secrets.
 ```bash
 gitleaks git --log-opts="--all" --no-banner
