@@ -1,9 +1,13 @@
+.fixed.inset-x-0.z-100 {
+  padding-top: 0.5rem;
+}
+
 .logo svg {
-  height: 12rem;
-  width: 12rem;
+  height: 3.5rem;
+  width: auto;
 }
 
 .logo img {
-  max-height: 12rem;
-  max-width: 12rem;
+  max-height: 3.5rem;
+  width: auto;
 }
