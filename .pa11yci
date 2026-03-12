@@ -10,7 +10,7 @@
   "urls": [
     {
       "url": "http://localhost:8080/",
-      "hideElements": "svg text, .px-2.text-primary-500, .inline-block.rtl\\:rotate-180, .single_hero_background, nav span.text-base.font-medium"
+      "hideElements": "svg text, .px-2.text-primary-500, .relative.flex.flex-col.items-center.justify-center.text-center, nav span.text-base.font-medium"
     },
     "http://localhost:8080/about/",
     "http://localhost:8080/services/",
