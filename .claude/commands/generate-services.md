@@ -89,6 +89,8 @@ Before creating or updating any service pages, complete these two steps:
 
 If either property is missing, add it. Do not remove other properties that may already be present.
 
+**3. Ensure each service page bundle has a featured image.** The services cascade sets `showHero: true`, so any page without a `featured.*` image will render with a missing hero. If generating new pages that don't have images yet, note this in the Phase 4 verification report so the user can source images before publishing.
+
 ### Page generation
 
 For each approved service, create a page at `content/services/<slug>/index.md`.
