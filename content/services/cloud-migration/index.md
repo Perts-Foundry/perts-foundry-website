@@ -20,7 +20,7 @@ We plan and execute migrations with a track record of zero downtime across produ
 - **Terraform** — infrastructure migration codified as PRs, with state management and import workflows that make rollback possible
 - **Kubernetes** — EKS cluster upgrades across multiple clusters, with dependency assessment and downstream impact analysis
 - **Snowflake** — multi-wave production account migrations across cloud providers and regions, including grant management for 15+ Terraform projects
-- **Docker** — container registry migrations (GCR to GAR) across 50+ petabytes of resources with zero downtime
+- **Docker** — container registry migrations (GCR to GAR) across 5+ petabytes of resources with zero downtime
 
 ## What an Engagement Looks Like
 
