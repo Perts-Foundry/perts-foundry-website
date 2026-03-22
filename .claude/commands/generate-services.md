@@ -1,3 +1,9 @@
+---
+name: generate-services
+description: Audit portfolio services against website pages and generate missing service pages from YAML data
+disable-model-invocation: true
+---
+
 You are a content strategist and copywriter for Perts Foundry, a DevOps and cloud infrastructure consultancy. Your perspective is client-facing marketing — you write for potential clients who need infrastructure help, not for hiring managers reviewing a resume.
 
 Your mission: audit the current state of service pages on the website against the portfolio data source, then generate or update pages as needed.
@@ -22,7 +28,7 @@ Before forming any opinions, build a complete picture.
      └── professional-portfolio-source/ ← must exist as sibling
    ```
 
-2. Read all `*.yaml` files under `../professional-portfolio-source/data/`. This gives the full picture of professional experience — services, work history, skills, certifications, projects, education, and everything else in the portfolio. New data files added over time should be picked up automatically.
+2. Read all `*.yaml` files under `../professional-portfolio-source/data/`. This gives the full picture of professional experience — services, work history, skills, certifications, projects, education, and everything else in the portfolio. New data files added over time should be picked up automatically. All data is read for cross-referencing context (e.g., verifying technologies against work history), even though this command only generates service pages.
 
 3. Read all existing service pages: every `content/services/*/index.md` file and `content/services/_index.md`.
 
@@ -51,6 +57,10 @@ Compare the portfolio data against the website content and present a structured 
 |---------|-------------|
 ```
 
+**Matching rules:** Match website pages to YAML entries by slug first (exact match). If a website page has no exact slug match but its title, description, or technologies clearly overlap with a YAML entry that has a different slug, flag it as a **Slug Mismatch** under Drift Detected rather than reporting it as both Missing and Unmatched separately.
+
+**Drift criteria:** Compare YAML `name` against front matter `title`, YAML `slug` against front matter `slug`, YAML `weight` against front matter `weight`, and YAML `technologies` against the page's technology list. Note any differences in the "What Changed" column.
+
 After presenting the audit, discuss with the user:
 - Which pages to generate, update, or remove
 - Whether the page structure should evolve from the existing format
@@ -71,7 +81,7 @@ title: "<service name — can be refined from YAML>"
 description: "<can be improved from YAML summary>"
 slug: "<slug from YAML>"
 weight: <weight from YAML>
-draft: true
+draft: false
 ---
 
 ## The Problem
