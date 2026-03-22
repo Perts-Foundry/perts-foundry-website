@@ -74,6 +74,8 @@ content/             # Markdown content (about, blog, case-studies, contact, ser
 layouts/             # Custom Hugo layout overrides
 static/              # Static assets and security headers
 archetypes/          # Content templates (blog.md, case-studies.md)
+docs/                # Architecture proposals and reference guides
+.claude/commands/    # Claude Code slash commands (generate-services)
 .github/workflows/   # CI: validate.yml (PR checks), deploy.yml (manual deploy)
 ```
 
@@ -100,4 +102,4 @@ All infrastructure changes (DNS, Workers config, R2 buckets, etc.) must be codif
 
 - Main branch: `main`
 - Feature branches merge via PR after all validation checks pass
-- Deployment is manual via workflow dispatch (not automatic on merge)
+- Deployment is triggered by commenting `deploy` on a PR (not automatic on merge)
