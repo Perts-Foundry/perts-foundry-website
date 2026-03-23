@@ -53,23 +53,45 @@ Compare the portfolio data against the website content and present a structured 
 |------|------|---------------|
 
 ### Drift Detected (both exist, content may have diverged)
-| Service | What Changed |
-|---------|-------------|
+| Service | What Changed | Rename Required |
+|---------|-------------|-----------------|
 ```
 
 **Matching rules:** Match website pages to YAML entries by slug first (exact match). If a website page has no exact slug match but its title, description, or technologies clearly overlap with a YAML entry that has a different slug, flag it as a **Slug Mismatch** under Drift Detected rather than reporting it as both Missing and Unmatched separately.
 
 **Drift criteria:** Compare YAML `name` against front matter `title`, YAML `slug` against front matter `slug`, YAML `weight` against front matter `weight`, and YAML `technologies` against the page's technology list. Note any differences in the "What Changed" column.
 
-After presenting the audit, discuss with the user:
-- Which pages to generate, update, or remove
-- Whether the page structure should evolve from the existing format
-- Any organizational questions about services (combine, split, deprioritize)
-- Whether unmatched website pages should be aligned to YAML slugs or kept
+After presenting the audit, apply these defaults without asking:
+- **Slug mismatches:** the YAML slug is authoritative. The old directory will be removed and a new one created at the correct slug. Note the rename in the "Rename Required" column.
+- **Technologies without portfolio backing:** always replace with verified alternatives or remove.
+- **Page content tightened to verified experience:** follows from the technology verification rule.
+- **Engagement labels:** always generate service-specific labels.
 
-Do not generate any pages until the user has reviewed the audit and approved next steps.
+Then discuss only genuinely ambiguous decisions with the user:
+- Which pages to generate, update, or remove (the scope of work)
+- Whether the page structure should change from the current format
+- Any services that should be combined, split, or deprioritized
+
+Do not generate any pages until the user has reviewed the audit and approved the scope.
 
 ## Phase 3: Generate
+
+### Pre-generation steps
+
+Before creating or updating any service pages, complete these two steps:
+
+**1. Handle slug renames.** If the audit identified slug mismatches (a website page exists at a different slug than the YAML specifies), delete the old directory at `content/services/<old-slug>/` before creating the new one at `content/services/<new-slug>/`. This is a rename, not a duplication. Verify the old directory is removed before proceeding.
+
+**2. Ensure `content/services/_index.md` is correctly configured.** The section index must have the following properties for the Blowfish theme to render service pages in the intended order with correct pagination:
+
+- `orderByWeight: true` at the top level (without this, Blowfish sorts by date instead of weight)
+- `invertPagination: true` in the `cascade` block (without this, Hugo's prev/next links are backwards)
+
+If either property is missing, add it. Do not remove other properties that may already be present.
+
+**3. Ensure each service page bundle has a featured image.** The services cascade sets `showHero: true`, so any page without a `featured.*` image will render with a missing hero. If generating new pages that don't have images yet, note this in the Phase 4 verification report so the user can source images before publishing.
+
+### Page generation
 
 For each approved service, create a page at `content/services/<slug>/index.md`.
 
@@ -83,7 +105,11 @@ slug: "<slug from YAML>"
 weight: <weight from YAML>
 draft: false
 ---
+```
 
+> Pages default to `draft: false`. If you want to gate publication, set individual pages to `draft: true` after generation. Do not raise draft status as a discussion point during the audit phase.
+
+```markdown
 ## The Problem
 
 [Client perspective — what they're experiencing, why it's frustrating, what risks
@@ -126,7 +152,9 @@ For the Technologies section, cross-reference each technology against `work.yaml
 ## Phase 4: Verify
 
 After generating pages, briefly report:
-- File paths created
+- File paths created or updated
+- Directories renamed (old path removed, new path created)
+- Changes made to `content/services/_index.md` (if any)
 - Service names generated
 - Any issues noticed (e.g., a service with very few matching work highlights)
 
@@ -140,3 +168,4 @@ After generating pages, briefly report:
 | Don't generate without discussing audit findings first | Present audit, discuss, then generate approved pages | User may want to change structure or priorities first |
 | Don't list technologies without experience backing | Cross-reference every tech against work.yaml | Credibility requires real experience, not aspirational claims |
 | Don't assume existing page structure is permanent | Discuss structural choices during audit phase | User may want to evolve the format |
+| Don't leave orphaned directories after a slug rename | Delete `content/services/<old-slug>/` before creating `content/services/<new-slug>/` | Orphaned pages create duplicate content and confuse Hugo's URL routing |
