@@ -24,7 +24,7 @@ jobs:
     steps:
       - name: React with eyes
         continue-on-error: true
-        uses: actions/github-script@f28e40c7f34bde8b3046d885e986cb6290c5673b # v7
+        uses: actions/github-script@ed597411d8f924073f98dfc5c65a23a2325f34cd # v8.0.0
         with:
           script: |
             await github.rest.reactions.createForIssueComment({
@@ -35,7 +35,7 @@ jobs:
             });
 
       - name: Validate deployer permissions
-        uses: actions/github-script@f28e40c7f34bde8b3046d885e986cb6290c5673b # v7
+        uses: actions/github-script@ed597411d8f924073f98dfc5c65a23a2325f34cd # v8.0.0
         with:
           script: |
             const { data } = await github.rest.repos.getCollaboratorPermissionLevel({
@@ -51,7 +51,7 @@ jobs:
 
       - name: Get PR details
         id: pr
-        uses: actions/github-script@f28e40c7f34bde8b3046d885e986cb6290c5673b # v7
+        uses: actions/github-script@ed597411d8f924073f98dfc5c65a23a2325f34cd # v8.0.0
         with:
           script: |
             const { data: pr } = await github.rest.pulls.get({
@@ -69,7 +69,7 @@ jobs:
             core.setOutput('base_ref', pr.base.ref);
 
       - name: Verify validation passed
-        uses: actions/github-script@f28e40c7f34bde8b3046d885e986cb6290c5673b # v7
+        uses: actions/github-script@ed597411d8f924073f98dfc5c65a23a2325f34cd # v8.0.0
         env:
           PR_SHA: ${{ steps.pr.outputs.sha }}
         with:
@@ -155,7 +155,7 @@ jobs:
       # ── Success: comment, merge, delete branch ──────────────────
       - name: Merge PR and report success
         if: success()
-        uses: actions/github-script@f28e40c7f34bde8b3046d885e986cb6290c5673b # v7
+        uses: actions/github-script@ed597411d8f924073f98dfc5c65a23a2325f34cd # v8.0.0
         env:
           BUILD_OUTPUT: ${{ steps.build.outputs.output }}
           DEPLOY_OUTPUT: ${{ steps.wrangler.outputs.command-output }}
@@ -266,7 +266,7 @@ jobs:
       # ── Failure: comment with error details ─────────────────────
       - name: Report failure
         if: failure() && steps.pr.outcome == 'success'
-        uses: actions/github-script@f28e40c7f34bde8b3046d885e986cb6290c5673b # v7
+        uses: actions/github-script@ed597411d8f924073f98dfc5c65a23a2325f34cd # v8.0.0
         env:
           BUILD_EXIT: ${{ steps.build.outputs.exit_code }}
           BUILD_OUTPUT: ${{ steps.build.outputs.output }}
