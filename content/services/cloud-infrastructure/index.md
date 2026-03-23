@@ -1,28 +1,29 @@
 ---
 title: "Cloud Infrastructure"
-description: "Design, build, and optimize cloud infrastructure on AWS, Azure, or GCP."
+description: "Design, build, and optimize cloud infrastructure across AWS, GCP, and multi-cloud environments"
 slug: "cloud-infrastructure"
 weight: 1
+draft: false
 ---
 
 ## The Problem
 
-Your infrastructure grew organically — click-ops in the console, snowflake servers, and tribal knowledge that lives in one person's head. It works until it doesn't, and scaling means more toil, not more velocity.
+Your infrastructure grew organically. Somebody clicked through the AWS console to spin up a VPC, another team provisioned resources in GCP without telling anyone, and now you have environments that nobody fully understands. Scaling means more manual work, not more velocity. When something breaks, the person who built it is the only one who can fix it, and they might not be on your team anymore.
 
 ## The Outcome
 
-Infrastructure defined entirely in code, version-controlled, and reproducible. Environments you can spin up in minutes. Cost visibility and guardrails that prevent surprises on your monthly bill.
+We build cloud infrastructure that is fully codified, version-controlled, and reproducible. You get environments that can be provisioned in minutes, networking that follows consistent patterns, and IAM policies that enforce least privilege across your organization. When your team needs a new environment, they open a pull request, not a support ticket.
 
 ## Technologies
 
-- **Terraform** for infrastructure as code across any cloud provider
-- **AWS / Azure / GCP** — we're cloud-agnostic and meet you where you are
-- **Kubernetes** for container orchestration at scale
-- **Networking & Security** — VPCs, IAM, secrets management, and zero-trust architecture
+- **AWS** — VPC networking, EKS, EC2, S3, IAM, and the broader compute and storage ecosystem, backed by hands-on experience across production workloads and an AWS Solutions Architect Professional certification
+- **GCP** — GKE, VPC Service Controls, Compute Engine, and GCP networking, with deep operational experience managing multi-tenant infrastructure
+- **Terraform** — all infrastructure defined as code, with module development, HCP Private Registry management, and Atlantis-driven PR workflows
+- **Kubernetes** — container orchestration on both EKS and GKE, including cluster provisioning, upgrades, and multi-tenant onboarding
 
 ## What an Engagement Looks Like
 
-1. **Assessment** — We audit your current infrastructure, identify risks, and map dependencies
-2. **Architecture** — We design a target state aligned with your growth trajectory
-3. **Build** — We implement in iterations, validating with your team at each step
-4. **Handoff** — Documentation, runbooks, and pairing sessions so your team owns it fully
+1. **Infrastructure Audit** — We map your current cloud footprint, identify risks like overprivileged IAM policies or untracked resources, and document what exists
+2. **Target Architecture** — We design infrastructure aligned with your growth, covering networking, compute, storage, and security boundaries
+3. **Codify & Build** — We implement everything in Terraform with PR-based workflows, validating with your team at each step
+4. **Operational Handoff** — Your team gets documentation, runbooks, and pairing sessions so they own and operate the infrastructure confidently

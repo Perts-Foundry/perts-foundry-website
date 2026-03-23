@@ -1,6 +1,7 @@
 # Hugo
 public/
 .hugo_build.lock
+hugo_stats.json
 resources/
 
 # Hugo module cache (local)
@@ -17,3 +18,6 @@ Thumbs.db
 
 # Environment
 .env
+
+# Claude Code local settings
+.claude/settings.local.json
