@@ -50,7 +50,7 @@
   {{ with $.Params.imagePosition | default $defaultPosition }}
     {{ $style = printf "object-position: %s;" . }}
   {{ end }}
-  <div class="overflow-hidden h-36 md:h-56 lg:h-72">
+  <div>
     <img
       src="{{ . }}"
       alt=""
@@ -58,7 +58,6 @@
       loading="eager"
       decoding="async"
       fetchpriority="high"
-      class="w-full h-full nozoom object-cover"
-      {{ if $style }}style="{{ $style | safeCSS }}"{{ end }}>
+      class="w-full nozoom rounded-md">
   </div>
 {{ end }}
