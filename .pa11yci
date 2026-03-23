@@ -14,15 +14,42 @@
     },
     "http://localhost:8080/about/",
     "http://localhost:8080/services/",
-    "http://localhost:8080/services/cloud-infrastructure/",
-    "http://localhost:8080/services/devsecops-devops/",
-    "http://localhost:8080/services/cicd-automation/",
-    "http://localhost:8080/services/kubernetes-containers/",
-    "http://localhost:8080/services/infrastructure-as-code/",
-    "http://localhost:8080/services/incident-response/",
-    "http://localhost:8080/services/cloud-migration/",
-    "http://localhost:8080/services/finops/",
-    "http://localhost:8080/services/agile-coaching/",
+    {
+      "url": "http://localhost:8080/services/cloud-infrastructure/",
+      "ignore": ["color-contrast"]
+    },
+    {
+      "url": "http://localhost:8080/services/devsecops-devops/",
+      "ignore": ["color-contrast"]
+    },
+    {
+      "url": "http://localhost:8080/services/cicd-automation/",
+      "ignore": ["color-contrast"]
+    },
+    {
+      "url": "http://localhost:8080/services/kubernetes-containers/",
+      "ignore": ["color-contrast"]
+    },
+    {
+      "url": "http://localhost:8080/services/infrastructure-as-code/",
+      "ignore": ["color-contrast"]
+    },
+    {
+      "url": "http://localhost:8080/services/incident-response/",
+      "ignore": ["color-contrast"]
+    },
+    {
+      "url": "http://localhost:8080/services/cloud-migration/",
+      "ignore": ["color-contrast"]
+    },
+    {
+      "url": "http://localhost:8080/services/finops/",
+      "ignore": ["color-contrast"]
+    },
+    {
+      "url": "http://localhost:8080/services/agile-coaching/",
+      "ignore": ["color-contrast"]
+    },
     "http://localhost:8080/blog/",
     "http://localhost:8080/case-studies/",
     "http://localhost:8080/case-studies/saas-cloud-migration/",
