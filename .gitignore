@@ -1,6 +1,7 @@
 # Hugo
 public/
 .hugo_build.lock
+hugo_stats.json
 resources/
 
 # Hugo module cache (local)

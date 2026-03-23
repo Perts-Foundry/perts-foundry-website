@@ -70,9 +70,10 @@ gitleaks git --log-opts="--all" --no-banner
 config/_default/     # Hugo config (hugo.toml, params.toml, menus, etc.)
 config/production/   # Production overrides
 config/development/  # Development overrides
-content/             # Markdown content (about, blog, case-studies, contact, services)
+content/             # Markdown content (about, accessibility, blog, case-studies, contact, services)
 layouts/             # Custom Hugo layout overrides
 static/              # Static assets and security headers
+wrangler.toml        # Cloudflare Workers deployment config
 archetypes/          # Content templates (blog.md, case-studies.md)
 docs/                # Architecture proposals and reference guides
 .claude/commands/    # Claude Code slash commands (generate-services)
