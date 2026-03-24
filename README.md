@@ -11,7 +11,7 @@ hugo server
 ## Production Build
 
 ```bash
-hugo --gc --minify
+hugo --gc --minify --cleanDestinationDir
 ```
 
 ## Project Documentation
