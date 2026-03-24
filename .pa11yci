@@ -52,7 +52,6 @@
     },
     "http://localhost:8080/blog/",
     "http://localhost:8080/case-studies/",
-    "http://localhost:8080/case-studies/saas-cloud-migration/",
     "http://localhost:8080/contact/",
     "http://localhost:8080/accessibility/"
   ]
