@@ -26,7 +26,7 @@ This creates duplication and drift. Adding a new consulting service requires edi
 **Website (`perts-foundry-website`)**:
 
 - Hugo 0.157.0 with Blowfish v2.100.0 theme (imported via Hugo Module)
-- Content sections: blog (1 post), services (2 pages), case studies (1 page), about, contact, accessibility
+- Content sections: blog (1 post), services (9 pages), case studies (0 pages, section page only), about, contact, accessibility
 - Empty `data/` directory (only `.gitkeep`)
 - No data templates, shortcodes, or structured data consumption in layouts
 - Deployed to Cloudflare Workers via wrangler
@@ -569,7 +569,7 @@ perts-foundry-website/
 │   ├── case-studies/
 │   │   ├── _index.md                  # KEPT — section list page
 │   │   ├── _content.gotmpl            # NEW — generates pages from engagements.yaml
-│   │   └── saas-cloud-migration/      # REMOVED — replaced by adapter
+│   │   └── saas-cloud-migration/      # ALREADY REMOVED (was placeholder content)
 │   ├── projects/
 │   │   ├── _index.md                  # NEW — section list page
 │   │   └── _content.gotmpl            # NEW — generates pages from projects.yaml
@@ -782,7 +782,7 @@ Once adapters are verified and data is populated, remove the manually-written pa
 
 - `content/services/cloud-infrastructure/index.md` (and `featured.jpg`)
 - `content/services/cicd-pipelines/index.md` (and `featured.jpg`)
-- `content/case-studies/saas-cloud-migration/index.md` (and `featured.jpg`)
+- `content/case-studies/saas-cloud-migration/index.md` (and `featured.jpg`) — already removed
 
 **Note:** Running both manual and adapter-generated pages simultaneously for the same slug will cause a Hugo path collision. To compare before removing, temporarily rename the manual page slugs.
 

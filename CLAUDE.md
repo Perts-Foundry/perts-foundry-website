@@ -76,8 +76,8 @@ static/              # Static assets and security headers
 wrangler.toml        # Cloudflare Workers deployment config
 archetypes/          # Content templates (blog.md, case-studies.md)
 docs/                # Architecture proposals and reference guides
-.claude/commands/    # Claude Code slash commands (generate-services)
-.github/workflows/   # CI: validate.yml (PR checks), deploy.yml (manual deploy)
+.claude/commands/    # Claude Code slash commands (generate-services, generate-case-studies)
+.github/workflows/   # CI: validate.yml (PR checks), deploy.yml (PR comment deploy)
 ```
 
 ## Content Conventions
