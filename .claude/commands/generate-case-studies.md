@@ -14,12 +14,12 @@ Your mission: mine the portfolio work history for case study candidates, present
 |---------|-------|----------|
 | The Challenge | Third person for the client | "they", "their", "the team" |
 | Our Approach (pf-* entries) | First person plural for the company | "we", "our" |
-| The Approach (pre-founding entries) | Third person for the individual | "the team", "[name]" |
+| The Approach (pre-founding entries) | Third person for the individual | "the team", "our founder" |
 | Results | Third person for outcomes | "the team", "the client" (metrics table cells are label-only, no pronouns) |
 
 - Never use first-person singular ("I", "my"). The YAML portfolio data uses resume voice; transform it completely into case study narrative.
 - Never use "you/your" for the client. That voice is reserved for service pages. Case studies are retrospective narratives, not sales pitches.
-- Resume phrases like "Led", "Spearheaded", "Drove" must be rewritten as situation descriptions (challenge) or action descriptions (approach).
+- In body text, resume phrases like "Led", "Spearheaded", "Drove" must be rewritten as situation descriptions (challenge) or action descriptions (approach). Titles may use action verbs for brevity (e.g., "Led P0 Incident Resolution").
 - Tone: specific, evidence-driven, technically detailed. Let the work speak for itself.
 
 ## Phase 1: Orient
@@ -44,7 +44,8 @@ Before forming any opinions, build a complete picture.
    - SPEC-2: Do not disclose revenue, headcount, or other client business metrics not already in work.yaml.
    - SPEC-3: Do not name specific internal tools, products, or proprietary systems unless the technology is public (e.g., Snowflake, Terraform).
    - SPEC-4: Do not reference specific teams, managers, or organizational structure by name.
-   - SPEC-5: When publishing multiple case studies from the same client, vary descriptors across studies to reduce the correlation surface.
+   - SPEC-5: When publishing multiple case studies from the same client, vary descriptors across studies to reduce the correlation surface. Note that descriptor variation reduces casual identification but does not defeat deliberate correlation analysis; the Anonymization Assessment in Phase 2 is the primary control for cross-candidate risk.
+   - SPEC-6: Do not use specific dates, quarters, or narrow time ranges. Use relative durations (e.g., "over the course of a quarter", "approximately six months") rather than calendar references.
 
 5. Evaluate existing case study pages for factual grounding. If a page's content cannot be traced to work.yaml highlights, flag it as "ungrounded" in the Phase 2 report. The page may be placeholder content from early site development. Do not use ungrounded pages as tone references for generation.
 
@@ -82,7 +83,7 @@ For each candidate:
 ### Candidate N: [Title]
 **Source:** [work entry ID(s)] | Highlights: [IDs]
 **Existing page:** [path if one exists, "none" otherwise]
-**Anonymized client:** [extracted from summary field]
+**Descriptor options:** [2-3 options derived from summary field; user selects]
 **Industry:** [inferred]
 **Challenge:** [1-3 sentences synthesized from highlights]
 **Result:** [1-3 sentences synthesized from highlights]
@@ -92,6 +93,11 @@ For each candidate:
 **Technologies:** [verified against work.yaml highlights]
 **Demonstrates services:** [matching slugs from services.yaml]
 **Assessment:** [Metric-rich / Narrative-rich / Needs enrichment] -- [rationale]
+
+Assessment definitions:
+- **Metric-rich**: Has quantifiable before/after outcomes or clear dollar/percentage metrics.
+- **Narrative-rich**: Has a coherent story arc even without hard metrics; 3+ highlights forming a bounded narrative.
+- **Needs enrichment**: Fewer than 3 related highlights AND lacks both a clear transformation arc and a quantifiable outcome. These are auto-dropped unless the user provides additional detail.
 
 ### Anonymization Assessment
 [When multiple candidates share a client, evaluate the combined fingerprint.
@@ -113,7 +119,7 @@ After presenting the report, apply these defaults without asking:
 - **Technologies without work.yaml backing:** replace with verified alternatives or remove
 - **Candidates below the "Needs enrichment" threshold:** drop unless the user provides additional detail
 
-Then ask the user which review workflow they prefer:
+Then ask the user which review workflow they prefer. Both workflows begin with the full report above. Option A uses the report as the basis for batch discussion. Option B uses the report as an overview before diving into each candidate.
 
 **Option A: Batch review.** Discuss scope, ambiguous decisions, and anonymization as a group. Best when the user is already familiar with the portfolio data and wants to move quickly. Discuss:
 - Which candidates to generate (the scope of work)
@@ -121,17 +127,20 @@ Then ask the user which review workflow they prefer:
 - Any metrics the user can provide for narrative-rich candidates
 - Whether the page structure should change from the default format
 
-**Option B: Per-candidate deep dive.** Walk through each candidate one at a time. For each candidate:
+**Option B: Per-candidate deep dive.** Best suited for 1-5 candidates or when anonymization is particularly sensitive. For larger batches, Option A is more practical. Walk through each candidate one at a time. For each candidate:
 
-1. Present a COMPLETE draft: front matter, full body text (Challenge, Approach, Results, Key Technologies), proposed slug, proposed weight, and client descriptor options. Do not present a summary and wait for approval before writing the draft; present the draft itself as the review artifact.
-2. Include an anonymization assessment specific to this candidate. Flag any technologies, details, or descriptors that increase the correlation surface with other candidates from the same client.
+1. Present a COMPLETE draft in the conversation: front matter, full body text (Challenge, Approach, Results, Key Technologies), proposed slug, proposed weight, and client descriptor options. Follow all Phase 3 body structure templates and generation guidelines when composing the draft. These drafts are review artifacts presented in the conversation; do not write files to disk until all candidates are confirmed and Phase 3 begins.
+2. Include an anonymization assessment specific to this candidate. Flag any technologies, details, or descriptors that increase the correlation surface with other candidates from the same client. When proposing descriptors, list all descriptors already assigned to other confirmed candidates from the same client.
 3. Ask enrichment questions to elicit additional context:
+   - "Which client descriptor do you prefer for this case study?"
    - "Are there details about scope, timeline, or effort that the highlights do not capture?"
    - "Are any metrics approximate or missing that you can provide?"
    - "Should any technologies be added or removed for anonymization reasons?"
 4. Wait for explicit confirmation that this candidate is locked in before advancing to the next. If the user provides feedback, regenerate and present the updated draft. Do not advance until the user confirms.
 
-Do not generate any pages until the user has reviewed the report (batch) or confirmed all candidates (per-candidate) and approved the scope.
+After all Option B candidates are individually confirmed, present a final cross-candidate anonymization assessment. Evaluate the combined correlation surface across all locked-in candidates from the same client. If the combined fingerprint is more identifying than any individual assessment indicated, flag specific candidates and recommend revisions before proceeding to generation.
+
+Do not write any pages to disk until the user has reviewed the report (batch) or confirmed all candidates including the final cross-candidate assessment (per-candidate) and approved the scope. Under Option B, Phase 3 becomes a write-to-disk step for confirmed drafts plus the pre-generation infrastructure work.
 
 ### Anonymization rules
 
@@ -144,7 +153,7 @@ Do not generate any pages until the user has reviewed the report (batch) or conf
 
 ### Pre-generation steps
 
-**1. Configure `content/case-studies/_index.md`.** The title and description are already correct. Add only missing properties:
+**1. Verify `content/case-studies/_index.md`.** The title and description are already correct. Verify these properties are present and add any that are missing:
 - Top-level: `orderByWeight: true`
 - Inside `cascade:` block: `showReadingTime: false`, `invertPagination: true`
 - Do not remove existing properties (`showDate: false`, `showAuthor: false`)
@@ -178,7 +187,7 @@ Never generate content based on assumed data. If a highlight is ambiguous or a m
 ```yaml
 ---
 title: "<metric-driven headline>"
-description: "<one sentence leading with primary metric>"
+description: "<one sentence leading with primary metric; must use approved params.client descriptor>"
 slug: "<kebab-case-slug>"
 weight: <integer, lower = higher priority>
 draft: false
@@ -262,8 +271,9 @@ Use `###` level headings for these sub-sections, not bold text
 (`**Phase 1:**`). Bold text styled as a heading triggers markdownlint
 MD036 (emphasis used instead of a heading).
 
-Two hundred to four hundred words for the Approach section regardless
-of format.]
+Two hundred to four hundred words for the default workstream format.
+Chronological and incident formats with 3+ sub-sections may extend to
+600 words.]
 
 ## Results
 
@@ -297,7 +307,7 @@ _Names and identifying details have been generalized for this case study._
 ## The Approach
 
 [Third-person narrative. Do not use "we/our" for work done before
-Perts Foundry existed. Use "[Name] identified...", "The team implemented...",
+Perts Foundry existed. Use "Our founder identified...", "The team implemented...",
 or passive constructions. Same workstream structure otherwise.]
 
 ## Results
@@ -387,7 +397,7 @@ After generating pages and passing validation, present a structured report:
 | Don't | Do Instead | Why |
 |-------|-----------|-----|
 | Use "I", "my", or resume voice | Use "we/our" for company (pf-*), third person for pre-founding | Website represents a company; case studies are retrospective |
-| Carry through resume phrases | Rewrite into narrative ("The team was facing...", "We identified...") | Audience is potential clients, not hiring managers |
+| Carry through resume phrases in body text | Rewrite into narrative ("The team was facing...", "We identified..."); titles may use action verbs | Audience is potential clients, not hiring managers |
 | Use "you/your" for the client | Use "they/their" or the anonymized descriptor | Case studies describe a past client, not a sales pitch |
 | Generate without discussing the report first | Present report, discuss, then generate approved pages | User may want to change scope or structure |
 | List technologies without experience backing | Cross-reference every tech against work.yaml highlights | Credibility requires real experience |
