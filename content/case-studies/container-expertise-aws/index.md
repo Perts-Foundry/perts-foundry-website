@@ -1,5 +1,5 @@
 ---
-title: "Deep Container Expertise Forged at AWS, Now Applied at Perts Foundry"
+title: "Deep Container Expertise, Forged at AWS"
 description: "Before founding Perts Foundry, our founder served as an AWS Cloud Support Engineer for container services, resolving critical production incidents for enterprise customers across EKS, ECS, and ECR."
 slug: "container-expertise-aws"
 weight: 100

@@ -1,5 +1,5 @@
 ---
-title: "Completed Zero-Downtime Platform Upgrades Across Three Cloud Providers for a B2B Technology Company"
+title: "Zero-Downtime Platform Upgrades Across Three Cloud Providers"
 description: "Upgraded ~15 production Snowflake Terraform projects across AWS, GCP, and Azure, upgraded 3 EKS clusters through multiple major versions, and decommissioned 2 unneeded clusters with zero downtime."
 slug: "zero-downtime-platform-upgrades"
 weight: 60

@@ -1,5 +1,5 @@
 ---
-title: "Modernized CI/CD Infrastructure for a Defense Software Organization"
+title: "Modernized CI/CD Infrastructure for a Defense Organization"
 description: "Transformed build and delivery infrastructure from legacy manual processes to modern CI/CD pipelines serving 10+ agile teams across a four-year engagement."
 slug: "cicd-modernization-defense"
 weight: 80

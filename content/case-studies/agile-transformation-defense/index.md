@@ -1,5 +1,5 @@
 ---
-title: "Led Organization-Wide Agile Adoption at a Defense Software Organization"
+title: "Led Organization-Wide Agile Adoption"
 description: "Pioneered a three-phase agile transformation from waterfall to optimized Kanban, reducing issue open time by 25% and establishing the reference implementation for the organization."
 slug: "agile-transformation-defense"
 weight: 90

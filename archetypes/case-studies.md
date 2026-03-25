@@ -4,6 +4,7 @@ date: {{ .Date }}
 draft: true
 description: ""
 slug: "{{ .File.ContentBaseName }}"
+weight: 0
 params:
   client: ""
   industry: ""

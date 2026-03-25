@@ -1,5 +1,5 @@
 ---
-title: "Saved Over $125,000 in Annual Cloud Spend for an Enterprise Data Platform"
+title: "Saved Over $125,000 in Annual Cloud Spend"
 description: "Eliminated over $125,000 in annual cloud waste through storage right-sizing, idle cluster decommissioning, and Soft Delete remediation across GCP."
 slug: "finops-cloud-cost-savings"
 weight: 10
@@ -21,7 +21,7 @@ _This case study has been anonymized at the client's request._
 
 ## The Challenge
 
-An enterprise data collaboration platform had accumulated significant cloud waste across their GCP environment with no systematic cost governance in place. Persistent disks were provisioned on premium PD-SSD tiers for workloads where high-performance storage was unnecessary. GKE clusters that had been stood up for projects long since completed were still running, consuming compute and networking resources with no active consumers.
+An enterprise data platform had accumulated significant cloud waste across their GCP environment with no systematic cost governance in place. Persistent disks were provisioned on premium PD-SSD tiers for workloads where high-performance storage was unnecessary. GKE clusters that had been stood up for projects long since completed were still running, consuming compute and networking resources with no active consumers.
 
 Compounding the problem, Google had enabled Soft Delete as a platform default across GCS buckets. Soft Delete retains a copy of every deleted object for a configurable retention period, and the organization is billed for that retained storage. For high-churn buckets with frequent writes and deletes, this default quietly generated substantial charges that nobody had accounted for.
 

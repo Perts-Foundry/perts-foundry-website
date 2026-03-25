@@ -1,5 +1,5 @@
 ---
-title: "Migrated 5+ Petabytes to Artifact Registry with Zero Downtime for an Enterprise Data Platform"
+title: "5+ PB Registry Migration with Zero Downtime"
 description: "Completed a 5+ petabyte container registry migration from GCR to GAR with zero service disruption ahead of Google's deprecation deadline."
 slug: "zero-downtime-registry-migration"
 weight: 20
@@ -20,7 +20,7 @@ _This case study has been anonymized at the client's request._
 
 ## The Challenge
 
-Google announced the deprecation of Google Container Registry (GCR), setting a hard deadline for all customers to migrate their container image infrastructure to Artifact Registry (GAR). For an enterprise data collaboration platform, this was not a simple cutover. Their registry footprint spanned over 5 petabytes of container images across dev, staging, and production environments in multiple regions, with CI/CD pipelines and running workloads continuously pulling images from GCR.
+Google announced the deprecation of Google Container Registry (GCR), setting a hard deadline for all customers to migrate their container image infrastructure to Artifact Registry (GAR). For an enterprise data platform, this was not a simple cutover. Their registry footprint spanned over 5 petabytes of container images across dev, staging, and production environments in multiple regions, with CI/CD pipelines and running workloads continuously pulling images from GCR.
 
 The scale was compounded by sprawl. Years of organic growth had left container images scattered across a large number of projects, and it was not always clear which images were still actively consumed by critical workloads and which were remnants of decommissioned services. Any disruption during migration would ripple outward: broken image pulls would block deployments, and running services referencing GCR paths could fail at restart or scale-up. The migration needed to be completely invisible to downstream teams.
 

@@ -1,5 +1,5 @@
 ---
-title: "Drove the Shift from DevOps to DevSecOps for a Multi-Cloud SaaS Organization"
+title: "Drove the Shift from DevOps to DevSecOps"
 description: "Designed and executed a DevSecOps integration strategy spanning security governance, credential hardening, secrets management, and structured knowledge transfer across engineering teams."
 slug: "devops-to-devsecops-transformation"
 weight: 40

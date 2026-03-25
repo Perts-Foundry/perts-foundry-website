@@ -1,5 +1,5 @@
 ---
-title: "Led P0 Incident Resolution Across Multi-Cloud Production Systems for a Large SaaS Company"
+title: "Led P0 Incident Resolution Across Multi-Cloud Systems"
 description: "Coordinated war room response for high-severity production incidents spanning NFS failures, network policy misconfigurations, and domain expiry across GCP and AWS."
 slug: "incident-response-leadership"
 weight: 50
