@@ -41,13 +41,13 @@ We focused on four workstreams:
 
 ## Results
 
-| Metric | Before | After |
-| ------ | ------ | ----- |
-| Module distribution | Ad hoc | Self-service via HCP Private Registry |
-| Consuming projects migrated | -- | 200+ (over one year) |
-| Atlantis rate limiting | ~3 failed plan reports per week | 85% reduction within one month |
-| Dependency management | Manual | Automated via Renovatebot |
-| Framework consumers | 15-20 teams (high maintenance overhead) | 15-20 teams (restructured, reduced overhead) |
+| Metric                      | Before                                  | After                                        |
+| --------------------------- | --------------------------------------- | -------------------------------------------- |
+| Module distribution         | Ad hoc                                  | Self-service via HCP Private Registry        |
+| Consuming projects migrated | --                                      | 200+ (over one year)                         |
+| Atlantis rate limiting      | ~3 failed plan reports per week         | 85% reduction within one month               |
+| Dependency management       | Manual                                  | Automated via Renovatebot                    |
+| Framework consumers         | 15-20 teams (high maintenance overhead) | 15-20 teams (restructured, reduced overhead) |
 
 The registry migration earned recognition across the organization for its quality and impact. With self-service module distribution, automated dependency management, and a significantly more reliable CI/CD workflow, the team had transformed Terraform from a scaling bottleneck into a well-governed platform supporting hundreds of projects and dozens of teams. The silent plan failures that had been a weekly source of developer frustration were effectively eliminated, restoring trust in the infrastructure workflow. And the automated dependency management meant the platform would stay current without requiring manual intervention, reducing the risk of falling behind on provider updates or security patches.
 

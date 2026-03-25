@@ -39,13 +39,13 @@ We focused on two parallel workstreams:
 
 ## Results
 
-| Metric | Before | After |
-| ------ | ------ | ----- |
-| Snowflake projects upgraded | Outdated across 3 cloud providers | ~15 upgraded (AWS, GCP, Azure) |
-| Snowflake account migration | Pre-migration | Completed across providers and regions |
-| EKS clusters | 5 approaching end-of-support | 3 upgraded through multiple major versions |
-| Unneeded EKS clusters | 2 running (unnecessary cost) | Decommissioned |
-| Service disruption | -- | Zero downtime across all upgrades |
+| Metric                      | Before                            | After                                      |
+| --------------------------- | --------------------------------- | ------------------------------------------ |
+| Snowflake projects upgraded | Outdated across 3 cloud providers | ~15 upgraded (AWS, GCP, Azure)             |
+| Snowflake account migration | Pre-migration                     | Completed across providers and regions     |
+| EKS clusters                | 5 approaching end-of-support      | 3 upgraded through multiple major versions |
+| Unneeded EKS clusters       | 2 running (unnecessary cost)      | Decommissioned                             |
+| Service disruption          | --                                | Zero downtime across all upgrades          |
 
 This was keep-the-lights-on work at its most demanding: not a single flashy migration with a clear finish line, but a sustained effort across multiple platforms, providers, and regions where the margin for error was zero. The dependency assessment that led to decommissioning 2 clusters demonstrated that keeping the lights on is not just about upgrading everything in place; sometimes the right answer is to turn off what is no longer needed. The production environment continued operating without interruption throughout, and the organization moved from a reactive posture of chasing deadlines to a position where critical infrastructure was current and right-sized.
 

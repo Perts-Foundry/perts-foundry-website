@@ -39,12 +39,12 @@ We focused on three parallel workstreams over the course of a quarter:
 
 ## Results
 
-| Metric | Before | After |
-| ------ | ------ | ----- |
-| Annual cloud waste | Untracked | $125K+ eliminated |
-| Storage tier (non-critical workloads) | PD-SSD (over-provisioned) | PD-Balanced |
-| Idle GKE clusters | Running unmonitored | Decommissioned |
-| GCS Soft Delete | Enabled by platform default | Disabled |
+| Metric                                | Before                      | After             |
+| ------------------------------------- | --------------------------- | ----------------- |
+| Annual cloud waste                    | Untracked                   | $125K+ eliminated |
+| Storage tier (non-critical workloads) | PD-SSD (over-provisioned)   | PD-Balanced       |
+| Idle GKE clusters                     | Running unmonitored         | Decommissioned    |
+| GCS Soft Delete                       | Enabled by platform default | Disabled          |
 
 The storage tier migration accounted for roughly half of the total savings, with idle cluster decommissioning and Soft Delete remediation splitting the remainder.
 

@@ -43,13 +43,13 @@ We executed this transformation over the course of a quarter, focusing on five w
 
 ## Results
 
-| Metric | Before | After |
-| ------ | ------ | ----- |
+| Metric                | Before                                 | After                                           |
+| --------------------- | -------------------------------------- | ----------------------------------------------- |
 | AWS accounts hardened | Unhardened (stale credentials, no MFA) | 10+ (root rotation, MFA enforced, IAM reviewed) |
-| Credential management | Manual rotation | Automated lifecycle management |
-| Secrets management | Broken cross-platform auth | Vault operational across GKE and AWS |
-| Repository governance | Informal (bypasses possible) | GitHub rulesets enforcing security by default |
-| Operational workflows | Manual | Automated via Jira |
+| Credential management | Manual rotation                        | Automated lifecycle management                  |
+| Secrets management    | Broken cross-platform auth             | Vault operational across GKE and AWS            |
+| Repository governance | Informal (bypasses possible)           | GitHub rulesets enforcing security by default   |
+| Operational workflows | Manual                                 | Automated via Jira                              |
 
 The transformation was completed within a single quarter. By designing a security integration strategy and facilitating structured knowledge transfer across multiple teams, the engagement ensured that DevSecOps practices were embedded into how teams worked rather than bolted on as an afterthought.
 

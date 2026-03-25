@@ -40,12 +40,12 @@ We focused on three workstreams:
 
 ## Results
 
-| Metric | Before | After |
-| ------ | ------ | ----- |
-| Teams on multi-tenant GKE | 0 | 4 (multiple applications each) |
-| Application scale capacity | Baseline | Nearly 100x |
-| Onboarding process | Ad hoc, no documentation | Repeatable with team-specific Confluence docs |
-| Cluster lifecycle | Reactive | Planned testing and transition process |
+| Metric                     | Before                   | After                                         |
+| -------------------------- | ------------------------ | --------------------------------------------- |
+| Teams on multi-tenant GKE  | 0                        | 4 (multiple applications each)                |
+| Application scale capacity | Baseline                 | Nearly 100x                                   |
+| Onboarding process         | Ad hoc, no documentation | Repeatable with team-specific Confluence docs |
+| Cluster lifecycle          | Reactive                 | Planned testing and transition process        |
 
 The multi-tenant onboarding transformed Kubernetes from an infrastructure managed by one team into a shared platform serving multiple product teams. Where teams had previously faced the prospect of figuring out Kubernetes independently, they now had a supported onboarding path with documentation, namespace isolation, and tailored Helm charts. The team-specific Confluence documentation meant the investment was not one-time; future teams could onboard without the same level of hands-on support, reducing the marginal cost of each new team joining the platform.
 

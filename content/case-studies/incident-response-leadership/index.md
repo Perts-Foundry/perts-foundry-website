@@ -29,15 +29,15 @@ The team needed someone who could respond to a page within minutes, take command
 
 Over the course of the engagement, we led the response to multiple high-severity incidents, each requiring a different diagnostic approach and coordination strategy.
 
-**Incident 1: NFS Outage Affecting 100+ Services**
+### Incident 1: NFS Outage Affecting 100+ Services
 
 An NFS failure cascaded across the production environment, impacting over 100 services. After being paged, we coordinated a 6-hour war room effort, leading the troubleshooting across infrastructure and application teams. The diagnosis required working across multiple layers of the stack simultaneously: identifying which services were directly dependent on NFS, which were failing due to cascading effects, and which were unaffected. The response involved standing up replacement NFS instances to restore service while engaging Google support to diagnose the underlying failure. After resolution, we authored the postmortem, which uncovered previously unknown dependencies between services and the NFS infrastructure, documenting the root cause, timeline, and remediation steps to prevent recurrence.
 
-**Incident 2: Network Communication Failure**
+### Incident 2: Network Communication Failure
 
 Production services lost the ability to communicate with each other, triggering a P0 escalation. The failure presented as a complete loss of connectivity between services that had been communicating normally minutes earlier. We led a screen-share war room session to diagnose the failure in real time, systematically ruling out application-level causes and tracing the issue to a missing network deny policy that had broken connectivity at the infrastructure layer. Once identified, we executed a service perimeter update to restore communications. The postmortem revealed additional dependency relationships that had not been documented, leading to infrastructure changes that hardened the network configuration against similar misconfigurations.
 
-**Incident 3: Production Domain Expiry**
+### Incident 3: Production Domain Expiry
 
 A production domain expired unexpectedly, causing downtime for user-facing services. The expiration had not been tracked, and there was no alerting in place to warn of approaching renewal deadlines. We coordinated with engineering teams and AWS support to rapidly assess the infrastructure impact, determine which services were affected, and implement a workaround to restore availability while the domain renewal was processed. Monitoring was added afterward to alert on upcoming domain expirations well in advance, ensuring this category of incident could not recur undetected.
 

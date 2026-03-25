@@ -36,13 +36,13 @@ We focused on three workstreams, executing the migration over the course of two 
 
 ## Results
 
-| Metric | Before | After |
-| ------ | ------ | ----- |
-| Registry platform | GCR (deprecated) | GAR |
-| Data migrated | -- | 5+ PB across dev, staging, and production |
-| Service disruption | -- | Zero downtime |
-| Downstream team awareness | -- | Fully transparent (no action required) |
-| Deadline compliance | Google deprecation deadline | Completed ahead of schedule |
+| Metric                    | Before                      | After                                     |
+| ------------------------- | --------------------------- | ----------------------------------------- |
+| Registry platform         | GCR (deprecated)            | GAR                                       |
+| Data migrated             | --                          | 5+ PB across dev, staging, and production |
+| Service disruption        | --                          | Zero downtime                             |
+| Downstream team awareness | --                          | Fully transparent (no action required)    |
+| Deadline compliance       | Google deprecation deadline | Completed ahead of schedule               |
 
 The migration was completed ahead of Google's deprecation deadline with no service disruption and no downstream coordination required. Over 5 petabytes of container images were moved to Artifact Registry while CI/CD pipelines and running workloads continued operating as if nothing had changed. Not a single team needed to take action or even be aware that the migration was happening.
 
