@@ -157,11 +157,11 @@ Do not write any pages to disk until the user has reviewed the report (batch) or
 - Top-level: `orderByWeight: true`
 - Inside `cascade:` block: `showReadingTime: false`, `invertPagination: true`
 - Do not remove existing properties (`showDate: false`, `showAuthor: false`)
-- Do not add `showHero` or `heroStyle` unless the user confirms images will be provided
+- Inside `cascade:` block: `showHero: true`, `heroStyle: basic` (hero images are standard for case studies)
 
 **2. Backfill weight on existing pages.** If existing case study pages lack a `weight` field and `orderByWeight: true` is being added, assign weights to those pages. Note backfilled weights in the Phase 4 report.
 
-**3. Check for featured images.** If the cascade already has `showHero: true`, note any page bundles that lack a `featured.*` image in the Phase 4 report.
+**3. Check for featured images.** Since the cascade sets `showHero: true`, every case study page bundle needs a `featured.*` image. Note any page bundles that lack one in the Phase 4 report as an action item.
 
 **4. Update `.pa11yci` with new case study URLs.** For each case study that will be generated, add its URL to the `urls` array in `.pa11yci`. Use the same format as existing service page entries:
 ```json
