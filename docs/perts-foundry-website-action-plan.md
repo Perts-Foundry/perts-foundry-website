@@ -1,5 +1,7 @@
 # Perts Foundry LLC — Website Action Plan
 
+> **Note:** This was the initial planning document. The project deployed on Cloudflare Workers (not Cloudflare Pages as described below), and the infrastructure repo is named `Perts-Foundry/infrastructure` (not `perts-foundry-infra`). See `CLAUDE.md` for the current architecture.
+
 ## Overview
 
 This action plan covers standing up a Hugo static site for Perts Foundry LLC, deployed to Cloudflare Pages, with all infrastructure managed by Terraform and CI/CD handled by GitHub Actions. The architecture uses two separate repositories — one for infrastructure, one for the Hugo site — under the existing `Perts-Foundry` GitHub organization.

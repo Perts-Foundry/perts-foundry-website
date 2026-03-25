@@ -1,5 +1,7 @@
 # Portfolio Data Integration — Architecture Proposal
 
+> **Note:** The "Current State" section below predates the case study generation. As of March 2026, 10 case studies exist in `content/case-studies/`, generated from `work.yaml` via the `generate-case-studies` Claude Code command rather than from `engagements.yaml` via content adapters as this proposal describes.
+
 This document evaluates architectural options for integrating the `professional-portfolio-source` repository into the Perts Foundry website. It covers data import mechanisms, consumption patterns, hybrid combinations, and a recommended approach with implementation details.
 
 ## Overview

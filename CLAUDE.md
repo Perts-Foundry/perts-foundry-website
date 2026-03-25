@@ -87,6 +87,12 @@ docs/                # Architecture proposals and reference guides
 - Content files live under `content/` as page bundles (directory with `index.md`)
 - Front matter uses YAML delimiters (`---`)
 - All new content starts as `draft: true`
+- Tags use proper case (`Terraform`, `AWS`, `Kubernetes`, not `terraform`, `aws`)
+- Permalinks for case studies use the `slug` field: `/case-studies/:slug/`
+
+### Section ordering (services, case-studies)
+
+Both `content/services/_index.md` and `content/case-studies/_index.md` use `orderByWeight: true` with cascading display settings (`showDate: false`, `showAuthor: false`, `showReadingTime: false`, `invertPagination: true`). New pages in these sections must include a `weight` field or they will sort unpredictably. Case studies use weight increments of 10 (range 10-100) to allow future insertions.
 
 ## Code Style
 
