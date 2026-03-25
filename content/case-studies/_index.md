@@ -7,4 +7,6 @@ cascade:
   showAuthor: false
   showReadingTime: false
   invertPagination: true
+  showHero: true
+  heroStyle: basic
 ---

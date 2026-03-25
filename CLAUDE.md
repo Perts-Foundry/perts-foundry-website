@@ -92,7 +92,7 @@ docs/                # Architecture proposals and reference guides
 
 ### Section ordering (services, case-studies)
 
-Both `content/services/_index.md` and `content/case-studies/_index.md` use `orderByWeight: true` with cascading display settings (`showDate: false`, `showAuthor: false`, `showReadingTime: false`, `invertPagination: true`). New pages in these sections must include a `weight` field or they will sort unpredictably. Case studies use weight increments of 10 (range 10-100) to allow future insertions.
+Both `content/services/_index.md` and `content/case-studies/_index.md` use `orderByWeight: true` with cascading display settings (`showDate: false`, `showAuthor: false`, `showReadingTime: false`, `invertPagination: true`, `showHero: true`, `heroStyle: basic`). New pages in these sections must include a `weight` field or they will sort unpredictably. Both sections require a `featured.jpg` in each page bundle for the hero image. Case studies use weight increments of 10 (range 10-100) to allow future insertions.
 
 ## Code Style
 
