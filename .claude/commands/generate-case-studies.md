@@ -39,7 +39,12 @@ Before forming any opinions, build a complete picture.
 
 3. Read all existing case study pages: every `content/case-studies/*/index.md` file and `content/case-studies/_index.md`.
 
-4. Read `../professional-portfolio-source/docs/review-findings-backlog.md` for anonymization boundaries (SPEC-1 through SPEC-5).
+4. Apply the following anonymization boundaries (previously codified as SPEC-1 through SPEC-5, now embedded directly):
+   - SPEC-1: Never name the client organization. Use the anonymized descriptor chosen during Phase 2 review.
+   - SPEC-2: Do not disclose revenue, headcount, or other client business metrics not already in work.yaml.
+   - SPEC-3: Do not name specific internal tools, products, or proprietary systems unless the technology is public (e.g., Snowflake, Terraform).
+   - SPEC-4: Do not reference specific teams, managers, or organizational structure by name.
+   - SPEC-5: When publishing multiple case studies from the same client, vary descriptors across studies to reduce the correlation surface.
 
 5. Evaluate existing case study pages for factual grounding. If a page's content cannot be traced to work.yaml highlights, flag it as "ungrounded" in the Phase 2 report. The page may be placeholder content from early site development. Do not use ungrounded pages as tone references for generation.
 
@@ -51,7 +56,7 @@ Mine `work.yaml` for case study candidates and assess existing pages.
 
 Analyze all work.yaml highlights for case study potential. Prioritize sources:
 
-1. **`pf-*` work entries** (Perts Foundry consulting engagements). These map directly to case study candidates. The anonymized client descriptor must be extracted from the `summary` field text (e.g., "enterprise data collaboration platform" from "Embedded with an enterprise data collaboration platform"). Both `pf-*` entries share the same client, so the descriptor and industry must be consistent across all candidates from these entries.
+1. **`pf-*` work entries** (Perts Foundry consulting engagements). These map directly to case study candidates. Use the `summary` field text as a starting point for anonymized client descriptors (e.g., "enterprise data collaboration platform" from "Embedded with an enterprise data collaboration platform"), but the user will choose the final descriptor during Phase 2 review. Both `pf-*` entries share the same client; to reduce the anonymization correlation surface (SPEC-5), VARY the client descriptor across case studies from the same client (e.g., "enterprise data platform" for one, "enterprise SaaS platform" for another, "large SaaS company" for a third). Present descriptor options during Phase 2 for user selection.
 2. **Pre-founding entries** (AWS, NSWC). These validate expertise depth but require different framing since they predate Perts Foundry. Use "before founding Perts Foundry" or "our founder's experience at [employer]" voice. For AWS, the employer name is not confidential. For NSWC entries, use "a defense software organization" rather than the full department name. NSWC entries span multiple positions at the same organization and may be combined into a single case study.
 
 Group related highlights thematically. A single work entry may yield multiple case studies, and a single case study may draw from multiple work entries. Many candidates will be narrative-rich rather than metric-rich; this is expected and not a deficiency. Strong candidates have any of:
@@ -108,18 +113,30 @@ After presenting the report, apply these defaults without asking:
 - **Technologies without work.yaml backing:** replace with verified alternatives or remove
 - **Candidates below the "Needs enrichment" threshold:** drop unless the user provides additional detail
 
-Then discuss only genuinely ambiguous decisions with the user:
+Then ask the user which review workflow they prefer:
+
+**Option A: Batch review.** Discuss scope, ambiguous decisions, and anonymization as a group. Best when the user is already familiar with the portfolio data and wants to move quickly. Discuss:
 - Which candidates to generate (the scope of work)
 - Whether existing pages should be regenerated or left as-is
 - Any metrics the user can provide for narrative-rich candidates
 - Whether the page structure should change from the default format
 
-Do not generate any pages until the user has reviewed the report and approved the scope.
+**Option B: Per-candidate deep dive.** Walk through each candidate one at a time. For each candidate:
+
+1. Present a COMPLETE draft: front matter, full body text (Challenge, Approach, Results, Key Technologies), proposed slug, proposed weight, and client descriptor options. Do not present a summary and wait for approval before writing the draft; present the draft itself as the review artifact.
+2. Include an anonymization assessment specific to this candidate. Flag any technologies, details, or descriptors that increase the correlation surface with other candidates from the same client.
+3. Ask enrichment questions to elicit additional context:
+   - "Are there details about scope, timeline, or effort that the highlights do not capture?"
+   - "Are any metrics approximate or missing that you can provide?"
+   - "Should any technologies be added or removed for anonymization reasons?"
+4. Wait for explicit confirmation that this candidate is locked in before advancing to the next. If the user provides feedback, regenerate and present the updated draft. Do not advance until the user confirms.
+
+Do not generate any pages until the user has reviewed the report (batch) or confirmed all candidates (per-candidate) and approved the scope.
 
 ### Anonymization rules
 
-- Extract anonymized client descriptors from work.yaml `summary` field text. Do not introduce new identifying details beyond what work.yaml already contains.
-- Respect the specificity boundaries in `../professional-portfolio-source/docs/review-findings-backlog.md` (SPEC-1 through SPEC-5).
+- Use anonymized client descriptors chosen during Phase 2 review. The work.yaml `summary` field is a starting point, not the final descriptor. Do not introduce new identifying details beyond what work.yaml already contains.
+- Apply the anonymization boundaries defined in Phase 1, step 4 (SPEC-1 through SPEC-5).
 - For AWS entries, the employer name is not confidential.
 - For NSWC entries, use "a defense software organization" rather than the full department name.
 
@@ -136,6 +153,15 @@ Do not generate any pages until the user has reviewed the report and approved th
 **2. Backfill weight on existing pages.** If existing case study pages lack a `weight` field and `orderByWeight: true` is being added, assign weights to those pages. Note backfilled weights in the Phase 4 report.
 
 **3. Check for featured images.** If the cascade already has `showHero: true`, note any page bundles that lack a `featured.*` image in the Phase 4 report.
+
+**4. Update `.pa11yci` with new case study URLs.** For each case study that will be generated, add its URL to the `urls` array in `.pa11yci`. Use the same format as existing service page entries:
+```json
+{
+  "url": "http://localhost:8080/case-studies/<slug>/",
+  "ignore": ["color-contrast"]
+}
+```
+This ensures new pages have accessibility test coverage in CI. If a case study is being removed, also remove its entry from `.pa11yci`.
 
 ### Page generation
 
@@ -169,7 +195,15 @@ tags:
 
 > Generated pages use `draft: false` because the user has already approved content during Phase 2. This differs from the archetype default (`draft: true`), which assumes manual authoring. If the user wants to gate publication, they set individual pages to `draft: true` after generation.
 
-**Title:** Lead with the strongest metric. Formula: "[Result verb + metric] for [anonymized client descriptor]". If no single metric stands out, use: "[Transformation verb + scope] for [anonymized client descriptor]" (e.g., "Modernized CI/CD Infrastructure for a Defense Software Organization").
+**Title:** Lead with the strongest metric. Keep titles under 60 characters (hard limit: 70). The client descriptor should generally be dropped from the title since it appears in `description` and `params.client`. Examples:
+- "Saved Over $125,000 in Annual Cloud Spend" (41 chars)
+- "5+ PB Registry Migration with Zero Downtime" (43 chars)
+- "Scaled Terraform Operations Across 200+ Projects" (48 chars)
+- "Led P0 Incident Resolution Across Multi-Cloud Systems" (53 chars)
+
+If the title naturally includes the client descriptor and stays under 60 characters, that is fine. If it exceeds 60, drop the descriptor first.
+
+**Tag casing:** Use proper case for all tags. Product names use their official casing (e.g., `Terraform`, `Kubernetes`, `AWS`, `GKE`). Discipline tags use title case (e.g., `FinOps`, `Incident Response`, `Agile`). Do not use lowercase for tags (e.g., `terraform`, `devops`).
 
 **params.result:** Reflect the single most impactful metric, matching what leads the title.
 
@@ -181,10 +215,13 @@ _This case study has been anonymized at the client's request._
 ## The Challenge
 
 [Third-person narrative. Use "they/their" or the anonymized descriptor.
-Be specific about the pain: what was broken, slow, risky, or costly.
-Quantify the pain where possible. Open with a vivid one-sentence hook,
-paint the problem with increasing specificity, close by making the stakes
-clear. Two to three paragraphs, 150-250 words.]
+The descriptor used in body text MUST match the `params.client` value
+in front matter, not the raw summary field from work.yaml. If the user
+chose a different descriptor during Phase 2 review, use their choice
+throughout. Be specific about the pain: what was broken, slow, risky,
+or costly. Quantify the pain where possible. Open with a vivid
+one-sentence hook, paint the problem with increasing specificity, close
+by making the stakes clear. Two to three paragraphs, 150-250 words.]
 
 ## Our Approach
 
@@ -197,9 +234,36 @@ We focused on [N] parallel workstreams:
 - **[Workstream Name]** -- [How this connected to the outcome]
 
 Labels must be specific to this case study, not generic.
-The structure above is the default. For incident-response stories,
-a chronological format (situation, action, outcome) may fit better.
-Two hundred to four hundred words.]
+
+The workstream structure above is the default. Two alternative
+structures are available when the content fits them better:
+
+**Chronological format** (for phased transformations):
+
+### Phase 1: [Phase Name]
+
+[Narrative paragraph describing what happened in this phase.]
+
+### Phase 2: [Phase Name]
+
+[Narrative paragraph.]
+
+**Incident format** (for incident-response stories):
+
+### Incident 1: [Incident Name]
+
+[Narrative paragraph describing the incident, diagnosis, and resolution.]
+
+### Incident 2: [Incident Name]
+
+[Narrative paragraph.]
+
+Use `###` level headings for these sub-sections, not bold text
+(`**Phase 1:**`). Bold text styled as a heading triggers markdownlint
+MD036 (emphasis used instead of a heading).
+
+Two hundred to four hundred words for the Approach section regardless
+of format.]
 
 ## Results
 
@@ -251,12 +315,14 @@ If 4+ technologies are involved, add after Results:
 <comma-separated list>
 ```
 
+**Tags vs. Key Technologies:** These serve different purposes. Front matter `tags` drive site taxonomy and filtering; include only the primary technologies and disciplines a reader would use to find this case study. The Key Technologies body section is a comprehensive reference listing all technologies involved, including supporting tools (e.g., Bash, Python, Linux) that would clutter the tag taxonomy. A technology can appear in Key Technologies without appearing in tags, but every tag should also appear in Key Technologies.
+
 ### Generation guidelines
 
 - Use ALL portfolio data as context: work highlights, skills, certs, projects. Weave experience naturally into the narrative.
 - The anonymization notice is mandatory on every case study page. Use the client-request phrasing for pf-* entries and the generalized phrasing for pre-founding entries.
 - Each case study should feel like a complete story with a clear arc.
-- Varied length is fine. Target 750-1,500 words per case study.
+- Varied length is fine. Target 600-1,500 words per case study. Case studies built from 1-3 highlights naturally run 600-750 words; do not pad them to reach a higher target. Case studies built from 4+ highlights or multi-phase engagements typically reach 900-1,200 words.
 - Read existing grounded case study pages for tone context, but do not use ungrounded pages as references.
 
 ### Technology verification
@@ -265,7 +331,19 @@ Cross-reference each technology against `work.yaml` highlights for the specific 
 
 ## Phase 4: Verify
 
-After generating pages, present a structured report:
+### Run validation checks
+
+Before presenting the report, run these validation steps against all generated and modified files:
+
+1. `npx prettier --write "content/case-studies/*/index.md"` to format all case study files. Prettier handles table alignment, line breaks, and other formatting that is tedious to get right manually.
+2. `npx markdownlint-cli2 "content/case-studies/*/index.md"` to verify no markdownlint violations. Fix any violations before proceeding.
+3. `hugo --gc --minify --cleanDestinationDir` to verify the site builds cleanly with the new pages.
+
+If any check fails, fix the issue and re-run before presenting the report. Note any fixes made in the "Attention Needed" section of the report.
+
+### Present report
+
+After generating pages and passing validation, present a structured report:
 
 ```
 ## Generation Report
@@ -295,8 +373,9 @@ After generating pages, present a structured report:
 - [Case studies without featured images]
 - [Candidates with few matching work highlights]
 - [Technologies that could not be verified]
-- [Case studies outside 750-1,500 word range]
+- [Case studies outside 600-1,500 word range]
 - [Content generated from ambiguous data -- verify accuracy]
+- [Docs that reference case study counts or architecture that may now be stale (check docs/*.md)]
 
 ### Service Coverage
 | Case Study | Demonstrates Services |
@@ -316,6 +395,6 @@ After generating pages, present a structured report:
 | Put after-only metrics in the before/after table | Weave after-only metrics into the narrative paragraph | Empty "before" cells undermine the table's credibility |
 | Generate content from assumed data | Flag gaps in Phase 4 rather than inventing details | Credibility depends on accuracy |
 | Leave orphaned directories after a slug change | Delete old directory before creating new | Orphaned pages create duplicate content |
-| Add identifying details beyond work.yaml | Use existing anonymized descriptors from summary fields | Respect SPEC-1 through SPEC-5 anonymization boundaries |
+| Add identifying details beyond work.yaml | Use anonymized descriptors chosen during Phase 2 review | Respect SPEC-1 through SPEC-5 anonymization boundaries |
 | Use ungrounded pages as tone references | Only reference pages backed by work.yaml data | Fabricated content miscalibrates the generation |
 | Assume existing page structure is permanent | Discuss structural choices during Phase 2 | User may want to evolve the format |
