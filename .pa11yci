@@ -52,6 +52,46 @@
     },
     "http://localhost:8080/blog/",
     "http://localhost:8080/case-studies/",
+    {
+      "url": "http://localhost:8080/case-studies/finops-cloud-cost-savings/",
+      "ignore": ["color-contrast"]
+    },
+    {
+      "url": "http://localhost:8080/case-studies/zero-downtime-registry-migration/",
+      "ignore": ["color-contrast"]
+    },
+    {
+      "url": "http://localhost:8080/case-studies/terraform-infrastructure-at-scale/",
+      "ignore": ["color-contrast"]
+    },
+    {
+      "url": "http://localhost:8080/case-studies/devops-to-devsecops-transformation/",
+      "ignore": ["color-contrast"]
+    },
+    {
+      "url": "http://localhost:8080/case-studies/incident-response-leadership/",
+      "ignore": ["color-contrast"]
+    },
+    {
+      "url": "http://localhost:8080/case-studies/zero-downtime-platform-upgrades/",
+      "ignore": ["color-contrast"]
+    },
+    {
+      "url": "http://localhost:8080/case-studies/kubernetes-multi-tenancy-scaling/",
+      "ignore": ["color-contrast"]
+    },
+    {
+      "url": "http://localhost:8080/case-studies/cicd-modernization-defense/",
+      "ignore": ["color-contrast"]
+    },
+    {
+      "url": "http://localhost:8080/case-studies/agile-transformation-defense/",
+      "ignore": ["color-contrast"]
+    },
+    {
+      "url": "http://localhost:8080/case-studies/container-expertise-aws/",
+      "ignore": ["color-contrast"]
+    },
     "http://localhost:8080/contact/",
     "http://localhost:8080/accessibility/"
   ]
