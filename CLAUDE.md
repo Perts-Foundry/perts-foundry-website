@@ -70,7 +70,7 @@ gitleaks git --log-opts="--all" --no-banner
 config/_default/     # Hugo config (hugo.toml, params.toml, menus, etc.)
 config/production/   # Production overrides
 config/development/  # Development overrides
-content/             # Markdown content (about, accessibility, blog, case-studies, contact, services)
+content/             # Markdown content (about, accessibility, blog, case-studies, contact, privacy, services)
 layouts/             # Custom Hugo layout overrides
 static/              # Static assets and security headers
 wrangler.toml        # Cloudflare Workers deployment config
