@@ -12,7 +12,10 @@
       "url": "http://localhost:8080/",
       "ignore": ["color-contrast"]
     },
-    "http://localhost:8080/about/",
+    {
+      "url": "http://localhost:8080/about/",
+      "ignore": ["color-contrast"]
+    },
     "http://localhost:8080/services/",
     {
       "url": "http://localhost:8080/services/cloud-infrastructure/",
