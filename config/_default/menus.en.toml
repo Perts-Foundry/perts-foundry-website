@@ -9,11 +9,6 @@
   weight = 20
 
 [[main]]
-  name = "Blog"
-  pageRef = "blog"
-  weight = 30
-
-[[main]]
   name = "About"
   pageRef = "about"
   weight = 40
@@ -27,3 +22,8 @@
   name = "Accessibility"
   pageRef = "accessibility"
   weight = 10
+
+[[footer]]
+  name = "Privacy"
+  pageRef = "privacy"
+  weight = 20

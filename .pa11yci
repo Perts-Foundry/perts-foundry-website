@@ -93,6 +93,7 @@
       "ignore": ["color-contrast"]
     },
     "http://localhost:8080/contact/",
-    "http://localhost:8080/accessibility/"
+    "http://localhost:8080/accessibility/",
+    "http://localhost:8080/privacy/"
   ]
 }

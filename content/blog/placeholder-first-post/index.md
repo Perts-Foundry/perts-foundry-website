@@ -3,6 +3,7 @@ title: "Why Your Startup Needs Infrastructure as Code — Yesterday"
 description: "If your infrastructure lives in a console and someone's memory, you're carrying more risk than you think."
 slug: "infrastructure-as-code"
 date: 2025-03-01
+draft: true
 tags:
   - Terraform
   - DevOps

@@ -32,14 +32,17 @@ These actively damage credibility or are red flags per the guide. Must fix befor
 
 ### C1. About page has no real person
 
-- [ ] Add professional headshot image
-- [ ] Add founder's real name, background, credentials (AWS SA Pro, prior AWS CSE role)
-- [ ] Rewrite in first-person ("I") voice
-- [ ] Add "Why I do this work" section
-- [ ] Add personal touch (interests, values)
-- [ ] Update `config/_default/languages.en.toml` author config (name, image, links)
+- [x] Add professional headshot image
+- [x] Add founder's real name, background, credentials (AWS SA Pro, prior AWS CSE role)
+- [x] Rewrite in first-person ("I") voice
+- [x] Add "Why I do this work" section ("The Foundry")
+- [x] Add personal touch (interests, values)
+- [x] Update `config/_default/languages.en.toml` author name to "Seth Perts"
+- [ ] Configure `author.image` and `author.headline` in `languages.en.toml`
 
-**Why it matters:** The guide calls this "non-negotiable" and "the single biggest red flag that signals a shell company." Currently, the About page is ~120 words with zero visual elements or human identity.
+**Why it matters:** The guide calls this "non-negotiable" and "the single biggest red flag that signals a shell company."
+
+**Resolved 2026-03-27:** About page rewritten with founder bio, headshot, credentials, Results section, and "The Foundry" philosophy section.
 
 **Files:** `content/about/index.md`, `config/_default/languages.en.toml`, new headshot image
 
@@ -47,12 +50,14 @@ These actively damage credibility or are red flags per the guide. Must fix befor
 
 ### C2. Blog with one stale post hurts credibility
 
-- [ ] Set `showRecent = false` in `config/_default/params.toml`
-- [ ] Remove Blog from nav menu in `config/_default/menus.en.toml`
-- [ ] Set existing post to `draft: true` in `content/blog/placeholder-first-post/index.md`
+- [x] Set `showRecent = false` in `config/_default/params.toml`
+- [x] Remove Blog from nav menu in `config/_default/menus.en.toml`
+- [x] Set existing post to `draft: true` in `content/blog/placeholder-first-post/index.md`
 - [ ] (Future) Write 3-5 evergreen articles when ready to re-enable
 
-**Why it matters:** The guide states "a blog with one stale post from six months ago actively hurts your credibility more than having no blog at all." The single post is over 12 months old and the directory is literally named `placeholder-first-post`.
+**Why it matters:** The guide states "a blog with one stale post from six months ago actively hurts your credibility more than having no blog at all."
+
+**Resolved 2026-03-27:** Blog disabled (nav removed, post drafted, homepage recent section hidden).
 
 **Files:** `config/_default/params.toml`, `config/_default/menus.en.toml`, `content/blog/placeholder-first-post/index.md`
 
@@ -60,12 +65,14 @@ These actively damage credibility or are red flags per the guide. Must fix befor
 
 ### C3. No privacy policy
 
-- [ ] Create `content/privacy/index.md` with simple policy
-- [ ] Add footer menu entry in `config/_default/menus.en.toml`
+- [x] Create `content/privacy/index.md` with simple policy
+- [x] Add footer menu entry in `config/_default/menus.en.toml`
 
 **Why it matters:** Enterprise procurement teams expect a privacy policy in the footer.
 
-**Files:** New `content/privacy/index.md`, `config/_default/menus.en.toml`
+**Resolved 2026-03-27:** Privacy policy added covering Cloudflare Web Analytics, no cookies, data rights, and third-party disclosure. Footer link at weight 20.
+
+**Files:** `content/privacy/index.md`, `config/_default/menus.en.toml`
 
 ---
 
@@ -148,9 +155,10 @@ Strengthen positioning. Address in subsequent iterations.
 
 ### M1. HSTS max-age is 300 seconds (should be 31536000)
 
-- [ ] Change `max-age=300` to `max-age=31536000` in `static/_headers`
+- [x] Change `max-age=300` to `max-age=31536000` in `static/_headers`
+- [x] Add `preload` directive
 
-One-line change. 5-minute HSTS provides almost no protection. Technical buyers or security header scanning tools would flag this.
+**Resolved 2026-03-27:** HSTS set to `max-age=31536000; includeSubDomains; preload`.
 
 ---
 
@@ -176,9 +184,9 @@ Resolved by the About page rewrite. "We" on other pages reads as professional co
 
 ### M4. Homepage "Recent" section has misleading "Show More" destination
 
-- [ ] Set `showRecent = false` or change `showMoreLinkDest` to `/case-studies/`
+- [x] Set `showRecent = false` and change `showMoreLinkDest` to `/case-studies/`
 
-The "Recent" section actually displays case studies (most recently modified content), but "Show More" links to `/blog` which has a single old post.
+**Resolved 2026-03-27:** Recent section disabled (`showRecent = false`), `showMoreLink = false`, destination changed to `/case-studies`.
 
 **Files:** `config/_default/params.toml`
 

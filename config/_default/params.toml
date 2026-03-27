@@ -10,10 +10,10 @@ disableTextInHeader = true
 [homepage]
   layout = "background"
   homepageImage = "img/background.jpg"
-  showRecent = true
+  showRecent = false
   showRecentItems = 3
-  showMoreLink = true
-  showMoreLinkDest = "/blog"
+  showMoreLink = false
+  showMoreLinkDest = "/case-studies"
   cardView = false
 
 [article]
