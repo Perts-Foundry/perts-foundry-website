@@ -73,6 +73,7 @@ config/development/  # Development overrides
 content/             # Markdown content (about, accessibility, blog, case-studies, contact, privacy, services)
 layouts/             # Custom Hugo layout overrides
 static/              # Static assets and security headers
+src/                 # Cloudflare Worker source (contact form API)
 wrangler.toml        # Cloudflare Workers deployment config
 archetypes/          # Content templates (blog.md, case-studies.md)
 docs/                # Architecture proposals and reference guides
@@ -102,9 +103,34 @@ Both `content/services/_index.md` and `content/case-studies/_index.md` use `orde
 - TOML for all Hugo configuration
 - Never commit secrets or credentials — Gitleaks scans the full history
 
+## Worker (API Endpoint)
+
+The site includes a Cloudflare Worker at `src/worker.js` that handles `POST /api/contact`.
+All other requests are served as static assets via `env.ASSETS.fetch()`.
+
+### Secrets (not in repo)
+
+Set via `wrangler secret put`:
+
+- `RESEND_API_KEY` -- Resend API key for email delivery
+- `TURNSTILE_SECRET_KEY` -- Cloudflare Turnstile secret key for CAPTCHA verification
+
+The Turnstile *site key* (public) is in `config/_default/params.toml` as `turnstileSiteKey`.
+
+### Local development
+
+```bash
+# Content iteration (no Worker)
+hugo server
+
+# Worker testing (build Hugo first)
+hugo --gc --minify --cleanDestinationDir
+npx wrangler dev
+```
+
 ## Infrastructure
 
-All infrastructure changes (DNS, Workers config, R2 buckets, etc.) must be codified in Terraform in the [Perts-Foundry/infrastructure](https://github.com/Perts-Foundry/infrastructure) repo. Never make manual infrastructure changes — always create a PR in that repo instead.
+All infrastructure changes (DNS, Workers config, R2 buckets, etc.) must be codified in Terraform in the [Perts-Foundry/infrastructure](https://github.com/Perts-Foundry/infrastructure) repo. Never make manual infrastructure changes -- always create a PR in that repo instead.
 
 ## Git Workflow
 

@@ -127,13 +127,15 @@ Agile Coaching is the strongest cut candidate (furthest from DevOps core).
 
 ### H3. Contact page lacks form and scheduling link
 
-- [ ] Add Calendly or Cal.com booking link
-- [ ] Add contact form (Formspree, Formspark, or Basin for static site)
-- [ ] Update CSP `form-action` directive if using third-party form
+- [x] Add Cal.com booking link
+- [x] Add contact form (Cloudflare Workers + Resend)
+- [x] Update CSP for Turnstile (`challenges.cloudflare.com` in `script-src` and `frame-src`)
 
 **Why it matters:** The guide specifies three elements: form, scheduling link, professional email. Currently only email and GitHub are offered.
 
-**Files:** `content/contact/index.md`, `static/_headers` (CSP if needed)
+**Resolved 2026-03-28:** Contact form with Turnstile CAPTCHA and Resend email delivery. Cal.com scheduling link (standalone, no Proton Calendar connection). Worker handles POST /api/contact with validation, honeypot, rate limiting, and graceful degradation when secrets are not yet configured.
+
+**Files:** `src/worker.js`, `wrangler.toml`, `layouts/contact/simple.html`, `layouts/partials/extend-head-uncached.html`, `content/contact/index.md`, `static/_headers`, `assets/css/custom.css`, `config/_default/params.toml`
 
 ---
 
