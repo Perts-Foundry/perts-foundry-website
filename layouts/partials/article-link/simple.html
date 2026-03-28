@@ -114,6 +114,10 @@
       <div class="article-link__summary prose dark:prose-invert max-w-fit mt-1 line-clamp-6">
         {{ .Summary | plainify }}
       </div>
+    {{ else if .Description }}
+      <div class="article-link__summary prose dark:prose-invert max-w-fit mt-1 line-clamp-6">
+        {{ .Description | plainify }}
+      </div>
     {{ end }}
   </div>
   <div class="px-6 pt-4 pb-2"></div>
