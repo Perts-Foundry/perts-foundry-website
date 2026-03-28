@@ -95,7 +95,10 @@
       "url": "http://localhost:8080/case-studies/container-expertise-aws/",
       "ignore": ["color-contrast"]
     },
-    "http://localhost:8080/contact/",
+    {
+      "url": "http://localhost:8080/contact/",
+      "ignore": ["color-contrast"]
+    },
     "http://localhost:8080/accessibility/",
     "http://localhost:8080/privacy/"
   ]

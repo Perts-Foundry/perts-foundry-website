@@ -1,0 +1,201 @@
+{{/* Override: adds a contact form with Turnstile CAPTCHA after the markdown
+     content. Form submits via AJAX to /api/contact (Cloudflare Worker).
+     Based on blowfish v2.100.0 _default/simple.html */}}
+{{ define "main" }}
+  <article class="max-w-full">
+    <header>
+      {{ if .Params.showBreadcrumbs | default (.Site.Params.article.showBreadcrumbs | default false) }}
+        {{ partial "breadcrumbs.html" . }}
+      {{ end }}
+      <h1 class="mt-0 text-4xl font-extrabold text-neutral-900 dark:text-neutral">
+        {{ .Title | emojify }}
+      </h1>
+    </header>
+    <section class="max-w-full mt-6 prose dark:prose-invert">
+      {{ .Content }}
+    </section>
+
+    <section class="contact-form-section mt-10 max-w-2xl" aria-label="Contact form">
+      <h2 class="text-2xl font-bold text-neutral-900 dark:text-neutral mb-6">
+        Send a Message
+      </h2>
+
+      <form id="contact-form" class="contact-form" novalidate>
+        <div class="form-group">
+          <label for="contact-name" class="form-label">
+            Name <span aria-hidden="true">*</span>
+          </label>
+          <input
+            type="text"
+            id="contact-name"
+            name="name"
+            required
+            maxlength="200"
+            autocomplete="name"
+            aria-required="true"
+            class="form-input"
+          />
+        </div>
+
+        <div class="form-group">
+          <label for="contact-email" class="form-label">
+            Email <span aria-hidden="true">*</span>
+          </label>
+          <input
+            type="email"
+            id="contact-email"
+            name="email"
+            required
+            maxlength="254"
+            autocomplete="email"
+            aria-required="true"
+            class="form-input"
+          />
+        </div>
+
+        <div class="form-group">
+          <label for="contact-message" class="form-label">
+            Message <span aria-hidden="true">*</span>
+          </label>
+          <textarea
+            id="contact-message"
+            name="message"
+            required
+            maxlength="5000"
+            rows="6"
+            aria-required="true"
+            class="form-input"
+          ></textarea>
+        </div>
+
+        {{/* Honeypot: hidden from real users, attracts bots */}}
+        <div aria-hidden="true" style="position:absolute;left:-9999px;top:-9999px;">
+          <label for="contact-website">Website</label>
+          <input type="text" id="contact-website" name="website" tabindex="-1" autocomplete="off" />
+        </div>
+
+        {{/* Turnstile widget */}}
+        {{ with site.Params.turnstileSiteKey }}
+          <div class="form-group">
+            <div class="cf-turnstile" data-sitekey="{{ . }}" data-theme="dark"></div>
+          </div>
+        {{ end }}
+
+        <button type="submit" class="contact-submit" id="contact-submit">
+          Send Message
+        </button>
+      </form>
+
+      <div id="form-success" class="form-status form-status--success" role="alert" hidden>
+        <p>
+          <strong>Message sent!</strong> We typically respond within one business day.
+        </p>
+      </div>
+      <div id="form-error" class="form-status form-status--error" role="alert" hidden>
+        <p id="form-error-message">
+          Unable to send message. Please try again or email us directly at
+          <a href="mailto:contact@pertsfoundry.com">contact@pertsfoundry.com</a>.
+        </p>
+      </div>
+    </section>
+
+    <footer class="pt-8">
+      {{ partial "sharing-links.html" . }}
+    </footer>
+  </article>
+
+  <script>
+    (function () {
+      var form = document.getElementById("contact-form");
+      var submitBtn = document.getElementById("contact-submit");
+      var successEl = document.getElementById("form-success");
+      var errorEl = document.getElementById("form-error");
+      var errorMsg = document.getElementById("form-error-message");
+
+      if (!form) return;
+
+      form.addEventListener("submit", function (e) {
+        e.preventDefault();
+
+        var name = document.getElementById("contact-name").value.trim();
+        var email = document.getElementById("contact-email").value.trim();
+        var message = document.getElementById("contact-message").value.trim();
+        var website = document.getElementById("contact-website").value;
+
+        // Client-side validation
+        if (!name || !email || !message) {
+          showError("Please fill in all required fields.");
+          return;
+        }
+
+        // Get Turnstile response
+        var turnstileResponse = "";
+        if (typeof turnstile !== "undefined") {
+          turnstileResponse = turnstile.getResponse();
+          if (!turnstileResponse) {
+            showError("Please complete the verification challenge.");
+            return;
+          }
+        }
+
+        submitBtn.disabled = true;
+        submitBtn.textContent = "Sending...";
+        hideMessages();
+
+        fetch("/api/contact", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            name: name,
+            email: email,
+            message: message,
+            website: website,
+            "cf-turnstile-response": turnstileResponse,
+          }),
+        })
+          .then(function (res) {
+            return res.json().then(function (data) {
+              return { ok: res.ok, data: data };
+            });
+          })
+          .then(function (result) {
+            if (result.ok && result.data.success) {
+              form.hidden = true;
+              successEl.hidden = false;
+            } else {
+              showError(
+                result.data.error ||
+                  "Unable to send message. Please try again or email contact@pertsfoundry.com directly."
+              );
+              submitBtn.disabled = false;
+              submitBtn.textContent = "Send Message";
+              if (typeof turnstile !== "undefined") {
+                turnstile.reset();
+              }
+            }
+          })
+          .catch(function () {
+            showError(
+              "Unable to send message. Please try again or email contact@pertsfoundry.com directly."
+            );
+            submitBtn.disabled = false;
+            submitBtn.textContent = "Send Message";
+            if (typeof turnstile !== "undefined") {
+              turnstile.reset();
+            }
+          });
+      });
+
+      function showError(msg) {
+        errorMsg.textContent = msg;
+        errorEl.hidden = false;
+        successEl.hidden = true;
+      }
+
+      function hideMessages() {
+        errorEl.hidden = true;
+        successEl.hidden = true;
+      }
+    })();
+  </script>
+{{ end }}
