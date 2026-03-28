@@ -5,6 +5,7 @@ CheckMailto: false
 CheckTelephone: false
 IgnoreURLs:
   - "https://pertsfoundry.com"
+  - "/api/contact"
 IgnoreAltEmpty: true
 IgnoreInternalEmptyHash: true
 IgnoreDirectoryMissingTrailingSlash: true

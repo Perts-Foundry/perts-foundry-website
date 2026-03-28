@@ -1,0 +1,6 @@
+{{/* Load Turnstile script only on the contact page */}}
+{{ if eq .RelPermalink "/contact/" }}
+  {{ with site.Params.turnstileSiteKey }}
+    <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+  {{ end }}
+{{ end }}
