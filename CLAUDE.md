@@ -89,6 +89,7 @@ docs/                # Architecture proposals and reference guides
 - All new content starts as `draft: true`
 - Tags use proper case (`Terraform`, `AWS`, `Kubernetes`, not `terraform`, `aws`)
 - Permalinks for case studies use the `slug` field: `/case-studies/:slug/`
+- Content `slug` values must match their directory name (e.g., `content/services/cloud-infrastructure/` uses `slug: "cloud-infrastructure"`). Structured breadcrumb data relies on this alignment.
 
 ### Section ordering (services, case-studies)
 
