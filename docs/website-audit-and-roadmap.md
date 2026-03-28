@@ -38,7 +38,7 @@ These actively damage credibility or are red flags per the guide. Must fix befor
 - [x] Add "Why I do this work" section ("The Foundry")
 - [x] Add personal touch (interests, values)
 - [x] Update `config/_default/languages.en.toml` author name to "Seth Perts"
-- [ ] Configure `author.image` and `author.headline` in `languages.en.toml`
+- [x] Configure `author.image` and `author.headline` in `languages.en.toml`
 
 **Why it matters:** The guide calls this "non-negotiable" and "the single biggest red flag that signals a shell company."
 
@@ -116,7 +116,7 @@ Agile Coaching is the strongest cut candidate (furthest from DevOps core).
 - [ ] Add aggregate metrics from case studies
 - [ ] Add or duplicate the 3-step engagement process
 - [ ] Add certification badge images below hero
-- [ ] Configure `author.image` and `author.headline` in `languages.en.toml`
+- [x] Configure `author.image` and `author.headline` in `languages.en.toml`
 - [ ] Plan testimonial placement (add when collected)
 
 **Why it matters:** The homepage is currently a tagline, two generic paragraphs, and two buttons. The author section renders empty (no image, headline, or links). The guide prescribes certification badges, testimonials, "How I Work" section, and specific metrics.
@@ -196,6 +196,7 @@ Resolved by the About page rewrite. "We" on other pages reads as professional co
 
 ### L1. No structured data / JSON-LD
 
+- [x] Enable breadcrumb structured data (`enableStructuredBreadcrumbs = true`)
 - [ ] Add ProfessionalService or Organization schema via `layouts/partials/extend-head.html`
 
 ### L2. No custom Open Graph images
@@ -221,19 +222,23 @@ Resolved by the About page rewrite. "We" on other pages reads as professional co
 
 ### V-Bug-1. Word counts display on service and case study listing cards
 
-- [ ] Hide word count metadata ("289 words") from listing cards via CSS or article-link partial override
+- [x] Hide word count metadata ("289 words") from listing cards
 
 **Details:** `showReadingTime: false` in the cascade does not prevent word count from appearing in the `article-link/simple.html` template. "289 words" next to "Cloud Infrastructure" is developer metadata that should not be visible to consulting prospects.
 
-**Files:** `assets/css/custom.css` or `layouts/partials/article-link/simple.html`
+**Resolved 2026-03-27:** Added `showWordCount = false` to `[article]` in `config/_default/params.toml`.
+
+**Files:** `config/_default/params.toml`
 
 ---
 
 ### V-Bug-2. Services and case studies listing cards show no descriptions
 
-- [ ] Surface front matter `description` field on listing cards
+- [x] Surface front matter `description` field on listing cards
 
 Every service and case study has a `description` in front matter, but only titles (and word counts) render on listing pages. Visitors must click through each item to learn what it covers.
+
+**Resolved 2026-03-27:** Added `{{ else if .Description }}` fallback block to `article-link/simple.html` template override. Descriptions now render on all 9 service and 10 case study listing cards.
 
 **Files:** `layouts/partials/article-link/simple.html`
 
@@ -248,7 +253,7 @@ See `docs/visual-enhancement-research.md` for detailed research with techniques,
 - [ ] **V1. Micro-interactions** on cards, buttons, links (hover lift, shadow, scale, glow)
 - [ ] **V2. Dark mode glow accents** using blue/violet palette (box-shadow, gradient borders)
 - [ ] **V3. Fluid typography** for hero headings (`clamp()`)
-- [ ] **V4. Fix word count display** on listing pages (V-Bug-1 above)
+- [x] **V4. Fix word count display** on listing pages (V-Bug-1 above)
 
 ### Tier 2: Medium Effort (CSS + minimal JS)
 

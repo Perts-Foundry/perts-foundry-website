@@ -6,6 +6,7 @@ enableCodeCopy = true
 logo = "img/logo/perts-foundry-horizontal-dark.svg"
 secondaryLogo = "img/logo/perts-foundry-horizontal-light.svg"
 disableTextInHeader = true
+enableStructuredBreadcrumbs = true
 
 [homepage]
   layout = "background"
@@ -17,6 +18,7 @@ disableTextInHeader = true
   cardView = false
 
 [article]
+  showWordCount = false
   showDate = false
   showDateUpdated = false
   showAuthor = false

@@ -9,5 +9,7 @@ title = "Perts Foundry"
 
 [params.author]
   name = "Seth Perts"
+  image = "img/author.jpg"
+  headline = "DevOps consulting that helps scaling teams ship faster and spend less on infrastructure."
   email = "contact@pertsfoundry.com"
   links = []
