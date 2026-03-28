@@ -1,5 +1,6 @@
 {{/* Override: marks featured image as decorative (alt="") since the card link
-     already contains the page title. Based on blowfish v2.100.0 article-link/simple.html */}}
+     already contains the page title. Also adds .Description fallback when
+     showSummary is disabled. Based on blowfish v2.100.0 article-link/simple.html */}}
 {{ $constrainItemsWidth := site.Params.list.constrainItemsWidth | default false }}
 {{ $disableImageOptimization := site.Store.Get "disableImageOptimization" }}
 
