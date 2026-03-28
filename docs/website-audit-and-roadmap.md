@@ -222,11 +222,13 @@ Resolved by the About page rewrite. "We" on other pages reads as professional co
 
 ### V-Bug-1. Word counts display on service and case study listing cards
 
-- [x] Hide word count metadata ("289 words") from listing cards via CSS or article-link partial override
+- [x] Hide word count metadata ("289 words") from listing cards
 
 **Details:** `showReadingTime: false` in the cascade does not prevent word count from appearing in the `article-link/simple.html` template. "289 words" next to "Cloud Infrastructure" is developer metadata that should not be visible to consulting prospects.
 
-**Files:** `assets/css/custom.css` or `layouts/partials/article-link/simple.html`
+**Resolved 2026-03-27:** Added `showWordCount = false` to `[article]` in `config/_default/params.toml`.
+
+**Files:** `config/_default/params.toml`
 
 ---
 
@@ -235,6 +237,8 @@ Resolved by the About page rewrite. "We" on other pages reads as professional co
 - [x] Surface front matter `description` field on listing cards
 
 Every service and case study has a `description` in front matter, but only titles (and word counts) render on listing pages. Visitors must click through each item to learn what it covers.
+
+**Resolved 2026-03-27:** Added `{{ else if .Description }}` fallback block to `article-link/simple.html` template override. Descriptions now render on all 9 service and 10 case study listing cards.
 
 **Files:** `layouts/partials/article-link/simple.html`
 
