@@ -59,12 +59,193 @@ html {
   color: #60a5fa;
 }
 
-/* Contact form */
-.contact-form-section {
-  border-top: 1px solid rgba(148, 163, 184, 0.2);
-  padding-top: 2rem;
+/* Contact page layout */
+.contact-layout {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
 }
 
+@media (min-width: 768px) {
+  .contact-layout {
+    flex-direction: row;
+    align-items: stretch;
+    gap: 2rem;
+  }
+  .contact-info {
+    flex: 0 0 45%;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+  .contact-info .contact-card:last-child {
+    margin-top: auto;
+  }
+  .contact-form-column {
+    flex: 1;
+  }
+  .contact-form-column > .contact-card {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+  }
+  .contact-form-column .contact-form {
+    flex: 1;
+  }
+}
+
+.contact-info {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  min-width: 0;
+}
+
+.contact-form-column {
+  min-width: 0;
+}
+
+/* Contact cards */
+.contact-card {
+  padding: 1.5rem;
+  border: 1px solid rgba(148, 163, 184, 0.15);
+  border-radius: 0.5rem;
+  background: rgba(148, 163, 184, 0.04);
+}
+
+.contact-card--cta {
+  border-color: rgba(59, 130, 246, 0.45);
+  background: rgba(59, 130, 246, 0.08);
+  box-shadow: 0 0 20px rgba(59, 130, 246, 0.08);
+}
+
+[data-appearance="light"] .contact-card {
+  background: rgba(148, 163, 184, 0.06);
+  border-color: rgba(148, 163, 184, 0.2);
+}
+
+[data-appearance="light"] .contact-card--cta {
+  border-color: rgba(59, 130, 246, 0.25);
+  background: rgba(59, 130, 246, 0.04);
+}
+
+/* Scheduling CTA button */
+.contact-cta-button {
+  display: inline-block;
+  padding: 0.75rem 1.75rem;
+  background: rgb(var(--color-primary-600));
+  color: #fff;
+  font-weight: 600;
+  font-size: 1rem;
+  border-radius: 0.375rem;
+  text-decoration: none;
+  transition: background-color 0.15s ease;
+}
+
+.contact-cta-button:hover {
+  background: rgb(var(--color-primary-500));
+  color: #fff;
+  text-decoration: none;
+}
+
+.contact-cta-button:focus-visible {
+  outline: 2px solid rgb(var(--color-primary-500));
+  outline-offset: 2px;
+}
+
+.contact-cta-wrapper {
+  margin-top: 0.75rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid rgba(148, 163, 184, 0.15);
+}
+
+/* What to Expect steps */
+.contact-steps {
+  list-style: none;
+  counter-reset: steps;
+  padding: 0;
+  margin: 0;
+}
+
+.contact-steps li {
+  counter-increment: steps;
+  display: flex;
+  flex-direction: column;
+  padding: 0.75rem 0 0.75rem 2.75rem;
+  position: relative;
+}
+
+.contact-steps li + li {
+  border-top: 1px solid rgba(148, 163, 184, 0.1);
+}
+
+.contact-steps li::before {
+  content: counter(steps);
+  position: absolute;
+  left: 0;
+  top: 0.625rem;
+  width: 1.75rem;
+  height: 1.75rem;
+  border-radius: 50%;
+  background: rgba(59, 130, 246, 0.15);
+  color: rgb(var(--color-primary-400));
+  font-weight: 700;
+  font-size: 0.8125rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.contact-steps li strong {
+  color: rgb(var(--color-neutral-200));
+  font-size: 0.9375rem;
+}
+
+.contact-steps li span {
+  color: rgb(var(--color-neutral-400));
+  font-size: 0.8125rem;
+  margin-top: 0.125rem;
+}
+
+[data-appearance="light"] .contact-steps li strong {
+  color: rgb(var(--color-neutral-700));
+}
+
+[data-appearance="light"] .contact-steps li span {
+  color: rgb(var(--color-neutral-500));
+}
+
+/* Contact links */
+.contact-links {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.contact-links li {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.375rem 0;
+  font-size: 0.9375rem;
+}
+
+.contact-links li strong {
+  color: rgb(var(--color-neutral-400));
+  min-width: 3.5rem;
+}
+
+.contact-links a {
+  color: rgb(var(--color-primary-400));
+  text-decoration: none;
+}
+
+.contact-links a:hover,
+.contact-links a:focus-visible {
+  text-decoration: underline;
+}
+
+/* Contact form */
 .contact-form .form-group {
   margin-bottom: 1.25rem;
 }
@@ -134,6 +315,11 @@ html {
   background: rgb(var(--color-primary-500));
 }
 
+.contact-submit:focus-visible {
+  outline: 2px solid rgb(var(--color-primary-500));
+  outline-offset: 2px;
+}
+
 .contact-submit:disabled {
   opacity: 0.6;
   cursor: not-allowed;
@@ -170,4 +356,11 @@ html {
 
 [data-appearance="light"] .form-status--error {
   color: #dc2626;
+}
+
+/* Privacy note */
+.form-privacy {
+  margin-top: 1rem;
+  font-size: 0.8125rem;
+  color: rgb(var(--color-neutral-400));
 }

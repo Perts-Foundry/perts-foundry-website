@@ -2,6 +2,12 @@
 // Routes /api/contact through validation, Turnstile, and Resend.
 // All other requests fall through to static assets.
 
+// Best-effort rate limiting. This in-memory Map resets when the Worker
+// isolate is evicted and is not shared across Cloudflare edge locations.
+// Turnstile is the primary bot defense; this catches casual abuse within
+// a single isolate session. For durable rate limiting, use Cloudflare WAF
+// rate limiting rules configured in Terraform.
+const CONTACT_EMAIL = "contact@pertsfoundry.com";
 const RATE_LIMIT_MAX = 5;
 const RATE_LIMIT_WINDOW_MS = 60 * 60 * 1000; // 1 hour
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -75,6 +81,7 @@ async function verifyTurnstile(token, secretKey, ip) {
         response: token,
         remoteip: ip,
       }),
+      signal: AbortSignal.timeout(5000),
     },
   );
   const result = await response.json();
@@ -90,7 +97,7 @@ async function sendEmail(apiKey, { name, email, message }) {
     },
     body: JSON.stringify({
       from: "Perts Foundry Website <noreply@mail.pertsfoundry.com>",
-      to: "contact@pertsfoundry.com",
+      to: CONTACT_EMAIL,
       reply_to: email.trim(),
       subject: `Contact Form: ${name.trim()}`,
       text: [
@@ -101,7 +108,11 @@ async function sendEmail(apiKey, { name, email, message }) {
         message.trim(),
       ].join("\n"),
     }),
+    signal: AbortSignal.timeout(5000),
   });
+  if (!response.ok) {
+    console.error("Resend API error:", await response.text());
+  }
   return response.ok;
 }
 
@@ -116,6 +127,14 @@ async function handleContactForm(request, env) {
       { error: "Too many requests. Please try again later." },
       429,
     );
+  }
+
+  const contentLength = parseInt(
+    request.headers.get("Content-Length") || "0",
+    10,
+  );
+  if (contentLength > 10000) {
+    return jsonResponse({ error: "Request too large." }, 413);
   }
 
   let data;
@@ -136,17 +155,16 @@ async function handleContactForm(request, env) {
     return jsonResponse({ error: errors[0] }, 400);
   }
 
-  // Sanitize reply-to against header injection
-  if (hasCRLF(data.email)) {
-    return jsonResponse({ error: "Invalid email address." }, 400);
+  // Sanitize against email header injection (reply-to and subject)
+  if (hasCRLF(data.email) || hasCRLF(data.name)) {
+    return jsonResponse({ error: "Invalid characters in input." }, 400);
   }
 
   // Check that secrets are configured
   if (!env.TURNSTILE_SECRET_KEY || !env.RESEND_API_KEY) {
     return jsonResponse(
       {
-        error:
-          "Contact form is temporarily unavailable. Please email contact@pertsfoundry.com directly.",
+        error: `Contact form is temporarily unavailable. Please email ${CONTACT_EMAIL} directly.`,
       },
       503,
     );
@@ -160,23 +178,40 @@ async function handleContactForm(request, env) {
       400,
     );
   }
-  const turnstileValid = await verifyTurnstile(
-    turnstileToken,
-    env.TURNSTILE_SECRET_KEY,
-    ip,
-  );
+  let turnstileValid;
+  try {
+    turnstileValid = await verifyTurnstile(
+      turnstileToken,
+      env.TURNSTILE_SECRET_KEY,
+      ip,
+    );
+  } catch {
+    return jsonResponse(
+      {
+        error: `Unable to verify your request. Please try again or email ${CONTACT_EMAIL} directly.`,
+      },
+      500,
+    );
+  }
   if (!turnstileValid) {
-    return jsonResponse({ error: "Verification failed. Please try again." }, 403);
+    return jsonResponse(
+      { error: "Verification failed. Please try again." },
+      403,
+    );
   }
 
-  // Send the email
+  // Send the email with only validated, trimmed fields
+  const sanitized = {
+    name: data.name.trim(),
+    email: data.email.trim(),
+    message: data.message.trim(),
+  };
   try {
-    const sent = await sendEmail(env.RESEND_API_KEY, data);
+    const sent = await sendEmail(env.RESEND_API_KEY, sanitized);
     if (!sent) {
       return jsonResponse(
         {
-          error:
-            "Unable to send message. Please try again or email contact@pertsfoundry.com directly.",
+          error: `Unable to send message. Please try again or email ${CONTACT_EMAIL} directly.`,
         },
         500,
       );
@@ -184,8 +219,7 @@ async function handleContactForm(request, env) {
   } catch {
     return jsonResponse(
       {
-        error:
-          "Unable to send message. Please try again or email contact@pertsfoundry.com directly.",
+        error: `Unable to send message. Please try again or email ${CONTACT_EMAIL} directly.`,
       },
       500,
     );
@@ -206,3 +240,5 @@ export default {
     return env.ASSETS.fetch(request);
   },
 };
+
+export { validateFields, hasCRLF, isRateLimited, rateLimitMap };

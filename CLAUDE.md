@@ -47,9 +47,9 @@ npx markdownlint-cli2 "content/**/*.md"
 ```
 
 ### 5. Prettier
-Checks formatting of content markdown and workflow YAML. Config: `.prettierrc.toml`.
+Checks formatting of content markdown, workflow YAML, and Worker JS. Config: `.prettierrc.toml`.
 ```bash
-npx prettier --check "content/**/*.md" ".github/**/*.yml"
+npx prettier --check "content/**/*.md" ".github/**/*.yml" "src/**/*.js"
 ```
 
 ### 6. actionlint
@@ -91,6 +91,7 @@ docs/                # Architecture proposals and reference guides
 - Tags use proper case (`Terraform`, `AWS`, `Kubernetes`, not `terraform`, `aws`)
 - Permalinks for case studies use the `slug` field: `/case-studies/:slug/`
 - Content `slug` values must match their directory name (e.g., `content/services/cloud-infrastructure/` uses `slug: "cloud-infrastructure"`). Structured breadcrumb data relies on this alignment.
+- **Exception: contact page.** The contact page uses a custom template (`layouts/contact/simple.html`) that hardcodes all content in HTML for two-column layout control. The markdown file (`content/contact/index.md`) contains only front matter. Editing the contact page content requires modifying the template, not the markdown file.
 
 ### Section ordering (services, case-studies)
 
