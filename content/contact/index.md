@@ -15,7 +15,7 @@ The fastest way to get started is a quick intro call.
 
 <!-- markdownlint-disable MD034 -->
 
-{{< button href="https://cal.com/pertsfoundry/intro" target="_blank" rel="noopener" >}}
+{{< button href="https://cal.com/perts-foundry/discovery-meeting" target="_blank" rel="noopener" >}}
 Schedule a 30-Minute Intro Call
 {{< /button >}}
 
