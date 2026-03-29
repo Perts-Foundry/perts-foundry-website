@@ -201,7 +201,8 @@ jobs:
         run: |
           npx --yes prettier --no-color --check \
             "content/**/*.md" \
-            ".github/**/*.yml" 2>&1 | tee /tmp/prettier.txt || true
+            ".github/**/*.yml" \
+            "src/**/*.js" 2>&1 | tee /tmp/prettier.txt || true
           EXIT_CODE=${PIPESTATUS[0]}
           echo "exit_code=$EXIT_CODE" >> "$GITHUB_OUTPUT"
           {

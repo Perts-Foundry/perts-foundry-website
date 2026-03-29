@@ -8,6 +8,7 @@ secondaryLogo = "img/logo/perts-foundry-horizontal-light.svg"
 disableTextInHeader = true
 enableStructuredBreadcrumbs = true
 turnstileSiteKey = "0x4AAAAAACxUbBWxqsfKfvH-"
+calendarUrl = "https://cal.com/perts-foundry/discovery-meeting"
 
 [homepage]
   layout = "background"
