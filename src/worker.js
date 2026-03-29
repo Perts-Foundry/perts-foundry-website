@@ -89,7 +89,7 @@ async function sendEmail(apiKey, { name, email, message }) {
       "Content-Type": "application/json",
     },
     body: JSON.stringify({
-      from: "Perts Foundry Website <noreply@pertsfoundry.com>",
+      from: "Perts Foundry Website <noreply@mail.pertsfoundry.com>",
       to: "contact@pertsfoundry.com",
       reply_to: email.trim(),
       subject: `Contact Form: ${name.trim()}`,
