@@ -1,5 +1,5 @@
-{{/* Override: adds a contact form with Turnstile CAPTCHA after the markdown
-     content. Form submits via AJAX to /api/contact (Cloudflare Worker).
+{{/* Override: two-column contact page with scheduling CTA, trust signals,
+     and contact form. Form submits via AJAX to /api/contact (Cloudflare Worker).
      Based on blowfish v2.100.0 _default/simple.html */}}
 {{ define "main" }}
   <article class="max-w-full">
@@ -11,93 +11,170 @@
         {{ .Title | emojify }}
       </h1>
     </header>
-    <section class="max-w-full mt-6 prose dark:prose-invert">
-      {{ .Content }}
+
+    <section class="mt-6 mb-8 max-w-3xl">
+      <p class="text-lg text-neutral-600 dark:text-neutral-300">
+        Every engagement starts with a conversation. Tell us what you're facing,
+        what's not working, or what you're planning next. From there, we'll figure
+        out the best way to help. You'll be working directly with Seth, founder of
+        Perts Foundry.
+      </p>
     </section>
 
-    <section class="contact-form-section mt-10 max-w-2xl" aria-label="Contact form">
-      <h2 class="text-2xl font-bold text-neutral-900 dark:text-neutral mb-6">
-        Send a Message
-      </h2>
+    <div class="contact-layout">
+      {{/* Left column: scheduling, process, contact info */}}
+      <div class="contact-info">
+        <div class="contact-card contact-card--cta">
+          <h2 class="text-xl font-bold text-neutral-900 dark:text-neutral mb-2">
+            Schedule a Discovery Meeting
+          </h2>
+          <p class="text-sm text-neutral-500 dark:text-neutral-400 mb-4">
+            The fastest way to get started. 30 minutes, no commitment.
+          </p>
 
-      <form id="contact-form" class="contact-form" novalidate>
-        <div class="form-group">
-          <label for="contact-name" class="form-label">
-            Name <span aria-hidden="true">*</span>
-          </label>
-          <input
-            type="text"
-            id="contact-name"
-            name="name"
-            required
-            maxlength="200"
-            autocomplete="name"
-            aria-required="true"
-            class="form-input"
-          />
-        </div>
+          <h3 class="text-base font-bold text-neutral-900 dark:text-neutral mb-3 mt-5">
+            What to Expect
+          </h3>
+          <ol class="contact-steps">
+            <li>
+              <strong>A quick intro call</strong>
+              <span>30 minutes to understand your situation and goals</span>
+            </li>
+            <li>
+              <strong>An honest assessment</strong>
+              <span>We'll tell you if we're the right fit</span>
+            </li>
+            <li>
+              <strong>A clear proposal</strong>
+              <span>Scope, timeline, and pricing with no surprises</span>
+            </li>
+          </ol>
 
-        <div class="form-group">
-          <label for="contact-email" class="form-label">
-            Email <span aria-hidden="true">*</span>
-          </label>
-          <input
-            type="email"
-            id="contact-email"
-            name="email"
-            required
-            maxlength="254"
-            autocomplete="email"
-            aria-required="true"
-            class="form-input"
-          />
-        </div>
-
-        <div class="form-group">
-          <label for="contact-message" class="form-label">
-            Message <span aria-hidden="true">*</span>
-          </label>
-          <textarea
-            id="contact-message"
-            name="message"
-            required
-            maxlength="5000"
-            rows="6"
-            aria-required="true"
-            class="form-input"
-          ></textarea>
-        </div>
-
-        {{/* Honeypot: hidden from real users, attracts bots */}}
-        <div aria-hidden="true" style="position:absolute;left:-9999px;top:-9999px;">
-          <label for="contact-website">Website</label>
-          <input type="text" id="contact-website" name="website" tabindex="-1" autocomplete="off" />
-        </div>
-
-        {{/* Turnstile widget */}}
-        {{ with site.Params.turnstileSiteKey }}
-          <div class="form-group">
-            <div class="cf-turnstile" data-sitekey="{{ . }}" data-theme="dark"></div>
+          <div class="contact-cta-wrapper">
+            <a href="{{ site.Params.calendarUrl }}"
+               target="_blank"
+               rel="noopener"
+               class="contact-cta-button">
+              Book a 30-Minute Call
+            </a>
           </div>
-        {{ end }}
+        </div>
 
-        <button type="submit" class="contact-submit" id="contact-submit">
-          Send Message
-        </button>
-      </form>
+        <div class="contact-card">
+          <h3 class="text-lg font-bold text-neutral-900 dark:text-neutral mb-3">
+            Other Ways to Reach Us
+          </h3>
+          <ul class="contact-links">
+            <li>
+              <strong>Email</strong>
+              <a href="mailto:{{ site.Params.author.email }}">{{ site.Params.author.email }}</a>
+            </li>
+            <li>
+              <strong>GitHub</strong>
+              <a href="https://github.com/Perts-Foundry" target="_blank" rel="noopener">Perts-Foundry</a>
+            </li>
+          </ul>
+          <p class="text-sm text-neutral-500 dark:text-neutral-400 mt-3">
+            We typically respond within one business day.
+          </p>
+        </div>
+      </div>
 
-      <div id="form-success" class="form-status form-status--success" role="alert" hidden>
-        <p>
-          <strong>Message sent!</strong> We typically respond within one business day.
-        </p>
+      {{/* Right column: contact form */}}
+      <div class="contact-form-column">
+        <div class="contact-card">
+          <h2 class="text-xl font-bold text-neutral-900 dark:text-neutral mb-2">
+            Send a Message
+          </h2>
+          <p class="text-sm text-neutral-500 dark:text-neutral-400 mb-4">
+            Prefer to write? Tell us about your challenge and we'll follow up.
+          </p>
+
+          <form id="contact-form" class="contact-form" novalidate>
+            <div class="form-group">
+              <label for="contact-name" class="form-label">
+                Name <span aria-hidden="true">*</span>
+              </label>
+              <input
+                type="text"
+                id="contact-name"
+                name="name"
+                required
+                maxlength="200"
+                autocomplete="name"
+                aria-required="true"
+                class="form-input"
+              />
+            </div>
+
+            <div class="form-group">
+              <label for="contact-email" class="form-label">
+                Email <span aria-hidden="true">*</span>
+              </label>
+              <input
+                type="email"
+                id="contact-email"
+                name="email"
+                required
+                maxlength="254"
+                autocomplete="email"
+                aria-required="true"
+                class="form-input"
+              />
+            </div>
+
+            <div class="form-group">
+              <label for="contact-message" class="form-label">
+                Message <span aria-hidden="true">*</span>
+              </label>
+              <textarea
+                id="contact-message"
+                name="message"
+                required
+                maxlength="5000"
+                rows="5"
+                aria-required="true"
+                class="form-input"
+              ></textarea>
+            </div>
+
+            {{/* Honeypot: hidden from real users, attracts bots */}}
+            <div aria-hidden="true" style="position:absolute;left:-9999px;top:-9999px;">
+              <label for="contact-website">Website</label>
+              <input type="text" id="contact-website" name="website" tabindex="-1" autocomplete="off" />
+            </div>
+
+            {{/* Turnstile widget */}}
+            {{ with site.Params.turnstileSiteKey }}
+              <div class="form-group">
+                <div class="cf-turnstile" data-sitekey="{{ . }}" data-theme="auto"></div>
+              </div>
+            {{ end }}
+
+            <button type="submit" class="contact-submit" id="contact-submit">
+              Start the Conversation
+            </button>
+          </form>
+
+          <div id="form-success" class="form-status form-status--success" role="alert" tabindex="-1" hidden>
+            <p>
+              <strong>Message sent!</strong> We typically respond within one business day.
+            </p>
+          </div>
+          <div id="form-error" class="form-status form-status--error" role="alert" hidden>
+            <p>
+              <span id="form-error-message">Unable to send message. Please try again.</span>
+              You can also email us directly at
+              <a href="mailto:{{ site.Params.author.email }}">{{ site.Params.author.email }}</a>.
+            </p>
+          </div>
+
+          <p class="form-privacy">
+            &#x1f512; Your information stays private. No spam, no sharing.
+          </p>
+        </div>
       </div>
-      <div id="form-error" class="form-status form-status--error" role="alert" hidden>
-        <p id="form-error-message">
-          Unable to send message. Please try again or email us directly at
-          <a href="mailto:contact@pertsfoundry.com">contact@pertsfoundry.com</a>.
-        </p>
-      </div>
-    </section>
+    </div>
 
     <footer class="pt-8">
       {{ partial "sharing-links.html" . }}
@@ -162,13 +239,14 @@
             if (result.ok && result.data.success) {
               form.hidden = true;
               successEl.hidden = false;
+              successEl.focus();
             } else {
               showError(
                 result.data.error ||
-                  "Unable to send message. Please try again or email contact@pertsfoundry.com directly."
+                  "Unable to send message. Please try again or email {{ site.Params.author.email }} directly."
               );
               submitBtn.disabled = false;
-              submitBtn.textContent = "Send Message";
+              submitBtn.textContent = "Start the Conversation";
               if (typeof turnstile !== "undefined") {
                 turnstile.reset();
               }
@@ -176,10 +254,10 @@
           })
           .catch(function () {
             showError(
-              "Unable to send message. Please try again or email contact@pertsfoundry.com directly."
+              "Unable to send message. Please try again or email {{ site.Params.author.email }} directly."
             );
             submitBtn.disabled = false;
-            submitBtn.textContent = "Send Message";
+            submitBtn.textContent = "Start the Conversation";
             if (typeof turnstile !== "undefined") {
               turnstile.reset();
             }
