@@ -7,7 +7,7 @@ logo = "img/logo/perts-foundry-horizontal-dark.svg"
 secondaryLogo = "img/logo/perts-foundry-horizontal-light.svg"
 disableTextInHeader = true
 enableStructuredBreadcrumbs = true
-turnstileSiteKey = "1x00000000000000000000AA"
+turnstileSiteKey = "0x4AAAAAACxUbBWxqsfKfvH-"
 
 [homepage]
   layout = "background"
