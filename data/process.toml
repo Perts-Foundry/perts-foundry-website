@@ -1,0 +1,19 @@
+[[steps]]
+title = "Discover"
+description = "Understand your current infrastructure, constraints, and goals."
+icon = "search"
+
+[[steps]]
+title = "Design"
+description = "Propose an approach, select the right tools, and align on scope."
+icon = "edit"
+
+[[steps]]
+title = "Build"
+description = "Implement alongside your team so knowledge transfers naturally."
+icon = "code"
+
+[[steps]]
+title = "Hand Off"
+description = "Document everything, verify your team can operate independently."
+icon = "check"

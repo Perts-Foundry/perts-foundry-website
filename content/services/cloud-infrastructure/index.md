@@ -3,6 +3,7 @@ title: "Cloud Infrastructure"
 description: "Design, build, and optimize cloud infrastructure across AWS, GCP, and multi-cloud environments"
 slug: "cloud-infrastructure"
 weight: 1
+icon: "cloud"
 draft: false
 ---
 

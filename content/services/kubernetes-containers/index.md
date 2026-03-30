@@ -3,6 +3,7 @@ title: "Kubernetes & Containers"
 description: "Deploy, manage, and troubleshoot containerized workloads at scale"
 slug: "kubernetes-containers"
 weight: 4
+icon: "docker"
 draft: false
 ---
 
