@@ -103,6 +103,24 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-hugo-
 
+      - name: Install npm dependencies
+        run: npm ci
+
+      # ── Vitest (Worker unit tests) ─────────────────────────────
+      - name: Run Vitest
+        id: vitest
+        run: |
+          set +e
+          OUTPUT=$(npx vitest run 2>&1)
+          EXIT_CODE=$?
+          echo "$OUTPUT"
+          echo "exit_code=$EXIT_CODE" >> "$GITHUB_OUTPUT"
+          {
+            echo "output<<GHEOF"
+            echo "$OUTPUT" | sed 's/\x1b\[[0-9;]*m//g' | tail -20
+            echo "GHEOF"
+          } >> "$GITHUB_OUTPUT"
+
       # ── Hugo Build ──────────────────────────────────────────────
       - name: Hugo build
         id: hugo-build
@@ -233,6 +251,7 @@ jobs:
         id: results
         if: always()
         env:
+          EXIT_VITEST: ${{ steps.vitest.outputs.exit_code }}
           EXIT_HUGO: ${{ steps.hugo-build.outputs.exit_code }}
           EXIT_HTMLTEST: ${{ steps.htmltest.outputs.exit_code }}
           EXIT_PA11Y: ${{ steps.pa11y.outputs.exit_code }}
@@ -246,6 +265,7 @@ jobs:
           SKIP=0
 
           checks=(
+            "vitest:Tests:$EXIT_VITEST"
             "hugo-build:Build:$EXIT_HUGO"
             "htmltest:HTML:$EXIT_HTMLTEST"
             "pa11y:A11y:$EXIT_PA11Y"
@@ -283,6 +303,7 @@ jobs:
           SKIP_COUNT: ${{ steps.results.outputs.skip }}
           TOTAL_COUNT: ${{ steps.results.outputs.total }}
           COMMENT_PR_SHA: ${{ steps.comment-pr.outputs.sha }}
+          EXIT_VITEST: ${{ steps.vitest.outputs.exit_code }}
           EXIT_HUGO: ${{ steps.hugo-build.outputs.exit_code }}
           EXIT_HTMLTEST: ${{ steps.htmltest.outputs.exit_code }}
           EXIT_PA11Y: ${{ steps.pa11y.outputs.exit_code }}
@@ -290,6 +311,7 @@ jobs:
           EXIT_MDLINT: ${{ steps.markdownlint.outputs.exit_code }}
           EXIT_PRETTIER: ${{ steps.prettier.outputs.exit_code }}
           EXIT_ACTIONLINT: ${{ steps.actionlint.outputs.exit_code }}
+          OUTPUT_VITEST: ${{ steps.vitest.outputs.output }}
           OUTPUT_HUGO: ${{ steps.hugo-build.outputs.output }}
           OUTPUT_HTMLTEST: ${{ steps.htmltest.outputs.output }}
           OUTPUT_PA11Y: ${{ steps.pa11y.outputs.output }}
@@ -319,6 +341,7 @@ jobs:
               return code === '0' ? '✅' : '❌';
             };
 
+            const vitestExit = process.env.EXIT_VITEST || '';
             const hugoBuild = process.env.EXIT_HUGO || '';
             const htmltest = process.env.EXIT_HTMLTEST || '';
             const pa11y = process.env.EXIT_PA11Y || '';
@@ -328,6 +351,7 @@ jobs:
             const actionlint = process.env.EXIT_ACTIONLINT || '';
             const htmlSkipped = hugoBuild !== '0';
 
+            const vitestOutput = process.env.OUTPUT_VITEST || 'No output';
             const hugoOutput = process.env.OUTPUT_HUGO || '';
             const htmltestOutput = process.env.OUTPUT_HTMLTEST || 'Skipped (build failed)';
             const pa11yOutput = process.env.OUTPUT_PA11Y || 'Skipped (build failed)';
@@ -350,6 +374,7 @@ jobs:
               '',
               `| Check | Tool | Result |`,
               `|:------|:-----|:------:|`,
+              `| **Worker Unit Tests** | \`vitest\` | ${status(vitestExit)} |`,
               `| **Site Compilation** | \`hugo\` | ${status(hugoBuild)} |`,
               `| **Link & Image Validation** | \`htmltest\` | ${status(htmltest, htmlSkipped)} |`,
               `| **Accessibility (WCAG 2.1 AA)** | \`pa11y-ci\` | ${status(pa11y, htmlSkipped)} |`,
@@ -369,6 +394,14 @@ jobs:
               `| **Secret Detection** | \`gitleaks\` | ${status(gitleaks)} |`,
               '',
               '---',
+              '',
+              '<details><summary><strong>Worker Unit Tests</strong> (<code>vitest</code>)</summary>',
+              '',
+              '```',
+              vitestOutput,
+              '```',
+              '',
+              '</details>',
               '',
               '<details><summary><strong>Site Compilation</strong> (<code>hugo</code>)</summary>',
               '',
@@ -454,6 +487,7 @@ jobs:
       - name: Check for failures
         if: always()
         env:
+          EXIT_VITEST: ${{ steps.vitest.outputs.exit_code }}
           EXIT_HUGO: ${{ steps.hugo-build.outputs.exit_code }}
           EXIT_HTMLTEST: ${{ steps.htmltest.outputs.exit_code }}
           EXIT_PA11Y: ${{ steps.pa11y.outputs.exit_code }}
@@ -463,6 +497,7 @@ jobs:
           EXIT_ACTIONLINT: ${{ steps.actionlint.outputs.exit_code }}
         run: |
           FAILED=0
+          [ "$EXIT_VITEST" != "0" ] && echo "::error::Vitest worker tests failed" && FAILED=1
           [ "$EXIT_HUGO" != "0" ] && echo "::error::Hugo build failed" && FAILED=1
           if [ "$EXIT_HUGO" == "0" ] && [ "$EXIT_HTMLTEST" != "0" ]; then
             echo "::error::htmltest failed" && FAILED=1

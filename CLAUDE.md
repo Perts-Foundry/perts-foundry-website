@@ -32,21 +32,27 @@ The dev server is not needed for non-visual changes (CI config, worker code, doc
 
 ## PR Validation Checks
 
-All seven checks must pass before a PR can merge. Run these locally before pushing:
+All eight checks must pass before a PR can merge. Run these locally before pushing:
 
-### 1. Hugo Build
+### 1. Vitest (Worker unit tests)
+Runs the 43 Worker unit/integration tests. Config: `vitest.config.js`.
+```bash
+npx vitest run
+```
+
+### 2. Hugo Build
 ```bash
 hugo --gc --minify --cleanDestinationDir
 ```
 
-### 2. htmltest (link/image validation)
+### 3. htmltest (link/image validation)
 Runs against the `public/` build output. Config: `.htmltest.yml`.
 Only checks internal links — external URLs are skipped.
 ```bash
 htmltest
 ```
 
-### 3. pa11y-ci (accessibility)
+### 4. pa11y-ci (accessibility)
 Runs WCAG 2.1 AA checks (via axe-core) against the built site. Config: `.pa11yci`.
 Requires a local server on port 8080 serving `public/`.
 ```bash
@@ -54,26 +60,26 @@ npx serve public -l 8080 &
 npx pa11y-ci
 ```
 
-### 4. markdownlint
+### 5. markdownlint
 Lints all content markdown. Config: `.markdownlint-cli2.jsonc`.
 Disabled rules: MD041 (first-line heading), MD013 (line length), MD033 (inline HTML).
 ```bash
 npx markdownlint-cli2 "content/**/*.md"
 ```
 
-### 5. Prettier
+### 6. Prettier
 Checks formatting of content markdown, workflow YAML, and Worker JS. Config: `.prettierrc.toml`.
 ```bash
 npx prettier --check "content/**/*.md" ".github/**/*.yml" "src/**/*.js"
 ```
 
-### 6. actionlint
+### 7. actionlint
 Validates GitHub Actions workflow files.
 ```bash
 actionlint
 ```
 
-### 7. Gitleaks (secret detection)
+### 8. Gitleaks (secret detection)
 Scans the full git history for leaked secrets.
 ```bash
 gitleaks git --log-opts="--all" --no-banner
@@ -136,7 +142,7 @@ The Turnstile *site key* (public) is in `config/_default/params.toml` as `turnst
 
 ### Testing
 
-The Worker has 40 unit tests using Vitest with `@cloudflare/vitest-pool-workers`.
+The Worker has 43 unit tests using Vitest with `@cloudflare/vitest-pool-workers`.
 Config: `vitest.config.js`. Test file: `src/worker.test.js`.
 
 ```bash
