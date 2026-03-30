@@ -194,6 +194,18 @@ Resolved by the About page rewrite. "We" on other pages reads as professional co
 
 ---
 
+### M5. 21 pages suppress `color-contrast` in pa11y-ci
+
+- [ ] Identify which failures come from shared Blowfish theme components (nav, footer, hero) vs. custom CSS
+- [ ] Fix theme-level contrast issues centrally (shared component overrides)
+- [ ] Remove `"ignore": ["color-contrast"]` from pages as they pass
+
+21 of 27 pages in `.pa11yci` have `color-contrast` suppressed. The contact page was fixed and unsuppressed in PR #37. Many remaining failures likely come from Blowfish theme components rather than custom CSS, so fixing shared components first would unsuppress multiple pages at once.
+
+**Files:** `.pa11yci`, `assets/css/custom.css`
+
+---
+
 ## Low Priority / Nice-to-Have
 
 ### L1. No structured data / JSON-LD
@@ -217,6 +229,14 @@ Resolved by the About page rewrite. "We" on other pages reads as professional co
 
 - [ ] Collect real testimonials from clients
 - [ ] Plan placement on homepage and About page
+
+### L6. Review CSS light mode override organization
+
+- [ ] Revisit `assets/css/custom.css` structure if file exceeds ~500 lines
+
+Currently 14 `html:not(.dark)` light mode rules are co-located with their dark mode counterparts throughout the file (~395 lines). This pattern is maintainable at the current size. If more pages get light mode support and the file grows past ~500 lines, consider grouping all light overrides into a dedicated section at the bottom or splitting into separate files.
+
+**Files:** `assets/css/custom.css`
 
 ---
 
