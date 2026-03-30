@@ -13,7 +13,7 @@ Research into 2025-2026 web design trends for B2B consulting sites, with specifi
 - **Color scheme:** `perts-forge-blue` (blue primary #3B82F6, violet secondary #8B5CF6, slate neutral)
 - **Default appearance:** Dark mode, no auto-switching
 - **Homepage layout:** `background` (static image with gradient overlay)
-- **Custom CSS:** ~395 lines in `assets/css/custom.css` (header padding, scroll-padding, reduced-motion, logo sizing, headshot glow effect, contact page two-column layout, contact form styles, light/dark mode overrides for all contact elements)
+- **Custom CSS:** ~400 lines in `assets/css/custom.css` (header padding, scroll-padding, reduced-motion, logo sizing, headshot glow effect, contact page two-column layout, contact form styles, light/dark mode overrides for all contact elements)
 - **Existing customizations:** 8 layout overrides (home/background.html, hero/basic.html, article-link/simple.html, extend-footer.html, render-link.html, contact/simple.html, extend-head-uncached.html, robots.txt)
 - **Additional color schemes:** `perts-ember.css`, `perts-violet-forge.css` (unused, available for section theming)
 - **Animation infrastructure:** `prefers-reduced-motion` already handled in `custom.css`

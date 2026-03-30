@@ -234,7 +234,7 @@ Resolved by the About page rewrite. "We" on other pages reads as professional co
 
 - [ ] Revisit `assets/css/custom.css` structure if file exceeds ~500 lines
 
-Currently 14 `html:not(.dark)` light mode rules are co-located with their dark mode counterparts throughout the file (~395 lines). This pattern is maintainable at the current size. If more pages get light mode support and the file grows past ~500 lines, consider grouping all light overrides into a dedicated section at the bottom or splitting into separate files.
+Currently 15 `html:not(.dark)` light mode rules are co-located with their dark mode counterparts throughout the file (~400 lines). This pattern is maintainable at the current size. If more pages get light mode support and the file grows past ~500 lines, consider grouping all light overrides into a dedicated section at the bottom or splitting into separate files.
 
 **Files:** `assets/css/custom.css`
 
