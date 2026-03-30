@@ -1,11 +1,11 @@
 ---
 title: "Perts Foundry"
 description: "DevOps consulting that helps scaling teams ship faster and spend less on infrastructure."
+# hero.headline: Main homepage heading (h1), bold text
+# hero.subheadline: One-line supporting text below the heading
+hero:
+  headline: "Ship faster. Spend less. Sleep better."
+  subheadline: "DevOps consulting for engineering teams that need infrastructure they can rely on."
 ---
 
-DevOps consulting that helps scaling teams ship faster and spend less on infrastructure.
-
-We partner with growing engineering teams to build the platforms, pipelines, and practices that let them move fast without breaking things. From cloud architecture to CI/CD to observability, we handle the infrastructure so you can focus on your product.
-
-{{< button href="/services/" >}}Our Services{{< /button >}}
-{{< button href="/contact/" >}}Get in Touch{{< /button >}}
+Your team is scaling, but your infrastructure is not keeping up. Deployments are slow, cloud costs are climbing, and your engineers are spending more time fighting fires than building product. You need someone who has solved these problems before and can build systems your team will actually own after the engagement ends.

@@ -1,0 +1,11 @@
+[[items]]
+value = "$125K+"
+label = "Annual Savings Identified"
+
+[[items]]
+value = "200+"
+label = "Terraform Projects Managed"
+
+[[items]]
+value = "Zero"
+label = "Downtime Migrations"

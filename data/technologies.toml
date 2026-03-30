@@ -1,0 +1,23 @@
+[[items]]
+name = "AWS"
+
+[[items]]
+name = "GCP"
+
+[[items]]
+name = "Terraform"
+
+[[items]]
+name = "Kubernetes"
+
+[[items]]
+name = "Docker"
+
+[[items]]
+name = "GitHub Actions"
+
+[[items]]
+name = "Helm"
+
+[[items]]
+name = "Datadog"

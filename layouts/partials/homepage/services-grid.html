@@ -1,0 +1,38 @@
+{{ $services := site.GetPage "/services" }}
+{{ with $services }}
+  <section class="homepage-services" aria-labelledby="services-heading">
+    <div class="mx-auto max-w-5xl px-4 py-16">
+      <h2 id="services-heading" class="mb-10 text-center font-bold text-neutral-800 dark:text-neutral-100">
+        What We Do
+      </h2>
+      <div class="grid gap-6 sm:grid-cols-2">
+        {{ $icons := dict "cloud-infrastructure" "cloud" "devsecops-devops" "shield" "cicd-automation" "code" "kubernetes-containers" "docker" }}
+        {{ range first 4 .Pages.ByWeight }}
+          <a href="{{ .RelPermalink }}" class="homepage-service-card group block rounded-lg border border-neutral-300/20 p-6 !no-underline transition dark:border-neutral-600/20">
+            <div class="mb-3 flex items-center gap-3">
+              {{ $icon := index $icons .File.ContentBaseName }}
+              {{ with $icon }}
+                <span class="inline-block h-6 w-6 text-primary-500" aria-hidden="true">
+                  {{ partial "icon.html" . }}
+                </span>
+              {{ end }}
+              <h3 class="m-0 text-lg font-semibold text-neutral-800 dark:text-neutral-100">
+                {{ .Title }}
+              </h3>
+            </div>
+            {{ with .Description }}
+              <p class="m-0 text-sm text-neutral-500 dark:text-neutral-400">
+                {{ . }}
+              </p>
+            {{ end }}
+          </a>
+        {{ end }}
+      </div>
+      <p class="mt-8 text-center">
+        <a href="/services/" class="text-sm font-medium text-primary-600 hover:text-primary-500 dark:text-primary-400 dark:hover:text-primary-300">
+          View all services &rarr;
+        </a>
+      </p>
+    </div>
+  </section>
+{{ end }}

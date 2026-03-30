@@ -1,0 +1,47 @@
+{{ $cases := site.GetPage "/case-studies" }}
+{{ with $cases }}
+  {{ $featured := where .Pages ".Params.featured" true }}
+  {{ if $featured }}
+    <section class="homepage-cases" aria-labelledby="cases-heading">
+      <div class="mx-auto max-w-5xl px-4 py-16">
+        <h2 id="cases-heading" class="mb-10 text-center font-bold text-neutral-800 dark:text-neutral-100">
+          Selected Work
+        </h2>
+        <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          {{ range $featured }}
+            <a href="{{ .RelPermalink }}" class="homepage-case-card group block overflow-hidden rounded-lg border border-neutral-300/20 !no-underline transition dark:border-neutral-600/20">
+              {{ with .Resources.GetMatch "featured*" }}
+                <div class="aspect-video overflow-hidden">
+                  {{ $img := .Resize "640x" }}
+                  <img
+                    src="{{ $img.RelPermalink }}"
+                    alt="{{ $.Title }}"
+                    width="{{ $img.Width }}"
+                    height="{{ $img.Height }}"
+                    class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                    loading="lazy"
+                    decoding="async">
+                </div>
+              {{ end }}
+              <div class="p-5">
+                <h3 class="m-0 mb-2 text-base font-semibold text-neutral-800 dark:text-neutral-100">
+                  {{ .Title }}
+                </h3>
+                {{ with .Description }}
+                  <p class="m-0 text-sm text-neutral-500 dark:text-neutral-400 line-clamp-3">
+                    {{ . }}
+                  </p>
+                {{ end }}
+              </div>
+            </a>
+          {{ end }}
+        </div>
+        <p class="mt-8 text-center">
+          <a href="/case-studies/" class="text-sm font-medium text-primary-600 hover:text-primary-500 dark:text-primary-400 dark:hover:text-primary-300">
+            View all case studies &rarr;
+          </a>
+        </p>
+      </div>
+    </section>
+  {{ end }}
+{{ end }}
