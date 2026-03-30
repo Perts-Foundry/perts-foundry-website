@@ -263,7 +263,7 @@ This follows the research-backed B2B consulting conversion flow: problem, soluti
 | 4 | **Services Grid** | 3-4 top services as cards with icon + title + one-liner + link. |
 | 5 | **Results Metrics** | 3 large stat callouts: "$125K+ saved", "Zero downtime", "200+ Terraform projects". Full-width band. |
 | 6 | **Featured Case Studies** | 2-3 cards with outcome headline + hero image + link. |
-| 7 | **How We Work** | 4-step process matching existing service pages (Audit, Design, Build, Handoff). |
+| 7 | **How We Work** | 4-step process matching existing service pages (Discover, Design, Build, Hand Off). |
 | 8 | **Final CTA** | "Ready to talk?" + contact CTA + response time commitment. |
 
 **Implementation:** Set `homepage.layout = "custom"` in `params.toml`, create `layouts/partials/home/custom.html` with Tailwind utility classes. All content already exists in the site; it just needs to be surfaced on the homepage.

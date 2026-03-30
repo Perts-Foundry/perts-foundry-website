@@ -85,6 +85,16 @@ Scans the full git history for leaked secrets.
 gitleaks git --log-opts="--all" --no-banner
 ```
 
+### 9. Homepage smoke test
+Verifies all 8 homepage section IDs and data bindings are present in the built HTML.
+Runs automatically in CI after the Hugo build. To check locally after building:
+```bash
+hugo --gc --minify --cleanDestinationDir
+for id in hero-heading tech-bar-heading problem-heading services-heading metrics-heading cases-heading process-heading cta-heading; do
+  grep -qE "id=\"?$id\"?" public/index.html && echo "OK: $id" || echo "MISSING: $id"
+done
+```
+
 ## Project Structure
 
 ```

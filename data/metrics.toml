@@ -1,14 +1,17 @@
-# These metrics also appear on the About page (content/about/index.md, Results section).
-# Update both locations when values change.
+# Homepage metrics band and About page results share these values.
+# The {{% metric %}} shortcode reads from this file by key.
 
 [[items]]
+key = "savings"
 value = "$125K+"
 label = "Annual Savings Identified"
 
 [[items]]
+key = "terraform"
 value = "200+"
 label = "Terraform Projects Managed"
 
 [[items]]
+key = "migrations"
 value = "Zero"
 label = "Downtime Migrations"

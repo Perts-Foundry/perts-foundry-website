@@ -20,7 +20,7 @@ No changes needed in these areas.
 | Technical infrastructure | Exceeds | SSL, Hugo on Cloudflare Workers, CDN, minification, responsive images, lazy loading |
 | Security | Exceeds | CSP, X-Frame-Options, Permissions-Policy, Gitleaks in CI, AI bot blocking |
 | Accessibility | Exceeds | WCAG 2.1 AA, 27-page pa11y-ci in CI, dedicated page, custom layouts for alt text |
-| CI/CD validation | Exceeds | 8 automated PR checks (Vitest, Hugo build, htmltest, pa11y-ci, markdownlint, Prettier, actionlint, Gitleaks) |
+| CI/CD validation | Exceeds | 9 automated PR checks (Vitest, Hugo build, homepage smoke test, htmltest, pa11y-ci, markdownlint, Prettier, actionlint, Gitleaks) |
 | Contact process | Exceeds | Contact form (Workers + Resend + Turnstile), Cal.com scheduling link, email fallback, "What to Expect" steps, response time commitment |
 | SEO fundamentals | Good | Sitemap, robots.txt, meta descriptions on all pages, proper permalinks |
 
@@ -118,6 +118,7 @@ Agile Coaching is the strongest cut candidate (furthest from DevOps core).
 - [ ] Add certification badge images below hero
 - [x] Configure `author.image` and `author.headline` in `languages.en.toml`
 - [ ] Plan testimonial placement (add when collected)
+- [ ] Add JSON-LD structured data (Organization, Service, HowTo schemas) for SEO rich snippets
 
 **Why it matters:** The guide prescribes certification badges, testimonials, "How I Work" section, and specific metrics.
 
@@ -236,7 +237,7 @@ Resolved by the About page rewrite. "We" on other pages reads as professional co
 
 - [ ] Revisit `assets/css/custom.css` structure if file exceeds ~500 lines
 
-Currently 15 `html:not(.dark)` light mode rules are co-located with their dark mode counterparts throughout the file (~400 lines). This pattern is maintainable at the current size. If more pages get light mode support and the file grows past ~500 lines, consider grouping all light overrides into a dedicated section at the bottom or splitting into separate files.
+Currently 25 `html:not(.dark)` light mode rules are co-located with their dark mode counterparts throughout the file (~580 lines). The file has exceeded the ~500-line threshold; consider grouping all light overrides into a dedicated section at the bottom or splitting into separate files when next editing the CSS.
 
 **Files:** `assets/css/custom.css`
 

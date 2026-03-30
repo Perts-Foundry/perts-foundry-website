@@ -8,7 +8,7 @@
           Selected Work
         </h2>
         <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {{ range sort $featured "Weight" "desc" }}
+          {{ range $featured.ByWeight }}
             {{ $page := . }}
             <a href="{{ .RelPermalink }}" class="homepage-case-card group block overflow-hidden rounded-lg border border-neutral-300/20 !no-underline transition dark:border-neutral-600/20">
               {{ with .Resources.GetMatch "featured*" }}

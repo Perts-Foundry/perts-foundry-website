@@ -1,0 +1,6 @@
+{{- $key := .Get 0 -}}
+{{- range site.Data.metrics.items -}}
+  {{- if eq .key $key -}}
+    {{- .value -}}
+  {{- end -}}
+{{- end -}}

@@ -361,7 +361,7 @@ Interactive elements need keyboard accessibility and ARIA attributes. pa11y-ci w
 
 | Item | Description | Files |
 |------|-------------|-------|
-| Animated hero background | CSS gradient mesh or particles.js | `home/background.html` or `home/custom.html` |
+| Animated hero background | CSS gradient mesh or particles.js | `home/custom.html` (note: `home/background.html` was deleted when the text-only hero was adopted) |
 | Enhanced case studies | Scroll reveals, animated metrics, colored tables | Case study layouts, `custom.css`, `extend-footer.html` |
 | Section color theming | Map Forge Blue/Ember/Violet to sections | `extend-footer.html`, `custom.css` |
 | SVG icon animations | Stroke draw-on effects on tech logos | New SVG files, `custom.css` |

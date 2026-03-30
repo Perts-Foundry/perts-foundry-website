@@ -142,38 +142,39 @@ jobs:
         id: homepage-smoke
         if: steps.hugo-build.outputs.exit_code == '0'
         run: |
-          set +e
           ERRORS=""
           HP="public/index.html"
+          # Section structure checks (verify all 8 partials render)
           for id in hero-heading tech-bar-heading problem-heading services-heading metrics-heading cases-heading process-heading cta-heading; do
-            if ! grep -q "id=\"$id\"" "$HP"; then
+            if ! grep -qE "id=\"?$id\"?" "$HP"; then
               ERRORS="${ERRORS}Missing section: $id\n"
             fi
           done
-          if ! grep -q "Ship faster" "$HP"; then
-            ERRORS="${ERRORS}Missing hero headline\n"
+          # Data binding checks (verify TOML data files populate sections)
+          if ! grep -q "Kubernetes" "$HP"; then
+            ERRORS="${ERRORS}Missing technology data (expected 'Kubernetes')\n"
           fi
-          if ! grep -q "View all services" "$HP"; then
-            ERRORS="${ERRORS}Missing services footer link\n"
+          if ! grep -qF "\$125K+" "$HP"; then
+            ERRORS="${ERRORS}Missing metrics data (expected \$125K+)\n"
           fi
-          if ! grep -q "View all case studies" "$HP"; then
-            ERRORS="${ERRORS}Missing case studies footer link\n"
+          if ! grep -q "Discover" "$HP"; then
+            ERRORS="${ERRORS}Missing process step data (expected 'Discover')\n"
           fi
           if [ -n "$ERRORS" ]; then
-            printf "$ERRORS"
+            printf '%b' "$ERRORS"
             echo "exit_code=1" >> "$GITHUB_OUTPUT"
             {
               echo "output<<GHEOF"
-              printf "$ERRORS"
+              printf '%b' "$ERRORS"
               echo "GHEOF"
             } >> "$GITHUB_OUTPUT"
             exit 0
           else
-            echo "All 8 homepage sections verified."
+            echo "All 8 homepage sections and data bindings verified."
             echo "exit_code=0" >> "$GITHUB_OUTPUT"
             {
               echo "output<<GHEOF"
-              echo "All 8 homepage sections present with expected content."
+              echo "All 8 homepage sections present with expected data."
               echo "GHEOF"
             } >> "$GITHUB_OUTPUT"
           fi
