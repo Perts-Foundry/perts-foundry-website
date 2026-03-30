@@ -108,6 +108,7 @@ jobs:
         id: vitest
         run: |
           npm ci
+          mkdir -p public
           set +e
           OUTPUT=$(npx vitest run 2>&1)
           EXIT_CODE=$?
