@@ -19,7 +19,7 @@ No changes needed in these areas.
 | Domain and email | Complete | pertsfoundry.com (.com), contact@pertsfoundry.com (domain-matched) |
 | Technical infrastructure | Exceeds | SSL, Hugo on Cloudflare Workers, CDN, minification, responsive images, lazy loading |
 | Security | Exceeds | CSP, X-Frame-Options, Permissions-Policy, Gitleaks in CI, AI bot blocking |
-| Accessibility | Exceeds | WCAG 2.1 AA, 26-page pa11y-ci in CI, dedicated page, custom layouts for alt text |
+| Accessibility | Exceeds | WCAG 2.1 AA, 27-page pa11y-ci in CI, dedicated page, custom layouts for alt text |
 | CI/CD validation | Exceeds | 7 automated PR checks (Hugo build, htmltest, pa11y-ci, markdownlint, Prettier, actionlint, Gitleaks) |
 | Contact process | Exceeds | Contact form (Workers + Resend + Turnstile), Cal.com scheduling link, email fallback, "What to Expect" steps, response time commitment |
 | SEO fundamentals | Good | Sitemap, robots.txt, meta descriptions on all pages, proper permalinks |

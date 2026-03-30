@@ -15,6 +15,21 @@ hugo server
 hugo --gc --minify --cleanDestinationDir
 ```
 
+## Development Workflow
+
+When making changes to templates, CSS, content, or any visual aspect of the site,
+start the Hugo dev server so the user can preview changes in their browser before
+committing. The server live-reloads on file changes.
+
+To start the dev server reliably:
+
+1. Kill any existing Hugo server: `pkill -f "hugo server" 2>/dev/null || true`
+2. Start a fresh server (run in background, do NOT append `&` to the command):
+   `hugo server`
+3. Tell the user the preview URL (default: http://localhost:1313/)
+
+The dev server is not needed for non-visual changes (CI config, worker code, docs).
+
 ## PR Validation Checks
 
 All seven checks must pass before a PR can merge. Run these locally before pushing:
@@ -71,6 +86,7 @@ config/_default/     # Hugo config (hugo.toml, params.toml, menus, etc.)
 config/production/   # Production overrides
 config/development/  # Development overrides
 content/             # Markdown content (about, accessibility, blog, case-studies, contact, privacy, services)
+assets/css/          # Custom CSS overrides (custom.css) and color schemes (schemes/)
 layouts/             # Custom Hugo layout overrides
 static/              # Static assets and security headers
 src/                 # Cloudflare Worker source (contact form API)
@@ -117,6 +133,15 @@ Set via `wrangler secret put`:
 - `TURNSTILE_SECRET_KEY` -- Cloudflare Turnstile secret key for CAPTCHA verification
 
 The Turnstile *site key* (public) is in `config/_default/params.toml` as `turnstileSiteKey`.
+
+### Testing
+
+The Worker has 40 unit tests using Vitest with `@cloudflare/vitest-pool-workers`.
+Config: `vitest.config.js`. Test file: `src/worker.test.js`.
+
+```bash
+npx vitest run
+```
 
 ### Local development
 

@@ -13,15 +13,15 @@ Research into 2025-2026 web design trends for B2B consulting sites, with specifi
 - **Color scheme:** `perts-forge-blue` (blue primary #3B82F6, violet secondary #8B5CF6, slate neutral)
 - **Default appearance:** Dark mode, no auto-switching
 - **Homepage layout:** `background` (static image with gradient overlay)
-- **Custom CSS:** ~29 lines in `assets/css/custom.css` (header padding, scroll-padding, reduced-motion, logo sizing)
-- **Existing customizations:** 5 layout overrides (home/background.html, hero/basic.html, article-link/simple.html, extend-footer.html, render-link.html)
+- **Custom CSS:** ~395 lines in `assets/css/custom.css` (header padding, scroll-padding, reduced-motion, logo sizing, headshot glow effect, contact page two-column layout, contact form styles, light/dark mode overrides for all contact elements)
+- **Existing customizations:** 8 layout overrides (home/background.html, hero/basic.html, article-link/simple.html, extend-footer.html, render-link.html, contact/simple.html, extend-head-uncached.html, robots.txt)
 - **Additional color schemes:** `perts-ember.css`, `perts-violet-forge.css` (unused, available for section theming)
 - **Animation infrastructure:** `prefers-reduced-motion` already handled in `custom.css`
 
 ### Key Blowfish Customization Surfaces
 
 - `layouts/partials/home/custom.html` (set `homepage.layout = "custom"` for full control)
-- `layouts/partials/extend-head.html` (inject CSS, fonts, meta into `<head>`)
+- `layouts/partials/extend-head-uncached.html` (inject CSS, fonts, meta into `<head>`; project uses the uncached variant)
 - `layouts/partials/extend-footer.html` (inject JS before `</body>`, already exists with commented-out scheme rotation)
 - `assets/css/custom.css` (loaded after theme defaults, supports `@apply`)
 - `layouts/shortcodes/` (custom visual components)

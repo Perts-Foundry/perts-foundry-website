@@ -303,6 +303,10 @@ html:not(.dark) .contact-links a {
   color: rgb(var(--color-neutral-500));
 }
 
+html:not(.dark) .contact-form .form-input::placeholder {
+  color: rgb(var(--color-neutral-400));
+}
+
 .contact-form textarea.form-input {
   resize: vertical;
   min-height: 8rem;
