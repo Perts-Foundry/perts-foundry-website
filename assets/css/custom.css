@@ -389,7 +389,7 @@ html:not(.dark) .form-status--error {
 .form-privacy {
   margin-top: 1rem;
   font-size: 0.8125rem;
-  color: rgb(var(--color-neutral-400));
+  color: rgb(var(--color-neutral-300));
 }
 
 html:not(.dark) .form-privacy {
