@@ -137,6 +137,47 @@ jobs:
         env:
           HUGO_ENVIRONMENT: production
 
+      # ── Homepage smoke test ──────────────────────────────────────
+      - name: Verify homepage sections
+        id: homepage-smoke
+        if: steps.hugo-build.outputs.exit_code == '0'
+        run: |
+          set +e
+          ERRORS=""
+          HP="public/index.html"
+          for id in hero-heading tech-bar-heading problem-heading services-heading metrics-heading cases-heading process-heading cta-heading; do
+            if ! grep -q "id=\"$id\"" "$HP"; then
+              ERRORS="${ERRORS}Missing section: $id\n"
+            fi
+          done
+          if ! grep -q "Ship faster" "$HP"; then
+            ERRORS="${ERRORS}Missing hero headline\n"
+          fi
+          if ! grep -q "View all services" "$HP"; then
+            ERRORS="${ERRORS}Missing services footer link\n"
+          fi
+          if ! grep -q "View all case studies" "$HP"; then
+            ERRORS="${ERRORS}Missing case studies footer link\n"
+          fi
+          if [ -n "$ERRORS" ]; then
+            printf "$ERRORS"
+            echo "exit_code=1" >> "$GITHUB_OUTPUT"
+            {
+              echo "output<<GHEOF"
+              printf "$ERRORS"
+              echo "GHEOF"
+            } >> "$GITHUB_OUTPUT"
+            exit 0
+          else
+            echo "All 8 homepage sections verified."
+            echo "exit_code=0" >> "$GITHUB_OUTPUT"
+            {
+              echo "output<<GHEOF"
+              echo "All 8 homepage sections present with expected content."
+              echo "GHEOF"
+            } >> "$GITHUB_OUTPUT"
+          fi
+
       # ── htmltest ────────────────────────────────────────────────
       - name: Install htmltest
         if: steps.hugo-build.outputs.exit_code == '0'
@@ -252,6 +293,7 @@ jobs:
         env:
           EXIT_VITEST: ${{ steps.vitest.outputs.exit_code }}
           EXIT_HUGO: ${{ steps.hugo-build.outputs.exit_code }}
+          EXIT_SMOKE: ${{ steps.homepage-smoke.outputs.exit_code }}
           EXIT_HTMLTEST: ${{ steps.htmltest.outputs.exit_code }}
           EXIT_PA11Y: ${{ steps.pa11y.outputs.exit_code }}
           EXIT_GITLEAKS: ${{ steps.gitleaks.outputs.exit_code }}
@@ -266,6 +308,7 @@ jobs:
           checks=(
             "vitest:Tests:$EXIT_VITEST"
             "hugo-build:Build:$EXIT_HUGO"
+            "homepage-smoke:Smoke:$EXIT_SMOKE"
             "htmltest:HTML:$EXIT_HTMLTEST"
             "pa11y:A11y:$EXIT_PA11Y"
             "gitleaks:Security:$EXIT_GITLEAKS"
@@ -304,6 +347,7 @@ jobs:
           COMMENT_PR_SHA: ${{ steps.comment-pr.outputs.sha }}
           EXIT_VITEST: ${{ steps.vitest.outputs.exit_code }}
           EXIT_HUGO: ${{ steps.hugo-build.outputs.exit_code }}
+          EXIT_SMOKE: ${{ steps.homepage-smoke.outputs.exit_code }}
           EXIT_HTMLTEST: ${{ steps.htmltest.outputs.exit_code }}
           EXIT_PA11Y: ${{ steps.pa11y.outputs.exit_code }}
           EXIT_GITLEAKS: ${{ steps.gitleaks.outputs.exit_code }}
@@ -312,6 +356,7 @@ jobs:
           EXIT_ACTIONLINT: ${{ steps.actionlint.outputs.exit_code }}
           OUTPUT_VITEST: ${{ steps.vitest.outputs.output }}
           OUTPUT_HUGO: ${{ steps.hugo-build.outputs.output }}
+          OUTPUT_SMOKE: ${{ steps.homepage-smoke.outputs.output }}
           OUTPUT_HTMLTEST: ${{ steps.htmltest.outputs.output }}
           OUTPUT_PA11Y: ${{ steps.pa11y.outputs.output }}
           OUTPUT_GITLEAKS: ${{ steps.gitleaks.outputs.output }}
@@ -342,6 +387,7 @@ jobs:
 
             const vitestExit = process.env.EXIT_VITEST || '';
             const hugoBuild = process.env.EXIT_HUGO || '';
+            const smokeExit = process.env.EXIT_SMOKE || '';
             const htmltest = process.env.EXIT_HTMLTEST || '';
             const pa11y = process.env.EXIT_PA11Y || '';
             const gitleaks = process.env.EXIT_GITLEAKS || '';
@@ -352,6 +398,7 @@ jobs:
 
             const vitestOutput = process.env.OUTPUT_VITEST || 'No output';
             const hugoOutput = process.env.OUTPUT_HUGO || '';
+            const smokeOutput = process.env.OUTPUT_SMOKE || 'Skipped (build failed)';
             const htmltestOutput = process.env.OUTPUT_HTMLTEST || 'Skipped (build failed)';
             const pa11yOutput = process.env.OUTPUT_PA11Y || 'Skipped (build failed)';
             const gitleaksOutput = process.env.OUTPUT_GITLEAKS || 'No issues found';
@@ -375,6 +422,7 @@ jobs:
               `|:------|:-----|:------:|`,
               `| **Worker Unit Tests** | \`vitest\` | ${status(vitestExit)} |`,
               `| **Site Compilation** | \`hugo\` | ${status(hugoBuild)} |`,
+              `| **Homepage Sections** | smoke test | ${status(smokeExit, htmlSkipped)} |`,
               `| **Link & Image Validation** | \`htmltest\` | ${status(htmltest, htmlSkipped)} |`,
               `| **Accessibility (WCAG 2.1 AA)** | \`pa11y-ci\` | ${status(pa11y, htmlSkipped)} |`,
               '',
@@ -406,6 +454,14 @@ jobs:
               '',
               '```',
               hugoOutput,
+              '```',
+              '',
+              '</details>',
+              '',
+              `<details><summary><strong>Homepage Sections</strong> (smoke test)</summary>`,
+              '',
+              '```',
+              smokeOutput,
               '```',
               '',
               '</details>',
@@ -488,6 +544,7 @@ jobs:
         env:
           EXIT_VITEST: ${{ steps.vitest.outputs.exit_code }}
           EXIT_HUGO: ${{ steps.hugo-build.outputs.exit_code }}
+          EXIT_SMOKE: ${{ steps.homepage-smoke.outputs.exit_code }}
           EXIT_HTMLTEST: ${{ steps.htmltest.outputs.exit_code }}
           EXIT_PA11Y: ${{ steps.pa11y.outputs.exit_code }}
           EXIT_GITLEAKS: ${{ steps.gitleaks.outputs.exit_code }}
@@ -498,6 +555,9 @@ jobs:
           FAILED=0
           [ "$EXIT_VITEST" != "0" ] && echo "::error::Vitest worker tests failed" && FAILED=1
           [ "$EXIT_HUGO" != "0" ] && echo "::error::Hugo build failed" && FAILED=1
+          if [ "$EXIT_HUGO" == "0" ] && [ "$EXIT_SMOKE" != "0" ]; then
+            echo "::error::Homepage smoke test failed" && FAILED=1
+          fi
           if [ "$EXIT_HUGO" == "0" ] && [ "$EXIT_HTMLTEST" != "0" ]; then
             echo "::error::htmltest failed" && FAILED=1
           fi

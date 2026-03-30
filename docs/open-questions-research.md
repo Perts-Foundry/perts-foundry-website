@@ -164,6 +164,8 @@ This way: if `showSummary` is enabled, show the content summary. Otherwise, if a
 
 ## 4. Hero Background Approach
 
+> **Resolved 2026-03-30:** Text-only hero chosen (no background image or animation). The background image was deleted. This aligns with the "What Top Sites Actually Do" finding below: "Typography-first heroes are dominant." Research showed text-only heroes have up to 20% better conversion than image heroes.
+
 ### Comparison Matrix
 
 | Approach | Visual Impact | Performance | Mobile | Complexity | Brand Fit | Accessibility | Total /30 |
@@ -242,6 +244,8 @@ Typography-first heroes are dominant. Bold headlines, intentional whitespace, mi
 ---
 
 ## 5. Custom Homepage Layout
+
+> **Resolved 2026-03-30:** "Conversion-Focused Storyteller" layout implemented with 8 sections: Hero (text-only), Tech Trust Bar (text pills, not SVG logos), Problem Statement, Services Grid (top 4 by weight), Results Metrics (static, not animated), Featured Case Studies (filtered by `featured: true`), How We Work (4-step process: Discover, Design, Build, Hand Off), Final CTA. See `layouts/partials/home/custom.html` and `layouts/partials/homepage/`.
 
 ### Research Finding: Text-Only Heroes Outperform Image Heroes
 

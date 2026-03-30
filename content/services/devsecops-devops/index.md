@@ -3,6 +3,7 @@ title: "DevSecOps & DevOps"
 description: "Build DevOps foundations and embed security practices into infrastructure and delivery workflows"
 slug: "devsecops-devops"
 weight: 2
+icon: "shield"
 draft: false
 ---
 

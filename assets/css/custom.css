@@ -118,10 +118,16 @@ html:not(.dark) .numbered-steps li::before {
   background: rgba(148, 163, 184, 0.04);
 }
 
-.homepage-service-card:hover {
+.homepage-service-card:hover,
+.homepage-service-card:focus-visible {
   transform: translateY(-4px);
   box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
   border-color: rgba(59, 130, 246, 0.3);
+}
+
+.homepage-service-card:focus-visible {
+  outline: 2px solid rgb(var(--color-primary-500));
+  outline-offset: 2px;
 }
 
 html:not(.dark) .homepage-service-card {
@@ -158,10 +164,16 @@ html:not(.dark) .homepage-metrics {
   background: rgba(148, 163, 184, 0.04);
 }
 
-.homepage-case-card:hover {
+.homepage-case-card:hover,
+.homepage-case-card:focus-visible {
   transform: translateY(-4px);
   box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
   border-color: rgba(59, 130, 246, 0.3);
+}
+
+.homepage-case-card:focus-visible {
+  outline: 2px solid rgb(var(--color-primary-500));
+  outline-offset: 2px;
 }
 
 html:not(.dark) .homepage-case-card {
@@ -172,7 +184,9 @@ html:not(.dark) .homepage-case-card:hover {
   box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
 }
 
-/* Process steps (extends .numbered-steps) */
+/* Process steps (extends .numbered-steps)
+   Note: repeat(4, 1fr) is coupled to the 4 steps in data/process.toml.
+   Update grid-template-columns if the step count changes. */
 .process-steps {
   display: grid;
   grid-template-columns: 1fr;

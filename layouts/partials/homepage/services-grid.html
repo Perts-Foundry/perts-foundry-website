@@ -6,12 +6,10 @@
         What We Do
       </h2>
       <div class="grid gap-6 sm:grid-cols-2">
-        {{ $icons := dict "cloud-infrastructure" "cloud" "devsecops-devops" "shield" "cicd-automation" "code" "kubernetes-containers" "docker" }}
         {{ range first 4 .Pages.ByWeight }}
           <a href="{{ .RelPermalink }}" class="homepage-service-card group block rounded-lg border border-neutral-300/20 p-6 !no-underline transition dark:border-neutral-600/20">
             <div class="mb-3 flex items-center gap-3">
-              {{ $icon := index $icons .File.ContentBaseName }}
-              {{ with $icon }}
+              {{ with .Params.icon }}
                 <span class="inline-block h-6 w-6 text-primary-500" aria-hidden="true">
                   {{ partial "icon.html" . }}
                 </span>
@@ -21,7 +19,7 @@
               </h3>
             </div>
             {{ with .Description }}
-              <p class="m-0 text-sm text-neutral-500 dark:text-neutral-400">
+              <p class="m-0 text-sm text-neutral-500 dark:text-neutral-400 line-clamp-3">
                 {{ . }}
               </p>
             {{ end }}

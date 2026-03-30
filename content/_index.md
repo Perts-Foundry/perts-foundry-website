@@ -3,6 +3,7 @@ title: "Perts Foundry"
 description: "DevOps consulting that helps scaling teams ship faster and spend less on infrastructure."
 # hero.headline: Main homepage heading (h1), bold text
 # hero.subheadline: One-line supporting text below the heading
+# Body content below the front matter renders as the "problem statement" section.
 hero:
   headline: "Ship faster. Spend less. Sleep better."
   subheadline: "DevOps consulting for engineering teams that need infrastructure they can rely on."

@@ -1,10 +1,9 @@
-<section class="homepage-tech-bar" aria-labelledby="tech-bar-heading">
-  <div class="mx-auto max-w-5xl px-4 py-8">
-    <h2 id="tech-bar-heading" class="sr-only">Technologies we work with</h2>
-    <p class="mb-4 text-center text-sm font-medium uppercase tracking-wider text-neutral-500 dark:text-neutral-500">
-      Technologies we work with
-    </p>
-    {{ with site.Data.technologies.items }}
+{{ with site.Data.technologies.items }}
+  <section class="homepage-tech-bar" aria-labelledby="tech-bar-heading">
+    <div class="mx-auto max-w-5xl px-4 py-8">
+      <h2 id="tech-bar-heading" class="mb-4 text-center text-sm font-medium uppercase tracking-wider text-neutral-500 dark:text-neutral-500">
+        Technologies we work with
+      </h2>
       <ul class="flex flex-wrap items-center justify-center gap-3 list-none p-0 m-0">
         {{ range . }}
           <li class="rounded-full border border-neutral-300/30 px-4 py-1.5 text-sm font-medium text-neutral-600 dark:border-neutral-600/30 dark:text-neutral-400">
@@ -12,6 +11,6 @@
           </li>
         {{ end }}
       </ul>
-    {{ end }}
-  </div>
-</section>
+    </div>
+  </section>
+{{ end }}

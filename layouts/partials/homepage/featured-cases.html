@@ -8,14 +8,15 @@
           Selected Work
         </h2>
         <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {{ range $featured }}
+          {{ range sort $featured "Weight" "desc" }}
+            {{ $page := . }}
             <a href="{{ .RelPermalink }}" class="homepage-case-card group block overflow-hidden rounded-lg border border-neutral-300/20 !no-underline transition dark:border-neutral-600/20">
               {{ with .Resources.GetMatch "featured*" }}
                 <div class="aspect-video overflow-hidden">
                   {{ $img := .Resize "640x" }}
                   <img
                     src="{{ $img.RelPermalink }}"
-                    alt="{{ $.Title }}"
+                    alt=""
                     width="{{ $img.Width }}"
                     height="{{ $img.Height }}"
                     class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
@@ -25,9 +26,9 @@
               {{ end }}
               <div class="p-5">
                 <h3 class="m-0 mb-2 text-base font-semibold text-neutral-800 dark:text-neutral-100">
-                  {{ .Title }}
+                  {{ $page.Title }}
                 </h3>
-                {{ with .Description }}
+                {{ with $page.Description }}
                   <p class="m-0 text-sm text-neutral-500 dark:text-neutral-400 line-clamp-3">
                     {{ . }}
                   </p>

@@ -1,3 +1,6 @@
+# These metrics also appear on the About page (content/about/index.md, Results section).
+# Update both locations when values change.
+
 [[items]]
 value = "$125K+"
 label = "Annual Savings Identified"

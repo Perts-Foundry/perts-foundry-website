@@ -32,7 +32,7 @@ The dev server is not needed for non-visual changes (CI config, worker code, doc
 
 ## PR Validation Checks
 
-All eight checks must pass before a PR can merge. Run these locally before pushing:
+All nine checks must pass before a PR can merge. Run these locally before pushing:
 
 ### 1. Vitest (Worker unit tests)
 Runs the 43 Worker unit/integration tests. Config: `vitest.config.js`.
@@ -92,8 +92,9 @@ config/_default/     # Hugo config (hugo.toml, params.toml, menus, etc.)
 config/production/   # Production overrides
 config/development/  # Development overrides
 content/             # Markdown content (about, accessibility, blog, case-studies, contact, privacy, services)
+data/                # Structured TOML data files (metrics, process steps, technologies) used by homepage
 assets/css/          # Custom CSS overrides (custom.css) and color schemes (schemes/)
-layouts/             # Custom Hugo layout overrides
+layouts/             # Custom Hugo layout overrides (includes homepage/ sub-partials)
 static/              # Static assets and security headers
 src/                 # Cloudflare Worker source (contact form API)
 wrangler.toml        # Cloudflare Workers deployment config
@@ -114,6 +115,7 @@ docs/                # Architecture proposals and reference guides
 - Permalinks for case studies use the `slug` field: `/case-studies/:slug/`
 - Content `slug` values must match their directory name (e.g., `content/services/cloud-infrastructure/` uses `slug: "cloud-infrastructure"`). Structured breadcrumb data relies on this alignment.
 - **Exception: contact page.** The contact page uses a custom template (`layouts/contact/simple.html`) that hardcodes all content in HTML for two-column layout control. The markdown file (`content/contact/index.md`) contains only front matter. Editing the contact page content requires modifying the template, not the markdown file.
+- **Exception: homepage.** The homepage uses a custom layout (`layouts/partials/home/custom.html`) that dispatches to 8 section sub-partials in `layouts/partials/homepage/`. Content comes from 4 sources: `hero.headline` and `hero.subheadline` from `content/_index.md` front matter; the problem statement from `content/_index.md` body; metrics, process steps, and technologies from `data/*.toml` files; services and case studies from Hugo section queries. Case studies appear on the homepage only if they have `featured: true` in their front matter. Services with an `icon` field in front matter display that Blowfish icon on the homepage grid.
 
 ### Section ordering (services, case-studies)
 

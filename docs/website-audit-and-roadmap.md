@@ -113,15 +113,17 @@ Agile Coaching is the strongest cut candidate (furthest from DevOps core).
 
 ### H2. Homepage missing key credibility elements
 
-- [ ] Add aggregate metrics from case studies
-- [ ] Add or duplicate the 3-step engagement process
+- [x] Add aggregate metrics from case studies
+- [x] Add or duplicate the 3-step engagement process
 - [ ] Add certification badge images below hero
 - [x] Configure `author.image` and `author.headline` in `languages.en.toml`
 - [ ] Plan testimonial placement (add when collected)
 
-**Why it matters:** The homepage is currently a tagline, two generic paragraphs, and two buttons. The author section renders empty (no image, headline, or links). The guide prescribes certification badges, testimonials, "How I Work" section, and specific metrics.
+**Why it matters:** The guide prescribes certification badges, testimonials, "How I Work" section, and specific metrics.
 
-**Files:** `content/_index.md`, `config/_default/languages.en.toml`, certification badge images
+**Partially resolved 2026-03-30:** Custom multi-section homepage with metrics band ($125K+, 200+, Zero), 4-step "How We Work" process timeline, tech trust bar, services grid, featured case studies, and dual CTAs. Remaining: certification badge images, testimonials.
+
+**Files:** `content/_index.md`, `data/metrics.toml`, `data/process.toml`, `data/technologies.toml`, `layouts/partials/homepage/`, certification badge images
 
 ---
 
@@ -290,18 +292,18 @@ See `docs/visual-enhancement-research.md` for detailed research with techniques,
 
 ### Tier 1: Quick Wins (CSS-only)
 
-- [ ] **V1. Micro-interactions** on cards, buttons, links (hover lift, shadow, scale, glow)
-- [ ] **V2. Dark mode glow accents** using blue/violet palette (box-shadow, gradient borders)
-- [ ] **V3. Fluid typography** for hero headings (`clamp()`)
+- [x] **V1. Micro-interactions** on cards, buttons, links (hover lift, shadow, scale, glow)
+- [x] **V2. Dark mode glow accents** using blue/violet palette (box-shadow, gradient borders)
+- [x] **V3. Fluid typography** for hero headings (`clamp()`)
 - [x] **V4. Fix word count display** on listing pages (V-Bug-1 above)
 
 ### Tier 2: Medium Effort (CSS + minimal JS)
 
 - [ ] **V5. Scroll-reveal animations** (Intersection Observer + CSS transitions, ~15 lines JS)
-- [ ] **V6. Technology logo wall** (CSS marquee, AWS/GCP/Terraform/K8s logos)
-- [ ] **V7. Animated metric counters** ($125K+, 200+ projects, etc.)
-- [ ] **V8. Process timeline** ("How We Work" visual flow)
-- [ ] **V9. Custom homepage layout** (Blowfish `custom` layout, sectioned landing page)
+- [x] **V6. Technology logo wall** (text pill trust bar; CSS marquee with SVG logos deferred)
+- [ ] **V7. Animated metric counters** (static display implemented; JS counter animation deferred)
+- [x] **V8. Process timeline** ("How We Work" 4-step grid with icons and numbered steps)
+- [x] **V9. Custom homepage layout** (Blowfish `custom` layout, 8-section landing page)
 - [ ] **V10. Glassmorphism service cards** (`backdrop-filter: blur()`)
 
 ### Tier 3: Differentiation
