@@ -119,12 +119,12 @@ html {
   box-shadow: 0 0 20px rgba(59, 130, 246, 0.08);
 }
 
-[data-appearance="light"] .contact-card {
+html:not(.dark) .contact-card {
   background: rgba(148, 163, 184, 0.06);
   border-color: rgba(148, 163, 184, 0.2);
 }
 
-[data-appearance="light"] .contact-card--cta {
+html:not(.dark) .contact-card--cta {
   border-color: rgba(59, 130, 246, 0.25);
   background: rgba(59, 130, 246, 0.04);
 }
@@ -207,24 +207,24 @@ html {
   margin-top: 0.125rem;
 }
 
-[data-appearance="light"] .contact-steps li strong {
+html:not(.dark) .contact-steps li strong {
   color: rgb(var(--color-neutral-700));
 }
 
-[data-appearance="light"] .contact-steps li span {
+html:not(.dark) .contact-steps li span {
   color: rgb(var(--color-neutral-600));
 }
 
-[data-appearance="light"] .contact-steps li::before {
+html:not(.dark) .contact-steps li::before {
   background: rgba(37, 99, 235, 0.12);
   color: rgb(var(--color-primary-700));
 }
 
-[data-appearance="light"] .contact-steps li + li {
+html:not(.dark) .contact-steps li + li {
   border-top-color: rgba(148, 163, 184, 0.2);
 }
 
-[data-appearance="light"] .contact-cta-wrapper {
+html:not(.dark) .contact-cta-wrapper {
   border-top-color: rgba(148, 163, 184, 0.25);
 }
 
@@ -258,11 +258,11 @@ html {
   text-decoration: underline;
 }
 
-[data-appearance="light"] .contact-links li strong {
+html:not(.dark) .contact-links li strong {
   color: rgb(var(--color-neutral-600));
 }
 
-[data-appearance="light"] .contact-links a {
+html:not(.dark) .contact-links a {
   color: rgb(var(--color-primary-700));
 }
 
@@ -309,11 +309,11 @@ html {
 }
 
 /* Light mode overrides */
-[data-appearance="light"] .contact-form .form-label {
+html:not(.dark) .contact-form .form-label {
   color: rgb(var(--color-neutral-600));
 }
 
-[data-appearance="light"] .contact-form .form-input {
+html:not(.dark) .contact-form .form-input {
   background: rgb(var(--color-neutral-100));
   border-color: rgb(var(--color-neutral-300));
   color: rgb(var(--color-neutral-800));
@@ -373,11 +373,11 @@ html {
   text-decoration: underline;
 }
 
-[data-appearance="light"] .form-status--success {
+html:not(.dark) .form-status--success {
   color: #16a34a;
 }
 
-[data-appearance="light"] .form-status--error {
+html:not(.dark) .form-status--error {
   color: #dc2626;
 }
 
@@ -388,6 +388,6 @@ html {
   color: rgb(var(--color-neutral-400));
 }
 
-[data-appearance="light"] .form-privacy {
+html:not(.dark) .form-privacy {
   color: rgb(var(--color-neutral-500));
 }
