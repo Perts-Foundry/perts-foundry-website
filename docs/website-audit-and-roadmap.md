@@ -19,8 +19,8 @@ No changes needed in these areas.
 | Domain and email | Complete | pertsfoundry.com (.com), contact@pertsfoundry.com (domain-matched) |
 | Technical infrastructure | Exceeds | SSL, Hugo on Cloudflare Workers, CDN, minification, responsive images, lazy loading |
 | Security | Exceeds | CSP, X-Frame-Options, Permissions-Policy, Gitleaks in CI, AI bot blocking |
-| Accessibility | Exceeds | WCAG 2.1 AA, 26-page pa11y-ci in CI, dedicated page, custom layouts for alt text |
-| CI/CD validation | Exceeds | 7 automated PR checks (Hugo build, htmltest, pa11y-ci, markdownlint, Prettier, actionlint, Gitleaks) |
+| Accessibility | Exceeds | WCAG 2.1 AA, 27-page pa11y-ci in CI, dedicated page, custom layouts for alt text |
+| CI/CD validation | Exceeds | 8 automated PR checks (Vitest, Hugo build, htmltest, pa11y-ci, markdownlint, Prettier, actionlint, Gitleaks) |
 | Contact process | Exceeds | Contact form (Workers + Resend + Turnstile), Cal.com scheduling link, email fallback, "What to Expect" steps, response time commitment |
 | SEO fundamentals | Good | Sitemap, robots.txt, meta descriptions on all pages, proper permalinks |
 
@@ -194,6 +194,18 @@ Resolved by the About page rewrite. "We" on other pages reads as professional co
 
 ---
 
+### M5. 21 pages suppress `color-contrast` in pa11y-ci
+
+- [ ] Identify which failures come from shared Blowfish theme components (nav, footer, hero) vs. custom CSS
+- [ ] Fix theme-level contrast issues centrally (shared component overrides)
+- [ ] Remove `"ignore": ["color-contrast"]` from pages as they pass
+
+21 of 27 pages in `.pa11yci` have `color-contrast` suppressed. The contact page was fixed and unsuppressed in PR #37. Many remaining failures likely come from Blowfish theme components rather than custom CSS, so fixing shared components first would unsuppress multiple pages at once.
+
+**Files:** `.pa11yci`, `assets/css/custom.css`
+
+---
+
 ## Low Priority / Nice-to-Have
 
 ### L1. No structured data / JSON-LD
@@ -217,6 +229,32 @@ Resolved by the About page rewrite. "We" on other pages reads as professional co
 
 - [ ] Collect real testimonials from clients
 - [ ] Plan placement on homepage and About page
+
+### L6. Review CSS light mode override organization
+
+- [ ] Revisit `assets/css/custom.css` structure if file exceeds ~500 lines
+
+Currently 15 `html:not(.dark)` light mode rules are co-located with their dark mode counterparts throughout the file (~400 lines). This pattern is maintainable at the current size. If more pages get light mode support and the file grows past ~500 lines, consider grouping all light overrides into a dedicated section at the bottom or splitting into separate files.
+
+**Files:** `assets/css/custom.css`
+
+### L7. pa11y-ci runs only in dark mode
+
+- [ ] Add a second pa11y-ci pass that toggles to light mode before checking
+- [ ] Use pa11y's `actions` feature to run `document.documentElement.classList.remove('dark')` before each URL check
+
+The site defaults to dark mode, so pa11y-ci only validates dark mode contrast and accessibility. Light mode has zero automated coverage. Consider testing at least the contact page, homepage, and one service/case study page in light mode initially.
+
+**Files:** `.pa11yci`, `.github/workflows/validate.yml`
+
+### L8. Investigate pa11y `hideElements` suppression
+
+- [ ] Determine what `.px-2.text-primary-500` and `.inline-block.rtl\:rotate-180` target
+- [ ] If issues are color-contrast only, switch to per-page `ignore` rules instead of global `hideElements`
+
+`hideElements` hides elements from ALL axe-core rules (not just contrast), meaning genuine accessibility issues on those elements are invisible to CI. `hideElements` should be reserved for elements that genuinely cannot be tested (e.g., third-party embeds).
+
+**Files:** `.pa11yci`
 
 ---
 
