@@ -447,8 +447,9 @@ The first rule of ARIA: **don't use ARIA if native HTML can do the job.**
 **Strengths (from layout inspection):**
 
 - `layouts/partials/article-link/simple.html`: Featured image alt text set to page title
-- `layouts/partials/home/background.html`: Decorative images correctly use `alt=""`;
-  author image has descriptive alt; social links have `aria-label` and `title`
+- `layouts/partials/home/custom.html` + `layouts/partials/homepage/`: Section
+  headings have `aria-labelledby`; decorative icons use `aria-hidden="true"`;
+  card images inside links use `alt=""`; focus-visible states on interactive cards
 - `layouts/_default/_markup/render-link.html`: External links get `target="_blank"` with
   `rel="noopener noreferrer"`
 - `config/_default/hugo.toml`: `languageCode = "en-us"` properly configured

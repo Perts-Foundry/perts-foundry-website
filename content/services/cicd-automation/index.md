@@ -3,6 +3,7 @@ title: "CI/CD & Automation"
 description: "Build and modernize CI/CD pipelines to accelerate delivery and reduce toil"
 slug: "cicd-automation"
 weight: 3
+icon: "code"
 draft: false
 ---
 

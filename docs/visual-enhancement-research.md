@@ -12,9 +12,9 @@ Research into 2025-2026 web design trends for B2B consulting sites, with specifi
 - **Theme:** Blowfish v2 (Hugo module), built on Tailwind CSS
 - **Color scheme:** `perts-forge-blue` (blue primary #3B82F6, violet secondary #8B5CF6, slate neutral)
 - **Default appearance:** Dark mode, no auto-switching
-- **Homepage layout:** `background` (static image with gradient overlay)
-- **Custom CSS:** ~400 lines in `assets/css/custom.css` (header padding, scroll-padding, reduced-motion, logo sizing, headshot glow effect, contact page two-column layout, contact form styles, light/dark mode overrides for all contact elements)
-- **Existing customizations:** 8 layout overrides (home/background.html, hero/basic.html, article-link/simple.html, extend-footer.html, render-link.html, contact/simple.html, extend-head-uncached.html, robots.txt)
+- **Homepage layout:** `custom` (multi-section landing page via `layouts/partials/home/custom.html` dispatching to 8 sub-partials in `layouts/partials/homepage/`)
+- **Custom CSS:** ~580 lines in `assets/css/custom.css`, organized with comment-block sections (Global, Shared Components, Homepage, Contact Page). Includes homepage card interactions, metric glow effects, fluid typography, process timeline, and light/dark mode overrides.
+- **Existing customizations:** 16 layout files (home/custom.html, homepage/hero.html, homepage/tech-bar.html, homepage/problem.html, homepage/services-grid.html, homepage/metrics-band.html, homepage/featured-cases.html, homepage/process.html, homepage/final-cta.html, hero/basic.html, article-link/simple.html, extend-footer.html, render-link.html, contact/simple.html, extend-head-uncached.html, robots.txt)
 - **Additional color schemes:** `perts-ember.css`, `perts-violet-forge.css` (unused, available for section theming)
 - **Animation infrastructure:** `prefers-reduced-motion` already handled in `custom.css`
 
@@ -361,7 +361,7 @@ Interactive elements need keyboard accessibility and ARIA attributes. pa11y-ci w
 
 | Item | Description | Files |
 |------|-------------|-------|
-| Animated hero background | CSS gradient mesh or particles.js | `home/background.html` or `home/custom.html` |
+| Animated hero background | CSS gradient mesh or particles.js | `home/custom.html` (note: `home/background.html` was deleted when the text-only hero was adopted) |
 | Enhanced case studies | Scroll reveals, animated metrics, colored tables | Case study layouts, `custom.css`, `extend-footer.html` |
 | Section color theming | Map Forge Blue/Ember/Violet to sections | `extend-footer.html`, `custom.css` |
 | SVG icon animations | Stroke draw-on effects on tech logos | New SVG files, `custom.css` |

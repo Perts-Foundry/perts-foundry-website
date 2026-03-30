@@ -3,6 +3,7 @@ title: "Built Multi-Tenant Kubernetes Platform, Scaled Nearly 100x"
 description: "Onboarded 4 teams to multi-tenant GKE clusters, tuned a critical application for nearly 100x scale, and managed cluster lifecycle across the organization."
 slug: "kubernetes-multi-tenancy-scaling"
 weight: 70
+featured: true
 draft: false
 params:
   client: "growing technology startup"

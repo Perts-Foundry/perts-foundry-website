@@ -5,6 +5,7 @@ draft: true
 description: ""
 slug: "{{ .File.ContentBaseName }}"
 weight: 0
+featured: false
 params:
   client: ""
   industry: ""

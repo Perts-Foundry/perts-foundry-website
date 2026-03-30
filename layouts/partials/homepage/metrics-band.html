@@ -1,0 +1,19 @@
+{{ with site.Data.metrics.items }}
+  <section class="homepage-metrics" aria-labelledby="metrics-heading">
+    <div class="mx-auto max-w-5xl px-4 py-16">
+      <h2 id="metrics-heading" class="sr-only">Results</h2>
+      <div class="flex flex-col items-center justify-center gap-10 sm:flex-row sm:gap-16">
+        {{ range . }}
+          <div class="text-center">
+            <span class="homepage-metric-value block text-4xl font-extrabold text-primary-500 sm:text-5xl">
+              {{ .value }}
+            </span>
+            <span class="mt-2 block text-sm font-medium text-neutral-500 dark:text-neutral-400">
+              {{ .label }}
+            </span>
+          </div>
+        {{ end }}
+      </div>
+    </div>
+  </section>
+{{ end }}

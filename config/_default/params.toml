@@ -11,8 +11,7 @@ turnstileSiteKey = "0x4AAAAAACxUbBWxqsfKfvH-"
 calendarUrl = "https://cal.com/perts-foundry/discovery-meeting"
 
 [homepage]
-  layout = "background"
-  homepageImage = "img/background.jpg"
+  layout = "custom"
   showRecent = false
   showRecentItems = 3
   showMoreLink = false

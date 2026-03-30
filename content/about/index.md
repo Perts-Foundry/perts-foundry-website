@@ -18,11 +18,11 @@ I got my start as a developer before spending most of my career in DevOps and De
 
 ## Results
 
-- **$125,000+** saved in annual cloud spend through right-sizing, idle resource cleanup, and cost governance
+- **{{% metric "savings" %}}** saved in annual cloud spend through right-sizing, idle resource cleanup, and cost governance
 - **5+ petabytes** migrated across container registries with zero downtime
 - **~100x application scaling** achieved through autoscaler tuning and synthetic load testing
 - **P0 incident response** led across multi-cloud systems, driving resolution within minutes of paging
-- **200+ Terraform projects** migrated to a centralized module registry with fully automated CI/CD
+- **{{% metric "terraform" %}}** Terraform projects migrated to a centralized module registry with fully automated CI/CD
 - **CI/CD modernization** for a defense organization, from legacy systems to automated quality gates
 
 See the full [case studies](/case-studies/) for the details behind each engagement.
