@@ -212,7 +212,20 @@ html {
 }
 
 [data-appearance="light"] .contact-steps li span {
-  color: rgb(var(--color-neutral-500));
+  color: rgb(var(--color-neutral-600));
+}
+
+[data-appearance="light"] .contact-steps li::before {
+  background: rgba(37, 99, 235, 0.12);
+  color: rgb(var(--color-primary-700));
+}
+
+[data-appearance="light"] .contact-steps li + li {
+  border-top-color: rgba(148, 163, 184, 0.2);
+}
+
+[data-appearance="light"] .contact-cta-wrapper {
+  border-top-color: rgba(148, 163, 184, 0.25);
 }
 
 /* Contact links */
@@ -245,6 +258,14 @@ html {
   text-decoration: underline;
 }
 
+[data-appearance="light"] .contact-links li strong {
+  color: rgb(var(--color-neutral-600));
+}
+
+[data-appearance="light"] .contact-links a {
+  color: rgb(var(--color-primary-700));
+}
+
 /* Contact form */
 .contact-form .form-group {
   margin-bottom: 1.25rem;
@@ -267,7 +288,9 @@ html {
   color: rgb(var(--color-neutral-200));
   font-size: 1rem;
   font-family: inherit;
-  transition: border-color 0.15s ease, outline 0.15s ease;
+  transition:
+    border-color 0.15s ease,
+    outline 0.15s ease;
 }
 
 .contact-form .form-input:focus {
@@ -363,4 +386,8 @@ html {
   margin-top: 1rem;
   font-size: 0.8125rem;
   color: rgb(var(--color-neutral-400));
+}
+
+[data-appearance="light"] .form-privacy {
+  color: rgb(var(--color-neutral-500));
 }
