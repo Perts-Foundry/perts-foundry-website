@@ -103,13 +103,11 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-hugo-
 
-      - name: Install npm dependencies
-        run: npm ci
-
       # ── Vitest (Worker unit tests) ─────────────────────────────
       - name: Run Vitest
         id: vitest
         run: |
+          npm ci
           set +e
           OUTPUT=$(npx vitest run 2>&1)
           EXIT_CODE=$?
