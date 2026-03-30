@@ -97,7 +97,7 @@
     },
     {
       "url": "http://localhost:8080/contact/",
-      "ignore": ["color-contrast"]
+      "hideElements": "svg text, .px-2.text-primary-500, .inline-block.rtl\\:rotate-180, .form-privacy"
     },
     "http://localhost:8080/accessibility/",
     "http://localhost:8080/privacy/"

@@ -357,6 +357,19 @@ describe("handleContactForm", () => {
     expect(body.error).toContain("Invalid");
   });
 
+  it("returns 400 when name contains CRLF (header injection)", async () => {
+    const res = await SELF.fetch("https://example.com/api/contact", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(
+        validBody({ name: "Jane\r\nBcc: attacker@evil.com" }),
+      ),
+    });
+    expect(res.status).toBe(400);
+    const body = await res.json();
+    expect(body.error).toContain("Invalid");
+  });
+
   // -- Missing env secrets --------------------------------------------------
 
   it("returns 503 when env secrets are missing", async () => {
@@ -411,6 +424,23 @@ describe("handleContactForm with secrets", () => {
     };
   }
 
+  // -- Content-Length enforcement ---------------------------------------------
+
+  it("returns 413 when Content-Length exceeds 10000", async () => {
+    const req = new Request("https://example.com/api/contact", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Content-Length": "20000",
+      },
+      body: JSON.stringify(validBody()),
+    });
+    const res = await worker.fetch(req, mockEnv());
+    expect(res.status).toBe(413);
+    const data = await res.json();
+    expect(data.error).toBe("Request too large.");
+  });
+
   // -- Missing Turnstile token ----------------------------------------------
 
   it("returns 400 when Turnstile token is missing", async () => {
@@ -438,6 +468,21 @@ describe("handleContactForm with secrets", () => {
     expect(res.status).toBe(403);
     const data = await res.json();
     expect(data.error).toContain("Verification failed");
+  });
+
+  // -- Turnstile network failure (catch branch) ------------------------------
+
+  it("returns 500 when Turnstile API call throws", async () => {
+    fetchMock
+      .get("https://challenges.cloudflare.com")
+      .intercept({ path: "/turnstile/v0/siteverify", method: "POST" })
+      .replyWithError(new Error("DNS resolution failed"));
+
+    const req = contactRequest(validBody());
+    const res = await worker.fetch(req, mockEnv());
+    expect(res.status).toBe(500);
+    const data = await res.json();
+    expect(data.error).toContain("Unable to verify");
   });
 
   // -- Successful end-to-end flow -------------------------------------------
