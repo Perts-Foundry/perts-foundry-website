@@ -1,11 +1,17 @@
 {{ with site.Data.metrics.items }}
   <section class="homepage-metrics" aria-labelledby="metrics-heading">
-    <div class="mx-auto max-w-5xl px-4 py-16">
-      <h2 id="metrics-heading" class="sr-only">Results</h2>
-      <div class="flex flex-col items-center justify-center gap-10 sm:flex-row sm:gap-16">
+    <div class="mx-auto max-w-5xl px-4 py-14">
+      <h2 id="metrics-heading" class="mb-8 text-center font-bold text-neutral-800 dark:text-neutral-100" data-reveal>
+        Results That Matter
+      </h2>
+      <div class="flex flex-col items-center justify-center gap-10 sm:flex-row sm:gap-16" data-reveal-stagger>
         {{ range . }}
           <div class="text-center">
-            <span class="homepage-metric-value block text-4xl font-extrabold text-primary-500 sm:text-5xl">
+            <span class="homepage-metric-value block text-5xl font-extrabold text-primary-500 sm:text-6xl"
+              {{- if findRE "^[\\$]?[0-9]" .value }}
+                data-counter="{{ .value }}"
+                data-target="{{ replaceRE "[^0-9]" "" .value }}"
+              {{- end }}>
               {{ .value }}
             </span>
             <span class="mt-2 block text-sm font-medium text-neutral-500 dark:text-neutral-400">

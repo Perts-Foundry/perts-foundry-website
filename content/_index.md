@@ -6,8 +6,8 @@ images: ["img/og-homepage.png"]
 # hero.subheadline: One-line supporting text below the heading
 # Body content below the front matter renders as the "problem statement" section.
 hero:
-  headline: "Ship faster. Spend less. Sleep better."
-  subheadline: "DevOps consulting for engineering teams that need infrastructure they can rely on."
+  headline: "Build. Scale. Own."
+  subheadline: "Your team, extended."
 ---
 
-Your team is scaling, but your infrastructure is not keeping up. Deployments are slow, cloud costs are climbing, and your engineers are spending more time fighting fires than building product. You need someone who has solved these problems before and can build systems your team will actually own after the engagement ends.
+The friction your engineers assume is just how things work? That's where we start. Fragile pipelines, rising cloud costs, container sprawl, security gaps, manual processes that should have been automated years ago. Whatever is slowing your team down, we have solved it before, across hundreds of projects and multiple clouds. We work as part of your team, not outside it, bringing DevSecOps expertise to build what you need, scale what you have, and make sure you own the result.

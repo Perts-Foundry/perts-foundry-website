@@ -1,23 +1,31 @@
 [[items]]
 name = "AWS"
+icon = "aws"
 
 [[items]]
 name = "GCP"
+icon = "gcp"
 
 [[items]]
 name = "Terraform"
+icon = "terraform"
 
 [[items]]
 name = "Kubernetes"
+icon = "kubernetes"
 
 [[items]]
 name = "Docker"
+icon = "docker"
 
 [[items]]
 name = "GitHub Actions"
+icon = "github-actions"
 
 [[items]]
 name = "Helm"
+icon = "helm"
 
 [[items]]
 name = "Datadog"
+icon = "datadog"

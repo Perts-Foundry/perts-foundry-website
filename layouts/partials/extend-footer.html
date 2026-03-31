@@ -1,1 +1,79 @@
+<script>
+(function () {
+  // Bail early for reduced-motion users: no class added, all content stays visible
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
 
+  // Opt-in: add class so CSS can hide [data-reveal] elements
+  document.documentElement.classList.add('js-reveal-init');
+
+  // Scroll-reveal observer
+  var revealObserver = new IntersectionObserver(
+    function (entries) {
+      entries.forEach(function (entry) {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('revealed');
+          revealObserver.unobserve(entry.target);
+        }
+      });
+    },
+    { threshold: 0.15, rootMargin: '0px 0px -50px 0px' }
+  );
+
+  document
+    .querySelectorAll('[data-reveal], [data-reveal-stagger]')
+    .forEach(function (el) {
+      revealObserver.observe(el);
+    });
+
+  // Hero gradient pause when scrolled out of view
+  var heroEl = document.querySelector('.hero-gradient-bg');
+  if (heroEl) {
+    var heroBefore = heroEl; // animation is on the element's ::before
+    var heroObserver = new IntersectionObserver(
+      function (entries) {
+        entries.forEach(function (entry) {
+          heroBefore.style.animationPlayState = entry.isIntersecting
+            ? 'running'
+            : 'paused';
+        });
+      },
+      { threshold: 0 }
+    );
+    heroObserver.observe(heroEl);
+  }
+
+  // Animated metric counters
+  var counterObserver = new IntersectionObserver(
+    function (entries) {
+      entries.forEach(function (entry) {
+        if (!entry.isIntersecting) return;
+        var el = entry.target;
+        var display = el.getAttribute('data-counter');
+        var target = parseInt(el.getAttribute('data-target'), 10);
+        counterObserver.unobserve(el);
+
+        if (isNaN(target)) return;
+
+        var prefix = display.match(/^[^0-9]*/)[0];
+        var suffix = display.match(/[^0-9]*$/)[0];
+        var duration = 2000;
+        var start = null;
+
+        requestAnimationFrame(function tick(now) {
+          if (!start) start = now;
+          var progress = Math.min((now - start) / duration, 1);
+          var eased = 1 - Math.pow(1 - progress, 3); // easeOutCubic
+          el.textContent =
+            prefix + Math.floor(eased * target).toLocaleString() + (progress >= 1 ? suffix : '');
+          if (progress < 1) requestAnimationFrame(tick);
+        });
+      });
+    },
+    { threshold: 0.3 }
+  );
+
+  document.querySelectorAll('[data-counter]').forEach(function (el) {
+    counterObserver.observe(el);
+  });
+})();
+</script>
