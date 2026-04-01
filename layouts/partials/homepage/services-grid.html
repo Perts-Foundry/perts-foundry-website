@@ -1,49 +1,49 @@
 {{ $services := site.GetPage "/services" }}
 {{ with $services }}
+  {{ $pages := .Pages.ByWeight }}
   <section class="homepage-services" aria-labelledby="services-heading">
     <div class="mx-auto max-w-5xl px-4 py-14">
-      <h2 id="services-heading" class="mb-10 text-center font-bold text-neutral-800 dark:text-neutral-100" data-reveal>
-        What We Do
+      <h2 id="services-heading" class="mb-6 text-center font-bold text-neutral-800 dark:text-neutral-100" data-reveal>
+        Our Services
       </h2>
-      <div class="grid gap-6 sm:grid-cols-2" data-reveal-stagger>
-        {{ range first 4 .Pages.ByWeight }}
-          <a href="{{ .RelPermalink }}" class="homepage-service-card group relative block overflow-hidden rounded-xl !no-underline transition">
-            {{- with .Resources.GetMatch "featured*" -}}
-              {{- $img := .Resize "640x" -}}
-              <img
-                src="{{ $img.RelPermalink }}"
-                alt=""
-                width="{{ $img.Width }}"
-                height="{{ $img.Height }}"
-                class="absolute inset-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-110"
-                loading="lazy"
-                decoding="async">
-            {{- end -}}
-            <div class="service-card-overlay relative z-10 p-7">
-              {{ with .Params.icon }}
-                <span class="mb-3 flex h-10 w-10 items-center justify-center rounded-lg bg-white/10 text-white backdrop-blur-sm" aria-hidden="true">
-                  <span class="h-5 w-5">
-                    {{ partial "icon.html" . }}
-                  </span>
-                </span>
-              {{ end }}
-              <h3 class="m-0 mb-2 text-lg font-semibold text-white">
-                {{ .Title }}
-              </h3>
-              {{ with .Description }}
-                <p class="m-0 text-sm leading-relaxed text-neutral-200">
-                  {{ . }}
-                </p>
-              {{ end }}
-            </div>
-          </a>
-        {{ end }}
+      <div class="services-carousel" data-reveal>
+        <button class="tech-carousel-btn services-carousel-prev" aria-label="Previous services" disabled>
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 2L4 7l5 5"/></svg>
+        </button>
+        <div class="services-carousel-track">
+          <div class="services-grid" id="services-carousel-grid">
+            {{ range $pages }}
+              <a href="{{ .RelPermalink }}" class="homepage-service-card group relative block overflow-hidden rounded-xl !no-underline">
+                {{- with .Resources.GetMatch "featured*" -}}
+                  {{- $img := .Resize "640x" -}}
+                  <img
+                    src="{{ $img.RelPermalink }}"
+                    alt=""
+                    width="{{ $img.Width }}"
+                    height="{{ $img.Height }}"
+                    class="absolute inset-0 h-full w-full object-cover"
+                    loading="lazy"
+                    decoding="async">
+                {{- end -}}
+                <div class="service-card-overlay relative z-10">
+                  <h3 class="service-card-title m-0">
+                    {{ .Title }}
+                  </h3>
+                </div>
+              </a>
+            {{ end }}
+          </div>
+        </div>
+        <button class="tech-carousel-btn services-carousel-next" aria-label="Next services">
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 2l5 5-5 5"/></svg>
+        </button>
       </div>
-      <p class="mt-8 mb-0 text-center">
-        <a href="/services/" class="inline-flex items-center gap-1 text-sm font-semibold text-primary-600 hover:text-primary-500 dark:text-primary-400 dark:hover:text-primary-300">
+      <div class="tech-carousel-dots" id="services-carousel-dots"></div>
+      <div class="services-view-all-wrap">
+        <a href="/services/" class="service-view-all">
           View all services &rarr;
         </a>
-      </p>
+      </div>
     </div>
   </section>
 {{ end }}

@@ -285,48 +285,150 @@ html:not(.dark) .hero-problem-text {
 }
 
 /* Service cards (image background + overlay) */
-.homepage-service-card {
+a.homepage-service-card {
   position: relative;
-  min-height: 200px;
+  min-height: 260px;
   border: 1px solid rgba(var(--color-neutral-400), 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease !important;
+  transition-property: transform, box-shadow, border-color !important;
 }
 
 .service-card-overlay {
-  background: linear-gradient(
-    to top,
-    rgba(var(--color-neutral-900), 0.92) 0%,
-    rgba(var(--color-neutral-900), 0.6) 50%,
-    rgba(var(--color-neutral-900), 0.3) 100%
-  );
-  min-height: 220px;
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
+  padding: 2rem;
+  background: linear-gradient(
+    to top,
+    rgba(var(--color-neutral-900), 0.95) 0%,
+    rgba(var(--color-neutral-900), 0.7) 50%,
+    rgba(var(--color-neutral-900), 0.45) 100%
+  );
+  min-height: 260px;
 }
 
-.homepage-service-card:hover,
-.homepage-service-card:focus-visible {
-  transform: translateY(-4px);
-  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3);
-  border-color: rgba(var(--color-primary-500), 0.3);
+a.homepage-service-card:hover,
+a.homepage-service-card:focus-visible {
+  transform: translateY(-12px) scale(1.02) !important;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.4);
+  border-color: rgba(var(--color-primary-500), 0.4);
 }
 
-.homepage-service-card:focus-visible {
+a.homepage-service-card:focus-visible {
   outline: 2px solid rgb(var(--color-primary-500));
   outline-offset: 2px;
 }
 
+/* Light mode: lighter overlay so cards don't look like dark-mode islands */
 html:not(.dark) .service-card-overlay {
   background: linear-gradient(
     to top,
-    rgba(var(--color-neutral-900), 0.88) 0%,
-    rgba(var(--color-neutral-900), 0.5) 50%,
-    rgba(var(--color-neutral-900), 0.2) 100%
+    rgba(255, 255, 255, 0.95) 0%,
+    rgba(255, 255, 255, 0.7) 50%,
+    rgba(255, 255, 255, 0.3) 100%
   );
 }
 
+html:not(.dark) .homepage-service-card {
+  border-color: rgba(var(--color-neutral-400), 0.2);
+}
+
 html:not(.dark) .homepage-service-card:hover {
-  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.12);
+}
+
+/* Service card text */
+.service-card-title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  color: #fff;
+}
+
+.service-card-desc {
+  font-size: 0.75rem;
+  line-height: 1.5;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+html:not(.dark) .service-card-title {
+  color: rgb(var(--color-neutral-900));
+}
+
+html:not(.dark) .service-card-desc {
+  color: rgb(var(--color-neutral-500));
+}
+
+/* Services grid */
+.services-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+  align-content: start;
+  padding: 1rem 0;
+}
+
+.services-carousel-track {
+  overflow: visible;
+}
+
+@media (min-width: 640px) {
+  .services-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+  }
+}
+
+/* Services carousel */
+.services-carousel {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.services-carousel-track {
+  flex: 1;
+}
+
+.services-view-all-wrap {
+  text-align: center;
+  margin-top: 1.5rem;
+}
+
+/* View all services link (matches hero-btn-secondary style) */
+.service-view-all {
+  display: inline-block;
+  padding: 10px 24px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  border-radius: 10px;
+  border: 2px solid transparent;
+  background-image:
+    linear-gradient(rgb(var(--color-neutral-900)), rgb(var(--color-neutral-900))),
+    linear-gradient(135deg, #3B82F6, #7C3AED);
+  background-origin: border-box;
+  background-clip: padding-box, border-box;
+  color: rgb(var(--color-neutral-300));
+  text-decoration: none;
+  transition: box-shadow 0.2s ease, transform 0.2s ease;
+}
+
+.service-view-all:hover {
+  box-shadow: 0 0 20px rgba(124, 58, 237, 0.2);
+  transform: scale(1.03);
+  color: rgb(var(--color-neutral-200));
+  text-decoration: none;
+}
+
+html:not(.dark) .service-view-all {
+  background-image:
+    linear-gradient(rgb(var(--color-neutral-50)), rgb(var(--color-neutral-50))),
+    linear-gradient(135deg, #3B82F6, #7C3AED);
+  color: rgb(var(--color-neutral-600));
+}
+
+html:not(.dark) .service-view-all:hover {
+  color: rgb(var(--color-neutral-800));
 }
 
 /* Metrics glow */
@@ -632,9 +734,8 @@ html:not(.dark) .homepage-cta-card::before {
   cursor: default;
 }
 
-.tech-carousel-btn .icon {
-  width: 1.25rem;
-  height: 1.25rem;
+.tech-carousel-btn svg {
+  display: block;
 }
 
 html:not(.dark) .tech-carousel-btn {
