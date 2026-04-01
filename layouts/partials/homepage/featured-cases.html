@@ -1,47 +1,50 @@
 {{ $cases := site.GetPage "/case-studies" }}
 {{ with $cases }}
-  {{ $top := first 4 .Pages.ByWeight }}
-  {{ if $top }}
+  {{ $pages := .Pages.ByWeight }}
+  {{ if $pages }}
     <section class="homepage-cases" aria-labelledby="cases-heading">
       <div class="mx-auto max-w-5xl px-4 py-14">
-        <h2 id="cases-heading" class="mb-10 text-center font-bold text-neutral-800 dark:text-neutral-100" data-reveal>
+        <h2 id="cases-heading" class="mb-6 text-center font-bold text-neutral-800 dark:text-neutral-100" data-reveal>
           Featured Work
         </h2>
-        <div class="grid gap-8 sm:grid-cols-2" data-reveal-stagger>
-          {{ range $top }}
-            {{ $page := . }}
-            <a href="{{ .RelPermalink }}" class="homepage-case-card group block overflow-hidden rounded-xl border border-neutral-300/20 !no-underline transition dark:border-neutral-600/20">
-              {{ with .Resources.GetMatch "featured*" }}
-                <div class="aspect-video overflow-hidden">
-                  {{ $img := .Resize "640x" }}
-                  <img
-                    src="{{ $img.RelPermalink }}"
-                    alt=""
-                    width="{{ $img.Width }}"
-                    height="{{ $img.Height }}"
-                    class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
-                    loading="lazy"
-                    decoding="async">
-                </div>
+        <div class="cases-carousel" data-reveal>
+          <button class="tech-carousel-btn cases-carousel-prev" aria-label="Previous case studies" disabled>
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 2L4 7l5 5"/></svg>
+          </button>
+          <div class="cases-carousel-track">
+            <div class="cases-grid" id="cases-carousel-grid">
+              {{ range $pages }}
+                <a href="{{ .RelPermalink }}" class="homepage-case-card group relative block overflow-hidden rounded-xl !no-underline">
+                  {{- with .Resources.GetMatch "featured*" -}}
+                    {{- $img := .Resize "640x" -}}
+                    <img
+                      src="{{ $img.RelPermalink }}"
+                      alt=""
+                      width="{{ $img.Width }}"
+                      height="{{ $img.Height }}"
+                      class="absolute inset-0 h-full w-full object-cover"
+                      loading="lazy"
+                      decoding="async">
+                  {{- end -}}
+                  <div class="case-card-overlay relative z-10">
+                    <h3 class="case-card-title m-0">
+                      {{ .Title }}
+                    </h3>
+                  </div>
+                </a>
               {{ end }}
-              <div class="p-5">
-                <h3 class="m-0 mb-2 text-base font-semibold text-neutral-800 dark:text-neutral-100">
-                  {{ $page.Title }}
-                </h3>
-                {{ with $page.Description }}
-                  <p class="m-0 text-sm text-neutral-500 dark:text-neutral-400 line-clamp-2">
-                    {{ . }}
-                  </p>
-                {{ end }}
-              </div>
-            </a>
-          {{ end }}
+            </div>
+          </div>
+          <button class="tech-carousel-btn cases-carousel-next" aria-label="Next case studies">
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 2l5 5-5 5"/></svg>
+          </button>
         </div>
-        <p class="mt-8 text-center">
-          <a href="/case-studies/" class="inline-flex items-center gap-1 text-sm font-semibold text-primary-600 hover:text-primary-500 dark:text-primary-400 dark:hover:text-primary-300">
+        <div class="tech-carousel-dots" id="cases-carousel-dots"></div>
+        <div class="cases-view-all-wrap">
+          <a href="/case-studies/" class="service-view-all">
             View all case studies &rarr;
           </a>
-        </p>
+        </div>
       </div>
     </section>
   {{ end }}
