@@ -189,6 +189,42 @@
 })();
 </script>
 
+<!-- Process beam connector -->
+<script>
+(function () {
+  var timeline = document.querySelector('.process-timeline');
+  if (!timeline) return;
+
+  // Hide the arrow elements (using beam instead)
+  document.querySelectorAll('.process-timeline-arrow').forEach(function (a) {
+    a.style.display = 'none';
+  });
+
+  // Ensure steps sit above the beam
+  document.querySelectorAll('.process-timeline-step').forEach(function (el) {
+    el.style.position = 'relative';
+    el.style.zIndex = '2';
+  });
+
+  // Create beam (desktop only)
+  if (window.innerWidth >= 640) {
+    timeline.style.position = 'relative';
+
+    var beam = document.createElement('div');
+    beam.style.cssText = 'position:absolute;top:2rem;left:12%;right:12%;height:2px;z-index:0;' +
+      'background:linear-gradient(90deg,transparent 0%,#3B82F6 15%,#7C3AED 50%,#DC2626 85%,transparent 100%)';
+
+    var glow = document.createElement('div');
+    glow.style.cssText = 'position:absolute;top:1.25rem;left:12%;right:12%;height:1.5rem;z-index:0;' +
+      'background:linear-gradient(90deg,transparent 0%,rgba(59,130,246,0.2) 15%,rgba(124,58,237,0.2) 50%,rgba(220,38,38,0.12) 85%,transparent 100%);' +
+      'filter:blur(10px);pointer-events:none';
+
+    timeline.appendChild(beam);
+    timeline.appendChild(glow);
+  }
+})();
+</script>
+
 <!-- Cases carousel navigation -->
 <script>
 (function () {

@@ -1,18 +1,26 @@
 {{ with site.Data.process.steps }}
+  {{ $steps := . }}
   <section class="homepage-process" aria-labelledby="process-heading">
-    <div class="mx-auto max-w-5xl px-4 py-14">
-      <h2 id="process-heading" class="mb-10 text-center font-bold text-neutral-800 dark:text-neutral-100">
-        How We Work
+    <div class="mx-auto max-w-5xl px-4 py-16">
+      <h2 id="process-heading" class="process-heading" data-reveal>
+        Our Process
       </h2>
-      <ol class="numbered-steps process-steps" data-reveal-stagger>
-        {{ range . }}
-          <li class="process-step-card">
-            <span class="process-step-icon" aria-hidden="true">
-              {{ partial "icon.html" .icon }}
-            </span>
-            <strong class="process-step-title">{{ .title }}</strong>
-            <span class="process-step-desc">{{ .description }}</span>
+      <ol class="process-timeline" data-reveal-stagger>
+        {{ range $i, $step := $steps }}
+          <li class="process-timeline-step">
+            <div class="process-step-number">
+              <span>{{ add $i 1 }}</span>
+            </div>
+            <strong class="process-step-name">{{ $step.title }}</strong>
+            <span class="process-step-text">{{ $step.description }}</span>
           </li>
+          {{ if lt (add $i 1) (len $steps) }}
+            <li class="process-timeline-arrow" aria-hidden="true">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M5 12h14M13 6l6 6-6 6"/>
+              </svg>
+            </li>
+          {{ end }}
         {{ end }}
       </ol>
     </div>
