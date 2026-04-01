@@ -1,23 +1,27 @@
 {{ with site.Data.metrics.items }}
   <section class="homepage-metrics" aria-labelledby="metrics-heading">
-    <div class="mx-auto max-w-5xl px-4 py-14">
-      <h2 id="metrics-heading" class="mb-8 text-center font-bold text-neutral-800 dark:text-neutral-100" data-reveal>
-        Results That Matter
+    <div class="mx-auto max-w-5xl px-4 py-16">
+      <h2 id="metrics-heading" class="metrics-heading" data-reveal>
+        Results at Scale
       </h2>
-      <div class="flex flex-col items-center justify-center gap-10 sm:flex-row sm:gap-16" data-reveal-stagger>
-        {{ range . }}
-          <div class="text-center">
-            <span class="homepage-metric-value block text-5xl font-extrabold text-primary-500 sm:text-6xl"
-              {{- if findRE "^[\\$]?[0-9]" .value }}
-                data-counter="{{ .value }}"
-                data-target="{{ replaceRE "[^0-9]" "" .value }}"
+      <div class="metrics-row" data-reveal-stagger>
+        {{ $total := len . }}
+        {{ range $i, $item := . }}
+          <div class="metric-item">
+            <span class="homepage-metric-value"
+              {{- if findRE "^[\\$]?[0-9]" $item.value }}
+                data-counter="{{ $item.value }}"
+                data-target="{{ replaceRE "[^0-9]" "" $item.value }}"
               {{- end }}>
-              {{ .value }}
+              {{ $item.value }}
             </span>
-            <span class="mt-2 block text-sm font-medium text-neutral-500 dark:text-neutral-400">
-              {{ .label }}
+            <span class="metric-label">
+              {{ $item.label }}
             </span>
           </div>
+          {{ if lt (add $i 1) $total }}
+            <div class="metric-divider" aria-hidden="true"></div>
+          {{ end }}
         {{ end }}
       </div>
     </div>

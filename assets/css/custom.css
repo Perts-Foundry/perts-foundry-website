@@ -431,25 +431,129 @@ html:not(.dark) .service-view-all:hover {
   color: rgb(var(--color-neutral-800));
 }
 
-/* Metrics glow */
-.homepage-metric-value {
-  text-shadow: 0 0 40px rgba(var(--color-primary-500), 0.5);
-}
-
-html:not(.dark) .homepage-metric-value {
-  text-shadow: none;
-}
-
 /* Metrics band background */
 .homepage-metrics {
   background: rgba(var(--color-neutral-900), 0.3);
   border-top: 1px solid rgba(var(--color-neutral-400), 0.08);
   border-bottom: 1px solid rgba(var(--color-neutral-400), 0.08);
+  margin: 1.5rem 0;
 }
 
 html:not(.dark) .homepage-metrics {
   background: rgba(var(--color-neutral-200), 0.5);
   border-color: rgba(var(--color-neutral-400), 0.15);
+}
+
+/* Metrics heading */
+.metrics-heading {
+  text-align: center;
+  font-weight: 700;
+  font-size: clamp(1.75rem, 3.5vw, 2.5rem);
+  letter-spacing: -0.01em;
+  color: rgb(var(--color-neutral-100));
+  margin-bottom: 2.5rem;
+}
+
+html:not(.dark) .metrics-heading {
+  color: rgb(var(--color-neutral-800));
+}
+
+/* Metrics row */
+.metrics-row {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2rem;
+}
+
+@media (min-width: 640px) {
+  .metrics-row {
+    flex-direction: row;
+    justify-content: center;
+    gap: 0;
+  }
+}
+
+/* Individual metric */
+.metric-item {
+  text-align: center;
+  flex: 1;
+  padding: 0 2rem;
+}
+
+/* Metric value */
+.homepage-metric-value {
+  display: block;
+  font-size: 3rem;
+  font-weight: 800;
+  background: linear-gradient(135deg, #60A5FA, #7C3AED);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  filter: drop-shadow(0 0 24px rgba(var(--color-primary-500), 0.4));
+  line-height: 1.1;
+}
+
+@media (min-width: 640px) {
+  .homepage-metric-value {
+    font-size: 3.5rem;
+  }
+}
+
+html:not(.dark) .homepage-metric-value {
+  background: linear-gradient(135deg, #2563EB, #7C3AED);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  filter: none;
+}
+
+/* Metric label */
+.metric-label {
+  display: block;
+  margin-top: 0.75rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: rgb(var(--color-neutral-400));
+}
+
+html:not(.dark) .metric-label {
+  color: rgb(var(--color-neutral-500));
+}
+
+/* Vertical divider between metrics */
+.metric-divider {
+  display: none;
+}
+
+@media (min-width: 640px) {
+  .metric-divider {
+    display: block;
+    width: 1px;
+    height: 4.5rem;
+    background: linear-gradient(
+      to bottom,
+      transparent,
+      rgba(var(--color-primary-400), 0.5),
+      transparent
+    );
+    flex-shrink: 0;
+  }
+}
+
+/* Mobile: horizontal divider */
+@media (max-width: 639px) {
+  .metric-divider {
+    display: block;
+    width: 4rem;
+    height: 1px;
+    background: linear-gradient(
+      to right,
+      transparent,
+      rgba(var(--color-primary-500), 0.3),
+      transparent
+    );
+  }
 }
 
 
