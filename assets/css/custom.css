@@ -109,6 +109,12 @@ html:not(.dark) .numbered-steps li::before {
 
 /* ===== Homepage ===== */
 
+.homepage {
+  display: flex;
+  flex-direction: column;
+  gap: 3rem;
+}
+
 /* Hero */
 .homepage-hero-heading {
   font-size: clamp(3rem, 6vw, 5rem);
@@ -190,7 +196,6 @@ html:not(.dark) .hero-gradient-bg::before {
   background: rgba(var(--color-neutral-900), 0.5);
   border-top: 1px solid rgba(var(--color-neutral-400), 0.06);
   border-bottom: 1px solid rgba(var(--color-neutral-400), 0.06);
-  margin: 1.5rem 0;
 }
 
 html:not(.dark) .homepage-process {
@@ -437,7 +442,6 @@ html:not(.dark) .service-view-all:hover {
   background: rgba(var(--color-neutral-900), 0.3);
   border-top: 1px solid rgba(var(--color-neutral-400), 0.08);
   border-bottom: 1px solid rgba(var(--color-neutral-400), 0.08);
-  margin: 1.5rem 0;
 }
 
 html:not(.dark) .homepage-metrics {
