@@ -224,11 +224,11 @@ jobs:
         id: pa11y
         if: steps.hugo-build.outputs.exit_code == '0'
         run: |
-          npx --yes serve public -l 8080 --no-clipboard &
+          npx serve public -l 8080 --no-clipboard &
           SERVER_PID=$!
           sleep 2
           set +e
-          OUTPUT=$(npx --yes pa11y-ci 2>&1)
+          OUTPUT=$(npx pa11y-ci 2>&1)
           EXIT_CODE=$?
           kill $SERVER_PID 2>/dev/null || true
           echo "$OUTPUT"
@@ -263,7 +263,7 @@ jobs:
       - name: Run markdownlint
         id: markdownlint
         run: |
-          npx --yes markdownlint-cli2 "content/**/*.md" 2>&1 | tee /tmp/mdlint.txt || true
+          npx markdownlint-cli2 "content/**/*.md" 2>&1 | tee /tmp/mdlint.txt || true
           EXIT_CODE=${PIPESTATUS[0]}
           echo "exit_code=$EXIT_CODE" >> "$GITHUB_OUTPUT"
           {
@@ -276,7 +276,7 @@ jobs:
       - name: Run Prettier check
         id: prettier
         run: |
-          npx --yes prettier --no-color --check \
+          npx prettier --no-color --check \
             "content/**/*.md" \
             ".github/**/*.yml" \
             "src/**/*.js" 2>&1 | tee /tmp/prettier.txt || true
@@ -441,7 +441,7 @@ jobs:
               `|:------|:-----|:------:|`,
               `| **Worker Unit Tests** | \`vitest\` | ${status(vitestExit)} |`,
               `| **Site Compilation** | \`hugo\` | ${status(hugoBuild)} |`,
-              `| **Homepage Sections** | smoke test | ${status(smokeExit, htmlSkipped)} |`,
+              `| **Homepage Sections** | \`smoke test\` | ${status(smokeExit, htmlSkipped)} |`,
               `| **Link & Image Validation** | \`htmltest\` | ${status(htmltest, htmlSkipped)} |`,
               `| **Accessibility (WCAG 2.1 AA)** | \`pa11y-ci\` | ${status(pa11y, htmlSkipped)} |`,
               '',

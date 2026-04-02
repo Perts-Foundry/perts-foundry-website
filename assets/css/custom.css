@@ -709,6 +709,12 @@ html:not(.dark) .process-heading {
   text-align: center;
   flex: 1;
   max-width: 220px;
+  cursor: default;
+  transition: transform 0.3s ease;
+}
+
+.homepage-process .process-timeline-step:hover {
+  transform: translateY(-12px);
 }
 
 /* Step number circle with gradient border */
@@ -804,23 +810,33 @@ html:not(.dark) .process-step-text {
 }
 
 /* Process beam (desktop gradient connector between steps) */
-.process-beam {
+.process-beam,
+.process-beam-glow {
   position: absolute;
-  top: 2rem;
   left: 12%;
   right: 12%;
-  height: 2px;
   z-index: 0;
+  opacity: 0;
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: opacity 0.8s ease 0.3s, transform 0.8s ease 0.3s;
+}
+
+.process-timeline.revealed ~ .process-beam,
+.process-timeline.revealed ~ .process-beam-glow {
+  opacity: 1;
+  transform: scaleX(1);
+}
+
+.process-beam {
+  top: 2rem;
+  height: 2px;
   background: linear-gradient(90deg, transparent 0%, var(--accent-blue) 15%, var(--accent-purple) 50%, var(--accent-red) 85%, transparent 100%);
 }
 
 .process-beam-glow {
-  position: absolute;
   top: 1.25rem;
-  left: 12%;
-  right: 12%;
   height: 1.5rem;
-  z-index: 0;
   background: linear-gradient(90deg, transparent 0%, rgba(59, 130, 246, 0.2) 15%, rgba(124, 58, 237, 0.2) 50%, rgba(220, 38, 38, 0.12) 85%, transparent 100%);
   filter: blur(10px);
   pointer-events: none;
@@ -1027,7 +1043,7 @@ html:not(.dark) .tech-carousel-btn:hover:not(:disabled) {
 
 /* Enter animation: scale up */
 .tech-item-enter {
-  animation: techEnterScale 0.4s ease forwards;
+  animation: techEnterScale 0.4s ease;
 }
 
 @keyframes techEnterScale {
@@ -1164,6 +1180,10 @@ html:not(.dark) .tech-label {
 [data-reveal-stagger].revealed > *:nth-child(2) { transition-delay: 0.1s; }
 [data-reveal-stagger].revealed > *:nth-child(3) { transition-delay: 0.15s; }
 [data-reveal-stagger].revealed > *:nth-child(4) { transition-delay: 0.2s; }
+[data-reveal-stagger].revealed > *:nth-child(5) { transition-delay: 0.25s; }
+[data-reveal-stagger].revealed > *:nth-child(6) { transition-delay: 0.3s; }
+[data-reveal-stagger].revealed > *:nth-child(7) { transition-delay: 0.35s; }
+[data-reveal-stagger].revealed > *:nth-child(8) { transition-delay: 0.4s; }
 
 /* Mandatory: reduced-motion users must always see content */
 @media (prefers-reduced-motion: reduce) {

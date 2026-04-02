@@ -91,7 +91,6 @@
     var current = 0;
     var autoTimer = null;
     var autoDelay = config.autoDelay || 5000;
-    var direction = 1;
     var fixedHeight = 0;
 
     var prevBtn = document.querySelector(config.prevSelector);
@@ -186,10 +185,7 @@
     }
 
     function autoAdvanceFn() {
-      var next = current + direction;
-      if (next >= total) { direction = -1; next = current - 1; }
-      else if (next < 0) { direction = 1; next = current + 1; }
-      goTo(next);
+      goTo((current + 1) % total);
     }
 
     function resetAuto() {
