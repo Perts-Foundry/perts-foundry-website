@@ -287,8 +287,8 @@
 <!-- Process beam connector -->
 <script>
 (function () {
-  var timeline = document.querySelector('.process-timeline');
-  if (!timeline) return;
+  var wrap = document.querySelector('.process-timeline-wrap');
+  if (!wrap) return;
 
   // Hide the arrow elements (beam replaces them on desktop)
   document.querySelectorAll('.process-timeline-arrow').forEach(function (a) {
@@ -306,7 +306,6 @@
 
   function createBeam() {
     if (beam) return;
-    timeline.style.position = 'relative';
 
     beam = document.createElement('div');
     beam.className = 'process-beam';
@@ -314,8 +313,8 @@
     glow = document.createElement('div');
     glow.className = 'process-beam-glow';
 
-    timeline.appendChild(beam);
-    timeline.appendChild(glow);
+    wrap.appendChild(beam);
+    wrap.appendChild(glow);
   }
 
   function removeBeam() {

@@ -678,6 +678,10 @@ html:not(.dark) .process-heading {
 }
 
 /* Process timeline */
+.process-timeline-wrap {
+  position: relative;
+}
+
 .process-timeline {
   list-style: none;
   padding: 0;

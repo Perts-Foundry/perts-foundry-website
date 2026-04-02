@@ -5,6 +5,7 @@
       <h2 id="process-heading" class="process-heading" data-reveal>
         Our Process
       </h2>
+      <div class="process-timeline-wrap">
       <ol class="process-timeline" data-reveal-stagger>
         {{ range $i, $step := $steps }}
           <li class="process-timeline-step">
@@ -23,6 +24,7 @@
           {{ end }}
         {{ end }}
       </ol>
+      </div>
     </div>
   </section>
 {{ end }}
