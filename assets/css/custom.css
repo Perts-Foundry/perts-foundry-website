@@ -793,9 +793,17 @@ html:not(.dark) .process-step-text {
 .homepage-cta-card {
   position: relative;
   overflow: hidden;
-  border: 1px solid rgba(var(--color-primary-500), 0.3);
-  background: rgba(var(--color-primary-500), 0.05);
-  box-shadow: 0 0 30px rgba(var(--color-primary-500), 0.08);
+  border: 2px solid transparent;
+  background-image:
+    linear-gradient(rgba(var(--color-neutral-900), 1), rgba(var(--color-neutral-900), 1)),
+    linear-gradient(135deg, #3B82F6, #7C3AED, #DC2626);
+  background-origin: border-box;
+  background-clip: padding-box, border-box;
+  box-shadow: 0 0 60px rgba(59, 130, 246, 0.15), 0 0 120px rgba(124, 58, 237, 0.08);
+}
+
+.homepage-cta-card h2 {
+  font-size: clamp(2rem, 4vw, 2.75rem);
 }
 
 .homepage-cta-card > * {
@@ -815,7 +823,7 @@ html:not(.dark) .process-step-text {
     rgba(var(--color-secondary-500), 0.04),
     transparent 70%
   );
-  opacity: 0.5;
+  opacity: 0.9;
   animation: ctaPulse 6s ease-in-out infinite alternate;
   pointer-events: none;
   z-index: 0;
@@ -827,9 +835,10 @@ html:not(.dark) .process-step-text {
 }
 
 html:not(.dark) .homepage-cta-card {
-  border-color: rgba(var(--color-primary-500), 0.2);
-  background: rgba(var(--color-primary-500), 0.03);
-  box-shadow: none;
+  background-image:
+    linear-gradient(rgba(var(--color-neutral-50), 1), rgba(var(--color-neutral-50), 1)),
+    linear-gradient(135deg, #3B82F6, #7C3AED, #DC2626);
+  box-shadow: 0 0 40px rgba(59, 130, 246, 0.1);
 }
 
 html:not(.dark) .homepage-cta-card::before {
@@ -840,6 +849,7 @@ html:not(.dark) .homepage-cta-card::before {
     transparent 70%
   );
 }
+
 
 /* Card transitions and gradient border glow */
 .homepage-service-card,

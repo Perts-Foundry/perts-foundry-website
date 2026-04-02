@@ -1,24 +1,16 @@
 <section class="homepage-cta" aria-labelledby="cta-heading">
   <div class="mx-auto max-w-4xl px-4 py-14">
-    <div class="homepage-cta-card rounded-xl p-14 text-center" data-reveal>
-      <h2 id="cta-heading" class="mb-3 font-bold text-neutral-800 dark:text-neutral-100">
-        Ready to talk?
+    <div class="homepage-cta-card rounded-xl text-center" style="padding: 4.5rem 3.5rem;" data-reveal>
+      <h2 id="cta-heading" class="mb-6 font-bold text-neutral-800 dark:text-neutral-100">
+        Ready to forge ahead?
       </h2>
       <p class="mx-auto mt-0 mb-8 max-w-lg text-neutral-500 dark:text-neutral-400">
-        Book a free 30-minute discovery call, or send us a message. We typically respond within one business day.
+        Every engagement starts with a conversation. Book a call or drop us a message.
       </p>
       <div class="flex flex-wrap items-center justify-center gap-4">
-        {{ with site.Params.calendarUrl }}
-          <a href="{{ . }}"
-             target="_blank"
-             rel="noopener noreferrer"
-             class="!rounded-md bg-primary-600 px-6 py-3 text-lg font-semibold !text-neutral !no-underline hover:!bg-primary-500 dark:bg-primary-800 dark:hover:!bg-primary-700">
-            Schedule a Call
-          </a>
-        {{ end }}
         <a href="/contact/"
-           class="!rounded-md border border-primary-600 px-6 py-3 text-lg font-semibold !text-primary-600 !no-underline hover:bg-primary-600/10 dark:border-primary-500 dark:!text-primary-400 dark:hover:bg-primary-500/10">
-          Send a Message
+           class="hero-btn-primary" style="text-decoration:none">
+          Let's Talk
         </a>
       </div>
     </div>
