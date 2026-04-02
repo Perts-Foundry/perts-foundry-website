@@ -237,7 +237,7 @@ Resolved by the About page rewrite. "We" on other pages reads as professional co
 
 - [ ] Revisit `assets/css/custom.css` structure if file exceeds ~500 lines
 
-Currently 25 `html:not(.dark)` light mode rules are co-located with their dark mode counterparts throughout the file (~580 lines). The file has exceeded the ~500-line threshold; consider grouping all light overrides into a dedicated section at the bottom or splitting into separate files when next editing the CSS.
+Currently ~45 `html:not(.dark)` light mode rules are co-located with their dark mode counterparts throughout the file (~1,450 lines). The file has significantly exceeded the ~500-line threshold. Consider splitting into separate files (`_homepage.css`, `_contact.css`, `_global.css`) via Hugo `resources.Concat` if it grows further.
 
 **Files:** `assets/css/custom.css`
 
@@ -300,16 +300,16 @@ See `docs/visual-enhancement-research.md` for detailed research with techniques,
 
 ### Tier 2: Medium Effort (CSS + minimal JS)
 
-- [ ] **V5. Scroll-reveal animations** (Intersection Observer + CSS transitions, ~15 lines JS)
+- [x] **V5. Scroll-reveal animations** (IntersectionObserver + CSS transitions, `data-reveal` and `data-reveal-stagger` attributes)
 - [x] **V6. Technology logo wall** (text pill trust bar; CSS marquee with SVG logos deferred)
-- [ ] **V7. Animated metric counters** (static display implemented; JS counter animation deferred)
+- [x] **V7. Animated metric counters** (easeOutCubic counter with `data-counter`/`data-target` attributes)
 - [x] **V8. Process timeline** ("How We Work" 4-step grid with icons and numbered steps)
 - [x] **V9. Custom homepage layout** (Blowfish `custom` layout, 8-section landing page)
 - [ ] **V10. Glassmorphism service cards** (`backdrop-filter: blur()`)
 
 ### Tier 3: Differentiation
 
-- [ ] **V11. Animated hero background** (CSS gradient mesh or particle network)
+- [x] **V11. Animated hero background** (CSS gradient mesh with `heroGradientShift` keyframes, paused off-screen via IntersectionObserver)
 - [ ] **V12. Enhanced case study presentation** (scroll reveals, animated metrics, color-coded tables)
 - [ ] **V13. Section-specific color theming** (repurpose existing Forge Blue/Ember/Violet schemes)
 - [ ] **V14. SVG technology icon animations** (draw-on effects triggered on scroll)

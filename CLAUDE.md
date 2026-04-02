@@ -86,7 +86,7 @@ gitleaks git --log-opts="--all" --no-banner
 ```
 
 ### 9. Homepage smoke test
-Verifies all 8 homepage section IDs and data bindings are present in the built HTML.
+Verifies 8 homepage section IDs (across 7 partials), carousel infrastructure DOM IDs, section ordering, and data bindings in the built HTML.
 Runs automatically in CI after the Hugo build. To check locally after building:
 ```bash
 hugo --gc --minify --cleanDestinationDir
@@ -125,7 +125,7 @@ docs/                # Architecture proposals and reference guides
 - Permalinks for case studies use the `slug` field: `/case-studies/:slug/`
 - Content `slug` values must match their directory name (e.g., `content/services/cloud-infrastructure/` uses `slug: "cloud-infrastructure"`). Structured breadcrumb data relies on this alignment.
 - **Exception: contact page.** The contact page uses a custom template (`layouts/contact/simple.html`) that hardcodes all content in HTML for two-column layout control. The markdown file (`content/contact/index.md`) contains only front matter. Editing the contact page content requires modifying the template, not the markdown file.
-- **Exception: homepage.** The homepage uses a custom layout (`layouts/partials/home/custom.html`) that dispatches to 8 section sub-partials in `layouts/partials/homepage/`. Content comes from 4 sources: `hero.headline` and `hero.subheadline` from `content/_index.md` front matter; the problem statement from `content/_index.md` body; metrics, process steps, and technologies from `data/*.toml` files; services and case studies from Hugo section queries. Case studies appear on the homepage only if they have `featured: true` in their front matter. Services with an `icon` field in front matter display that Blowfish icon on the homepage grid.
+- **Exception: homepage.** The homepage uses a custom layout (`layouts/partials/home/custom.html`) that dispatches to 7 section sub-partials in `layouts/partials/homepage/`. Section order: hero (with inline problem statement), tech bar, metrics band, services grid, featured cases, process timeline, final CTA. Content comes from 4 sources: `hero.headline`, `hero.subheadline` from `content/_index.md` front matter; the problem statement from `content/_index.md` body (rendered inline in the hero); metrics, process steps, and technologies from `data/*.toml` files; services and case studies from Hugo section queries. All case studies and services appear on the homepage via paginated carousels (sorted by weight). Services display as image cards using their `featured*` image. The `.homepage` wrapper uses `display: flex; flex-direction: column; gap: 3rem` for consistent inter-section spacing. Three carousels (tech bar, services, cases) depend on specific DOM IDs: `tech-carousel-items`, `services-carousel-grid`, `cases-carousel-grid` and their corresponding `-dots` containers. Renaming these IDs in templates will silently break carousel navigation.
 
 ### Section ordering (services, case-studies)
 

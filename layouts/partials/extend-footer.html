@@ -25,16 +25,13 @@
       revealObserver.observe(el);
     });
 
-  // Hero gradient pause when scrolled out of view
+  // Hero gradient: pause animation and release GPU layer when scrolled out of view
   var heroEl = document.querySelector('.hero-gradient-bg');
   if (heroEl) {
-    var heroBefore = heroEl; // animation is on the element's ::before
     var heroObserver = new IntersectionObserver(
       function (entries) {
         entries.forEach(function (entry) {
-          heroBefore.style.animationPlayState = entry.isIntersecting
-            ? 'running'
-            : 'paused';
+          heroEl.classList.toggle('hero-offscreen', !entry.isIntersecting);
         });
       },
       { threshold: 0 }
@@ -78,114 +75,212 @@
 })();
 </script>
 
-<!-- Services carousel navigation -->
+<!-- Carousel navigation (shared factory + instances) -->
 <script>
 (function () {
-  var grid = document.getElementById('services-carousel-grid');
-  var dotsWrap = document.getElementById('services-carousel-dots');
-  if (!grid) return;
+  function initCarousel(config) {
+    var grid = document.getElementById(config.gridId);
+    var dotsWrap = document.getElementById(config.dotsId);
+    if (!grid) return;
 
-  var items = Array.from(grid.children);
-  var perPage = 4;
-  var total = Math.ceil(items.length / perPage);
-  var current = 0;
-  var fixedHeight = 0;
+    var items = Array.from(grid.children);
+    var perPage = typeof config.perPage === 'function' ? config.perPage() : config.perPage;
+    var total = Math.ceil(items.length / perPage);
+    if (total <= 1) return;
 
-  var prevBtn = document.querySelector('.services-carousel-prev');
-  var nextBtn = document.querySelector('.services-carousel-next');
+    var current = 0;
+    var autoTimer = null;
+    var autoDelay = config.autoDelay || 5000;
+    var direction = 1;
+    var fixedHeight = 0;
 
-  // Remove all items from DOM, store them
-  items.forEach(function (item) { grid.removeChild(item); });
+    var prevBtn = document.querySelector(config.prevSelector);
+    var nextBtn = document.querySelector(config.nextSelector);
+    var carousel = document.querySelector(config.hoverSelector);
+    var useToggle = config.mode === 'toggle';
 
-  // Build dots with progress indicator (matching tech bar style)
-  for (var d = 0; d < total; d++) {
-    var dot = document.createElement('button');
-    dot.className = 'tech-carousel-dot' + (d === 0 ? ' active' : '');
-    dot.setAttribute('aria-label', 'Page ' + (d + 1));
-    dot.dataset.page = d;
-    dot.addEventListener('click', function () {
-      goTo(parseInt(this.dataset.page));
+    // Unhide nav buttons (hidden by default for no-JS fallback)
+    prevBtn.removeAttribute('hidden');
+    nextBtn.removeAttribute('hidden');
+
+    // For swap mode: remove all items from DOM, store references
+    if (!useToggle) {
+      items.forEach(function (item) { grid.removeChild(item); });
+    }
+
+    // Set progress animation duration to match auto-advance delay
+    dotsWrap.style.setProperty('--dot-progress-duration', (autoDelay / 1000) + 's');
+
+    // Build pagination dots
+    for (var d = 0; d < total; d++) {
+      var dot = document.createElement('button');
+      dot.className = 'tech-carousel-dot' + (d === 0 ? ' active' : '');
+      dot.setAttribute('aria-label', 'Page ' + (d + 1));
+      dot.dataset.page = d;
+      dot.addEventListener('click', function () {
+        goTo(parseInt(this.dataset.page));
+        resetAuto();
+      });
+      dotsWrap.appendChild(dot);
+    }
+
+    function startProgress() {
+      var dots = dotsWrap.querySelectorAll('.tech-carousel-dot');
+      dots.forEach(function (dot) { dot.classList.remove('progressing'); });
+      var activeDot = dots[current];
+      if (activeDot) {
+        void activeDot.offsetWidth;
+        activeDot.classList.add('progressing');
+      }
+    }
+
+    function updateControls() {
+      var dots = dotsWrap.querySelectorAll('.tech-carousel-dot');
+      dots.forEach(function (dot, i) {
+        dot.classList.toggle('active', i === current);
+      });
+      prevBtn.disabled = current === 0;
+      nextBtn.disabled = current === total - 1;
+    }
+
+    function goTo(idx) {
+      if (useToggle) {
+        if (idx === current) return;
+        // Fade out current page items
+        items.forEach(function (item, i) {
+          if (Math.floor(i / perPage) === current) {
+            item.classList.add('tech-item-exit');
+            item.classList.remove('tech-item-enter');
+          }
+        });
+        // After exit animation, swap pages
+        setTimeout(function () {
+          current = idx;
+          items.forEach(function (item, i) {
+            var page = Math.floor(i / perPage);
+            item.classList.remove('tech-item-exit');
+            if (page === current) {
+              item.style.display = '';
+              item.classList.add('tech-item-enter');
+            } else {
+              item.style.display = 'none';
+              item.classList.remove('tech-item-enter');
+            }
+          });
+          updateControls();
+          startProgress();
+        }, 200);
+      } else {
+        current = idx;
+        grid.replaceChildren();
+        var start = current * perPage;
+        var end = Math.min(start + perPage, items.length);
+        for (var i = start; i < end; i++) {
+          items[i].classList.add('tech-item-enter');
+          items[i].style.gridColumn = '';
+          grid.appendChild(items[i]);
+        }
+        updateControls();
+        startProgress();
+      }
+    }
+
+    function autoAdvanceFn() {
+      var next = current + direction;
+      if (next >= total) { direction = -1; next = current - 1; }
+      else if (next < 0) { direction = 1; next = current + 1; }
+      goTo(next);
+    }
+
+    function resetAuto() {
+      clearInterval(autoTimer);
+      autoTimer = setInterval(autoAdvanceFn, autoDelay);
+      startProgress();
+    }
+
+    prevBtn.addEventListener('click', function () {
+      if (current > 0) goTo(current - 1);
       resetAuto();
     });
-    dotsWrap.appendChild(dot);
-  }
-
-  function startProgress() {
-    var dots = dotsWrap.querySelectorAll('.tech-carousel-dot');
-    dots.forEach(function (dot) { dot.classList.remove('progressing'); });
-    var activeDot = dots[current];
-    if (activeDot) {
-      // Force reflow to restart animation
-      void activeDot.offsetWidth;
-      activeDot.classList.add('progressing');
-    }
-  }
-
-  function goTo(idx) {
-    current = idx;
-
-    // Clear grid and insert only current page's items
-    grid.innerHTML = '';
-    var start = current * perPage;
-    var end = Math.min(start + perPage, items.length);
-    for (var i = start; i < end; i++) {
-      items[i].classList.add('tech-item-enter');
-      items[i].style.gridColumn = '';
-      grid.appendChild(items[i]);
-    }
-
-    var dots = dotsWrap.querySelectorAll('.tech-carousel-dot');
-    dots.forEach(function (dot, i) {
-      dot.classList.toggle('active', i === current);
+    nextBtn.addEventListener('click', function () {
+      if (current < total - 1) goTo(current + 1);
+      resetAuto();
     });
-    prevBtn.disabled = current === 0;
-    nextBtn.disabled = current === total - 1;
 
-    startProgress();
+    carousel.addEventListener('mouseenter', function () { clearInterval(autoTimer); });
+    carousel.addEventListener('mouseleave', function () { resetAuto(); });
+
+    // Initialize first page
+    if (useToggle) {
+      items.forEach(function (item, i) {
+        if (Math.floor(i / perPage) !== 0) item.style.display = 'none';
+      });
+    } else {
+      goTo(0);
+      requestAnimationFrame(function () {
+        fixedHeight = grid.offsetHeight;
+        grid.style.height = fixedHeight + 'px';
+      });
+    }
+
+    // Start auto-advance
+    if (config.autoAdvance && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      autoTimer = setInterval(autoAdvanceFn, autoDelay);
+      startProgress();
+    }
+
+    // Debounced resize handler for height-locked carousels
+    if (!useToggle) {
+      var resizeTimer;
+      window.addEventListener('resize', function () {
+        clearTimeout(resizeTimer);
+        resizeTimer = setTimeout(function () {
+          grid.style.height = '';
+          fixedHeight = grid.offsetHeight;
+          grid.style.height = fixedHeight + 'px';
+        }, 150);
+      });
+    }
   }
 
-  var autoTimer = null;
-  var autoDelay = 5000;
-  var direction = 1;
-
-  function autoAdvance() {
-    var next = current + direction;
-    if (next >= total) { direction = -1; next = current - 1; }
-    else if (next < 0) { direction = 1; next = current + 1; }
-    goTo(next);
-  }
-
-  function resetAuto() {
-    clearInterval(autoTimer);
-    autoTimer = setInterval(autoAdvance, autoDelay);
-    startProgress();
-  }
-
-  prevBtn.addEventListener('click', function () {
-    if (current > 0) goTo(current - 1);
-    resetAuto();
-  });
-  nextBtn.addEventListener('click', function () {
-    if (current < total - 1) goTo(current + 1);
-    resetAuto();
+  // Tech bar carousel (responsive: 4 items on mobile, 8 on desktop)
+  initCarousel({
+    gridId: 'tech-carousel-items',
+    dotsId: 'tech-carousel-dots',
+    prevSelector: '.tech-carousel-prev',
+    nextSelector: '.tech-carousel-next',
+    hoverSelector: '.tech-carousel',
+    perPage: function () { return window.innerWidth < 640 ? 4 : 8; },
+    mode: 'toggle',
+    autoAdvance: true,
+    autoDelay: 4000
   });
 
-  // Pause on hover
-  var carousel = document.querySelector('.services-carousel');
-  carousel.addEventListener('mouseenter', function () { clearInterval(autoTimer); });
-  carousel.addEventListener('mouseleave', function () { resetAuto(); });
-
-  // Initialize: show first page, then lock the height
-  goTo(0);
-  requestAnimationFrame(function () {
-    fixedHeight = grid.offsetHeight;
-    grid.style.height = fixedHeight + 'px';
+  // Services carousel
+  initCarousel({
+    gridId: 'services-carousel-grid',
+    dotsId: 'services-carousel-dots',
+    prevSelector: '.services-carousel-prev',
+    nextSelector: '.services-carousel-next',
+    hoverSelector: '.services-carousel',
+    perPage: 4,
+    mode: 'swap',
+    autoAdvance: true,
+    autoDelay: 6000
   });
 
-  // Auto-advance disabled for debugging
-  // if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-  //   autoTimer = setInterval(autoAdvance, autoDelay);
-  // }
+  // Cases carousel
+  initCarousel({
+    gridId: 'cases-carousel-grid',
+    dotsId: 'cases-carousel-dots',
+    prevSelector: '.cases-carousel-prev',
+    nextSelector: '.cases-carousel-next',
+    hoverSelector: '.cases-carousel',
+    perPage: 4,
+    mode: 'swap',
+    autoAdvance: true,
+    autoDelay: 5000
+  });
 })();
 </script>
 
@@ -195,7 +290,7 @@
   var timeline = document.querySelector('.process-timeline');
   if (!timeline) return;
 
-  // Hide the arrow elements (using beam instead)
+  // Hide the arrow elements (beam replaces them on desktop)
   document.querySelectorAll('.process-timeline-arrow').forEach(function (a) {
     a.style.display = 'none';
   });
@@ -206,260 +301,37 @@
     el.style.zIndex = '2';
   });
 
-  // Create beam (desktop only)
-  if (window.innerWidth >= 640) {
+  var beam = null;
+  var glow = null;
+
+  function createBeam() {
+    if (beam) return;
     timeline.style.position = 'relative';
 
-    var beam = document.createElement('div');
-    beam.style.cssText = 'position:absolute;top:2rem;left:12%;right:12%;height:2px;z-index:0;' +
-      'background:linear-gradient(90deg,transparent 0%,#3B82F6 15%,#7C3AED 50%,#DC2626 85%,transparent 100%)';
+    beam = document.createElement('div');
+    beam.className = 'process-beam';
 
-    var glow = document.createElement('div');
-    glow.style.cssText = 'position:absolute;top:1.25rem;left:12%;right:12%;height:1.5rem;z-index:0;' +
-      'background:linear-gradient(90deg,transparent 0%,rgba(59,130,246,0.2) 15%,rgba(124,58,237,0.2) 50%,rgba(220,38,38,0.12) 85%,transparent 100%);' +
-      'filter:blur(10px);pointer-events:none';
+    glow = document.createElement('div');
+    glow.className = 'process-beam-glow';
 
     timeline.appendChild(beam);
     timeline.appendChild(glow);
   }
-})();
-</script>
 
-<!-- Cases carousel navigation -->
-<script>
-(function () {
-  var grid = document.getElementById('cases-carousel-grid');
-  var dotsWrap = document.getElementById('cases-carousel-dots');
-  if (!grid) return;
-
-  var items = Array.from(grid.children);
-  var perPage = 4;
-  var total = Math.ceil(items.length / perPage);
-  var current = 0;
-  var fixedHeight = 0;
-
-  var prevBtn = document.querySelector('.cases-carousel-prev');
-  var nextBtn = document.querySelector('.cases-carousel-next');
-
-  // Remove all items from DOM, store them
-  items.forEach(function (item) { grid.removeChild(item); });
-
-  // Build dots
-  for (var d = 0; d < total; d++) {
-    var dot = document.createElement('button');
-    dot.className = 'tech-carousel-dot' + (d === 0 ? ' active' : '');
-    dot.setAttribute('aria-label', 'Page ' + (d + 1));
-    dot.dataset.page = d;
-    dot.addEventListener('click', function () {
-      goTo(parseInt(this.dataset.page));
-      resetAuto();
-    });
-    dotsWrap.appendChild(dot);
+  function removeBeam() {
+    if (!beam) return;
+    beam.remove();
+    glow.remove();
+    beam = null;
+    glow = null;
   }
 
-  function startProgress() {
-    var dots = dotsWrap.querySelectorAll('.tech-carousel-dot');
-    dots.forEach(function (dot) { dot.classList.remove('progressing'); });
-    var activeDot = dots[current];
-    if (activeDot) {
-      void activeDot.offsetWidth;
-      activeDot.classList.add('progressing');
-    }
+  var mql = window.matchMedia('(min-width: 640px)');
+  function handleBreakpoint(e) {
+    if (e.matches) { createBeam(); }
+    else { removeBeam(); }
   }
-
-  function goTo(idx) {
-    current = idx;
-    grid.innerHTML = '';
-    var start = current * perPage;
-    var end = Math.min(start + perPage, items.length);
-    for (var i = start; i < end; i++) {
-      items[i].classList.add('tech-item-enter');
-      items[i].style.gridColumn = '';
-      grid.appendChild(items[i]);
-    }
-
-    var dots = dotsWrap.querySelectorAll('.tech-carousel-dot');
-    dots.forEach(function (dot, i) {
-      dot.classList.toggle('active', i === current);
-    });
-    prevBtn.disabled = current === 0;
-    nextBtn.disabled = current === total - 1;
-    startProgress();
-  }
-
-  var autoTimer = null;
-  var autoDelay = 5000;
-  var direction = 1;
-
-  function autoAdvance() {
-    var next = current + direction;
-    if (next >= total) { direction = -1; next = current - 1; }
-    else if (next < 0) { direction = 1; next = current + 1; }
-    goTo(next);
-  }
-
-  function resetAuto() {
-    clearInterval(autoTimer);
-    autoTimer = setInterval(autoAdvance, autoDelay);
-    startProgress();
-  }
-
-  prevBtn.addEventListener('click', function () {
-    if (current > 0) goTo(current - 1);
-    resetAuto();
-  });
-  nextBtn.addEventListener('click', function () {
-    if (current < total - 1) goTo(current + 1);
-    resetAuto();
-  });
-
-  var carousel = document.querySelector('.cases-carousel');
-  carousel.addEventListener('mouseenter', function () { clearInterval(autoTimer); });
-  carousel.addEventListener('mouseleave', function () { resetAuto(); });
-
-  // Initialize
-  goTo(0);
-  requestAnimationFrame(function () {
-    fixedHeight = grid.offsetHeight;
-    grid.style.height = fixedHeight + 'px';
-  });
-
-  if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-    autoTimer = setInterval(autoAdvance, autoDelay);
-  }
-})();
-</script>
-
-<!-- Tech bar carousel navigation -->
-<script>
-(function () {
-  var list = document.getElementById('tech-carousel-items');
-  var dotsWrap = document.getElementById('tech-carousel-dots');
-  if (!list) return;
-
-  var items = Array.from(list.children);
-  var perPage = 8;
-  var total = Math.ceil(items.length / perPage);
-  var current = 0;
-  var autoTimer = null;
-  var autoDelay = 5000;
-  var direction = 1; // 1 = forward, -1 = backward
-
-  var prevBtn = document.querySelector('.tech-carousel-prev');
-  var nextBtn = document.querySelector('.tech-carousel-next');
-
-  // Build dots with progress indicator
-  for (var d = 0; d < total; d++) {
-    var dot = document.createElement('button');
-    dot.className = 'tech-carousel-dot' + (d === 0 ? ' active' : '');
-    dot.setAttribute('aria-label', 'Page ' + (d + 1));
-    dot.dataset.page = d;
-    dot.addEventListener('click', function () {
-      goTo(parseInt(this.dataset.page), 'slide');
-      resetAuto();
-    });
-    dotsWrap.appendChild(dot);
-  }
-
-  function goTo(idx, animation) {
-    if (idx === current) return;
-    var dir = idx > current ? 'right' : 'left';
-    var anim = animation || 'slide';
-
-    // Fade out current page items
-    items.forEach(function (item, i) {
-      var page = Math.floor(i / perPage);
-      if (page === current) {
-        item.classList.add('tech-item-exit');
-        item.classList.remove('tech-item-enter');
-      }
-    });
-
-    // After exit animation, swap pages
-    setTimeout(function () {
-      current = idx;
-      items.forEach(function (item, i) {
-        var page = Math.floor(i / perPage);
-        item.classList.remove('tech-item-exit');
-        if (page === current) {
-          item.style.display = '';
-          item.classList.add('tech-item-enter');
-          item.style.animationDelay = '';
-        } else {
-          item.style.display = 'none';
-          item.classList.remove('tech-item-enter');
-        }
-      });
-
-      var dots = dotsWrap.querySelectorAll('.tech-carousel-dot');
-      dots.forEach(function (dot, i) {
-        dot.classList.toggle('active', i === current);
-      });
-      prevBtn.disabled = current === 0;
-      nextBtn.disabled = current === total - 1;
-
-      // Update progress bar on active dot
-      dots.forEach(function (dot) { dot.style.removeProperty('--progress'); });
-      startProgress();
-    }, 200);
-  }
-
-  function startProgress() {
-    var dots = dotsWrap.querySelectorAll('.tech-carousel-dot');
-    var activeDot = dots[current];
-    if (activeDot) {
-      activeDot.classList.add('progressing');
-      setTimeout(function () {
-        activeDot.classList.remove('progressing');
-      }, autoDelay);
-    }
-  }
-
-  function autoAdvance() {
-    var next = current + direction;
-    if (next >= total) {
-      direction = -1;
-      next = current - 1;
-    } else if (next < 0) {
-      direction = 1;
-      next = current + 1;
-    }
-    goTo(next, 'slide');
-  }
-
-  function resetAuto() {
-    clearInterval(autoTimer);
-    autoTimer = setInterval(autoAdvance, autoDelay);
-    startProgress();
-  }
-
-  prevBtn.addEventListener('click', function () {
-    if (current > 0) goTo(current - 1, 'slide');
-    resetAuto();
-  });
-  nextBtn.addEventListener('click', function () {
-    if (current < total - 1) goTo(current + 1, 'slide');
-    resetAuto();
-  });
-
-  // Pause on hover
-  var carousel = document.querySelector('.tech-carousel');
-  carousel.addEventListener('mouseenter', function () {
-    clearInterval(autoTimer);
-  });
-  carousel.addEventListener('mouseleave', function () {
-    resetAuto();
-  });
-
-  // Initialize
-  items.forEach(function (item, i) {
-    if (Math.floor(i / perPage) !== 0) item.style.display = 'none';
-  });
-
-  // Start auto-advance (skip if reduced motion)
-  if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-    autoTimer = setInterval(autoAdvance, autoDelay);
-    startProgress();
-  }
+  mql.addEventListener('change', handleBreakpoint);
+  handleBreakpoint(mql);
 })();
 </script>

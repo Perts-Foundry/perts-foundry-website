@@ -12,8 +12,8 @@ Research into 2025-2026 web design trends for B2B consulting sites, with specifi
 - **Theme:** Blowfish v2 (Hugo module), built on Tailwind CSS
 - **Color scheme:** `perts-forge-blue` (blue primary #3B82F6, violet secondary #8B5CF6, slate neutral)
 - **Default appearance:** Dark mode, no auto-switching
-- **Homepage layout:** `custom` (multi-section landing page via `layouts/partials/home/custom.html` dispatching to 8 sub-partials in `layouts/partials/homepage/`)
-- **Custom CSS:** ~580 lines in `assets/css/custom.css`, organized with comment-block sections (Global, Shared Components, Homepage, Contact Page). Includes homepage card interactions, metric glow effects, fluid typography, process timeline, and light/dark mode overrides.
+- **Homepage layout:** `custom` (multi-section landing page via `layouts/partials/home/custom.html` dispatching to 7 sub-partials in `layouts/partials/homepage/`)
+- **Custom CSS:** ~1,450 lines in `assets/css/custom.css`, organized with comment-block sections (Global, Shared Components, Homepage, Scroll Reveal, Contact Page). Includes homepage carousels, card interactions, metric glow effects, fluid typography, process timeline/beam, scroll-reveal animations, and light/dark mode overrides. Accent colors use CSS custom properties (`--accent-blue`, `--accent-purple`, etc.) defined on `.homepage`.
 - **Existing customizations:** 16 layout files (home/custom.html, homepage/hero.html, homepage/tech-bar.html, homepage/problem.html, homepage/services-grid.html, homepage/metrics-band.html, homepage/featured-cases.html, homepage/process.html, homepage/final-cta.html, hero/basic.html, article-link/simple.html, extend-footer.html, render-link.html, contact/simple.html, extend-head-uncached.html, robots.txt)
 - **Additional color schemes:** `perts-ember.css`, `perts-violet-forge.css` (unused, available for section theming)
 - **Animation infrastructure:** `prefers-reduced-motion` already handled in `custom.css`
@@ -22,7 +22,7 @@ Research into 2025-2026 web design trends for B2B consulting sites, with specifi
 
 - `layouts/partials/home/custom.html` (set `homepage.layout = "custom"` for full control)
 - `layouts/partials/extend-head-uncached.html` (inject CSS, fonts, meta into `<head>`; project uses the uncached variant)
-- `layouts/partials/extend-footer.html` (inject JS before `</body>`, already exists with commented-out scheme rotation)
+- `layouts/partials/extend-footer.html` (inject JS before `</body>`; contains scroll-reveal, counter animation, shared carousel factory, and process beam logic)
 - `assets/css/custom.css` (loaded after theme defaults, supports `@apply`)
 - `layouts/shortcodes/` (custom visual components)
 - CSS custom properties for the full color system (`--color-primary-*`, `--color-secondary-*`, `--color-neutral-*`)

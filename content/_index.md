@@ -4,7 +4,7 @@ description: "DevOps consulting that helps scaling teams ship faster and spend l
 images: ["img/og-homepage.png"]
 # hero.headline: Main homepage heading (h1), bold text
 # hero.subheadline: One-line supporting text below the heading
-# Body content below the front matter renders as the "problem statement" section.
+# Body content below the front matter renders as the problem statement in the hero section.
 hero:
   headline: "Build. Scale. Own."
   subheadline: "Your team, extended."

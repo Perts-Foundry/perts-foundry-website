@@ -113,6 +113,17 @@ html:not(.dark) .numbered-steps li::before {
   display: flex;
   flex-direction: column;
   gap: 3rem;
+  --accent-blue: #3B82F6;
+  --accent-blue-light: #60A5FA;
+  --accent-purple: #7C3AED;
+  --accent-red: #DC2626;
+  --accent-orange: #FB923C;
+}
+
+html:not(.dark) .homepage {
+  --accent-blue: #2563EB;
+  --accent-blue-light: #2563EB;
+  --accent-orange: #EA580C;
 }
 
 /* Hero */
@@ -127,18 +138,11 @@ html:not(.dark) .numbered-steps li::before {
   font-weight: 600;
   letter-spacing: 0.12em;
   text-transform: uppercase;
-  background: linear-gradient(90deg, #3B82F6, #7C3AED, #DC2626, #FB923C);
+  background: linear-gradient(90deg, var(--accent-blue), var(--accent-purple), var(--accent-red), var(--accent-orange));
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
   display: inline-block;
-}
-
-html:not(.dark) .homepage-hero-sub {
-  background: linear-gradient(90deg, #2563EB, #7C3AED, #DC2626, #EA580C);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
 }
 
 /* Hero animated gradient background */
@@ -182,6 +186,11 @@ html:not(.dark) .hero-gradient-bg::before {
   100% { background-position: 0% 50%; }
 }
 
+.hero-gradient-bg.hero-offscreen::before {
+  animation-play-state: paused;
+  will-change: auto;
+}
+
 /* Section headings */
 .homepage-services h2,
 .homepage-cases h2,
@@ -210,8 +219,9 @@ html:not(.dark) .homepage-process {
   font-size: 1.125rem;
   font-weight: 600;
   border-radius: 10px;
-  background: linear-gradient(135deg, #3B82F6, #7C3AED);
+  background: linear-gradient(135deg, var(--accent-blue), var(--accent-purple));
   color: #fff;
+  text-decoration: none;
   transition: transform 0.2s ease, box-shadow 0.2s ease, opacity 0.2s ease;
 }
 
@@ -228,10 +238,11 @@ html:not(.dark) .homepage-process {
   font-size: 1.125rem;
   font-weight: 600;
   border-radius: 10px;
+  text-decoration: none;
   border: 2px solid transparent;
   background-image:
     linear-gradient(rgb(var(--color-neutral-900)), rgb(var(--color-neutral-900))),
-    linear-gradient(135deg, #3B82F6, #7C3AED);
+    linear-gradient(135deg, var(--accent-blue), var(--accent-purple));
   background-origin: border-box;
   background-clip: padding-box, border-box;
   color: rgb(var(--color-neutral-300));
@@ -247,7 +258,7 @@ html:not(.dark) .homepage-process {
 html:not(.dark) .hero-btn-secondary {
   background-image:
     linear-gradient(rgb(var(--color-neutral-50)), rgb(var(--color-neutral-50))),
-    linear-gradient(135deg, #3B82F6, #7C3AED);
+    linear-gradient(135deg, var(--accent-blue), var(--accent-purple));
   color: rgb(var(--color-neutral-600));
 }
 
@@ -264,7 +275,7 @@ html:not(.dark) .hero-btn-secondary:hover {
   text-align: center;
   color: rgb(var(--color-neutral-200));
   border: none;
-  background-image: linear-gradient(90deg, transparent, #3B82F6, #7C3AED, #EF4444, transparent);
+  background-image: linear-gradient(90deg, transparent, var(--accent-blue), var(--accent-purple), var(--accent-red), transparent);
   background-size: 60% 2px;
   background-repeat: no-repeat;
   background-position: top center;
@@ -291,12 +302,12 @@ html:not(.dark) .hero-problem-text {
 }
 
 /* Service cards (image background + overlay) */
-a.homepage-service-card {
+.homepage-services a.homepage-service-card {
   position: relative;
   min-height: 260px;
   border: 1px solid rgba(var(--color-neutral-400), 0.1);
-  transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease !important;
-  transition-property: transform, box-shadow, border-color !important;
+  transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+  transition-property: transform, box-shadow, border-color;
 }
 
 .service-card-overlay {
@@ -313,9 +324,9 @@ a.homepage-service-card {
   min-height: 260px;
 }
 
-a.homepage-service-card:hover,
-a.homepage-service-card:focus-visible {
-  transform: translateY(-12px) scale(1.02) !important;
+.homepage-services a.homepage-service-card:hover,
+.homepage-services a.homepage-service-card:focus-visible {
+  transform: translateY(-12px) scale(1.02);
   box-shadow: 0 24px 60px rgba(0, 0, 0, 0.4);
   border-color: rgba(var(--color-primary-500), 0.4);
 }
@@ -411,7 +422,7 @@ html:not(.dark) .service-card-desc {
   border: 2px solid transparent;
   background-image:
     linear-gradient(rgb(var(--color-neutral-900)), rgb(var(--color-neutral-900))),
-    linear-gradient(135deg, #3B82F6, #7C3AED);
+    linear-gradient(135deg, var(--accent-blue), var(--accent-purple));
   background-origin: border-box;
   background-clip: padding-box, border-box;
   color: rgb(var(--color-neutral-300));
@@ -429,7 +440,7 @@ html:not(.dark) .service-card-desc {
 html:not(.dark) .service-view-all {
   background-image:
     linear-gradient(rgb(var(--color-neutral-50)), rgb(var(--color-neutral-50))),
-    linear-gradient(135deg, #3B82F6, #7C3AED);
+    linear-gradient(135deg, var(--accent-blue), var(--accent-purple));
   color: rgb(var(--color-neutral-600));
 }
 
@@ -491,7 +502,7 @@ html:not(.dark) .metrics-heading {
   display: block;
   font-size: 3rem;
   font-weight: 800;
-  background: linear-gradient(135deg, #60A5FA, #7C3AED);
+  background: linear-gradient(135deg, var(--accent-blue-light), var(--accent-purple));
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -506,10 +517,6 @@ html:not(.dark) .metrics-heading {
 }
 
 html:not(.dark) .homepage-metric-value {
-  background: linear-gradient(135deg, #2563EB, #7C3AED);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
   filter: none;
 }
 
@@ -563,31 +570,31 @@ html:not(.dark) .metric-label {
 
 
 /* Case study cards (matches service card style) */
-a.homepage-case-card {
+.homepage-cases a.homepage-case-card {
   position: relative;
   min-height: 260px;
   border: 1px solid rgba(var(--color-neutral-400), 0.1);
-  transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease !important;
-  transition-property: transform, box-shadow, border-color !important;
+  transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+  transition-property: transform, box-shadow, border-color;
 }
 
-a.homepage-case-card:hover,
-a.homepage-case-card:focus-visible {
-  transform: translateY(-12px) scale(1.02) !important;
+.homepage-cases a.homepage-case-card:hover,
+.homepage-cases a.homepage-case-card:focus-visible {
+  transform: translateY(-12px) scale(1.02);
   box-shadow: 0 24px 60px rgba(0, 0, 0, 0.4);
   border-color: rgba(var(--color-primary-500), 0.4);
 }
 
-a.homepage-case-card:focus-visible {
+.homepage-cases a.homepage-case-card:focus-visible {
   outline: 2px solid rgb(var(--color-primary-500));
   outline-offset: 2px;
 }
 
-html:not(.dark) a.homepage-case-card {
+html:not(.dark) .homepage-cases a.homepage-case-card {
   border-color: rgba(var(--color-neutral-400), 0.2);
 }
 
-html:not(.dark) a.homepage-case-card:hover {
+html:not(.dark) .homepage-cases a.homepage-case-card:hover {
   box-shadow: 0 16px 48px rgba(0, 0, 0, 0.12);
 }
 
@@ -714,7 +721,7 @@ html:not(.dark) .process-heading {
   color: rgb(var(--color-primary-400));
   background:
     linear-gradient(rgb(var(--color-neutral-900)), rgb(var(--color-neutral-900))),
-    linear-gradient(135deg, #3B82F6, #7C3AED);
+    linear-gradient(135deg, var(--accent-blue), var(--accent-purple));
   background-origin: border-box;
   background-clip: padding-box, border-box;
   border: 2px solid transparent;
@@ -724,7 +731,7 @@ html:not(.dark) .process-step-number {
   color: rgb(var(--color-primary-600));
   background:
     linear-gradient(rgb(var(--color-neutral-50)), rgb(var(--color-neutral-50))),
-    linear-gradient(135deg, #3B82F6, #7C3AED);
+    linear-gradient(135deg, var(--accent-blue), var(--accent-purple));
   background-origin: border-box;
   background-clip: padding-box, border-box;
 }
@@ -792,15 +799,38 @@ html:not(.dark) .process-step-text {
   }
 }
 
+/* Process beam (desktop gradient connector between steps) */
+.process-beam {
+  position: absolute;
+  top: 2rem;
+  left: 12%;
+  right: 12%;
+  height: 2px;
+  z-index: 0;
+  background: linear-gradient(90deg, transparent 0%, var(--accent-blue) 15%, var(--accent-purple) 50%, var(--accent-red) 85%, transparent 100%);
+}
+
+.process-beam-glow {
+  position: absolute;
+  top: 1.25rem;
+  left: 12%;
+  right: 12%;
+  height: 1.5rem;
+  z-index: 0;
+  background: linear-gradient(90deg, transparent 0%, rgba(59, 130, 246, 0.2) 15%, rgba(124, 58, 237, 0.2) 50%, rgba(220, 38, 38, 0.12) 85%, transparent 100%);
+  filter: blur(10px);
+  pointer-events: none;
+}
 
 /* Final CTA card */
 .homepage-cta-card {
   position: relative;
   overflow: hidden;
+  padding: 4.5rem 3.5rem;
   border: 2px solid transparent;
   background-image:
     linear-gradient(rgba(var(--color-neutral-900), 1), rgba(var(--color-neutral-900), 1)),
-    linear-gradient(135deg, #3B82F6, #7C3AED, #DC2626);
+    linear-gradient(135deg, var(--accent-blue), var(--accent-purple), var(--accent-red));
   background-origin: border-box;
   background-clip: padding-box, border-box;
   box-shadow: 0 0 60px rgba(59, 130, 246, 0.15), 0 0 120px rgba(124, 58, 237, 0.08);
@@ -841,7 +871,7 @@ html:not(.dark) .process-step-text {
 html:not(.dark) .homepage-cta-card {
   background-image:
     linear-gradient(rgba(var(--color-neutral-50), 1), rgba(var(--color-neutral-50), 1)),
-    linear-gradient(135deg, #3B82F6, #7C3AED, #DC2626);
+    linear-gradient(135deg, var(--accent-blue), var(--accent-purple), var(--accent-red));
   box-shadow: 0 0 40px rgba(59, 130, 246, 0.1);
 }
 
@@ -1016,7 +1046,7 @@ html:not(.dark) .tech-carousel-btn:hover:not(:disabled) {
   width: 0;
   background: rgb(var(--color-primary-400));
   border-radius: inherit;
-  animation: dotProgress 5s linear forwards;
+  animation: dotProgress var(--dot-progress-duration, 5s) linear forwards;
 }
 
 @keyframes dotProgress {
