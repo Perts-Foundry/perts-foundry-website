@@ -14,4 +14,4 @@ label = "Terraform Projects Managed"
 [[items]]
 key = "migrations"
 value = "Zero"
-label = "Downtime Migrations"
+label = "Zero-Downtime Migrations"

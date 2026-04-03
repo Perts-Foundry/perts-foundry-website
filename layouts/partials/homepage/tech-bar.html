@@ -1,16 +1,35 @@
 {{ with site.Data.technologies.items }}
+  {{ $items := . }}
+  {{ $perPage := 8 }}
   <section class="homepage-tech-bar" aria-labelledby="tech-bar-heading">
-    <div class="mx-auto max-w-5xl px-4 py-8">
-      <h2 id="tech-bar-heading" class="mb-4 text-center text-sm font-medium uppercase tracking-wider text-neutral-500">
-        Technologies we work with
+    <div class="mx-auto max-w-5xl px-4 py-14" data-reveal>
+      <h2 id="tech-bar-heading" class="tech-bar-heading mb-5 text-center">
+        Core technologies in our toolkit
       </h2>
-      <ul class="flex flex-wrap items-center justify-center gap-3 list-none p-0 m-0">
-        {{ range . }}
-          <li class="rounded-full border border-neutral-300/30 px-4 py-1.5 text-sm font-medium text-neutral-600 dark:border-neutral-600/30 dark:text-neutral-400">
-            {{ .name }}
-          </li>
-        {{ end }}
-      </ul>
+      <div class="tech-carousel">
+        <button class="tech-carousel-btn tech-carousel-prev" aria-label="Previous technologies" disabled hidden>
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 2L4 7l5 5"/></svg>
+        </button>
+        <div class="tech-carousel-track">
+          {{/* Render all items in a flat list; JS handles pagination */}}
+          <ul class="tech-grid" id="tech-carousel-items">
+            {{ range $items }}
+              <li class="tech-label">
+                {{ with .icon }}
+                  <span class="icon-wrap" aria-hidden="true">
+                    {{ partial "icon.html" . }}
+                  </span>
+                {{ end }}
+                {{ .name }}
+              </li>
+            {{ end }}
+          </ul>
+        </div>
+        <button class="tech-carousel-btn tech-carousel-next" aria-label="Next technologies" hidden>
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 2l5 5-5 5"/></svg>
+        </button>
+      </div>
+      <div class="tech-carousel-dots" id="tech-carousel-dots"></div>
     </div>
   </section>
 {{ end }}

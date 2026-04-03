@@ -164,7 +164,7 @@ This way: if `showSummary` is enabled, show the content summary. Otherwise, if a
 
 ## 4. Hero Background Approach
 
-> **Resolved 2026-03-30:** Text-only hero chosen (no background image or animation). The background image was deleted. This aligns with the "What Top Sites Actually Do" finding below: "Typography-first heroes are dominant." Research showed text-only heroes have up to 20% better conversion than image heroes.
+> **Resolved 2026-03-30:** Text-only hero initially chosen. **Superseded 2026-04-01:** An animated CSS gradient mesh background (`heroGradientShift` keyframes, paused off-screen via IntersectionObserver) was added during the visual overhaul. The hero card has rounded corners and side margins, with the gradient providing subtle visual interest while keeping typography as the primary focus.
 
 ### Comparison Matrix
 
@@ -245,7 +245,7 @@ Typography-first heroes are dominant. Bold headlines, intentional whitespace, mi
 
 ## 5. Custom Homepage Layout
 
-> **Resolved 2026-03-30:** "Conversion-Focused Storyteller" layout implemented with 8 sections: Hero (text-only), Tech Trust Bar (text pills, not SVG logos), Problem Statement, Services Grid (top 4 by weight), Results Metrics (static, not animated), Featured Case Studies (filtered by `featured: true`), How We Work (4-step process: Discover, Design, Build, Hand Off), Final CTA. See `layouts/partials/home/custom.html` and `layouts/partials/homepage/`.
+> **Resolved 2026-03-30:** "Conversion-Focused Storyteller" layout implemented. **Updated 2026-04-02:** Visual overhaul reduced to 7 sections (problem statement merged into hero). Current layout: Hero (animated gradient bg, inline problem statement), Tech Bar (SVG icon carousel), Metrics Band (animated counters), Services Grid (image card carousel, all services), Featured Cases (carousel, all case studies by weight), Process Timeline (Discover, Build, Scale, Own with gradient beam), Final CTA. See `layouts/partials/home/custom.html` and `layouts/partials/homepage/`.
 
 ### Research Finding: Text-Only Heroes Outperform Image Heroes
 
@@ -257,14 +257,13 @@ This follows the research-backed B2B consulting conversion flow: problem, soluti
 
 | # | Section | Content |
 |---|---------|---------|
-| 1 | **Hero** | Bold headline + 1-line subhead + primary CTA ("Let's Talk") + secondary CTA ("See Our Work"). Text-only, no background image. Dark theme, large type. |
-| 2 | **Tech Trust Bar** | AWS, GCP, Terraform, Kubernetes, Docker logos. Muted/grayscale, "Technologies we work with" label. |
-| 3 | **Problem Statement** | 2-3 short paragraphs framing the pain. Pull from existing service page copy. |
-| 4 | **Services Grid** | 3-4 top services as cards with icon + title + one-liner + link. |
-| 5 | **Results Metrics** | 3 large stat callouts: "$125K+ saved", "Zero downtime", "200+ Terraform projects". Full-width band. |
-| 6 | **Featured Case Studies** | 2-3 cards with outcome headline + hero image + link. |
-| 7 | **How We Work** | 4-step process matching existing service pages (Discover, Design, Build, Hand Off). |
-| 8 | **Final CTA** | "Ready to talk?" + contact CTA + response time commitment. |
+| 1 | **Hero** | Animated gradient bg, bold headline ("Build. Scale. Own."), subheadline, inline problem statement, dual CTAs. |
+| 2 | **Tech Bar** | SVG icon carousel (8 per page, paginated), "Core technologies in our toolkit" label. |
+| 3 | **Metrics Band** | 3 animated stat counters: "$125K+", "200+", "Zero". Dark band with gradient text. |
+| 4 | **Services Grid** | All services as image card carousel (4 per page), "View all services" link. |
+| 5 | **Featured Cases** | All case studies as image card carousel (4 per page), "View all case studies" link. |
+| 6 | **Process Timeline** | 4-step horizontal timeline (Discover, Build, Scale, Own) with gradient beam connector. |
+| 7 | **Final CTA** | "Ready to forge ahead?" + contact CTA, gradient border card with pulsing glow. |
 
 **Implementation:** Set `homepage.layout = "custom"` in `params.toml`, create `layouts/partials/home/custom.html` with Tailwind utility classes. All content already exists in the site; it just needs to be surfaced on the homepage.
 

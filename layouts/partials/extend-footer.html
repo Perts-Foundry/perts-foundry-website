@@ -1,1 +1,332 @@
+<script>
+(function () {
+  // Bail early for reduced-motion users: no class added, all content stays visible
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
 
+  // Opt-in: add class so CSS can hide [data-reveal] elements
+  document.documentElement.classList.add('js-reveal-init');
+
+  // Scroll-reveal observer
+  var revealObserver = new IntersectionObserver(
+    function (entries) {
+      entries.forEach(function (entry) {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('revealed');
+          revealObserver.unobserve(entry.target);
+        }
+      });
+    },
+    { threshold: 0.15, rootMargin: '0px 0px -50px 0px' }
+  );
+
+  document
+    .querySelectorAll('[data-reveal], [data-reveal-stagger]')
+    .forEach(function (el) {
+      revealObserver.observe(el);
+    });
+
+  // Hero gradient: pause animation and release GPU layer when scrolled out of view
+  var heroEl = document.querySelector('.hero-gradient-bg');
+  if (heroEl) {
+    var heroObserver = new IntersectionObserver(
+      function (entries) {
+        entries.forEach(function (entry) {
+          heroEl.classList.toggle('hero-offscreen', !entry.isIntersecting);
+        });
+      },
+      { threshold: 0 }
+    );
+    heroObserver.observe(heroEl);
+  }
+
+  // Animated metric counters
+  var counterObserver = new IntersectionObserver(
+    function (entries) {
+      entries.forEach(function (entry) {
+        if (!entry.isIntersecting) return;
+        var el = entry.target;
+        var display = el.getAttribute('data-counter');
+        var target = parseInt(el.getAttribute('data-target'), 10);
+        counterObserver.unobserve(el);
+
+        if (isNaN(target)) return;
+
+        var prefix = display.match(/^[^0-9]*/)[0];
+        var suffix = display.match(/[^0-9]*$/)[0];
+        var duration = 2000;
+        var start = null;
+
+        requestAnimationFrame(function tick(now) {
+          if (!start) start = now;
+          var progress = Math.min((now - start) / duration, 1);
+          var eased = 1 - Math.pow(1 - progress, 3); // easeOutCubic
+          el.textContent =
+            prefix + Math.floor(eased * target).toLocaleString() + (progress >= 1 ? suffix : '');
+          if (progress < 1) requestAnimationFrame(tick);
+        });
+      });
+    },
+    { threshold: 0.3 }
+  );
+
+  document.querySelectorAll('[data-counter]').forEach(function (el) {
+    counterObserver.observe(el);
+  });
+})();
+</script>
+
+<!-- Carousel navigation (shared factory + instances) -->
+<script>
+(function () {
+  function initCarousel(config) {
+    var grid = document.getElementById(config.gridId);
+    var dotsWrap = document.getElementById(config.dotsId);
+    if (!grid) return;
+
+    var items = Array.from(grid.children);
+    var perPage = typeof config.perPage === 'function' ? config.perPage() : config.perPage;
+    var total = Math.ceil(items.length / perPage);
+    if (total <= 1) return;
+
+    var current = 0;
+    var autoTimer = null;
+    var autoDelay = config.autoDelay || 5000;
+    var fixedHeight = 0;
+
+    var prevBtn = document.querySelector(config.prevSelector);
+    var nextBtn = document.querySelector(config.nextSelector);
+    var carousel = document.querySelector(config.hoverSelector);
+    var useToggle = config.mode === 'toggle';
+
+    // Unhide nav buttons (hidden by default for no-JS fallback)
+    prevBtn.removeAttribute('hidden');
+    nextBtn.removeAttribute('hidden');
+
+    // For swap mode: remove all items from DOM, store references
+    if (!useToggle) {
+      items.forEach(function (item) { grid.removeChild(item); });
+    }
+
+    // Set progress animation duration to match auto-advance delay
+    dotsWrap.style.setProperty('--dot-progress-duration', (autoDelay / 1000) + 's');
+
+    // Build pagination dots
+    for (var d = 0; d < total; d++) {
+      var dot = document.createElement('button');
+      dot.className = 'tech-carousel-dot' + (d === 0 ? ' active' : '');
+      dot.setAttribute('aria-label', 'Page ' + (d + 1));
+      dot.dataset.page = d;
+      dot.addEventListener('click', function () {
+        goTo(parseInt(this.dataset.page));
+        resetAuto();
+      });
+      dotsWrap.appendChild(dot);
+    }
+
+    function startProgress() {
+      var dots = dotsWrap.querySelectorAll('.tech-carousel-dot');
+      dots.forEach(function (dot) { dot.classList.remove('progressing'); });
+      var activeDot = dots[current];
+      if (activeDot) {
+        void activeDot.offsetWidth;
+        activeDot.classList.add('progressing');
+      }
+    }
+
+    function updateControls() {
+      var dots = dotsWrap.querySelectorAll('.tech-carousel-dot');
+      dots.forEach(function (dot, i) {
+        dot.classList.toggle('active', i === current);
+      });
+      prevBtn.disabled = current === 0;
+      nextBtn.disabled = current === total - 1;
+    }
+
+    function goTo(idx) {
+      if (useToggle) {
+        if (idx === current) return;
+        // Fade out current page items
+        items.forEach(function (item, i) {
+          if (Math.floor(i / perPage) === current) {
+            item.classList.add('tech-item-exit');
+            item.classList.remove('tech-item-enter');
+          }
+        });
+        // After exit animation, swap pages
+        setTimeout(function () {
+          current = idx;
+          items.forEach(function (item, i) {
+            var page = Math.floor(i / perPage);
+            item.classList.remove('tech-item-exit');
+            if (page === current) {
+              item.style.display = '';
+              item.classList.add('tech-item-enter');
+            } else {
+              item.style.display = 'none';
+              item.classList.remove('tech-item-enter');
+            }
+          });
+          updateControls();
+          startProgress();
+        }, 200);
+      } else {
+        current = idx;
+        grid.replaceChildren();
+        var start = current * perPage;
+        var end = Math.min(start + perPage, items.length);
+        for (var i = start; i < end; i++) {
+          items[i].classList.add('tech-item-enter');
+          items[i].style.gridColumn = '';
+          grid.appendChild(items[i]);
+        }
+        updateControls();
+        startProgress();
+      }
+    }
+
+    function autoAdvanceFn() {
+      goTo((current + 1) % total);
+    }
+
+    function resetAuto() {
+      clearInterval(autoTimer);
+      autoTimer = setInterval(autoAdvanceFn, autoDelay);
+      startProgress();
+    }
+
+    prevBtn.addEventListener('click', function () {
+      if (current > 0) goTo(current - 1);
+      resetAuto();
+    });
+    nextBtn.addEventListener('click', function () {
+      if (current < total - 1) goTo(current + 1);
+      resetAuto();
+    });
+
+    carousel.addEventListener('mouseenter', function () { clearInterval(autoTimer); });
+    carousel.addEventListener('mouseleave', function () { resetAuto(); });
+
+    // Initialize first page
+    if (useToggle) {
+      items.forEach(function (item, i) {
+        if (Math.floor(i / perPage) !== 0) item.style.display = 'none';
+      });
+    } else {
+      goTo(0);
+      requestAnimationFrame(function () {
+        fixedHeight = grid.offsetHeight;
+        grid.style.height = fixedHeight + 'px';
+      });
+    }
+
+    // Start auto-advance
+    if (config.autoAdvance && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      autoTimer = setInterval(autoAdvanceFn, autoDelay);
+      startProgress();
+    }
+
+    // Debounced resize handler for height-locked carousels
+    if (!useToggle) {
+      var resizeTimer;
+      window.addEventListener('resize', function () {
+        clearTimeout(resizeTimer);
+        resizeTimer = setTimeout(function () {
+          grid.style.height = '';
+          fixedHeight = grid.offsetHeight;
+          grid.style.height = fixedHeight + 'px';
+        }, 150);
+      });
+    }
+  }
+
+  // Tech bar carousel (responsive: 4 items on mobile, 8 on desktop)
+  initCarousel({
+    gridId: 'tech-carousel-items',
+    dotsId: 'tech-carousel-dots',
+    prevSelector: '.tech-carousel-prev',
+    nextSelector: '.tech-carousel-next',
+    hoverSelector: '.tech-carousel',
+    perPage: function () { return window.innerWidth < 640 ? 4 : 8; },
+    mode: 'toggle',
+    autoAdvance: true,
+    autoDelay: 4000
+  });
+
+  // Services carousel
+  initCarousel({
+    gridId: 'services-carousel-grid',
+    dotsId: 'services-carousel-dots',
+    prevSelector: '.services-carousel-prev',
+    nextSelector: '.services-carousel-next',
+    hoverSelector: '.services-carousel',
+    perPage: 4,
+    mode: 'swap',
+    autoAdvance: true,
+    autoDelay: 6000
+  });
+
+  // Cases carousel
+  initCarousel({
+    gridId: 'cases-carousel-grid',
+    dotsId: 'cases-carousel-dots',
+    prevSelector: '.cases-carousel-prev',
+    nextSelector: '.cases-carousel-next',
+    hoverSelector: '.cases-carousel',
+    perPage: 4,
+    mode: 'swap',
+    autoAdvance: true,
+    autoDelay: 5000
+  });
+})();
+</script>
+
+<!-- Process beam connector -->
+<script>
+(function () {
+  var wrap = document.querySelector('.process-timeline-wrap');
+  if (!wrap) return;
+
+  // Hide the arrow elements (beam replaces them on desktop)
+  document.querySelectorAll('.process-timeline-arrow').forEach(function (a) {
+    a.style.display = 'none';
+  });
+
+  // Ensure steps sit above the beam
+  document.querySelectorAll('.process-timeline-step').forEach(function (el) {
+    el.style.position = 'relative';
+    el.style.zIndex = '2';
+  });
+
+  var beam = null;
+  var glow = null;
+
+  function createBeam() {
+    if (beam) return;
+
+    beam = document.createElement('div');
+    beam.className = 'process-beam';
+
+    glow = document.createElement('div');
+    glow.className = 'process-beam-glow';
+
+    wrap.appendChild(beam);
+    wrap.appendChild(glow);
+  }
+
+  function removeBeam() {
+    if (!beam) return;
+    beam.remove();
+    glow.remove();
+    beam = null;
+    glow = null;
+  }
+
+  var mql = window.matchMedia('(min-width: 640px)');
+  function handleBreakpoint(e) {
+    if (e.matches) { createBeam(); }
+    else { removeBeam(); }
+  }
+  mql.addEventListener('change', handleBreakpoint);
+  handleBreakpoint(mql);
+})();
+</script>

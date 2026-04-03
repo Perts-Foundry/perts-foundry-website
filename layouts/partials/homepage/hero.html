@@ -1,22 +1,27 @@
-<section class="homepage-hero" aria-labelledby="hero-heading">
-  <div class="mx-auto max-w-4xl px-4 py-24 text-center sm:py-32">
+<section class="homepage-hero hero-gradient-bg" aria-labelledby="hero-heading">
+  <div class="relative z-10 mx-auto max-w-5xl px-4 py-16 text-center sm:py-20">
     {{ with .Params.hero }}
       <h1 id="hero-heading" class="homepage-hero-heading mb-6 font-extrabold tracking-tight text-neutral-800 dark:text-neutral-100">
         {{ .headline }}
       </h1>
       {{ with .subheadline }}
-        <p class="mx-auto mt-0 mb-10 max-w-2xl text-xl text-neutral-500 dark:text-neutral-400">
+        <p class="homepage-hero-sub mx-auto mt-0 mb-8">
           {{ . }}
         </p>
       {{ end }}
     {{ end }}
+    {{ with .Content }}
+      <p id="problem-heading" class="hero-problem-text mx-auto mt-0 mb-10">
+        {{ . | plainify }}
+      </p>
+    {{ end }}
     <div class="flex flex-wrap items-center justify-center gap-4">
       <a href="/contact/"
-         class="!rounded-md bg-primary-600 px-6 py-3 text-lg font-semibold !text-neutral !no-underline hover:!bg-primary-500 dark:bg-primary-800 dark:hover:!bg-primary-700">
+         class="hero-btn-primary">
         Let's Talk
       </a>
       <a href="/case-studies/"
-         class="!rounded-md border border-primary-600 px-6 py-3 text-lg font-semibold !text-primary-600 !no-underline hover:bg-primary-600/10 dark:border-primary-500 dark:!text-primary-400 dark:hover:bg-primary-500/10">
+         class="hero-btn-secondary">
         See Our Work
       </a>
     </div>
