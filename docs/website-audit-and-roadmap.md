@@ -414,6 +414,23 @@ The minimum changes to pass the "is this person legit?" test:
 
 ---
 
+## Post-Launch Tasks
+
+Tasks to complete after removing Cloudflare Access and making the site public.
+
+### Security
+
+- [ ] Submit `pertsfoundry.com` to [hstspreload.org](https://hstspreload.org/) for HSTS preload list inclusion (currently eligible; `preload` directive is set)
+- [ ] Monitor browser console for CSP violations during the first week of public traffic (especially contact page with Turnstile and analytics beacon)
+- [ ] Verify `/api/contact` responses include security headers from Transform Rules (not just static asset responses)
+
+### Analytics
+
+- [ ] Confirm Cloudflare Web Analytics dashboard shows traffic from public visitors (not just authenticated Access sessions)
+- [ ] Identify baseline metrics for consulting site KPIs: service/case study page views, contact page visits, referral sources
+
+---
+
 ## Verification Checklist
 
 After implementing changes:
