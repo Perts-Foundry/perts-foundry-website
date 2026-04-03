@@ -29,14 +29,67 @@ html {
   }
 }
 
+/* Footer nav: always horizontal (only 2 links, no need to stack) */
+#site-footer nav ul {
+  flex-direction: row;
+}
+
+#site-footer nav ul li {
+  margin-bottom: 0;
+  margin-inline-end: 1.75rem;
+}
+
+#site-footer nav ul li:last-child {
+  margin-inline-end: 0;
+}
+
+/* Allow logo to shrink on narrow viewports (e.g., Galaxy Z Fold outer screen).
+   Without min-width: 0, the flex parent won't compress below the SVG's intrinsic width. */
+.main-menu > div:first-child {
+  min-width: 0;
+}
+
 .logo svg {
   height: 3.5rem;
   width: auto;
+  max-width: 100%;
 }
 
 .logo img {
   max-height: 3.5rem;
   width: auto;
+  max-width: 100%;
+}
+
+/* ===== Site-Wide Typography Scaling ===== */
+
+/* Override theme's fixed text-4xl (2.25rem / 36px) on page titles.
+   Scales from 30px (mobile) to 36px (desktop).
+   Homepage hero uses .homepage-hero-heading (no text-4xl class), so unaffected. */
+h1.text-4xl {
+  font-size: clamp(1.875rem, 1.5rem + 1vw, 2.25rem);
+  line-height: 1.15;
+}
+
+/* Prose heading responsive scaling (detail pages: services, case studies, about, etc.) */
+.prose h2 {
+  font-size: clamp(1.375rem, 1rem + 1.2vw, 1.6875rem);
+}
+
+.prose h3 {
+  font-size: clamp(1.125rem, 0.9rem + 0.9vw, 1.5rem);
+}
+
+/* Hero feature image: constrain height on mobile */
+.hero-feature-img {
+  max-height: 384px;
+  object-fit: cover;
+}
+
+@media (max-width: 639px) {
+  .hero-feature-img {
+    max-height: 240px;
+  }
 }
 
 /* ===== Shared Components ===== */
@@ -113,6 +166,7 @@ html:not(.dark) .numbered-steps li::before {
   display: flex;
   flex-direction: column;
   gap: 3rem;
+  overflow-wrap: break-word;
   --accent-blue: #3B82F6;
   --accent-blue-light: #60A5FA;
   --accent-purple: #7C3AED;
@@ -128,13 +182,13 @@ html:not(.dark) .homepage {
 
 /* Hero */
 .homepage-hero-heading {
-  font-size: clamp(3rem, 6vw, 5rem);
+  font-size: clamp(2.5rem, 6vw, 5rem);
   line-height: 1.05;
   letter-spacing: -0.03em;
 }
 
 .homepage-hero-sub {
-  font-size: 1.75rem;
+  font-size: clamp(1.25rem, 4vw, 1.75rem);
   font-weight: 600;
   letter-spacing: 0.12em;
   text-transform: uppercase;
@@ -301,6 +355,13 @@ html:not(.dark) .hero-problem-text {
   box-shadow: 0 0 20px rgba(var(--color-primary-500), 0.35);
 }
 
+/* Contain carousel overflow at section level (clip, not hidden, to avoid
+   creating a scroll container that could interfere with card hover transforms) */
+.homepage-services,
+.homepage-cases {
+  overflow: clip;
+}
+
 /* Service cards (image background + overlay) */
 .homepage-services a.homepage-service-card {
   position: relative;
@@ -356,9 +417,10 @@ html:not(.dark) .homepage-service-card:hover {
 
 /* Service card text */
 .service-card-title {
-  font-size: 1.25rem;
+  font-size: clamp(1.125rem, 3.5vw, 1.25rem);
   font-weight: 700;
   letter-spacing: -0.01em;
+  line-height: 1.3;
   color: #fff;
 }
 
@@ -392,7 +454,6 @@ html:not(.dark) .service-card-desc {
 @media (min-width: 640px) {
   .services-grid {
     grid-template-columns: repeat(2, 1fr);
-    gap: 1rem;
   }
 }
 
@@ -415,7 +476,7 @@ html:not(.dark) .service-card-desc {
 /* View all services link (matches hero-btn-secondary style) */
 .service-view-all {
   display: inline-block;
-  padding: 10px 24px;
+  padding: 12px 24px;
   font-size: 0.875rem;
   font-weight: 600;
   border-radius: 10px;
@@ -497,10 +558,16 @@ html:not(.dark) .metrics-heading {
   padding: 0 2rem;
 }
 
+@media (max-width: 639px) {
+  .metric-item {
+    padding: 0 1rem;
+  }
+}
+
 /* Metric value */
 .homepage-metric-value {
   display: block;
-  font-size: 3rem;
+  font-size: clamp(2.5rem, 8vw, 3.5rem);
   font-weight: 800;
   background: linear-gradient(135deg, var(--accent-blue-light), var(--accent-purple));
   -webkit-background-clip: text;
@@ -508,12 +575,6 @@ html:not(.dark) .metrics-heading {
   background-clip: text;
   filter: drop-shadow(0 0 24px rgba(var(--color-primary-500), 0.4));
   line-height: 1.1;
-}
-
-@media (min-width: 640px) {
-  .homepage-metric-value {
-    font-size: 3.5rem;
-  }
 }
 
 html:not(.dark) .homepage-metric-value {
@@ -622,9 +683,10 @@ html:not(.dark) .case-card-overlay {
 }
 
 .case-card-title {
-  font-size: 1.25rem;
+  font-size: clamp(1.125rem, 3.5vw, 1.25rem);
   font-weight: 700;
   letter-spacing: -0.01em;
+  line-height: 1.3;
   color: #fff;
 }
 
@@ -708,9 +770,14 @@ html:not(.dark) .process-heading {
   align-items: center;
   text-align: center;
   flex: 1;
-  max-width: 220px;
   cursor: default;
   transition: transform 0.3s ease;
+}
+
+@media (min-width: 1024px) {
+  .process-timeline-step {
+    max-width: 220px;
+  }
 }
 
 .homepage-process .process-timeline-step:hover {
@@ -856,8 +923,14 @@ html:not(.dark) .process-step-text {
   box-shadow: 0 0 60px rgba(59, 130, 246, 0.15), 0 0 120px rgba(124, 58, 237, 0.08);
 }
 
+@media (max-width: 639px) {
+  .homepage-cta-card {
+    padding: 3rem 1.5rem;
+  }
+}
+
 .homepage-cta-card h2 {
-  font-size: clamp(2rem, 4vw, 2.75rem);
+  font-size: clamp(1.75rem, 4vw, 2.75rem);
 }
 
 .homepage-cta-card > * {
@@ -904,6 +977,31 @@ html:not(.dark) .homepage-cta-card::before {
   );
 }
 
+/* Mobile: tighter card, button, and process sizing */
+@media (max-width: 639px) {
+  .service-card-overlay,
+  .case-card-overlay {
+    padding: 1.25rem;
+    min-height: 200px;
+  }
+
+  .homepage-services a.homepage-service-card,
+  .homepage-cases a.homepage-case-card {
+    min-height: 200px;
+  }
+
+  .hero-btn-primary,
+  .hero-btn-secondary {
+    padding: 13px 24px;
+    font-size: 1rem;
+  }
+
+  .process-step-number {
+    width: 3.5rem;
+    height: 3.5rem;
+    font-size: 1.25rem;
+  }
+}
 
 /* Card transitions and gradient border glow */
 .homepage-service-card,
@@ -1013,6 +1111,7 @@ html:not(.dark) .tech-carousel-btn:hover:not(:disabled) {
 }
 
 .tech-carousel-dot {
+  position: relative;
   width: 0.5rem;
   height: 0.5rem;
   border-radius: 50%;
@@ -1051,12 +1150,20 @@ html:not(.dark) .tech-carousel-btn:hover:not(:disabled) {
   to { opacity: 1; transform: scale(1); }
 }
 
-/* Dot progress bar (fills over autoDelay duration) */
-.tech-carousel-dot {
-  position: relative;
-  overflow: hidden;
+/* Invisible touch target expansion (WCAG 2.5.8: 44px minimum).
+   No overflow: hidden on the dot so this ::before is not clipped. */
+.tech-carousel-dot::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 44px;
+  height: 44px;
+  transform: translate(-50%, -50%);
 }
 
+/* Progress bar fill. border-radius: inherit picks up the dot's border-radius
+   (50% when inactive, 0.25rem when active), keeping the fill shape matched. */
 .tech-carousel-dot.active.progressing::after {
   content: '';
   position: absolute;
@@ -1093,7 +1200,7 @@ html:not(.dark) .tech-carousel-btn:hover:not(:disabled) {
 /* Tech bar grid */
 .tech-grid {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: 1fr;
   gap: 0.75rem;
   list-style: none;
   padding: 0;
@@ -1204,7 +1311,7 @@ html:not(.dark) .tech-label {
   gap: 1.5rem;
 }
 
-@media (min-width: 768px) {
+@media (min-width: 640px) {
   .contact-layout {
     flex-direction: row;
     align-items: stretch;
@@ -1271,6 +1378,7 @@ html:not(.dark) .contact-card--cta {
 .contact-cta-button {
   display: inline-block;
   padding: 0.75rem 1.75rem;
+  min-height: 2.75rem;
   background: rgb(var(--color-primary-600));
   color: #fff;
   font-weight: 600;
@@ -1333,6 +1441,12 @@ html:not(.dark) .contact-steps li span {
   color: rgb(var(--color-neutral-600));
 }
 
+@media (max-width: 639px) {
+  .contact-steps li span {
+    font-size: 0.875rem;
+  }
+}
+
 html:not(.dark) .contact-steps li + li {
   border-top-color: rgba(148, 163, 184, 0.2);
 }
@@ -1352,7 +1466,8 @@ html:not(.dark) .contact-cta-wrapper {
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  padding: 0.375rem 0;
+  padding: 0.75rem 0;
+  min-height: 2.75rem;
   font-size: 0.9375rem;
 }
 
@@ -1394,7 +1509,7 @@ html:not(.dark) .contact-links a {
 
 .contact-form .form-input {
   width: 100%;
-  padding: 0.625rem 0.875rem;
+  padding: 0.75rem 0.875rem;
   border: 1px solid rgb(var(--color-neutral-600));
   border-radius: 0.375rem;
   background: rgb(var(--color-neutral-800));
@@ -1439,7 +1554,8 @@ html:not(.dark) .contact-form .form-input {
 .contact-submit {
   display: inline-block;
   margin-top: 0.5rem;
-  padding: 0.625rem 1.5rem;
+  padding: 0.75rem 1.5rem;
+  min-height: 2.75rem;
   background: rgb(var(--color-primary-600));
   color: #fff;
   font-weight: 600;

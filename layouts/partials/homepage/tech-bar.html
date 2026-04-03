@@ -14,13 +14,13 @@
           {{/* Render all items in a flat list; JS handles pagination */}}
           <ul class="tech-grid" id="tech-carousel-items">
             {{ range $items }}
-              <li class="tech-label">
+              <li class="tech-label" title="{{ .name }}">
                 {{ with .icon }}
                   <span class="icon-wrap" aria-hidden="true">
                     {{ partial "icon.html" . }}
                   </span>
                 {{ end }}
-                {{ .name }}
+                <span class="tech-name">{{ .name }}</span>
               </li>
             {{ end }}
           </ul>
