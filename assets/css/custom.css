@@ -39,6 +39,37 @@ html {
   width: auto;
 }
 
+/* ===== Site-Wide Typography Scaling ===== */
+
+/* Override theme's fixed text-4xl (2.25rem / 36px) on page titles.
+   Scales from 30px (mobile) to 36px (desktop).
+   Homepage hero uses .homepage-hero-heading (no text-4xl class), so unaffected. */
+h1.text-4xl {
+  font-size: clamp(1.875rem, 1.5rem + 1vw, 2.25rem);
+  line-height: 1.15;
+}
+
+/* Prose heading responsive scaling (detail pages: services, case studies, about, etc.) */
+.prose h2 {
+  font-size: clamp(1.375rem, 1rem + 1.2vw, 1.6875rem);
+}
+
+.prose h3 {
+  font-size: clamp(1.125rem, 0.9rem + 0.9vw, 1.5rem);
+}
+
+/* Hero feature image: constrain height on mobile */
+.hero-feature-img {
+  max-height: 384px;
+  object-fit: cover;
+}
+
+@media (max-width: 639px) {
+  .hero-feature-img {
+    max-height: 240px;
+  }
+}
+
 /* ===== Shared Components ===== */
 
 /* Headshot with gradient border and glow */
@@ -1258,7 +1289,7 @@ html:not(.dark) .tech-label {
   gap: 1.5rem;
 }
 
-@media (min-width: 768px) {
+@media (min-width: 640px) {
   .contact-layout {
     flex-direction: row;
     align-items: stretch;
@@ -1325,6 +1356,7 @@ html:not(.dark) .contact-card--cta {
 .contact-cta-button {
   display: inline-block;
   padding: 0.75rem 1.75rem;
+  min-height: 2.75rem;
   background: rgb(var(--color-primary-600));
   color: #fff;
   font-weight: 600;
@@ -1387,6 +1419,12 @@ html:not(.dark) .contact-steps li span {
   color: rgb(var(--color-neutral-600));
 }
 
+@media (max-width: 639px) {
+  .contact-steps li span {
+    font-size: 0.875rem;
+  }
+}
+
 html:not(.dark) .contact-steps li + li {
   border-top-color: rgba(148, 163, 184, 0.2);
 }
@@ -1406,7 +1444,8 @@ html:not(.dark) .contact-cta-wrapper {
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  padding: 0.375rem 0;
+  padding: 0.75rem 0;
+  min-height: 2.75rem;
   font-size: 0.9375rem;
 }
 
@@ -1448,7 +1487,7 @@ html:not(.dark) .contact-links a {
 
 .contact-form .form-input {
   width: 100%;
-  padding: 0.625rem 0.875rem;
+  padding: 0.75rem 0.875rem;
   border: 1px solid rgb(var(--color-neutral-600));
   border-radius: 0.375rem;
   background: rgb(var(--color-neutral-800));
@@ -1493,7 +1532,8 @@ html:not(.dark) .contact-form .form-input {
 .contact-submit {
   display: inline-block;
   margin-top: 0.5rem;
-  padding: 0.625rem 1.5rem;
+  padding: 0.75rem 1.5rem;
+  min-height: 2.75rem;
   background: rgb(var(--color-primary-600));
   color: #fff;
   font-weight: 600;
