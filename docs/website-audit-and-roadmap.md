@@ -144,7 +144,7 @@ Agile Coaching is the strongest cut candidate (furthest from DevOps core).
 
 **Resolved 2026-03-28:** Contact form with Turnstile CAPTCHA and Resend email delivery. Cal.com scheduling link (standalone, no Proton Calendar connection). Worker handles POST /api/contact with validation, honeypot, rate limiting, and graceful degradation when secrets are not yet configured.
 
-**Files:** `src/worker.js`, `wrangler.toml`, `layouts/contact/simple.html`, `layouts/partials/extend-head-uncached.html`, `content/contact/index.md`, `static/_headers`, `assets/css/custom.css`, `config/_default/params.toml`
+**Files:** `src/worker.js`, `wrangler.toml`, `layouts/contact/simple.html`, `layouts/partials/extend-head-uncached.html`, `content/contact/index.md`, `assets/css/custom.css`, `config/_default/params.toml`
 
 ---
 

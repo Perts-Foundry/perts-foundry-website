@@ -105,7 +105,7 @@ content/             # Markdown content (about, accessibility, blog, case-studie
 data/                # Structured TOML data files (metrics, process steps, technologies) used by homepage
 assets/css/          # Custom CSS overrides (custom.css) and color schemes (schemes/)
 layouts/             # Custom Hugo layout overrides, shortcodes, and homepage sub-partials
-static/              # Static assets and security headers
+static/              # Static assets (favicons, images, manifest)
 src/                 # Cloudflare Worker source (contact form API)
 wrangler.toml        # Cloudflare Workers deployment config
 archetypes/          # Content templates (blog.md, case-studies.md, default.md)
