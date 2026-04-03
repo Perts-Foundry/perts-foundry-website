@@ -25,7 +25,10 @@ We embed security into your infrastructure and delivery pipelines so it happens 
 
 ## What an Engagement Looks Like
 
+{{< steps >}}
+
 1. **Security Posture Review** — We audit your cloud accounts, secrets management, IAM policies, and credential lifecycles to identify gaps
 2. **Threat Modeling** — We map your attack surface and prioritize hardening efforts based on actual risk, not checkbox compliance
 3. **Controls Implementation** — We codify security controls into your infrastructure and pipelines: automated secret rotation, IAM guardrails, and policy-as-code
 4. **Continuous Compliance** — We set up automated auditing and alerting so your security posture stays strong without manual intervention
+   {{< /steps >}}

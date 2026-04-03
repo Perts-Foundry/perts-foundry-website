@@ -237,7 +237,7 @@ Resolved by the About page rewrite. "We" on other pages reads as professional co
 
 - [ ] Revisit `assets/css/custom.css` structure if file exceeds ~500 lines
 
-Currently ~45 `html:not(.dark)` light mode rules are co-located with their dark mode counterparts throughout the file (~1,450 lines). The file has significantly exceeded the ~500-line threshold. Consider splitting into separate files (`_homepage.css`, `_contact.css`, `_global.css`) via Hugo `resources.Concat` if it grows further.
+Currently ~45 `html:not(.dark)` light mode rules are co-located with their dark mode counterparts throughout the file (~1,860 lines). The file has significantly exceeded the ~500-line threshold. Consider splitting into separate files (`_homepage.css`, `_contact.css`, `_global.css`) via Hugo `resources.Concat` if it grows further.
 
 **Files:** `assets/css/custom.css`
 
@@ -310,7 +310,7 @@ See `docs/visual-enhancement-research.md` for detailed research with techniques,
 ### Tier 3: Differentiation
 
 - [x] **V11. Animated hero background** (CSS gradient mesh with `heroGradientShift` keyframes, paused off-screen via IntersectionObserver)
-- [ ] **V12. Enhanced case study presentation** (scroll reveals, animated metrics, color-coded tables)
+- [x] **V12. Enhanced case study presentation** (partially complete: scroll reveals, metadata card, table styling implemented; animated metrics deferred)
 - [ ] **V13. Section-specific color theming** (repurpose existing Forge Blue/Ember/Violet schemes)
 - [ ] **V14. SVG technology icon animations** (draw-on effects triggered on scroll)
 

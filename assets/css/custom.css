@@ -1,5 +1,20 @@
 /* ===== Global ===== */
 
+:root {
+  --color-slate-base: 148, 163, 184;
+  --accent-blue: #3B82F6;
+  --accent-blue-light: #60A5FA;
+  --accent-purple: #7C3AED;
+  --accent-red: #DC2626;
+  --accent-orange: #FB923C;
+}
+
+html:not(.dark) {
+  --accent-blue: #2563EB;
+  --accent-blue-light: #2563EB;
+  --accent-orange: #EA580C;
+}
+
 .fixed.inset-x-0.z-100 {
   padding-top: 0.5rem;
 }
@@ -12,6 +27,12 @@
 /* Normalize list page heading to match simple layout (mt-0 instead of mt-5) */
 header > h1.mt-5 {
   margin-top: 0;
+}
+
+/* Reduce dead space between title and content when article metadata is hidden */
+#single_header .mb-6:last-child:empty,
+#single_header .mb-6:last-child:has(> .flex:empty) {
+  margin-bottom: 0.5rem;
 }
 
 html {
@@ -71,6 +92,11 @@ h1.text-4xl {
   line-height: 1.15;
 }
 
+/* Align TOC top with first content heading */
+.toc-right {
+  margin-top: 0;
+}
+
 /* Prose heading responsive scaling (detail pages: services, case studies, about, etc.) */
 .prose h2 {
   font-size: clamp(1.375rem, 1rem + 1.2vw, 1.6875rem);
@@ -119,45 +145,152 @@ h1.text-4xl {
 }
 
 .cta {
-  text-align: center;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
   font-size: 1.125rem;
+  padding: 3rem 2rem;
+  margin-top: 3rem;
+  border: 2px solid transparent;
+  border-radius: 0.75rem;
+  background-image:
+    linear-gradient(rgba(var(--color-neutral-900), 1), rgba(var(--color-neutral-900), 1)),
+    linear-gradient(135deg, var(--accent-blue), var(--accent-purple), var(--accent-red));
+  background-origin: border-box;
+  background-clip: padding-box, border-box;
+  box-shadow: 0 0 60px rgba(59, 130, 246, 0.15), 0 0 120px rgba(124, 58, 237, 0.08);
+}
+
+.cta > * {
+  position: relative;
+  z-index: 1;
+}
+
+.cta::before {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  border-radius: inherit;
+  background: radial-gradient(
+    ellipse at 50% 0%,
+    rgba(var(--color-primary-500), 0.08),
+    rgba(var(--color-secondary-500), 0.04),
+    transparent 70%
+  );
+  opacity: 0.9;
+  animation: ctaPulse 6s ease-in-out infinite alternate;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.cta strong {
+  font-size: clamp(1.5rem, 4vw, 2rem);
+  color: rgb(var(--color-neutral-100));
 }
 
 .cta a {
-  color: #60a5fa;
+  display: inline-block;
+  padding: 0.875rem 2rem;
+  background: rgb(var(--color-primary-600));
+  color: #fff;
+  font-weight: 600;
+  font-size: 1.0625rem;
+  border-radius: 0.5rem;
+  text-decoration: none;
+  transition: background-color 0.15s ease, transform 0.2s ease, box-shadow 0.2s ease;
 }
 
-/* Numbered steps base (shared by contact and homepage process) */
-.numbered-steps {
+.cta a:hover {
+  background: rgb(var(--color-primary-500));
+  color: #fff;
+  text-decoration: none;
+  transform: scale(1.03);
+  box-shadow: 0 0 24px rgba(59, 130, 246, 0.35);
+}
+
+.cta a:focus-visible {
+  outline: 2px solid rgb(var(--color-primary-500));
+  outline-offset: 2px;
+}
+
+html:not(.dark) .cta {
+  background-image:
+    linear-gradient(rgba(var(--color-neutral-50), 1), rgba(var(--color-neutral-50), 1)),
+    linear-gradient(135deg, var(--accent-blue), var(--accent-purple), var(--accent-red));
+  box-shadow: 0 0 40px rgba(59, 130, 246, 0.1);
+}
+
+html:not(.dark) .cta::before {
+  background: radial-gradient(
+    ellipse at 50% 0%,
+    rgba(var(--color-primary-600), 0.06),
+    rgba(var(--color-secondary-600), 0.03),
+    transparent 70%
+  );
+}
+
+html:not(.dark) .cta strong {
+  color: rgb(var(--color-neutral-800));
+}
+
+/* Numbered steps base (shared by contact page and service page shortcode) */
+.numbered-steps,
+.numbered-steps-wrapper ol {
   list-style: none;
   counter-reset: steps;
   padding: 0;
-  margin: 0;
 }
 
-.numbered-steps li {
+.numbered-steps li,
+.numbered-steps-wrapper ol li {
   counter-increment: steps;
   position: relative;
 }
 
-.numbered-steps li::before {
+.numbered-steps li::before,
+.numbered-steps-wrapper ol li::before {
   content: counter(steps);
-  width: 2rem;
-  height: 2rem;
-  border-radius: 50%;
-  background: rgba(var(--color-primary-500), 0.15);
-  color: rgb(var(--color-primary-400));
-  font-weight: 700;
-  font-size: 0.875rem;
   display: flex;
   align-items: center;
   justify-content: center;
+  font-weight: 700;
+  border-radius: 50%;
+  background: rgba(var(--color-primary-500), 0.15);
+  color: rgb(var(--color-primary-400));
+}
+
+html:not(.dark) .numbered-steps li::before,
+html:not(.dark) .numbered-steps-wrapper ol li::before {
+  color: rgb(var(--color-primary-700));
+  background: rgba(var(--color-primary-500), 0.12);
+}
+
+/* Contact page variant (2rem circles) */
+.numbered-steps { margin: 0; }
+
+.numbered-steps li::before {
+  width: 2rem;
+  height: 2rem;
+  font-size: 0.875rem;
   flex-shrink: 0;
 }
 
-html:not(.dark) .numbered-steps li::before {
-  background: rgba(37, 99, 235, 0.12);
-  color: rgb(var(--color-primary-700));
+/* Service page variant (1.75rem circles, self-positioning) */
+.numbered-steps-wrapper ol li {
+  padding-left: 2.75rem;
+  margin-bottom: 1rem;
+}
+
+.numbered-steps-wrapper ol li::before {
+  position: absolute;
+  left: 0;
+  top: 0.125rem;
+  width: 1.75rem;
+  height: 1.75rem;
+  font-size: 0.8125rem;
 }
 
 /* ===== Homepage ===== */
@@ -167,17 +300,6 @@ html:not(.dark) .numbered-steps li::before {
   flex-direction: column;
   gap: 3rem;
   overflow-wrap: break-word;
-  --accent-blue: #3B82F6;
-  --accent-blue-light: #60A5FA;
-  --accent-purple: #7C3AED;
-  --accent-red: #DC2626;
-  --accent-orange: #FB923C;
-}
-
-html:not(.dark) .homepage {
-  --accent-blue: #2563EB;
-  --accent-blue-light: #2563EB;
-  --accent-orange: #EA580C;
 }
 
 /* Hero */
@@ -1291,11 +1413,14 @@ html:not(.dark) .tech-label {
 [data-reveal-stagger].revealed > *:nth-child(6) { transition-delay: 0.3s; }
 [data-reveal-stagger].revealed > *:nth-child(7) { transition-delay: 0.35s; }
 [data-reveal-stagger].revealed > *:nth-child(8) { transition-delay: 0.4s; }
+[data-reveal-stagger].revealed > *:nth-child(9) { transition-delay: 0.45s; }
+[data-reveal-stagger].revealed > *:nth-child(10) { transition-delay: 0.5s; }
 
 /* Mandatory: reduced-motion users must always see content */
 @media (prefers-reduced-motion: reduce) {
   [data-reveal],
-  [data-reveal-stagger] > * {
+  [data-reveal-stagger] > *,
+  [data-prose-reveal] {
     opacity: 1 !important;
     transform: none !important;
     transition: none !important;
@@ -1353,9 +1478,9 @@ html:not(.dark) .tech-label {
 /* Contact cards */
 .contact-card {
   padding: 1.5rem;
-  border: 1px solid rgba(148, 163, 184, 0.15);
+  border: 1px solid rgba(var(--color-slate-base), 0.15);
   border-radius: 0.5rem;
-  background: rgba(148, 163, 184, 0.04);
+  background: rgba(var(--color-slate-base), 0.04);
 }
 
 .contact-card--cta {
@@ -1365,8 +1490,8 @@ html:not(.dark) .tech-label {
 }
 
 html:not(.dark) .contact-card {
-  background: rgba(148, 163, 184, 0.06);
-  border-color: rgba(148, 163, 184, 0.2);
+  background: rgba(var(--color-slate-base), 0.06);
+  border-color: rgba(var(--color-slate-base), 0.2);
 }
 
 html:not(.dark) .contact-card--cta {
@@ -1385,13 +1510,15 @@ html:not(.dark) .contact-card--cta {
   font-size: 1rem;
   border-radius: 0.375rem;
   text-decoration: none;
-  transition: background-color 0.15s ease;
+  transition: background-color 0.15s ease, transform 0.2s ease, box-shadow 0.2s ease;
 }
 
 .contact-cta-button:hover {
   background: rgb(var(--color-primary-500));
   color: #fff;
   text-decoration: none;
+  transform: scale(1.03);
+  box-shadow: 0 0 20px rgba(var(--color-primary-500), 0.3);
 }
 
 .contact-cta-button:focus-visible {
@@ -1402,7 +1529,7 @@ html:not(.dark) .contact-card--cta {
 .contact-cta-wrapper {
   margin-top: 0.75rem;
   padding-top: 0.75rem;
-  border-top: 1px solid rgba(148, 163, 184, 0.15);
+  border-top: 1px solid rgba(var(--color-slate-base), 0.15);
 }
 
 /* What to Expect steps (extends .numbered-steps) */
@@ -1419,7 +1546,7 @@ html:not(.dark) .contact-card--cta {
 }
 
 .contact-steps li + li {
-  border-top: 1px solid rgba(148, 163, 184, 0.1);
+  border-top: 1px solid rgba(var(--color-slate-base), 0.1);
 }
 
 .contact-steps li strong {
@@ -1448,11 +1575,11 @@ html:not(.dark) .contact-steps li span {
 }
 
 html:not(.dark) .contact-steps li + li {
-  border-top-color: rgba(148, 163, 184, 0.2);
+  border-top-color: rgba(var(--color-slate-base), 0.2);
 }
 
 html:not(.dark) .contact-cta-wrapper {
-  border-top-color: rgba(148, 163, 184, 0.25);
+  border-top-color: rgba(var(--color-slate-base), 0.25);
 }
 
 /* Contact links */
@@ -1563,11 +1690,13 @@ html:not(.dark) .contact-form .form-input {
   border: none;
   border-radius: 0.375rem;
   cursor: pointer;
-  transition: background-color 0.15s ease;
+  transition: background-color 0.15s ease, transform 0.2s ease, box-shadow 0.2s ease;
 }
 
 .contact-submit:hover {
   background: rgb(var(--color-primary-500));
+  transform: scale(1.03);
+  box-shadow: 0 0 20px rgba(var(--color-primary-500), 0.3);
 }
 
 .contact-submit:focus-visible {
@@ -1622,4 +1751,124 @@ html:not(.dark) .form-status--error {
 
 html:not(.dark) .form-privacy {
   color: rgb(var(--color-neutral-500));
+}
+
+/* ===== Article-Link Card Hover (List Pages) ===== */
+
+.article-link--simple {
+  transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+  border-radius: 0.5rem;
+  border: 1px solid transparent;
+}
+
+.article-link--simple:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.3);
+  border-color: rgba(var(--color-primary-500), 0.25);
+}
+
+html:not(.dark) .article-link--simple:hover {
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+  border-color: rgba(var(--color-primary-500), 0.2);
+}
+
+.article-link--simple:focus-within {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.3);
+  border-color: rgba(var(--color-primary-500), 0.25);
+}
+
+html:not(.dark) .article-link--simple:focus-within {
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+  border-color: rgba(var(--color-primary-500), 0.2);
+}
+
+/* ===== Results Table Enhancement ===== */
+
+.article-content table {
+  border-radius: 0.25rem;
+}
+
+.article-content tbody tr:nth-child(even) {
+  background: rgba(var(--color-slate-base), 0.05);
+}
+
+html:not(.dark) .article-content tbody tr:nth-child(even) {
+  background: rgba(var(--color-slate-base), 0.08);
+}
+
+/* Case study anonymization disclaimer */
+.article-content > p:last-child > em:only-child {
+  display: block;
+  margin-top: 2rem;
+  font-size: 0.8125rem;
+  color: rgb(var(--color-neutral-400));
+}
+
+html:not(.dark) .article-content > p:last-child > em:only-child {
+  color: rgb(var(--color-neutral-500));
+}
+
+/* ===== Single Page H2 Scroll Reveal ===== */
+
+.js-reveal-init .article-content h2[data-prose-reveal] {
+  opacity: 0;
+  transition: opacity 0.4s ease;
+}
+
+.article-content h2[data-prose-reveal].revealed {
+  opacity: 1;
+}
+
+/* ===== Tech Tags (Case Study Key Technologies) ===== */
+
+.tech-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+.tech-tag {
+  display: inline-block;
+  padding: 0.375rem 0.875rem;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  border-radius: 9999px;
+  color: rgb(var(--color-neutral-300));
+  border: 1px solid rgba(var(--color-primary-500), 0.3);
+  background: rgba(var(--color-primary-500), 0.08);
+}
+
+html:not(.dark) .tech-tag {
+  color: rgb(var(--color-neutral-600));
+  border-color: rgba(var(--color-primary-500), 0.25);
+  background: rgba(var(--color-primary-500), 0.06);
+}
+
+/* ===== Credential Badges (About Page) ===== */
+
+.credential-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.625rem;
+  margin-top: 0.5rem;
+}
+
+.credential-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.5rem 1rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  border-radius: 0.5rem;
+  color: rgb(var(--color-neutral-200));
+  border: 1px solid rgba(var(--color-slate-base), 0.15);
+  background: rgba(var(--color-slate-base), 0.06);
+}
+
+html:not(.dark) .credential-badge {
+  color: rgb(var(--color-neutral-700));
+  border-color: rgba(var(--color-slate-base), 0.2);
+  background: rgba(var(--color-slate-base), 0.08);
 }

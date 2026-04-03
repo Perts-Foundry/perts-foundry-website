@@ -21,7 +21,10 @@ We help your team adopt agile practices that actually improve how they work. Not
 
 ## What an Engagement Looks Like
 
+{{< steps >}}
+
 1. **Process Assessment** — We observe your team's current ceremonies, workflows, and pain points to understand what's working and what's not
 2. **Methodology Fit** — We recommend the right approach for your team's work, whether that's Scrum, Kanban, or a hybrid, based on how work actually flows
 3. **Ceremony Coaching** — We facilitate sprint planning, standups, retrospectives, and demos alongside your team until the patterns become natural
 4. **Workflow Optimization** — We configure your tools to match your process, set up intake automation, and establish metrics so your team can see the improvement
+   {{< /steps >}}
