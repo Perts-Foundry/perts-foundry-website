@@ -78,16 +78,18 @@ These actively damage credibility or are red flags per the guide. Must fix befor
 
 ### C4. Cloudflare Web Analytics: enable, configure, and utilize
 
-- [ ] Create Cloudflare Web Analytics site in dashboard (get accountTag and token)
-- [ ] Uncomment and populate `[analytics.cloudflare]` in `config/production/params.toml`
-- [ ] Verify analytics beacon loads on production after deploy
-- [ ] Review Cloudflare Web Analytics dashboard features (top pages, referrers, browsers, countries, Core Web Vitals)
-- [ ] Establish a baseline review cadence (e.g., weekly or monthly check-in)
-- [ ] Identify which metrics matter most for a consulting site (page views on services/case studies, contact page visits, referral sources)
+- [x] Create Cloudflare Web Analytics site in dashboard (get accountTag and token)
+- [x] ~~Uncomment and populate `[analytics.cloudflare]` in `config/production/params.toml`~~ Not needed; zone-based auto-injection handles beacon delivery
+- [x] Verify analytics beacon loads on production after deploy
+- [x] Review Cloudflare Web Analytics dashboard features (top pages, referrers, browsers, countries, Core Web Vitals)
+- [x] Establish a baseline review cadence (e.g., weekly or monthly check-in)
+- [x] Identify which metrics matter most for a consulting site (page views on services/case studies, contact page visits, referral sources)
 
-**Why it matters:** Zero visibility into whether anyone visits the site or which pages they view. Without analytics, every other marketing or content decision is guesswork. CSP already allows `https://static.cloudflareinsights.com`.
+**Why it matters:** Zero visibility into whether anyone visits the site or which pages they view. Without analytics, every other marketing or content decision is guesswork.
 
-**Files:** `config/production/params.toml`
+**Resolved 2026-04-03:** Cloudflare Web Analytics enabled via zone-based auto-injection (dashboard toggle). EU visitor data excluded. No code changes required; Cloudflare's edge injects the beacon into HTML responses automatically. The commented `[analytics.cloudflare]` config in `params.toml` was removed (Blowfish has no Cloudflare analytics integration; it supports Fathom, GA, Umami, and Seline only).
+
+**Files:** `config/production/params.toml` (comment updated), Cloudflare dashboard (Web Analytics)
 
 ---
 
@@ -142,7 +144,7 @@ Agile Coaching is the strongest cut candidate (furthest from DevOps core).
 
 **Resolved 2026-03-28:** Contact form with Turnstile CAPTCHA and Resend email delivery. Cal.com scheduling link (standalone, no Proton Calendar connection). Worker handles POST /api/contact with validation, honeypot, rate limiting, and graceful degradation when secrets are not yet configured.
 
-**Files:** `src/worker.js`, `wrangler.toml`, `layouts/contact/simple.html`, `layouts/partials/extend-head-uncached.html`, `content/contact/index.md`, `static/_headers`, `assets/css/custom.css`, `config/_default/params.toml`
+**Files:** `src/worker.js`, `wrangler.toml`, `layouts/contact/simple.html`, `layouts/partials/extend-head-uncached.html`, `content/contact/index.md`, `assets/css/custom.css`, `config/_default/params.toml`
 
 ---
 
@@ -171,8 +173,13 @@ Strengthen positioning. Address in subsequent iterations.
 
 - [x] Change `max-age=300` to `max-age=31536000` in `static/_headers`
 - [x] Add `preload` directive
+- [x] Migrate security headers from `static/_headers` to Terraform Transform Rules
 
 **Resolved 2026-03-27:** HSTS set to `max-age=31536000; includeSubDomains; preload`.
+
+**Updated 2026-04-03:** Discovered that `static/_headers` was never applied by Workers Static Assets (verified via Cloudflare Access service token bypass). All security headers (CSP, HSTS, X-Frame-Options, Referrer-Policy, Permissions-Policy, X-Content-Type-Options, X-XSS-Protection) and path-specific Cache-Control rules migrated to Cloudflare HTTP Response Header Modification Transform Rules, codified in Terraform in the [infrastructure repo](https://github.com/Perts-Foundry/infrastructure). The `static/_headers` file was removed. CSP `connect-src` updated to include `https://cloudflareinsights.com` for analytics beacon data reporting.
+
+**Files:** `cloudflare.tf` in infrastructure repo (`cloudflare_ruleset.com_response_headers`)
 
 ---
 
@@ -417,6 +424,6 @@ After implementing changes:
 - [ ] Start local server and review every modified page
 - [ ] Verify new pages in navigation and footer
 - [ ] Run accessibility checks: `npx serve public -l 8080 & npx pa11y-ci`
-- [ ] Validate security headers parse correctly
+- [x] Validate security headers parse correctly (migrated to Terraform Transform Rules; verify after `terraform apply`)
 - [ ] Confirm OG metadata in page source
-- [ ] Verify analytics beacon loads on production deploy
+- [x] Verify analytics beacon loads on production deploy
