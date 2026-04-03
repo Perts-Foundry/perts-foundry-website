@@ -29,14 +29,36 @@ html {
   }
 }
 
+/* Footer nav: always horizontal (only 2 links, no need to stack) */
+#site-footer nav ul {
+  flex-direction: row;
+}
+
+#site-footer nav ul li {
+  margin-bottom: 0;
+  margin-inline-end: 1.75rem;
+}
+
+#site-footer nav ul li:last-child {
+  margin-inline-end: 0;
+}
+
+/* Allow logo to shrink on narrow viewports (e.g., Galaxy Z Fold outer screen).
+   Without min-width: 0, the flex parent won't compress below the SVG's intrinsic width. */
+.main-menu > div:first-child {
+  min-width: 0;
+}
+
 .logo svg {
   height: 3.5rem;
   width: auto;
+  max-width: 100%;
 }
 
 .logo img {
   max-height: 3.5rem;
   width: auto;
+  max-width: 100%;
 }
 
 /* ===== Site-Wide Typography Scaling ===== */
