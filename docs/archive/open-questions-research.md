@@ -1,5 +1,7 @@
 # Open Questions Research: Decision Guide
 
+> **Archived:** 2026-04-03. All 8 decisions resolved and implemented. Remaining action items tracked in `docs/website-audit-and-roadmap.md`.
+
 > **Researched:** 2026-03-26
 > **Purpose:** Deep dives into every open-ended decision from the website audit. Review each section and choose your preferred path.
 

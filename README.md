@@ -16,4 +16,4 @@ hugo --gc --minify --cleanDestinationDir
 
 ## Project Documentation
 
-See `docs/` for planning documents and technical references.
+See `docs/` for active project documentation. Completed and historical documents are in `docs/archive/`.

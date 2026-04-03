@@ -117,7 +117,7 @@ docs/archive/        # Completed/historical docs; do not reference unless explic
 
 ## Documentation
 
-Active documentation lives in `docs/`. Completed or historical documents live in `docs/archive/`.
+Active documentation lives in `docs/`. Reference guides that inform ongoing work (credibility guide, accessibility compliance guide) remain in `docs/`. Completed plans, resolved decision docs, and superseded research live in `docs/archive/`.
 
 Do not read or reference archived documents unless the user explicitly asks for them. They contain outdated plans, completed research, or reference material that is no longer relevant to active work. Reading them wastes context and risks acting on stale information.
 
