@@ -54,4 +54,4 @@ The application scaling work proved that the platform could handle significant g
 
 ## Key Technologies
 
-Kubernetes, GKE, Helm, GCP, AWS, Confluence
+{{< tech-tags "Kubernetes, GKE, Helm, GCP, AWS, Confluence" >}}

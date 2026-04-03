@@ -55,4 +55,4 @@ The three-phase transformation demonstrated that agile adoption is not a one-siz
 
 ## Key Technologies
 
-Jira, Jira Service Desk, Confluence
+{{< tech-tags "Jira, Jira Service Desk, Confluence" >}}

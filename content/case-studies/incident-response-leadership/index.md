@@ -49,4 +49,4 @@ The pattern across these incidents demonstrated a consistent approach: respond i
 
 ## Key Technologies
 
-GCP, GKE, NFS, AWS
+{{< tech-tags "GCP, GKE, NFS, AWS" >}}

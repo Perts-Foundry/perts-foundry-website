@@ -29,9 +29,7 @@ See the full [case studies](/case-studies/) for the details behind each engageme
 
 ### Credentials
 
-- AWS Certified Solutions Architect, Professional
-- AWS Certified Solutions Architect, Associate
-- HashiCorp Certified: Terraform Associate (003)
+{{< credentials "AWS Certified Solutions Architect, Professional | AWS Certified Solutions Architect, Associate | HashiCorp Certified: Terraform Associate (003)" >}}
 
 ## The Foundry
 

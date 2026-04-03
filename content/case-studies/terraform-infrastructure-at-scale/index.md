@@ -53,4 +53,4 @@ The registry migration earned recognition across the organization for its qualit
 
 ## Key Technologies
 
-Terraform, HCP, Atlantis, GitHub, Renovatebot
+{{< tech-tags "Terraform, HCP, Atlantis, GitHub, Renovatebot" >}}

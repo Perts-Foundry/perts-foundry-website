@@ -55,4 +55,4 @@ Results were presented to engineering leadership, connecting the technical findi
 
 ## Key Technologies
 
-GCP, GKE, GCS, Terraform
+{{< tech-tags "GCP, GKE, GCS, Terraform" >}}

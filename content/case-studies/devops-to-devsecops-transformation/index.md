@@ -57,4 +57,4 @@ The shift to security by default was the most significant outcome. Before the en
 
 ## Key Technologies
 
-AWS, GCP, Terraform, Vault, Atlantis, GitHub, Jira
+{{< tech-tags "AWS, GCP, Terraform, Vault, Atlantis, GitHub, Jira" >}}

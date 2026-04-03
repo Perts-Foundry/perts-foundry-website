@@ -23,7 +23,10 @@ We bring structure to your incident response and build the muscle memory your te
 
 ## What an Engagement Looks Like
 
+{{< steps >}}
+
 1. **Incident Process Audit** — We review how your team handles incidents today: escalation paths, communication patterns, tooling, and postmortem follow-through
 2. **Runbook Development** — We document response procedures for your most common and highest-risk failure modes, so your team doesn't start from scratch every time
 3. **War Room Practice** — We run tabletop exercises based on realistic scenarios so your team builds confidence before the next real incident
 4. **Postmortem Improvement** — We establish a blameless postmortem process with action item tracking that drives actual infrastructure and process improvements
+   {{< /steps >}}

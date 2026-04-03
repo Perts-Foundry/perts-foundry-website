@@ -25,6 +25,14 @@
       revealObserver.observe(el);
     });
 
+  // Prose H2 reveal: lightweight opacity fade for article headings
+  document
+    .querySelectorAll('.article-content h2')
+    .forEach(function (el) {
+      el.setAttribute('data-prose-reveal', '');
+      revealObserver.observe(el);
+    });
+
   // Hero gradient: pause animation and release GPU layer when scrolled out of view
   var heroEl = document.querySelector('.hero-gradient-bg');
   if (heroEl) {

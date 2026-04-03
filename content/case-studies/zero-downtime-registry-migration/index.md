@@ -51,4 +51,4 @@ The discovery and triage phase provided a secondary benefit beyond the migration
 
 ## Key Technologies
 
-GCP, GCR, GAR
+{{< tech-tags "GCP, GCR, GAR" >}}

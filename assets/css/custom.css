@@ -121,10 +121,36 @@ h1.text-4xl {
 .cta {
   text-align: center;
   font-size: 1.125rem;
+  padding: 2rem;
+  border: 1px solid rgba(148, 163, 184, 0.15);
+  border-radius: 0.5rem;
+  background: rgba(148, 163, 184, 0.04);
+  margin-top: 2rem;
 }
 
 .cta a {
-  color: #60a5fa;
+  display: inline-block;
+  margin-top: 0.5rem;
+  padding: 0.75rem 1.75rem;
+  background: rgb(var(--color-primary-600));
+  color: #fff;
+  font-weight: 600;
+  border-radius: 0.375rem;
+  text-decoration: none;
+  transition: background-color 0.15s ease, transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.cta a:hover {
+  background: rgb(var(--color-primary-500));
+  color: #fff;
+  text-decoration: none;
+  transform: scale(1.03);
+  box-shadow: 0 0 20px rgba(var(--color-primary-500), 0.3);
+}
+
+html:not(.dark) .cta {
+  background: rgba(148, 163, 184, 0.06);
+  border-color: rgba(148, 163, 184, 0.2);
 }
 
 /* Numbered steps base (shared by contact and homepage process) */
@@ -1291,11 +1317,14 @@ html:not(.dark) .tech-label {
 [data-reveal-stagger].revealed > *:nth-child(6) { transition-delay: 0.3s; }
 [data-reveal-stagger].revealed > *:nth-child(7) { transition-delay: 0.35s; }
 [data-reveal-stagger].revealed > *:nth-child(8) { transition-delay: 0.4s; }
+[data-reveal-stagger].revealed > *:nth-child(9) { transition-delay: 0.45s; }
+[data-reveal-stagger].revealed > *:nth-child(10) { transition-delay: 0.5s; }
 
 /* Mandatory: reduced-motion users must always see content */
 @media (prefers-reduced-motion: reduce) {
   [data-reveal],
-  [data-reveal-stagger] > * {
+  [data-reveal-stagger] > *,
+  [data-prose-reveal] {
     opacity: 1 !important;
     transform: none !important;
     transition: none !important;
@@ -1385,13 +1414,15 @@ html:not(.dark) .contact-card--cta {
   font-size: 1rem;
   border-radius: 0.375rem;
   text-decoration: none;
-  transition: background-color 0.15s ease;
+  transition: background-color 0.15s ease, transform 0.2s ease, box-shadow 0.2s ease;
 }
 
 .contact-cta-button:hover {
   background: rgb(var(--color-primary-500));
   color: #fff;
   text-decoration: none;
+  transform: scale(1.03);
+  box-shadow: 0 0 20px rgba(var(--color-primary-500), 0.3);
 }
 
 .contact-cta-button:focus-visible {
@@ -1563,11 +1594,13 @@ html:not(.dark) .contact-form .form-input {
   border: none;
   border-radius: 0.375rem;
   cursor: pointer;
-  transition: background-color 0.15s ease;
+  transition: background-color 0.15s ease, transform 0.2s ease, box-shadow 0.2s ease;
 }
 
 .contact-submit:hover {
   background: rgb(var(--color-primary-500));
+  transform: scale(1.03);
+  box-shadow: 0 0 20px rgba(var(--color-primary-500), 0.3);
 }
 
 .contact-submit:focus-visible {
@@ -1622,4 +1655,205 @@ html:not(.dark) .form-status--error {
 
 html:not(.dark) .form-privacy {
   color: rgb(var(--color-neutral-500));
+}
+
+/* ===== Article-Link Card Hover (List Pages) ===== */
+
+.article-link--simple {
+  transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+  border-radius: 0.5rem;
+  border: 1px solid transparent;
+}
+
+.article-link--simple:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.3);
+  border-color: rgba(var(--color-primary-500), 0.25);
+}
+
+html:not(.dark) .article-link--simple:hover {
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+  border-color: rgba(var(--color-primary-500), 0.2);
+}
+
+/* ===== Case Study Metadata Card ===== */
+
+.case-meta-card {
+  margin-top: 1rem;
+  margin-bottom: 2rem;
+  padding: 1.25rem 1.5rem;
+  border: 1px solid rgba(148, 163, 184, 0.15);
+  border-radius: 0.5rem;
+  background: rgba(148, 163, 184, 0.04);
+}
+
+.case-meta-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+}
+
+@media (min-width: 640px) {
+  .case-meta-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .case-meta-item--wide {
+    grid-column: 1 / -1;
+  }
+}
+
+.case-meta-label {
+  display: block;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: rgb(var(--color-neutral-400));
+  margin-bottom: 0.25rem;
+}
+
+.case-meta-value {
+  display: block;
+  font-size: 0.9375rem;
+  line-height: 1.5;
+  color: rgb(var(--color-neutral-200));
+}
+
+.case-meta-value--result {
+  color: rgb(var(--color-primary-400));
+  font-weight: 600;
+}
+
+html:not(.dark) .case-meta-card {
+  background: rgba(148, 163, 184, 0.06);
+  border-color: rgba(148, 163, 184, 0.2);
+}
+
+html:not(.dark) .case-meta-label {
+  color: rgb(var(--color-neutral-500));
+}
+
+html:not(.dark) .case-meta-value {
+  color: rgb(var(--color-neutral-700));
+}
+
+html:not(.dark) .case-meta-value--result {
+  color: rgb(var(--color-primary-700));
+}
+
+/* ===== Results Table Enhancement ===== */
+
+.article-content .prose table {
+  border-left: 3px solid rgb(var(--color-primary-500));
+  border-radius: 0.25rem;
+}
+
+.article-content .prose tbody tr:nth-child(even) {
+  background: rgba(148, 163, 184, 0.05);
+}
+
+html:not(.dark) .article-content .prose tbody tr:nth-child(even) {
+  background: rgba(148, 163, 184, 0.08);
+}
+
+/* ===== Single Page H2 Scroll Reveal ===== */
+
+.js-reveal-init .article-content h2[data-prose-reveal] {
+  opacity: 0;
+  transition: opacity 0.4s ease;
+}
+
+.article-content h2[data-prose-reveal].revealed {
+  opacity: 1;
+}
+
+/* ===== Tech Tags (Case Study Key Technologies) ===== */
+
+.tech-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+.tech-tag {
+  display: inline-block;
+  padding: 0.375rem 0.875rem;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  border-radius: 9999px;
+  color: rgb(var(--color-neutral-300));
+  border: 1px solid rgba(var(--color-primary-500), 0.3);
+  background: rgba(var(--color-primary-500), 0.08);
+}
+
+html:not(.dark) .tech-tag {
+  color: rgb(var(--color-neutral-600));
+  border-color: rgba(var(--color-primary-500), 0.25);
+  background: rgba(var(--color-primary-500), 0.06);
+}
+
+/* ===== Numbered Steps Wrapper (Service Pages) ===== */
+
+.numbered-steps-wrapper ol {
+  list-style: none;
+  counter-reset: steps;
+  padding: 0;
+}
+
+.numbered-steps-wrapper ol li {
+  position: relative;
+  padding-left: 2.75rem;
+  margin-bottom: 1rem;
+  counter-increment: steps;
+}
+
+.numbered-steps-wrapper ol li::before {
+  content: counter(steps);
+  position: absolute;
+  left: 0;
+  top: 0.125rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.75rem;
+  height: 1.75rem;
+  font-size: 0.8125rem;
+  font-weight: 700;
+  border-radius: 50%;
+  background: rgba(var(--color-primary-500), 0.15);
+  color: rgb(var(--color-primary-400));
+}
+
+html:not(.dark) .numbered-steps-wrapper ol li::before {
+  color: rgb(var(--color-primary-700));
+  background: rgba(var(--color-primary-500), 0.12);
+}
+
+/* ===== Credential Badges (About Page) ===== */
+
+.credential-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.625rem;
+  margin-top: 0.5rem;
+}
+
+.credential-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.5rem 1rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  border-radius: 0.5rem;
+  color: rgb(var(--color-neutral-200));
+  border: 1px solid rgba(148, 163, 184, 0.15);
+  background: rgba(148, 163, 184, 0.06);
+}
+
+html:not(.dark) .credential-badge {
+  color: rgb(var(--color-neutral-700));
+  border-color: rgba(148, 163, 184, 0.2);
+  background: rgba(148, 163, 184, 0.08);
 }

@@ -26,7 +26,10 @@ We build CI/CD pipelines that are fast, reliable, and maintainable. Your team sh
 
 ## What an Engagement Looks Like
 
+{{< steps >}}
+
 1. **Pipeline Discovery** — We map your current build, test, and deploy workflows end-to-end, identifying bottlenecks and failure points
 2. **Toolchain Selection** — We recommend the right CI/CD stack for your team's size, codebase, and deployment targets
 3. **Pipeline Engineering** — We build pipelines with automated testing gates, caching, parallelization, and deployment strategies tailored to your application
 4. **Automation Expansion** — We extend automation beyond deployments: dependency updates, infrastructure changes, and toil reduction across your engineering workflow
+   {{< /steps >}}

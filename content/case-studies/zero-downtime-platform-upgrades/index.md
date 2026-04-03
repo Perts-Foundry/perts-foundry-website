@@ -51,4 +51,4 @@ This was keep-the-lights-on work at its most demanding: not a single flashy migr
 
 ## Key Technologies
 
-Snowflake, Terraform, AWS, GCP, Azure, EKS, Kubernetes
+{{< tech-tags "Snowflake, Terraform, AWS, GCP, Azure, EKS, Kubernetes" >}}
