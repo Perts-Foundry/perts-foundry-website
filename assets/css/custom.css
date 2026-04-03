@@ -1736,6 +1736,20 @@ html:not(.dark) .article-content tbody tr:nth-child(even) {
   background: rgba(var(--color-slate-base), 0.08);
 }
 
+/* Case study anonymization disclaimer */
+.article-content > p:last-child > em:only-child {
+  display: block;
+  margin-top: 2rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid rgba(var(--color-slate-base), 0.15);
+  font-size: 0.8125rem;
+  color: rgb(var(--color-neutral-400));
+}
+
+html:not(.dark) .article-content > p:last-child > em:only-child {
+  color: rgb(var(--color-neutral-500));
+}
+
 /* ===== Single Page H2 Scroll Reveal ===== */
 
 .js-reveal-init .article-content h2[data-prose-reveal] {
