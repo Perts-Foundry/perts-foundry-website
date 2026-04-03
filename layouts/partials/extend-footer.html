@@ -259,7 +259,7 @@
     prevSelector: '.services-carousel-prev',
     nextSelector: '.services-carousel-next',
     hoverSelector: '.services-carousel',
-    perPage: 4,
+    perPage: function () { return window.innerWidth < 640 ? 2 : 4; },
     mode: 'swap',
     autoAdvance: true,
     autoDelay: 6000
@@ -272,7 +272,7 @@
     prevSelector: '.cases-carousel-prev',
     nextSelector: '.cases-carousel-next',
     hoverSelector: '.cases-carousel',
-    perPage: 4,
+    perPage: function () { return window.innerWidth < 640 ? 2 : 4; },
     mode: 'swap',
     autoAdvance: true,
     autoDelay: 5000
