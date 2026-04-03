@@ -1,5 +1,7 @@
 # Perts Foundry LLC — Website Action Plan
 
+> **Archived:** 2026-04-03. All 6 phases complete. Current architecture documented in `CLAUDE.md`.
+
 > **Note:** This was the initial planning document. The project deployed on Cloudflare Workers (not Cloudflare Pages as described below), and the infrastructure repo is named `Perts-Foundry/infrastructure` (not `perts-foundry-infra`). See `CLAUDE.md` for the current architecture.
 
 ## Overview

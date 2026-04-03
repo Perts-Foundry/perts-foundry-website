@@ -1,5 +1,7 @@
 # The definitive Hugo playbook for Cloudflare Workers
 
+> **Archived:** 2026-04-03. Reference material consumed during project setup; not an active planning document.
+
 **Hugo paired with Cloudflare Workers and GitHub Actions is a near-ideal stack for a DevOps consulting website** — blazing build speeds, zero server-side attack surface, and a Git-native workflow that fits engineering culture. This guide distills community wisdom from r/gohugo, Hugo Discourse, Stack Overflow, GitHub issues, and developer blogs into practical, battle-tested advice across every dimension of building and maintaining a professional Hugo site. The biggest pitfalls — silent content disappearance from `_index.md` misuse, Go template context confusion, and Workers-specific configuration gaps — are all avoidable with the right knowledge upfront.
 
 **Platform note (March 2026):** As of April 2025, Cloudflare has shifted all new investment to Workers, with Pages entering maintenance mode. Workers now natively serves static assets (free and unlimited), supports `_headers` and `_redirects` files, and Hugo's official docs include a Workers hosting guide. This playbook targets Cloudflare Workers with Static Assets as the deployment platform, with builds controlled via GitHub Actions.

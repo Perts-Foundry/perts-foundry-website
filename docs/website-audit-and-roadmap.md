@@ -1,6 +1,6 @@
 # Perts Foundry Website: Audit & Roadmap
 
-> **Last audited:** 2026-04-03
+> **Last updated:** 2026-04-03
 > **Reference:** `docs/building-a-credible-solo-devops-consulting-website.md`
 > **Visual research:** `docs/archive/visual-enhancement-research.md`
 
@@ -149,13 +149,13 @@ Agile Coaching is the strongest cut candidate (furthest from DevOps core).
 ### H4. Social media links strategy
 
 - [ ] Decide on LinkedIn approach: create a Perts Foundry company page, reactivate personal profile, or skip LinkedIn entirely
-- [ ] Evaluate overemployment visibility risk for each option
+- [ ] Evaluate personal visibility and privacy tradeoffs for each option
 - [ ] If proceeding with LinkedIn: create page/profile, ensure messaging matches website
 - [ ] Add chosen social links to `author.links[]` in `languages.en.toml`
 - [ ] Add social links to the Contact page
 - [ ] Consider GitHub org link as a low-risk starting point (no personal exposure)
 
-**Why it matters:** Enterprise procurement teams cross-reference website claims against LinkedIn and other social profiles. However, social presence decisions must be weighed against overemployment visibility concerns.
+**Why it matters:** Enterprise procurement teams cross-reference website claims against LinkedIn and other social profiles. Social presence decisions must be weighed against personal privacy preferences.
 
 **Current state:** `author.links = []` (empty). Personal LinkedIn is hibernated. No business LinkedIn page exists. GitHub org (Perts-Foundry) is active.
 
@@ -222,13 +222,41 @@ Resolved by the About page rewrite. "We" on other pages reads as professional co
 
 - [ ] Audit current meta descriptions across all pages for keyword targeting and length (150-160 chars)
 - [ ] Review page titles for keyword placement and consistency
-- [ ] Add ProfessionalService JSON-LD schema to homepage (code ready in `docs/open-questions-research.md` Section 7)
-- [ ] Set `defaultSocialImage` in `params.toml` so all pages have OG images when shared
+- [ ] Add ProfessionalService JSON-LD schema to homepage (supersedes L1; template code below)
+- [ ] Set `defaultSocialImage` in `params.toml` so all pages have OG images when shared (supersedes L2)
 - [ ] Regenerate homepage OG image (current `og-homepage.png` shows old "Ship faster..." tagline instead of "Build. Scale. Own.")
 - [ ] Review internal linking strategy (do service pages link to relevant case studies and vice versa?)
 - [ ] Check that `robots.txt` and `sitemap.xml` are correctly generated and submitted to Google Search Console
 - [ ] Evaluate whether page load performance (Core Web Vitals) needs attention
 - [ ] Consider adding `alt` text audit for all images across the site
+
+**ProfessionalService JSON-LD** (create `layouts/partials/extend-head.html`):
+
+```html
+{{- if .IsHome }}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "ProfessionalService",
+  "name": "{{ site.Title }}",
+  "url": {{ site.Home.Permalink }},
+  "description": "{{ site.Home.Description | safeJS }}",
+  "logo": {
+    "@type": "ImageObject",
+    "url": "{{ "img/logo/perts-foundry-square-dark-1024.png" | absURL }}"
+  },
+  "email": "contact@pertsfoundry.com",
+  "sameAs": [
+    "https://github.com/Perts-Foundry"
+  ],
+  "knowsAbout": [
+    "DevOps", "Cloud Infrastructure", "CI/CD", "Kubernetes",
+    "Terraform", "AWS", "GCP", "Infrastructure as Code"
+  ]
+}
+</script>
+{{- end }}
+```
 
 **Why it matters:** The site has solid SEO fundamentals (sitemap, robots.txt, meta descriptions, proper permalinks, breadcrumb structured data) but has not had a dedicated optimization pass. Organic search is a primary discovery channel for consulting services.
 
@@ -256,11 +284,11 @@ Resolved by the About page rewrite. "We" on other pages reads as professional co
 ### L1. No structured data / JSON-LD
 
 - [x] Enable breadcrumb structured data (`enableStructuredBreadcrumbs = true`)
-- [ ] Add ProfessionalService or Organization schema via `layouts/partials/extend-head.html`
+- [ ] Add ProfessionalService or Organization schema via `layouts/partials/extend-head.html` (see M6)
 
 ### L2. No custom Open Graph images
 
-- [ ] Create 1200x630px default OG image for link previews
+- [ ] Create 1200x630px default OG image for link previews (see M6)
 
 ### L3. Blog post directory naming
 
@@ -374,7 +402,7 @@ The minimum changes to pass the "is this person legit?" test:
 | 2 | Disable blog (C2) | Removes active credibility damage | Low |
 | 3 | Add privacy policy (C3) | Closes procurement checklist gap | Low |
 | 4 | Enable analytics (C4) | Enables measuring effectiveness | Low |
-| 5 | Add LinkedIn link (H4) | Enables cross-referencing | Low |
+| 5 | Decide on social links strategy (H4) | Enables cross-referencing (if pursued) | Medium |
 | 6 | HSTS max-age to 1 year (M1) | Security header fix | Trivial |
 
 ---

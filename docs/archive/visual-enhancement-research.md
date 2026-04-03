@@ -1,5 +1,7 @@
 # Visual Enhancement Research: Perts Foundry Website
 
+> **Archived:** 2026-04-03. Tier 1-2 complete; remaining items tracked in `docs/website-audit-and-roadmap.md`.
+
 > **Researched:** 2026-03-25
 > **Note:** This baseline predates the inner-page visual polish work added in PR #45.
 > **Companion doc:** `docs/website-audit-and-roadmap.md` (tracks implementation status)
