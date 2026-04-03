@@ -19,8 +19,6 @@ tags:
   - Jira
 ---
 
-_This case study has been anonymized at the client's request._
-
 ## The Challenge
 
 A multi-cloud SaaS organization running production infrastructure across GCP and AWS had built a mature DevOps practice, but security was not yet embedded into the infrastructure and delivery workflows. Cloud accounts had accumulated credential drift: root credentials had not been rotated, stale information was tied to accounts, and MFA was not enforced. Secrets management spanned multiple platforms without a unified approach. Repository governance was informal, meaning contributors could bypass required checks and merge changes without the necessary security validations. And operational workflows still relied on manual processes that introduced both inefficiency and risk.
@@ -58,3 +56,5 @@ The shift to security by default was the most significant outcome. Before the en
 ## Key Technologies
 
 {{< tech-tags "AWS, GCP, Terraform, Vault, Atlantis, GitHub, Jira" >}}
+
+_This case study has been anonymized at the client's request._

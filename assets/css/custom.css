@@ -1725,7 +1725,6 @@ html:not(.dark) .article-link--simple:focus-within {
 /* ===== Results Table Enhancement ===== */
 
 .article-content table {
-  border-left: 3px solid rgb(var(--color-primary-500));
   border-radius: 0.25rem;
 }
 

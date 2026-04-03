@@ -19,8 +19,6 @@ tags:
   - Kubernetes
 ---
 
-_This case study has been anonymized at the client's request._
-
 ## The Challenge
 
 A B2B technology company running production infrastructure across AWS, GCP, and Azure was facing a category of work that every organization at scale must contend with: keeping the lights on. Critical platform infrastructure does not stay current on its own. Snowflake Terraform projects needed provider and configuration upgrades across all three cloud providers, and a multi-wave Snowflake account migration across providers and regions was required. Simultaneously, 5 AWS EKS clusters were approaching end-of-support deadlines that, if missed, would leave production Kubernetes workloads running on unsupported versions with no security patches. Some of these clusters had fallen multiple major versions behind, making the upgrade path significantly more complex.
@@ -52,3 +50,5 @@ This was keep-the-lights-on work at its most demanding: not a single flashy migr
 ## Key Technologies
 
 {{< tech-tags "Snowflake, Terraform, AWS, GCP, Azure, EKS, Kubernetes" >}}
+
+_This case study has been anonymized at the client's request._

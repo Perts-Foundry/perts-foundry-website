@@ -17,8 +17,6 @@ tags:
   - Incident Response
 ---
 
-_This case study has been anonymized at the client's request._
-
 ## The Challenge
 
 A large SaaS company operating across GCP and AWS faced the reality that comes with running large-scale production systems: critical incidents that demand immediate, coordinated response. With over 100 services running across multiple cloud providers, the blast radius of any infrastructure failure was significant. A single point of failure in shared infrastructure could cascade across dozens of services within minutes, and the interdependencies between services were not always well-documented.
@@ -50,3 +48,5 @@ The pattern across these incidents demonstrated a consistent approach: respond i
 ## Key Technologies
 
 {{< tech-tags "GCP, GKE, NFS, AWS" >}}
+
+_This case study has been anonymized at the client's request._

@@ -19,8 +19,6 @@ tags:
   - Confluence
 ---
 
-_This case study has been anonymized at the client's request._
-
 ## The Challenge
 
 A growing technology startup was expanding its use of Kubernetes as a shared platform, but the infrastructure was not keeping pace with the teams that needed to use it. Multiple product teams needed to onboard their applications to multi-tenant GKE clusters, and there was no established process, documentation, or integration support to get them there. Separately, a critical application was hitting its scaling ceiling and needed to handle nearly 100x its current load. And GKE clusters across the organization were approaching end-of-life, requiring testing, coordination, and transition planning to keep the platform supported.
@@ -55,3 +53,5 @@ The application scaling work proved that the platform could handle significant g
 ## Key Technologies
 
 {{< tech-tags "Kubernetes, GKE, Helm, GCP, AWS, Confluence" >}}
+
+_This case study has been anonymized at the client's request._
