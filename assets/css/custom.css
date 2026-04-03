@@ -123,7 +123,10 @@ h1.text-4xl {
 }
 
 .cta {
-  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
   font-size: 1.125rem;
   padding: 2rem;
   border: 1px solid rgba(var(--color-slate-base), 0.15);
@@ -134,7 +137,6 @@ h1.text-4xl {
 
 .cta a {
   display: inline-block;
-  margin-top: 0.5rem;
   padding: 0.75rem 1.75rem;
   background: rgb(var(--color-primary-600));
   color: #fff;
@@ -1720,84 +1722,18 @@ html:not(.dark) .article-link--simple:focus-within {
   border-color: rgba(var(--color-primary-500), 0.2);
 }
 
-/* ===== Case Study Metadata Card ===== */
-
-.case-meta-card {
-  margin-top: 1rem;
-  margin-bottom: 2rem;
-  padding: 1.25rem 1.5rem;
-  border: 1px solid rgba(var(--color-slate-base), 0.15);
-  border-radius: 0.5rem;
-  background: rgba(var(--color-slate-base), 0.04);
-}
-
-.case-meta-grid {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 1rem;
-}
-
-@media (min-width: 640px) {
-  .case-meta-grid {
-    grid-template-columns: 1fr 1fr;
-  }
-
-  .case-meta-item--wide {
-    grid-column: 1 / -1;
-  }
-}
-
-.case-meta-label {
-  display: block;
-  font-size: 0.75rem;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  color: rgb(var(--color-neutral-400));
-  margin-bottom: 0.25rem;
-}
-
-.case-meta-value {
-  display: block;
-  font-size: 0.9375rem;
-  line-height: 1.5;
-  color: rgb(var(--color-neutral-200));
-}
-
-.case-meta-value--result {
-  color: rgb(var(--color-primary-400));
-  font-weight: 600;
-}
-
-html:not(.dark) .case-meta-card {
-  background: rgba(var(--color-slate-base), 0.06);
-  border-color: rgba(var(--color-slate-base), 0.2);
-}
-
-html:not(.dark) .case-meta-label {
-  color: rgb(var(--color-neutral-500));
-}
-
-html:not(.dark) .case-meta-value {
-  color: rgb(var(--color-neutral-700));
-}
-
-html:not(.dark) .case-meta-value--result {
-  color: rgb(var(--color-primary-700));
-}
-
 /* ===== Results Table Enhancement ===== */
 
-.article-content .prose table {
+.article-content table {
   border-left: 3px solid rgb(var(--color-primary-500));
   border-radius: 0.25rem;
 }
 
-.article-content .prose tbody tr:nth-child(even) {
+.article-content tbody tr:nth-child(even) {
   background: rgba(var(--color-slate-base), 0.05);
 }
 
-html:not(.dark) .article-content .prose tbody tr:nth-child(even) {
+html:not(.dark) .article-content tbody tr:nth-child(even) {
   background: rgba(var(--color-slate-base), 0.08);
 }
 

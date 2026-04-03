@@ -203,12 +203,9 @@ jobs:
         if: steps.hugo-build.outputs.exit_code == '0'
         run: |
           ERRORS=""
-          # Case studies: metadata card and tech tags in every page
+          # Case studies: tech tags in every page
           for f in public/case-studies/*/index.html; do
             name=$(basename "$(dirname "$f")")
-            if ! grep -q 'case-meta-card' "$f"; then
-              ERRORS="${ERRORS}Missing case-meta-card: $name\n"
-            fi
             if ! grep -q 'tech-tags' "$f"; then
               ERRORS="${ERRORS}Missing tech-tags: $name\n"
             fi

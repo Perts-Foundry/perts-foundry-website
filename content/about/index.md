@@ -37,7 +37,5 @@ The name is deliberate. A foundry is where raw materials are shaped into somethi
 
 I started Perts Foundry because the most rewarding work I've done has always been building systems that outlast my engagement. I don't hand off a design doc and disappear. I pair with your engineers, build alongside them, and make sure the systems we put in place are ones your team can own and operate independently. Every engagement starts with understanding your current state, your constraints, and where you're trying to get to. Then we build it together.
 
----
-
 **Ready to forge something better?** [Get in touch](/contact/)
 {.cta}

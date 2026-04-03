@@ -138,20 +138,19 @@ Four custom shortcodes are available for content pages:
 
 ### Vendor Template Overrides
 
-Four Blowfish theme templates are overridden locally. On theme upgrades, re-diff each override against the new vendor version.
+Three Blowfish theme templates are overridden locally. On theme upgrades, re-diff each override against the new vendor version.
 
 | Local override | Vendor original | Modification | Base version |
 |----------------|----------------|--------------|--------------|
 | `layouts/partials/article-link/simple.html` | `article-link/simple.html` | Decorative alt on featured images, description fallback | v2.100.0 |
 | `layouts/_default/list.html` | `_default/list.html` | `data-reveal-stagger` attribute for scroll-reveal cascade | v2.100.0 |
-| `layouts/case-studies/single.html` | `_default/single.html` | Metadata card from `params.*` front matter fields | v2.100.0 |
 | `layouts/contact/simple.html` | `_default/simple.html` | Full custom two-column contact page layout | v2.100.0 |
 
 ### Scroll-Reveal System
 
 `extend-footer.html` includes an IntersectionObserver that powers scroll-triggered animations across the site. Three attribute types control the behavior:
 
-- `data-reveal` -- Fade + slide-up (0.6s ease). Used on contact cards, case study metadata card.
+- `data-reveal` -- Fade + slide-up (0.6s ease). Used on contact cards.
 - `data-reveal-stagger` -- Children cascade with staggered delays (0-0.5s). Used on list pages. Supports up to 10 children; items beyond 10 appear simultaneously without delay.
 - `data-prose-reveal` -- Opacity-only fade (0.4s) for article H2 headings. Applied via JS at runtime, not in templates.
 
