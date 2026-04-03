@@ -2,6 +2,17 @@
 
 :root {
   --color-slate-base: 148, 163, 184;
+  --accent-blue: #3B82F6;
+  --accent-blue-light: #60A5FA;
+  --accent-purple: #7C3AED;
+  --accent-red: #DC2626;
+  --accent-orange: #FB923C;
+}
+
+html:not(.dark) {
+  --accent-blue: #2563EB;
+  --accent-blue-light: #2563EB;
+  --accent-orange: #EA580C;
 }
 
 .fixed.inset-x-0.z-100 {
@@ -289,17 +300,6 @@ html:not(.dark) .numbered-steps-wrapper ol li::before {
   flex-direction: column;
   gap: 3rem;
   overflow-wrap: break-word;
-  --accent-blue: #3B82F6;
-  --accent-blue-light: #60A5FA;
-  --accent-purple: #7C3AED;
-  --accent-red: #DC2626;
-  --accent-orange: #FB923C;
-}
-
-html:not(.dark) .homepage {
-  --accent-blue: #2563EB;
-  --accent-blue-light: #2563EB;
-  --accent-orange: #EA580C;
 }
 
 /* Hero */
