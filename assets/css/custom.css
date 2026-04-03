@@ -1,5 +1,9 @@
 /* ===== Global ===== */
 
+:root {
+  --color-slate-base: 148, 163, 184;
+}
+
 .fixed.inset-x-0.z-100 {
   padding-top: 0.5rem;
 }
@@ -122,9 +126,9 @@ h1.text-4xl {
   text-align: center;
   font-size: 1.125rem;
   padding: 2rem;
-  border: 1px solid rgba(148, 163, 184, 0.15);
+  border: 1px solid rgba(var(--color-slate-base), 0.15);
   border-radius: 0.5rem;
-  background: rgba(148, 163, 184, 0.04);
+  background: rgba(var(--color-slate-base), 0.04);
   margin-top: 2rem;
 }
 
@@ -148,42 +152,71 @@ h1.text-4xl {
   box-shadow: 0 0 20px rgba(var(--color-primary-500), 0.3);
 }
 
-html:not(.dark) .cta {
-  background: rgba(148, 163, 184, 0.06);
-  border-color: rgba(148, 163, 184, 0.2);
+.cta a:focus-visible {
+  outline: 2px solid rgb(var(--color-primary-500));
+  outline-offset: 2px;
 }
 
-/* Numbered steps base (shared by contact and homepage process) */
-.numbered-steps {
+html:not(.dark) .cta {
+  background: rgba(var(--color-slate-base), 0.06);
+  border-color: rgba(var(--color-slate-base), 0.2);
+}
+
+/* Numbered steps base (shared by contact page and service page shortcode) */
+.numbered-steps,
+.numbered-steps-wrapper ol {
   list-style: none;
   counter-reset: steps;
   padding: 0;
-  margin: 0;
 }
 
-.numbered-steps li {
+.numbered-steps li,
+.numbered-steps-wrapper ol li {
   counter-increment: steps;
   position: relative;
 }
 
-.numbered-steps li::before {
+.numbered-steps li::before,
+.numbered-steps-wrapper ol li::before {
   content: counter(steps);
-  width: 2rem;
-  height: 2rem;
-  border-radius: 50%;
-  background: rgba(var(--color-primary-500), 0.15);
-  color: rgb(var(--color-primary-400));
-  font-weight: 700;
-  font-size: 0.875rem;
   display: flex;
   align-items: center;
   justify-content: center;
+  font-weight: 700;
+  border-radius: 50%;
+  background: rgba(var(--color-primary-500), 0.15);
+  color: rgb(var(--color-primary-400));
+}
+
+html:not(.dark) .numbered-steps li::before,
+html:not(.dark) .numbered-steps-wrapper ol li::before {
+  color: rgb(var(--color-primary-700));
+  background: rgba(var(--color-primary-500), 0.12);
+}
+
+/* Contact page variant (2rem circles) */
+.numbered-steps { margin: 0; }
+
+.numbered-steps li::before {
+  width: 2rem;
+  height: 2rem;
+  font-size: 0.875rem;
   flex-shrink: 0;
 }
 
-html:not(.dark) .numbered-steps li::before {
-  background: rgba(37, 99, 235, 0.12);
-  color: rgb(var(--color-primary-700));
+/* Service page variant (1.75rem circles, self-positioning) */
+.numbered-steps-wrapper ol li {
+  padding-left: 2.75rem;
+  margin-bottom: 1rem;
+}
+
+.numbered-steps-wrapper ol li::before {
+  position: absolute;
+  left: 0;
+  top: 0.125rem;
+  width: 1.75rem;
+  height: 1.75rem;
+  font-size: 0.8125rem;
 }
 
 /* ===== Homepage ===== */
@@ -1382,9 +1415,9 @@ html:not(.dark) .tech-label {
 /* Contact cards */
 .contact-card {
   padding: 1.5rem;
-  border: 1px solid rgba(148, 163, 184, 0.15);
+  border: 1px solid rgba(var(--color-slate-base), 0.15);
   border-radius: 0.5rem;
-  background: rgba(148, 163, 184, 0.04);
+  background: rgba(var(--color-slate-base), 0.04);
 }
 
 .contact-card--cta {
@@ -1394,8 +1427,8 @@ html:not(.dark) .tech-label {
 }
 
 html:not(.dark) .contact-card {
-  background: rgba(148, 163, 184, 0.06);
-  border-color: rgba(148, 163, 184, 0.2);
+  background: rgba(var(--color-slate-base), 0.06);
+  border-color: rgba(var(--color-slate-base), 0.2);
 }
 
 html:not(.dark) .contact-card--cta {
@@ -1433,7 +1466,7 @@ html:not(.dark) .contact-card--cta {
 .contact-cta-wrapper {
   margin-top: 0.75rem;
   padding-top: 0.75rem;
-  border-top: 1px solid rgba(148, 163, 184, 0.15);
+  border-top: 1px solid rgba(var(--color-slate-base), 0.15);
 }
 
 /* What to Expect steps (extends .numbered-steps) */
@@ -1450,7 +1483,7 @@ html:not(.dark) .contact-card--cta {
 }
 
 .contact-steps li + li {
-  border-top: 1px solid rgba(148, 163, 184, 0.1);
+  border-top: 1px solid rgba(var(--color-slate-base), 0.1);
 }
 
 .contact-steps li strong {
@@ -1479,11 +1512,11 @@ html:not(.dark) .contact-steps li span {
 }
 
 html:not(.dark) .contact-steps li + li {
-  border-top-color: rgba(148, 163, 184, 0.2);
+  border-top-color: rgba(var(--color-slate-base), 0.2);
 }
 
 html:not(.dark) .contact-cta-wrapper {
-  border-top-color: rgba(148, 163, 184, 0.25);
+  border-top-color: rgba(var(--color-slate-base), 0.25);
 }
 
 /* Contact links */
@@ -1676,15 +1709,26 @@ html:not(.dark) .article-link--simple:hover {
   border-color: rgba(var(--color-primary-500), 0.2);
 }
 
+.article-link--simple:focus-within {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.3);
+  border-color: rgba(var(--color-primary-500), 0.25);
+}
+
+html:not(.dark) .article-link--simple:focus-within {
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+  border-color: rgba(var(--color-primary-500), 0.2);
+}
+
 /* ===== Case Study Metadata Card ===== */
 
 .case-meta-card {
   margin-top: 1rem;
   margin-bottom: 2rem;
   padding: 1.25rem 1.5rem;
-  border: 1px solid rgba(148, 163, 184, 0.15);
+  border: 1px solid rgba(var(--color-slate-base), 0.15);
   border-radius: 0.5rem;
-  background: rgba(148, 163, 184, 0.04);
+  background: rgba(var(--color-slate-base), 0.04);
 }
 
 .case-meta-grid {
@@ -1726,8 +1770,8 @@ html:not(.dark) .article-link--simple:hover {
 }
 
 html:not(.dark) .case-meta-card {
-  background: rgba(148, 163, 184, 0.06);
-  border-color: rgba(148, 163, 184, 0.2);
+  background: rgba(var(--color-slate-base), 0.06);
+  border-color: rgba(var(--color-slate-base), 0.2);
 }
 
 html:not(.dark) .case-meta-label {
@@ -1750,11 +1794,11 @@ html:not(.dark) .case-meta-value--result {
 }
 
 .article-content .prose tbody tr:nth-child(even) {
-  background: rgba(148, 163, 184, 0.05);
+  background: rgba(var(--color-slate-base), 0.05);
 }
 
 html:not(.dark) .article-content .prose tbody tr:nth-child(even) {
-  background: rgba(148, 163, 184, 0.08);
+  background: rgba(var(--color-slate-base), 0.08);
 }
 
 /* ===== Single Page H2 Scroll Reveal ===== */
@@ -1794,43 +1838,6 @@ html:not(.dark) .tech-tag {
   background: rgba(var(--color-primary-500), 0.06);
 }
 
-/* ===== Numbered Steps Wrapper (Service Pages) ===== */
-
-.numbered-steps-wrapper ol {
-  list-style: none;
-  counter-reset: steps;
-  padding: 0;
-}
-
-.numbered-steps-wrapper ol li {
-  position: relative;
-  padding-left: 2.75rem;
-  margin-bottom: 1rem;
-  counter-increment: steps;
-}
-
-.numbered-steps-wrapper ol li::before {
-  content: counter(steps);
-  position: absolute;
-  left: 0;
-  top: 0.125rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 1.75rem;
-  height: 1.75rem;
-  font-size: 0.8125rem;
-  font-weight: 700;
-  border-radius: 50%;
-  background: rgba(var(--color-primary-500), 0.15);
-  color: rgb(var(--color-primary-400));
-}
-
-html:not(.dark) .numbered-steps-wrapper ol li::before {
-  color: rgb(var(--color-primary-700));
-  background: rgba(var(--color-primary-500), 0.12);
-}
-
 /* ===== Credential Badges (About Page) ===== */
 
 .credential-badges {
@@ -1848,12 +1855,12 @@ html:not(.dark) .numbered-steps-wrapper ol li::before {
   font-weight: 600;
   border-radius: 0.5rem;
   color: rgb(var(--color-neutral-200));
-  border: 1px solid rgba(148, 163, 184, 0.15);
-  background: rgba(148, 163, 184, 0.06);
+  border: 1px solid rgba(var(--color-slate-base), 0.15);
+  background: rgba(var(--color-slate-base), 0.06);
 }
 
 html:not(.dark) .credential-badge {
   color: rgb(var(--color-neutral-700));
-  border-color: rgba(148, 163, 184, 0.2);
-  background: rgba(148, 163, 184, 0.08);
+  border-color: rgba(var(--color-slate-base), 0.2);
+  background: rgba(var(--color-slate-base), 0.08);
 }

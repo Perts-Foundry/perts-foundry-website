@@ -104,11 +104,11 @@ config/development/  # Development overrides
 content/             # Markdown content (about, accessibility, blog, case-studies, contact, privacy, services)
 data/                # Structured TOML data files (metrics, process steps, technologies) used by homepage
 assets/css/          # Custom CSS overrides (custom.css) and color schemes (schemes/)
-layouts/             # Custom Hugo layout overrides (includes homepage/ sub-partials)
+layouts/             # Custom Hugo layout overrides, shortcodes, and homepage sub-partials
 static/              # Static assets and security headers
 src/                 # Cloudflare Worker source (contact form API)
 wrangler.toml        # Cloudflare Workers deployment config
-archetypes/          # Content templates (blog.md, case-studies.md)
+archetypes/          # Content templates (blog.md, case-studies.md, default.md)
 docs/                # Architecture proposals and reference guides
 .claude/commands/    # Claude Code slash commands (generate-services, generate-case-studies)
 .github/workflows/   # CI: validate.yml (PR checks), deploy.yml (PR comment deploy)
@@ -127,9 +127,39 @@ docs/                # Architecture proposals and reference guides
 - **Exception: contact page.** The contact page uses a custom template (`layouts/contact/simple.html`) that hardcodes all content in HTML for two-column layout control. The markdown file (`content/contact/index.md`) contains only front matter. Editing the contact page content requires modifying the template, not the markdown file.
 - **Exception: homepage.** The homepage uses a custom layout (`layouts/partials/home/custom.html`) that dispatches to 7 section sub-partials in `layouts/partials/homepage/`. Section order: hero (with inline problem statement), tech bar, metrics band, services grid, featured cases, process timeline, final CTA. Content comes from 4 sources: `hero.headline`, `hero.subheadline` from `content/_index.md` front matter; the problem statement from `content/_index.md` body (rendered inline in the hero); metrics, process steps, and technologies from `data/*.toml` files; services and case studies from Hugo section queries. All case studies and services appear on the homepage via paginated carousels (sorted by weight). Services display as image cards using their `featured*` image. The `.homepage` wrapper uses `display: flex; flex-direction: column; gap: 3rem` for consistent inter-section spacing. Three carousels (tech bar, services, cases) depend on specific DOM IDs: `tech-carousel-items`, `services-carousel-grid`, `cases-carousel-grid` and their corresponding `-dots` containers. Renaming these IDs in templates will silently break carousel navigation. Each carousel uses a responsive `perPage` function in `extend-footer.html` that checks `window.innerWidth < 640` to switch between mobile and desktop item counts. This 640px threshold must stay in sync with the CSS `@media (min-width: 640px)` breakpoints that control grid column counts; changing one without the other will cause layout/pagination mismatches. Note: `perPage` is evaluated once at page load and is not recalculated on resize or orientation change.
 
+### Custom Shortcodes
+
+Four custom shortcodes are available for content pages:
+
+- `{{% metric "key" %}}` -- Pulls display values from `data/metrics.toml` by key. Used on the about page for inline metric references.
+- `{{< tech-tags "A, B, C" >}}` -- Comma-separated list rendered as styled pill tags. Used in all case study "Key Technologies" sections.
+- `{{< steps >}}...{{< /steps >}}` -- Wraps an ordered list with numbered circle badges. Used in all service page "What an Engagement Looks Like" sections.
+- `{{< credentials "A | B | C" >}}` -- Pipe-separated list (pipe delimiter avoids conflicts with commas in credential names) rendered as badge elements. Used on the about page for certifications.
+
+### Vendor Template Overrides
+
+Four Blowfish theme templates are overridden locally. On theme upgrades, re-diff each override against the new vendor version.
+
+| Local override | Vendor original | Modification | Base version |
+|----------------|----------------|--------------|--------------|
+| `layouts/partials/article-link/simple.html` | `article-link/simple.html` | Decorative alt on featured images, description fallback | v2.100.0 |
+| `layouts/_default/list.html` | `_default/list.html` | `data-reveal-stagger` attribute for scroll-reveal cascade | v2.100.0 |
+| `layouts/case-studies/single.html` | `_default/single.html` | Metadata card from `params.*` front matter fields | v2.100.0 |
+| `layouts/contact/simple.html` | `_default/simple.html` | Full custom two-column contact page layout | v2.100.0 |
+
+### Scroll-Reveal System
+
+`extend-footer.html` includes an IntersectionObserver that powers scroll-triggered animations across the site. Three attribute types control the behavior:
+
+- `data-reveal` -- Fade + slide-up (0.6s ease). Used on contact cards, case study metadata card.
+- `data-reveal-stagger` -- Children cascade with staggered delays (0-0.5s). Used on list pages. Supports up to 10 children; items beyond 10 appear simultaneously without delay.
+- `data-prose-reveal` -- Opacity-only fade (0.4s) for article H2 headings. Applied via JS at runtime, not in templates.
+
+The `js-reveal-init` class on `<html>` gates visibility: without JS, all content remains visible. JS also bails early for users with `prefers-reduced-motion: reduce`, and a CSS `@media` query provides an independent fallback forcing all reveal elements to full opacity.
+
 ### Section ordering (services, case-studies)
 
-Both `content/services/_index.md` and `content/case-studies/_index.md` use `orderByWeight: true` with cascading display settings (`showDate: false`, `showAuthor: false`, `showReadingTime: false`, `invertPagination: true`, `showHero: true`, `heroStyle: basic`). New pages in these sections must include a `weight` field or they will sort unpredictably. Both sections require a `featured.jpg` in each page bundle for the hero image. Case studies use weight increments of 10 (range 10-100) to allow future insertions.
+Both `content/services/_index.md` and `content/case-studies/_index.md` use `orderByWeight: true` with cascading display settings (`showDate: false`, `showAuthor: false`, `showReadingTime: false`, `invertPagination: true`, `showHero: true`, `heroStyle: basic`). New pages in these sections must include a `weight` field or they will sort unpredictably. Both sections require a `featured.jpg` in each page bundle for the hero image. Case studies use weight increments of 10 (range 10-100) to allow future insertions. Case studies also require `params.client`, `params.industry`, `params.challenge`, and `params.result` in front matter; these render as a structured metadata card at the top of each page. Hugo merges the `params:` YAML key into `.Params` automatically. The archetype at `archetypes/case-studies.md` scaffolds these fields.
 
 ## Code Style
 

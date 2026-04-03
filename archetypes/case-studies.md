@@ -21,3 +21,7 @@ tags: []
 ## Our Approach
 
 ## Results
+
+## Key Technologies
+
+{{< tech-tags "" >}}
