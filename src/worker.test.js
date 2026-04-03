@@ -424,16 +424,14 @@ describe("handleContactForm with secrets", () => {
     };
   }
 
-  // -- Content-Length enforcement ---------------------------------------------
+  // -- Body size enforcement ----------------------------------------------------
 
-  it("returns 413 when Content-Length exceeds 10000", async () => {
+  it("returns 413 when request body exceeds 10000 bytes", async () => {
+    const oversized = { ...validBody(), message: "x".repeat(11000) };
     const req = new Request("https://example.com/api/contact", {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "Content-Length": "20000",
-      },
-      body: JSON.stringify(validBody()),
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(oversized),
     });
     const res = await worker.fetch(req, mockEnv());
     expect(res.status).toBe(413);

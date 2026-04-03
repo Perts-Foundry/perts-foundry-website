@@ -1,23 +1,152 @@
+# Page 1: Cloud & IaC
 [[items]]
 name = "AWS"
+icon = "aws"
 
 [[items]]
 name = "GCP"
+icon = "gcp"
+
+[[items]]
+name = "Cloudflare"
+icon = "cloudflare"
 
 [[items]]
 name = "Terraform"
+icon = "terraform"
+
+[[items]]
+name = "Packer"
+icon = "packer"
 
 [[items]]
 name = "Kubernetes"
+icon = "kubernetes"
 
 [[items]]
 name = "Docker"
-
-[[items]]
-name = "GitHub Actions"
+icon = "docker"
 
 [[items]]
 name = "Helm"
+icon = "helm"
+
+# Page 2: Container platforms & CI/CD
+[[items]]
+name = "ArgoCD"
+icon = "argocd"
 
 [[items]]
-name = "Datadog"
+name = "EKS"
+icon = "aws"
+
+[[items]]
+name = "ECS"
+icon = "aws"
+
+[[items]]
+name = "GKE"
+icon = "gcp"
+
+[[items]]
+name = "GitHub Actions"
+icon = "github-actions"
+
+[[items]]
+name = "Jenkins"
+icon = "jenkins"
+
+[[items]]
+name = "GitLab"
+icon = "gitlab"
+
+[[items]]
+name = "GitOps"
+icon = "gitops"
+
+# Page 3: Monitoring, Security, Automation
+[[items]]
+name = "Grafana"
+icon = "grafana"
+
+[[items]]
+name = "PagerDuty"
+icon = "pagerduty"
+
+[[items]]
+name = "CloudWatch"
+icon = "aws"
+
+[[items]]
+name = "Vault"
+icon = "vault"
+
+[[items]]
+name = "Snyk"
+icon = "snyk"
+
+[[items]]
+name = "Dependabot"
+icon = "github"
+
+[[items]]
+name = "Renovate"
+icon = "renovate"
+
+[[items]]
+name = "Python"
+icon = "python"
+
+# Page 4: Languages, OS, Storage
+[[items]]
+name = "Bash"
+icon = "terminal"
+
+[[items]]
+name = "YAML"
+icon = "code"
+
+[[items]]
+name = "JSON"
+icon = "code"
+
+[[items]]
+name = "Linux"
+icon = "linux"
+
+[[items]]
+name = "S3"
+icon = "aws"
+
+[[items]]
+name = "Snowflake"
+icon = "snowflake"
+
+[[items]]
+name = "GCS"
+icon = "gcp"
+
+[[items]]
+name = "ALB / NLB"
+icon = "aws"
+
+# Page 5: Collaboration & AI
+[[items]]
+name = "Jira"
+icon = "jira"
+
+[[items]]
+name = "Confluence"
+icon = "confluence"
+
+[[items]]
+name = "Slack"
+icon = "slack"
+
+[[items]]
+name = "Claude AI"
+icon = "claude"
+
+[[items]]
+name = "Cursor AI"
+icon = "cursor"

@@ -40,7 +40,11 @@ function isRateLimited(ip) {
 function jsonResponse(body, status = 200) {
   return new Response(JSON.stringify(body), {
     status,
-    headers: { "Content-Type": "application/json" },
+    headers: {
+      "Content-Type": "application/json",
+      "X-Content-Type-Options": "nosniff",
+      "Cache-Control": "no-store",
+    },
   });
 }
 
@@ -111,7 +115,7 @@ async function sendEmail(apiKey, { name, email, message }) {
     signal: AbortSignal.timeout(5000),
   });
   if (!response.ok) {
-    console.error("Resend API error:", await response.text());
+    console.error("Resend API error:", response.status);
   }
   return response.ok;
 }
@@ -129,17 +133,19 @@ async function handleContactForm(request, env) {
     );
   }
 
-  const contentLength = parseInt(
-    request.headers.get("Content-Length") || "0",
-    10,
-  );
-  if (contentLength > 10000) {
+  let bodyText;
+  try {
+    bodyText = await request.text();
+  } catch {
+    return jsonResponse({ error: "Invalid request." }, 400);
+  }
+  if (bodyText.length > 10000) {
     return jsonResponse({ error: "Request too large." }, 413);
   }
 
   let data;
   try {
-    data = await request.json();
+    data = JSON.parse(bodyText);
   } catch {
     return jsonResponse({ error: "Invalid request." }, 400);
   }

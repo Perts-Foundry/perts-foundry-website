@@ -82,10 +82,16 @@ jobs:
         id: hugo-version
         run: echo "version=$(cat .hugo-version)" >> "$GITHUB_OUTPUT"
 
+      - name: Setup Node.js
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        with:
+          node-version: "22"
+          cache: "npm"
+
       - name: Setup Go
         uses: actions/setup-go@4b73464bb391d4059bd26b0524d20df3927bd417 # v6
         with:
-          go-version: "1.22"
+          go-version-file: "go.mod"
 
       - name: Setup Hugo
         uses: peaceiris/actions-hugo@75d2e84710de30f6ff7268e08f310b60ef14033f # v3
@@ -144,7 +150,7 @@ jobs:
         run: |
           ERRORS=""
           HP="public/index.html"
-          # Section structure checks (verify all 8 partials render)
+          # Section structure checks (8 IDs across 7 partials; problem-heading is inside hero)
           for id in hero-heading tech-bar-heading problem-heading services-heading metrics-heading cases-heading process-heading cta-heading; do
             if ! grep -qE "id=\"?$id\"?" "$HP"; then
               ERRORS="${ERRORS}Missing section: $id\n"
@@ -160,6 +166,18 @@ jobs:
           if ! grep -q "Discover" "$HP"; then
             ERRORS="${ERRORS}Missing process step data (expected 'Discover')\n"
           fi
+          # Carousel infrastructure checks (JS depends on these DOM IDs)
+          for cid in tech-carousel-items tech-carousel-dots services-carousel-grid services-carousel-dots cases-carousel-grid cases-carousel-dots; do
+            if ! grep -qE "id=\"?$cid\"?" "$HP"; then
+              ERRORS="${ERRORS}Missing carousel ID: $cid\n"
+            fi
+          done
+          # Section ordering check (metrics must appear before services)
+          METRICS_POS=$(grep -bo 'metrics-heading' "$HP" | head -1 | cut -d: -f1)
+          SERVICES_POS=$(grep -bo 'services-heading' "$HP" | head -1 | cut -d: -f1)
+          if [ -n "$METRICS_POS" ] && [ -n "$SERVICES_POS" ] && [ "$METRICS_POS" -gt "$SERVICES_POS" ]; then
+            ERRORS="${ERRORS}Section ordering: metrics-heading must appear before services-heading\n"
+          fi
           if [ -n "$ERRORS" ]; then
             printf '%b' "$ERRORS"
             echo "exit_code=1" >> "$GITHUB_OUTPUT"
@@ -170,11 +188,11 @@ jobs:
             } >> "$GITHUB_OUTPUT"
             exit 0
           else
-            echo "All 8 homepage sections and data bindings verified."
+            echo "All homepage sections, carousel IDs, and ordering verified."
             echo "exit_code=0" >> "$GITHUB_OUTPUT"
             {
               echo "output<<GHEOF"
-              echo "All 8 homepage sections present with expected data."
+              echo "All homepage sections, carousel infrastructure, and ordering verified."
               echo "GHEOF"
             } >> "$GITHUB_OUTPUT"
           fi
@@ -206,11 +224,11 @@ jobs:
         id: pa11y
         if: steps.hugo-build.outputs.exit_code == '0'
         run: |
-          npx --yes serve public -l 8080 --no-clipboard &
+          npx serve public -l 8080 --no-clipboard &
           SERVER_PID=$!
           sleep 2
           set +e
-          OUTPUT=$(npx --yes pa11y-ci 2>&1)
+          OUTPUT=$(npx pa11y-ci 2>&1)
           EXIT_CODE=$?
           kill $SERVER_PID 2>/dev/null || true
           echo "$OUTPUT"
@@ -245,7 +263,7 @@ jobs:
       - name: Run markdownlint
         id: markdownlint
         run: |
-          npx --yes markdownlint-cli2 "content/**/*.md" 2>&1 | tee /tmp/mdlint.txt || true
+          npx markdownlint-cli2 "content/**/*.md" 2>&1 | tee /tmp/mdlint.txt || true
           EXIT_CODE=${PIPESTATUS[0]}
           echo "exit_code=$EXIT_CODE" >> "$GITHUB_OUTPUT"
           {
@@ -258,7 +276,7 @@ jobs:
       - name: Run Prettier check
         id: prettier
         run: |
-          npx --yes prettier --no-color --check \
+          npx prettier --no-color --check \
             "content/**/*.md" \
             ".github/**/*.yml" \
             "src/**/*.js" 2>&1 | tee /tmp/prettier.txt || true
@@ -423,7 +441,7 @@ jobs:
               `|:------|:-----|:------:|`,
               `| **Worker Unit Tests** | \`vitest\` | ${status(vitestExit)} |`,
               `| **Site Compilation** | \`hugo\` | ${status(hugoBuild)} |`,
-              `| **Homepage Sections** | smoke test | ${status(smokeExit, htmlSkipped)} |`,
+              `| **Homepage Smoke Test** | \`smoke test\` | ${status(smokeExit, htmlSkipped)} |`,
               `| **Link & Image Validation** | \`htmltest\` | ${status(htmltest, htmlSkipped)} |`,
               `| **Accessibility (WCAG 2.1 AA)** | \`pa11y-ci\` | ${status(pa11y, htmlSkipped)} |`,
               '',
@@ -459,7 +477,7 @@ jobs:
               '',
               '</details>',
               '',
-              `<details><summary><strong>Homepage Sections</strong> (smoke test)</summary>`,
+              `<details><summary><strong>Homepage Smoke Test</strong> (sections, carousels, data, ordering)</summary>`,
               '',
               '```',
               smokeOutput,

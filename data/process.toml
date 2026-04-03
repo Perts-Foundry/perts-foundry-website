@@ -1,19 +1,15 @@
 [[steps]]
 title = "Discover"
-description = "Understand your current infrastructure, constraints, and goals."
-icon = "search"
-
-[[steps]]
-title = "Design"
-description = "Propose an approach, select the right tools, and align on scope."
-icon = "edit"
+description = "It starts with a conversation. We learn your stack, your challenges, and your goals so we can build a plan that fits."
 
 [[steps]]
 title = "Build"
-description = "Implement alongside your team so knowledge transfers naturally."
-icon = "code"
+description = "We work shoulder-to-shoulder with your team to architect and forge the right solution."
 
 [[steps]]
-title = "Hand Off"
-description = "Document everything, verify your team can operate independently."
-icon = "check"
+title = "Scale"
+description = "We put it through its paces, tuning and hardening until it stands up to whatever comes next."
+
+[[steps]]
+title = "Own"
+description = "Your team walks away with the documentation, the knowledge, and the confidence to own it completely."
