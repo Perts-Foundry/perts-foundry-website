@@ -24,7 +24,10 @@ We plan and execute migrations with a track record of zero downtime across produ
 
 ## What an Engagement Looks Like
 
+{{< steps >}}
+
 1. **Migration Scoping** — We inventory what needs to move, map dependencies, and identify the risks that will derail the project if they're not addressed upfront
 2. **Wave Planning** — We break the migration into waves with clear success criteria, rollback procedures, and validation steps for each phase
 3. **Execution & Cutover** — We run each wave, monitor for issues, and handle the cutover so your team isn't scrambling during the transition
 4. **Validation & Cleanup** — We verify everything works in the new environment, decommission old resources, and document the new state
+   {{< /steps >}}

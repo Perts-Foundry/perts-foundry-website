@@ -24,7 +24,10 @@ We build cloud infrastructure that is fully codified, version-controlled, and re
 
 ## What an Engagement Looks Like
 
+{{< steps >}}
+
 1. **Infrastructure Audit** — We map your current cloud footprint, identify risks like overprivileged IAM policies or untracked resources, and document what exists
 2. **Target Architecture** — We design infrastructure aligned with your growth, covering networking, compute, storage, and security boundaries
 3. **Codify & Build** — We implement everything in Terraform with PR-based workflows, validating with your team at each step
 4. **Operational Handoff** — Your team gets documentation, runbooks, and pairing sessions so they own and operate the infrastructure confidently
+   {{< /steps >}}

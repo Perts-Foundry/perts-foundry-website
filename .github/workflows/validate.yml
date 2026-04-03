@@ -197,6 +197,56 @@ jobs:
             } >> "$GITHUB_OUTPUT"
           fi
 
+      # ── Inner page smoke test ────────────────────────────────────
+      - name: Verify inner page structure
+        id: inner-smoke
+        if: steps.hugo-build.outputs.exit_code == '0'
+        run: |
+          ERRORS=""
+          # Case studies: tech tags in every page
+          for f in public/case-studies/*/index.html; do
+            name=$(basename "$(dirname "$f")")
+            if ! grep -q 'tech-tags' "$f"; then
+              ERRORS="${ERRORS}Missing tech-tags: $name\n"
+            fi
+          done
+          # Services: numbered-steps-wrapper in every page
+          for f in public/services/*/index.html; do
+            name=$(basename "$(dirname "$f")")
+            if ! grep -q 'numbered-steps-wrapper' "$f"; then
+              ERRORS="${ERRORS}Missing numbered-steps-wrapper: $name\n"
+            fi
+          done
+          # About: credential badges
+          if ! grep -q 'credential-badges' public/about/index.html; then
+            ERRORS="${ERRORS}Missing credential-badges on about page\n"
+          fi
+          # List pages: scroll-reveal stagger
+          if ! grep -q 'data-reveal-stagger' public/services/index.html; then
+            ERRORS="${ERRORS}Missing data-reveal-stagger on services list\n"
+          fi
+          if ! grep -q 'data-reveal-stagger' public/case-studies/index.html; then
+            ERRORS="${ERRORS}Missing data-reveal-stagger on case-studies list\n"
+          fi
+          if [ -n "$ERRORS" ]; then
+            printf '%b' "$ERRORS"
+            echo "exit_code=1" >> "$GITHUB_OUTPUT"
+            {
+              echo "output<<GHEOF"
+              printf '%b' "$ERRORS"
+              echo "GHEOF"
+            } >> "$GITHUB_OUTPUT"
+            exit 0
+          else
+            echo "All inner page structures verified."
+            echo "exit_code=0" >> "$GITHUB_OUTPUT"
+            {
+              echo "output<<GHEOF"
+              echo "All inner page structures verified."
+              echo "GHEOF"
+            } >> "$GITHUB_OUTPUT"
+          fi
+
       # ── htmltest ────────────────────────────────────────────────
       - name: Install htmltest
         if: steps.hugo-build.outputs.exit_code == '0'
@@ -313,6 +363,7 @@ jobs:
           EXIT_VITEST: ${{ steps.vitest.outputs.exit_code }}
           EXIT_HUGO: ${{ steps.hugo-build.outputs.exit_code }}
           EXIT_SMOKE: ${{ steps.homepage-smoke.outputs.exit_code }}
+          EXIT_INNER: ${{ steps.inner-smoke.outputs.exit_code }}
           EXIT_HTMLTEST: ${{ steps.htmltest.outputs.exit_code }}
           EXIT_PA11Y: ${{ steps.pa11y.outputs.exit_code }}
           EXIT_GITLEAKS: ${{ steps.gitleaks.outputs.exit_code }}
@@ -328,6 +379,7 @@ jobs:
             "vitest:Tests:$EXIT_VITEST"
             "hugo-build:Build:$EXIT_HUGO"
             "homepage-smoke:Smoke:$EXIT_SMOKE"
+            "inner-smoke:Inner:$EXIT_INNER"
             "htmltest:HTML:$EXIT_HTMLTEST"
             "pa11y:A11y:$EXIT_PA11Y"
             "gitleaks:Security:$EXIT_GITLEAKS"
@@ -367,6 +419,7 @@ jobs:
           EXIT_VITEST: ${{ steps.vitest.outputs.exit_code }}
           EXIT_HUGO: ${{ steps.hugo-build.outputs.exit_code }}
           EXIT_SMOKE: ${{ steps.homepage-smoke.outputs.exit_code }}
+          EXIT_INNER: ${{ steps.inner-smoke.outputs.exit_code }}
           EXIT_HTMLTEST: ${{ steps.htmltest.outputs.exit_code }}
           EXIT_PA11Y: ${{ steps.pa11y.outputs.exit_code }}
           EXIT_GITLEAKS: ${{ steps.gitleaks.outputs.exit_code }}
@@ -376,6 +429,7 @@ jobs:
           OUTPUT_VITEST: ${{ steps.vitest.outputs.output }}
           OUTPUT_HUGO: ${{ steps.hugo-build.outputs.output }}
           OUTPUT_SMOKE: ${{ steps.homepage-smoke.outputs.output }}
+          OUTPUT_INNER: ${{ steps.inner-smoke.outputs.output }}
           OUTPUT_HTMLTEST: ${{ steps.htmltest.outputs.output }}
           OUTPUT_PA11Y: ${{ steps.pa11y.outputs.output }}
           OUTPUT_GITLEAKS: ${{ steps.gitleaks.outputs.output }}
@@ -407,6 +461,7 @@ jobs:
             const vitestExit = process.env.EXIT_VITEST || '';
             const hugoBuild = process.env.EXIT_HUGO || '';
             const smokeExit = process.env.EXIT_SMOKE || '';
+            const innerExit = process.env.EXIT_INNER || '';
             const htmltest = process.env.EXIT_HTMLTEST || '';
             const pa11y = process.env.EXIT_PA11Y || '';
             const gitleaks = process.env.EXIT_GITLEAKS || '';
@@ -418,6 +473,7 @@ jobs:
             const vitestOutput = process.env.OUTPUT_VITEST || 'No output';
             const hugoOutput = process.env.OUTPUT_HUGO || '';
             const smokeOutput = process.env.OUTPUT_SMOKE || 'Skipped (build failed)';
+            const innerOutput = process.env.OUTPUT_INNER || 'Skipped (build failed)';
             const htmltestOutput = process.env.OUTPUT_HTMLTEST || 'Skipped (build failed)';
             const pa11yOutput = process.env.OUTPUT_PA11Y || 'Skipped (build failed)';
             const gitleaksOutput = process.env.OUTPUT_GITLEAKS || 'No issues found';
@@ -442,6 +498,7 @@ jobs:
               `| **Worker Unit Tests** | \`vitest\` | ${status(vitestExit)} |`,
               `| **Site Compilation** | \`hugo\` | ${status(hugoBuild)} |`,
               `| **Homepage Smoke Test** | \`smoke test\` | ${status(smokeExit, htmlSkipped)} |`,
+              `| **Inner Page Smoke Test** | \`smoke test\` | ${status(innerExit, htmlSkipped)} |`,
               `| **Link & Image Validation** | \`htmltest\` | ${status(htmltest, htmlSkipped)} |`,
               `| **Accessibility (WCAG 2.1 AA)** | \`pa11y-ci\` | ${status(pa11y, htmlSkipped)} |`,
               '',
@@ -481,6 +538,14 @@ jobs:
               '',
               '```',
               smokeOutput,
+              '```',
+              '',
+              '</details>',
+              '',
+              `<details><summary><strong>Inner Page Smoke Test</strong> (shortcodes, metadata, stagger)</summary>`,
+              '',
+              '```',
+              innerOutput,
               '```',
               '',
               '</details>',
@@ -564,6 +629,7 @@ jobs:
           EXIT_VITEST: ${{ steps.vitest.outputs.exit_code }}
           EXIT_HUGO: ${{ steps.hugo-build.outputs.exit_code }}
           EXIT_SMOKE: ${{ steps.homepage-smoke.outputs.exit_code }}
+          EXIT_INNER: ${{ steps.inner-smoke.outputs.exit_code }}
           EXIT_HTMLTEST: ${{ steps.htmltest.outputs.exit_code }}
           EXIT_PA11Y: ${{ steps.pa11y.outputs.exit_code }}
           EXIT_GITLEAKS: ${{ steps.gitleaks.outputs.exit_code }}
@@ -576,6 +642,9 @@ jobs:
           [ "$EXIT_HUGO" != "0" ] && echo "::error::Hugo build failed" && FAILED=1
           if [ "$EXIT_HUGO" == "0" ] && [ "$EXIT_SMOKE" != "0" ]; then
             echo "::error::Homepage smoke test failed" && FAILED=1
+          fi
+          if [ "$EXIT_HUGO" == "0" ] && [ "$EXIT_INNER" != "0" ]; then
+            echo "::error::Inner page smoke test failed" && FAILED=1
           fi
           if [ "$EXIT_HUGO" == "0" ] && [ "$EXIT_HTMLTEST" != "0" ]; then
             echo "::error::htmltest failed" && FAILED=1

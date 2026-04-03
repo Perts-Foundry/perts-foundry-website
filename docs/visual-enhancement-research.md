@@ -1,6 +1,7 @@
 # Visual Enhancement Research: Perts Foundry Website
 
 > **Researched:** 2026-03-25
+> **Note:** This baseline predates the inner-page visual polish work added in PR #45.
 > **Companion doc:** `docs/website-audit-and-roadmap.md` (tracks implementation status)
 
 Research into 2025-2026 web design trends for B2B consulting sites, with specific implementation guidance for a Hugo static site using the Blowfish v2 theme on Cloudflare Workers.
@@ -13,8 +14,8 @@ Research into 2025-2026 web design trends for B2B consulting sites, with specifi
 - **Color scheme:** `perts-forge-blue` (blue primary #3B82F6, violet secondary #8B5CF6, slate neutral)
 - **Default appearance:** Dark mode, no auto-switching
 - **Homepage layout:** `custom` (multi-section landing page via `layouts/partials/home/custom.html` dispatching to 7 sub-partials in `layouts/partials/homepage/`)
-- **Custom CSS:** ~1,450 lines in `assets/css/custom.css`, organized with comment-block sections (Global, Shared Components, Homepage, Scroll Reveal, Contact Page). Includes homepage carousels, card interactions, metric glow effects, fluid typography, process timeline/beam, scroll-reveal animations, and light/dark mode overrides. Accent colors use CSS custom properties (`--accent-blue`, `--accent-purple`, etc.) defined on `.homepage`.
-- **Existing customizations:** 16 layout files (home/custom.html, homepage/hero.html, homepage/tech-bar.html, homepage/problem.html, homepage/services-grid.html, homepage/metrics-band.html, homepage/featured-cases.html, homepage/process.html, homepage/final-cta.html, hero/basic.html, article-link/simple.html, extend-footer.html, render-link.html, contact/simple.html, extend-head-uncached.html, robots.txt)
+- **Custom CSS:** ~1,860 lines in `assets/css/custom.css`, organized with comment-block sections (Global, Shared Components, Homepage, Scroll Reveal, Contact Page). Includes homepage carousels, card interactions, metric glow effects, fluid typography, process timeline/beam, scroll-reveal animations, and light/dark mode overrides. Accent colors use CSS custom properties (`--accent-blue`, `--accent-purple`, etc.) defined on `.homepage`.
+- **Existing customizations:** 21 layout files (home/custom.html, homepage/hero.html, homepage/tech-bar.html, homepage/services-grid.html, homepage/metrics-band.html, homepage/featured-cases.html, homepage/process.html, homepage/final-cta.html, hero/basic.html, article-link/simple.html, extend-footer.html, render-link.html, contact/simple.html, extend-head-uncached.html, robots.txt, _default/list.html, case-studies/single.html, shortcodes/metric.html, shortcodes/tech-tags.html, shortcodes/steps.html, shortcodes/credentials.html)
 - **Additional color schemes:** `perts-ember.css`, `perts-violet-forge.css` (unused, available for section theming)
 - **Animation infrastructure:** `prefers-reduced-motion` already handled in `custom.css`
 

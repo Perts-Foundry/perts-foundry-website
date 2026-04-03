@@ -23,7 +23,10 @@ We bring structure and scalability to your infrastructure code. You get a module
 
 ## What an Engagement Looks Like
 
+{{< steps >}}
+
 1. **IaC Assessment** — We audit your current Terraform (or lack thereof): module structure, state management, provider configuration, and workflow gaps
 2. **Module Architecture** — We design a module library with versioning, testing, and a private registry so teams consume infrastructure patterns instead of copy-pasting
 3. **Workflow Automation** — We set up Atlantis or HCP Terraform for PR-based plan/apply, so every infrastructure change gets reviewed before it reaches any environment
 4. **Migration & Adoption** — We migrate existing click-ops or legacy IaC into the new structure and onboard teams to the self-service workflow
+   {{< /steps >}}

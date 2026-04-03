@@ -17,8 +17,6 @@ tags:
   - Containers
 ---
 
-_This case study has been anonymized at the client's request._
-
 ## The Challenge
 
 Google announced the deprecation of Google Container Registry (GCR), setting a hard deadline for all customers to migrate their container image infrastructure to Artifact Registry (GAR). For an enterprise data platform, this was not a simple cutover. Their registry footprint spanned over 5 petabytes of container images across dev, staging, and production environments in multiple regions, with CI/CD pipelines and running workloads continuously pulling images from GCR.
@@ -51,4 +49,6 @@ The discovery and triage phase provided a secondary benefit beyond the migration
 
 ## Key Technologies
 
-GCP, GCR, GAR
+{{< tech-tags "GCP, GCR, GAR" >}}
+
+_This case study has been anonymized at the client's request._

@@ -22,7 +22,10 @@ We find the waste and eliminate it, then help you build the practices to keep co
 
 ## What an Engagement Looks Like
 
+{{< steps >}}
+
 1. **Cost Analysis** — We audit your cloud environments for waste: idle resources, oversized instances, suboptimal storage tiers, and unused allocations
 2. **Savings Roadmap** — We prioritize opportunities by impact and effort, so your team sees the biggest wins first
 3. **Implementation** — We execute the changes, from storage migrations to cluster right-sizing, with Terraform PRs your team can review
 4. **FinOps Foundation** — We establish ongoing cost visibility and review practices so your team catches waste before it accumulates
+   {{< /steps >}}

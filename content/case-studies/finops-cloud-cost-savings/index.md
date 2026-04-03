@@ -18,8 +18,6 @@ tags:
   - FinOps
 ---
 
-_This case study has been anonymized at the client's request._
-
 ## The Challenge
 
 An enterprise data platform had accumulated significant cloud waste across their GCP environment with no systematic cost governance in place. Persistent disks were provisioned on premium PD-SSD tiers for workloads where high-performance storage was unnecessary. GKE clusters that had been stood up for projects long since completed were still running, consuming compute and networking resources with no active consumers.
@@ -55,4 +53,6 @@ Results were presented to engineering leadership, connecting the technical findi
 
 ## Key Technologies
 
-GCP, GKE, GCS, Terraform
+{{< tech-tags "GCP, GKE, GCS, Terraform" >}}
+
+_This case study has been anonymized at the client's request._

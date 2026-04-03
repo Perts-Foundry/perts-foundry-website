@@ -17,8 +17,6 @@ tags:
   - Renovatebot
 ---
 
-_This case study has been anonymized at the client's request._
-
 ## The Challenge
 
 An enterprise SaaS platform had grown its Terraform footprint to hundreds of projects across a multi-cloud environment. What had started as a manageable infrastructure-as-code practice had scaled past the point where ad hoc processes could sustain it.
@@ -53,4 +51,6 @@ The registry migration earned recognition across the organization for its qualit
 
 ## Key Technologies
 
-Terraform, HCP, Atlantis, GitHub, Renovatebot
+{{< tech-tags "Terraform, HCP, Atlantis, GitHub, Renovatebot" >}}
+
+_This case study has been anonymized at the client's request._

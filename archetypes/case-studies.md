@@ -14,10 +14,14 @@ params:
 tags: []
 ---
 
-*This case study has been anonymized at the client's request.*
-
 ## The Challenge
 
 ## Our Approach
 
 ## Results
+
+## Key Technologies
+
+{{< tech-tags "" >}}
+
+_This case study has been anonymized at the client's request._

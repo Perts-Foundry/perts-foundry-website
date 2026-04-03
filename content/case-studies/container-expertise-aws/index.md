@@ -58,4 +58,4 @@ This is the expertise that Perts Foundry was built on. Every container troublesh
 
 ## Key Technologies
 
-AWS, EKS, Kubernetes, ECS, ECR, Docker, Terraform, CloudFormation, VPC, Transit Gateway, Bash, Python, Linux
+{{< tech-tags "AWS, EKS, Kubernetes, ECS, ECR, Docker, Terraform, CloudFormation, VPC, Transit Gateway, Bash, Python, Linux" >}}

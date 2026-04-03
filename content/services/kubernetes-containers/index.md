@@ -26,7 +26,10 @@ We build and operate container platforms that your teams can actually use. Clust
 
 ## What an Engagement Looks Like
 
+{{< steps >}}
+
 1. **Platform Assessment** — We evaluate your current container infrastructure: cluster health, upgrade status, resource utilization, and team onboarding friction
 2. **Cluster Operations** — We handle upgrades, migrations, and maintenance so your clusters stay current and your teams stay unblocked
 3. **Team Onboarding** — We build documentation, Helm charts, and self-service patterns so new teams can deploy without bottlenecking on your platform team
 4. **Production Readiness** — We set up monitoring, resource limits, and runbooks so your team can diagnose and resolve container issues independently
+   {{< /steps >}}
