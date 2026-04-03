@@ -50,7 +50,7 @@
   {{ with $.Params.imagePosition | default $defaultPosition }}
     {{ $style = printf "object-position: %s;" . }}
   {{ end }}
-  <div style="border-radius: 0.375rem;">
+  <div style="border-radius: 0.375rem; overflow: hidden;">
     <img
       src="{{ . }}"
       alt=""
@@ -58,7 +58,7 @@
       loading="eager"
       decoding="async"
       fetchpriority="high"
-      class="w-full nozoom"
-      style="width: 100%; max-height: 384px;{{ with $style }} {{ . }}{{ end }}">
+      class="w-full nozoom hero-feature-img"
+      style="width: 100%;{{ with $style }} {{ . }}{{ end }}">
   </div>
 {{ end }}

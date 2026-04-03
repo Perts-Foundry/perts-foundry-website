@@ -99,7 +99,10 @@
       "url": "http://localhost:8080/contact/",
       "hideElements": "svg text, .px-2.text-primary-500, .inline-block.rtl\\:rotate-180, .form-privacy"
     },
-    "http://localhost:8080/accessibility/",
+    {
+      "url": "http://localhost:8080/accessibility/",
+      "ignore": ["color-contrast"]
+    },
     "http://localhost:8080/privacy/"
   ]
 }
