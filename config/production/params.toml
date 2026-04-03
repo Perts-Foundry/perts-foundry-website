@@ -1,7 +1,5 @@
 # Production-specific overrides
 
-# Uncomment after enabling Cloudflare Web Analytics
-# [analytics]
-#   [analytics.cloudflare]
-#     accountTag = ""
-#     token = ""
+# Cloudflare Web Analytics is enabled via zone-based auto-injection in
+# the Cloudflare dashboard (Web Analytics > pertsfoundry.com). No code
+# configuration is required. EU visitor data is excluded.
