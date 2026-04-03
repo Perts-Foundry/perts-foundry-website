@@ -1,8 +1,8 @@
 # Perts Foundry Website: Audit & Roadmap
 
-> **Last audited:** 2026-03-25
+> **Last updated:** 2026-04-03
 > **Reference:** `docs/building-a-credible-solo-devops-consulting-website.md`
-> **Visual research:** `docs/visual-enhancement-research.md`
+> **Visual research:** `docs/archive/visual-enhancement-research.md`
 
 This document tracks every gap between the current website and a credible, launch-ready MVP for a solo DevOps consulting business. Items are prioritized and meant to be worked through over time. Mark items `[x]` as they are completed.
 
@@ -76,12 +76,16 @@ These actively damage credibility or are red flags per the guide. Must fix befor
 
 ---
 
-### C4. No analytics configured
+### C4. Cloudflare Web Analytics: enable, configure, and utilize
 
 - [ ] Create Cloudflare Web Analytics site in dashboard (get accountTag and token)
 - [ ] Uncomment and populate `[analytics.cloudflare]` in `config/production/params.toml`
+- [ ] Verify analytics beacon loads on production after deploy
+- [ ] Review Cloudflare Web Analytics dashboard features (top pages, referrers, browsers, countries, Core Web Vitals)
+- [ ] Establish a baseline review cadence (e.g., weekly or monthly check-in)
+- [ ] Identify which metrics matter most for a consulting site (page views on services/case studies, contact page visits, referral sources)
 
-**Why it matters:** Zero visibility into whether anyone visits the site or which pages they view. CSP already allows `https://static.cloudflareinsights.com`.
+**Why it matters:** Zero visibility into whether anyone visits the site or which pages they view. Without analytics, every other marketing or content decision is guesswork. CSP already allows `https://static.cloudflareinsights.com`.
 
 **Files:** `config/production/params.toml`
 
@@ -142,15 +146,20 @@ Agile Coaching is the strongest cut candidate (furthest from DevOps core).
 
 ---
 
-### H4. No LinkedIn or social links
+### H4. Social media links strategy
 
-- [ ] Add founder's LinkedIn and personal GitHub to `author.links[]` in `languages.en.toml`
-- [ ] Add LinkedIn to the Contact page
-- [ ] Ensure LinkedIn profile messaging is consistent with website
+- [ ] Decide on LinkedIn approach: create a Perts Foundry company page, reactivate personal profile, or skip LinkedIn entirely
+- [ ] Evaluate personal visibility and privacy tradeoffs for each option
+- [ ] If proceeding with LinkedIn: create page/profile, ensure messaging matches website
+- [ ] Add chosen social links to `author.links[]` in `languages.en.toml`
+- [ ] Add social links to the Contact page
+- [ ] Consider GitHub org link as a low-risk starting point (no personal exposure)
 
-**Why it matters:** Enterprise procurement teams cross-reference website claims against LinkedIn.
+**Why it matters:** Enterprise procurement teams cross-reference website claims against LinkedIn and other social profiles. Social presence decisions must be weighed against personal privacy preferences.
 
-**Files:** `config/_default/languages.en.toml`, `content/contact/index.md`
+**Current state:** `author.links = []` (empty). Personal LinkedIn is hibernated. No business LinkedIn page exists. GitHub org (Perts-Foundry) is active.
+
+**Files:** `config/_default/languages.en.toml`, `layouts/contact/simple.html`
 
 ---
 
@@ -209,16 +218,77 @@ Resolved by the About page rewrite. "We" on other pages reads as professional co
 
 ---
 
+### M6. SEO optimization audit
+
+- [ ] Audit current meta descriptions across all pages for keyword targeting and length (150-160 chars)
+- [ ] Review page titles for keyword placement and consistency
+- [ ] Add ProfessionalService JSON-LD schema to homepage (supersedes L1; template code below)
+- [ ] Set `defaultSocialImage` in `params.toml` so all pages have OG images when shared (supersedes L2)
+- [ ] Regenerate homepage OG image (current `og-homepage.png` shows old "Ship faster..." tagline instead of "Build. Scale. Own.")
+- [ ] Review internal linking strategy (do service pages link to relevant case studies and vice versa?)
+- [ ] Check that `robots.txt` and `sitemap.xml` are correctly generated and submitted to Google Search Console
+- [ ] Evaluate whether page load performance (Core Web Vitals) needs attention
+- [ ] Consider adding `alt` text audit for all images across the site
+
+**ProfessionalService JSON-LD** (create `layouts/partials/extend-head.html`):
+
+```html
+{{- if .IsHome }}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "ProfessionalService",
+  "name": "{{ site.Title }}",
+  "url": {{ site.Home.Permalink }},
+  "description": "{{ site.Home.Description | safeJS }}",
+  "logo": {
+    "@type": "ImageObject",
+    "url": "{{ "img/logo/perts-foundry-square-dark-1024.png" | absURL }}"
+  },
+  "email": "contact@pertsfoundry.com",
+  "sameAs": [
+    "https://github.com/Perts-Foundry"
+  ],
+  "knowsAbout": [
+    "DevOps", "Cloud Infrastructure", "CI/CD", "Kubernetes",
+    "Terraform", "AWS", "GCP", "Infrastructure as Code"
+  ]
+}
+</script>
+{{- end }}
+```
+
+**Why it matters:** The site has solid SEO fundamentals (sitemap, robots.txt, meta descriptions, proper permalinks, breadcrumb structured data) but has not had a dedicated optimization pass. Organic search is a primary discovery channel for consulting services.
+
+**Files:** Content front matter across `content/`, `config/_default/params.toml`, `layouts/partials/extend-head.html` (new), `static/img/`
+
+---
+
+### M7. Review AI-related marketing and messaging
+
+- [ ] Audit all content pages for AI/automation messaging and positioning
+- [ ] Evaluate whether current AI references align with market positioning and target audience expectations
+- [ ] Review service descriptions for AI/ML-adjacent language (DevOps automation, intelligent pipelines, etc.)
+- [ ] Decide on desired AI narrative: lean into it, keep it neutral, or minimize it
+- [ ] Update copy across affected pages based on the decision
+- [ ] Ensure consistency of AI messaging between homepage, services, case studies, and about page
+
+**Why it matters:** AI positioning in the DevOps/cloud consulting space is evolving rapidly. The messaging should reflect a deliberate strategy rather than inherited phrasing from initial content creation.
+
+**Files:** `content/` (multiple pages), `content/_index.md` (homepage front matter)
+
+---
+
 ## Low Priority / Nice-to-Have
 
 ### L1. No structured data / JSON-LD
 
 - [x] Enable breadcrumb structured data (`enableStructuredBreadcrumbs = true`)
-- [ ] Add ProfessionalService or Organization schema via `layouts/partials/extend-head.html`
+- [ ] Add ProfessionalService or Organization schema via `layouts/partials/extend-head.html` (see M6)
 
 ### L2. No custom Open Graph images
 
-- [ ] Create 1200x630px default OG image for link previews
+- [ ] Create 1200x630px default OG image for link previews (see M6)
 
 ### L3. Blog post directory naming
 
@@ -289,7 +359,7 @@ Every service and case study has a `description` in front matter, but only title
 
 ## Visual Enhancement Roadmap
 
-See `docs/visual-enhancement-research.md` for detailed research with techniques, implementation guidance, and browser support.
+See `docs/archive/visual-enhancement-research.md` for detailed research with techniques, implementation guidance, and browser support.
 
 ### Tier 1: Quick Wins (CSS-only)
 
@@ -332,7 +402,7 @@ The minimum changes to pass the "is this person legit?" test:
 | 2 | Disable blog (C2) | Removes active credibility damage | Low |
 | 3 | Add privacy policy (C3) | Closes procurement checklist gap | Low |
 | 4 | Enable analytics (C4) | Enables measuring effectiveness | Low |
-| 5 | Add LinkedIn link (H4) | Enables cross-referencing | Low |
+| 5 | Decide on social links strategy (H4) | Enables cross-referencing (if pursued) | Medium |
 | 6 | HSTS max-age to 1 year (M1) | Security header fix | Trivial |
 
 ---
