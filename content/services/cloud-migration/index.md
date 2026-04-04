@@ -2,12 +2,14 @@
 title: "Cloud Migration Consulting"
 description: "Plan and execute migrations across cloud services, platforms, and providers with minimal disruption"
 slug: "cloud-migration"
-weight: 7
+weight: 8
 tags:
   - AWS
   - GCP
   - Terraform
   - Containers
+  - Cursor
+  - Claude
 draft: false
 faqs:
   - question: "How do you migrate production workloads without downtime?"
@@ -35,6 +37,7 @@ We plan and execute migrations with a track record of zero downtime across produ
 - **Kubernetes** — EKS cluster upgrades across multiple clusters, with dependency assessment and downstream impact analysis
 - **Snowflake** — multi-wave production account migrations across cloud providers and regions, including grant management for 15+ Terraform projects
 - **Docker** — container registry migrations (GCR to GAR) across 5+ petabytes of resources with zero downtime
+- **Cursor & Claude** — AI-assisted development for large-scale migration planning and Terraform/Snowflake configuration across cloud providers
 
 ## What an Engagement Looks Like
 

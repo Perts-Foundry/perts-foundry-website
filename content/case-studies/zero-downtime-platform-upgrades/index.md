@@ -17,6 +17,9 @@ tags:
   - Azure
   - EKS
   - Kubernetes
+  - Cursor
+  - Claude
+  - AI
 ---
 
 ## The Challenge
@@ -31,7 +34,7 @@ The stakes were straightforward but unforgiving. These upgrades had to happen ac
 
 We focused on two parallel workstreams:
 
-- **Snowflake Infrastructure Upgrades** -- We upgraded approximately 15 production Snowflake Terraform projects spanning AWS, GCP, and Azure. Each project required careful assessment of its Terraform configuration, provider compatibility, and downstream dependencies before the upgrade could be executed. Beyond the individual project upgrades, we completed a multi-wave production Snowflake account migration across cloud providers and regions, sequencing the waves to maintain service continuity throughout. This was the longer effort of the two workstreams, spanning approximately six months.
+- **Snowflake Infrastructure Upgrades** -- We upgraded approximately 15 production Snowflake Terraform projects spanning AWS, GCP, and Azure, using AI-assisted development tools (Cursor and Claude) to accelerate the per-project analysis and configuration work. Each project required careful assessment of its Terraform configuration, provider compatibility, and downstream dependencies before the upgrade could be executed. Beyond the individual project upgrades, we completed a multi-wave production Snowflake account migration across cloud providers and regions, sequencing the waves to maintain service continuity throughout. This was the longer effort of the two workstreams, spanning approximately six months.
 
 - **EKS Cluster Assessment and Upgrades** -- We assessed all 5 AWS EKS clusters against their end-of-support deadlines and downstream dependencies. The assessment was not just about upgrading; it was about understanding whether each cluster still justified its existence. During this process, we determined that 2 of the 5 clusters were no longer needed, as the workloads they had originally been provisioned for had been retired or moved elsewhere. We decommissioned them to eliminate unnecessary cost and operational overhead. The remaining 3 clusters required upgrades through multiple major versions, which meant carefully stepping through each version boundary, validating workload compatibility, addressing breaking changes and API deprecations, and confirming stability before proceeding to the next version, all while keeping production workloads running.
 
@@ -49,7 +52,7 @@ This was keep-the-lights-on work at its most demanding: not a single flashy migr
 
 ## Key Technologies
 
-{{< tech-tags "Snowflake, Terraform, AWS, GCP, Azure, EKS, Kubernetes" >}}
+{{< tech-tags "Snowflake, Terraform, AWS, GCP, Azure, EKS, Kubernetes, Cursor, Claude" >}}
 
 _This case study has been anonymized at the client's request._
 

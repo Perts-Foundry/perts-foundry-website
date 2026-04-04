@@ -159,9 +159,9 @@ Do not write any pages to disk until the user has reviewed the report (batch) or
 - Do not remove existing properties (`showDate: false`, `showAuthor: false`)
 - Inside `cascade:` block: `showHero: true`, `heroStyle: basic` (hero images are standard for case studies)
 
-**2. Backfill weight on existing pages.** If existing case study pages lack a `weight` field and `orderByWeight: true` is being added, assign weights to those pages. Note backfilled weights in the Phase 4 report.
+**2. Backfill weight on existing pages.** If existing case study pages lack a `weight` field and `orderByWeight: true` is being added, assign weights to those pages. Note backfilled weights in the Phase 5 report.
 
-**3. Check for featured images.** Since the cascade sets `showHero: true`, every case study page bundle needs a `featured.*` image. Note any page bundles that lack one in the Phase 4 report as an action item.
+**3. Check for featured images.** Since the cascade sets `showHero: true`, every case study page bundle needs a `featured.*` image. New pages will have images processed in Phase 4. Note any existing page bundles that lack one in the Phase 5 report as an action item.
 
 **4. Update `.pa11yci` with new case study URLs.** For each case study that will be generated, add its URL to the `urls` array in `.pa11yci`. Use the same format as existing service page entries:
 ```json
@@ -176,7 +176,7 @@ This ensures new pages have accessibility test coverage in CI. If a case study i
 
 For each approved candidate, create a page at `content/case-studies/<slug>/index.md`.
 
-Never generate content based on assumed data. If a highlight is ambiguous or a metric cannot be verified, flag it in the Phase 4 report rather than inventing content.
+Never generate content based on assumed data. If a highlight is ambiguous or a metric cannot be verified, flag it in the Phase 5 report rather than inventing content.
 
 **Slug conventions:** Derive slugs from the primary theme or outcome. Keep to 3-5 words in kebab-case (e.g., `finops-cloud-cost-savings`, `zero-downtime-registry-migration`). Slugs must be stable across re-runs; once a case study exists, reuse its slug. Present proposed slugs during Phase 2 for user confirmation.
 
@@ -339,7 +339,79 @@ If 4+ technologies are involved, add after Results:
 
 Cross-reference each technology against `work.yaml` highlights for the specific work being described. Only claim technologies with real experience backing. Cross-reference with skills.yaml and certificates.yaml for contextual credibility only, not for listing.
 
-## Phase 4: Verify
+## Phase 4: Featured Image Processing
+
+After page generation, process featured images for any new page bundles that lack a `featured.jpg`.
+
+### Image specifications
+
+All case study featured images follow these standards:
+
+| Property | Value |
+|----------|-------|
+| Dimensions | 1400x781 pixels |
+| Format | JPEG, quality 85 |
+| Target file size | 200-400KB |
+| Logo overlay | `static/img/logo/perts-foundry-icon-64.png`, southeast gravity |
+| Watermark cover | 100x100px dark rectangle (#050710) under the logo to cover AI generator watermarks |
+
+### Workflow
+
+For each new page missing a `featured.jpg`:
+
+**Step 1: Analyze visual style.** Read 3-4 existing case study featured images (`content/case-studies/*/featured.jpg`) to identify the consistent visual style. The established pattern is:
+- Dark navy/black backgrounds
+- Glowing neon accents in blue and purple/violet tones
+- Futuristic 3D perspective renders
+- Symbolic metaphors for the case study's concept (not literal depictions)
+- No text overlays, no logos, no people
+- 16:9 aspect ratio
+
+**Step 2: Generate image prompt.** Craft a prompt for the user to use with Google Gemini (or another AI image generator). The prompt must:
+- Describe a symbolic 3D visualization that represents the case study's theme
+- Specify the dark navy-black background with blue/violet neon glow palette
+- Request cinematic lighting, 3D perspective, photorealistic render style
+- Explicitly state: "No text, no logos, no letters, no people. 16:9 aspect ratio."
+- Avoid requesting any literal text, abbreviations, or acronyms in the image
+
+Present the prompt to the user and ask them to generate the image and provide the file path.
+
+**Step 3: Process the image.** When the user provides the generated image path, process it using a Node.js script with the sharp library (do not use sharp CLI, it has unreliable argument parsing for composite operations):
+
+```javascript
+node -e "
+const sharp = require('sharp');
+sharp('<USER_PROVIDED_PATH>')
+  .resize(1400, 781, { fit: 'cover' })
+  .composite([
+    {
+      input: {
+        create: {
+          width: 100,
+          height: 100,
+          channels: 3,
+          background: { r: 5, g: 7, b: 16 }
+        }
+      },
+      gravity: 'southeast'
+    },
+    {
+      input: 'static/img/logo/perts-foundry-icon-64.png',
+      gravity: 'southeast'
+    }
+  ])
+  .jpeg({ quality: 85 })
+  .toFile('content/case-studies/<slug>/featured.jpg')
+  .then(info => console.log('Done:', JSON.stringify(info)))
+  .catch(err => console.error('Error:', err.message));
+"
+```
+
+The two-layer composite approach is essential: the dark rectangle blanks out any AI generator watermark in the corner, then the PF icon sits cleanly on top.
+
+**Step 4: Verify.** Show the processed image to the user for approval. If the watermark is still visible or the image needs adjustment, re-process. Check the file size is within the 200-400KB range.
+
+## Phase 5: Verify
 
 ### Run validation checks
 
@@ -364,8 +436,8 @@ After generating pages and passing validation, present a structured report:
 - N services now have case study backing
 
 ### Pages Created
-| File Path | Title | Word Count | Has Metrics Table |
-|-----------|-------|------------|-------------------|
+| File Path | Title | Word Count | Has Metrics Table | Has Image |
+|-----------|-------|------------|-------------------|-----------|
 
 ### Pages Updated
 | File Path | What Changed |
@@ -378,6 +450,15 @@ After generating pages and passing validation, present a structured report:
 ### Changes to _index.md
 - [properties added or modified]
 
+### Changes to .pa11yci
+- [URLs added or removed]
+
+### Documentation Maintenance
+Flag any of these that apply:
+- [ ] `docs/website-audit-and-roadmap.md` references stale case study counts (update "What's Already Strong" table, M6)
+- [ ] `CLAUDE.md` needs updates for new conventions introduced by generated pages
+- [ ] pa11y-ci page count in roadmap "What's Already Strong" table is now stale
+
 ### Attention Needed
 - [Case studies without metrics tables (informational, not a deficiency)]
 - [Case studies without featured images]
@@ -385,7 +466,7 @@ After generating pages and passing validation, present a structured report:
 - [Technologies that could not be verified]
 - [Case studies outside 600-1,500 word range]
 - [Content generated from ambiguous data -- verify accuracy]
-- [Docs that reference case study counts or architecture that may now be stale (check docs/*.md)]
+- [Any formatting or lint fixes applied]
 
 ### Service Coverage
 | Case Study | Demonstrates Services |
@@ -403,8 +484,11 @@ After generating pages and passing validation, present a structured report:
 | List technologies without experience backing | Cross-reference every tech against work.yaml highlights | Credibility requires real experience |
 | Skip the anonymization notice | Include on every page (phrasing varies by entry type) | Trust signal for current and prospective clients |
 | Put after-only metrics in the before/after table | Weave after-only metrics into the narrative paragraph | Empty "before" cells undermine the table's credibility |
-| Generate content from assumed data | Flag gaps in Phase 4 rather than inventing details | Credibility depends on accuracy |
+| Generate content from assumed data | Flag gaps in Phase 5 rather than inventing details | Credibility depends on accuracy |
 | Leave orphaned directories after a slug change | Delete old directory before creating new | Orphaned pages create duplicate content |
 | Add identifying details beyond work.yaml | Use anonymized descriptors chosen during Phase 2 review | Respect SPEC-1 through SPEC-5 anonymization boundaries |
 | Use ungrounded pages as tone references | Only reference pages backed by work.yaml data | Fabricated content miscalibrates the generation |
 | Assume existing page structure is permanent | Discuss structural choices during Phase 2 | User may want to evolve the format |
+| Use sharp CLI for image compositing | Use `node -e` with the sharp library directly | sharp CLI has unreliable argument parsing for composite operations |
+| Skip the dark rectangle under the logo overlay | Always composite the 100x100 dark rect before the icon | AI generator watermarks extend beyond the icon bounds and poke through without it |
+| Generate image prompts with text or letters in them | Use symbolic, abstract 3D visuals only | Text in AI-generated images renders poorly and breaks the established visual style |

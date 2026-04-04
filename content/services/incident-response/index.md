@@ -2,7 +2,7 @@
 title: "Incident Response & Reliability Consulting"
 description: "Lead incident resolution and build processes to prevent recurrence"
 slug: "incident-response"
-weight: 6
+weight: 7
 tags:
   - GCP
   - AWS

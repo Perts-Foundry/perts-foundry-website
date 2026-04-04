@@ -30,7 +30,8 @@
   "knowsAbout": [
     "DevOps", "Cloud Infrastructure", "CI/CD", "Kubernetes",
     "Terraform", "AWS", "GCP", "Infrastructure as Code",
-    "DevSecOps", "FinOps"
+    "DevSecOps", "FinOps", "AI-Augmented Engineering",
+    "AI Code Review", "AI Developer Tools"
   ],
   "contactPoint": {
     "@type": "ContactPoint",
@@ -54,7 +55,7 @@
     "name": {{ site.Title | jsonify }},
     "url": "{{ site.Home.Permalink }}"
   },
-  "serviceType": "DevOps Consulting",
+  "serviceType": {{ with .Params.serviceType }}{{ . | jsonify }}{{ else }}"DevOps Consulting"{{ end }},
   "url": "{{ .Permalink }}"
 }
 </script>

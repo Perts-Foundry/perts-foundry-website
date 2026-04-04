@@ -18,6 +18,10 @@
     },
     "http://localhost:8080/services/",
     {
+      "url": "http://localhost:8080/services/ai-augmented-engineering/",
+      "ignore": ["color-contrast"]
+    },
+    {
       "url": "http://localhost:8080/services/cloud-infrastructure/",
       "ignore": ["color-contrast"]
     },
@@ -55,6 +59,14 @@
     },
     "http://localhost:8080/blog/",
     "http://localhost:8080/case-studies/",
+    {
+      "url": "http://localhost:8080/case-studies/ai-accelerated-infrastructure-delivery/",
+      "ignore": ["color-contrast"]
+    },
+    {
+      "url": "http://localhost:8080/case-studies/enterprise-ai-tooling-adoption/",
+      "ignore": ["color-contrast"]
+    },
     {
       "url": "http://localhost:8080/case-studies/finops-cloud-cost-savings/",
       "ignore": ["color-contrast"]

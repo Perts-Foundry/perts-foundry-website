@@ -2,7 +2,7 @@
 title: "Kubernetes & Container Consulting"
 description: "Deploy, manage, and troubleshoot containerized workloads at scale"
 slug: "kubernetes-containers"
-weight: 4
+weight: 5
 tags:
   - Kubernetes
   - EKS

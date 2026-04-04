@@ -99,9 +99,9 @@ Significant gaps that meaningfully weaken the site. Address soon after launch.
 
 ### H1. ~~Too many services (9 listed; guide recommends 3-5)~~ Closed
 
-- [x] Decide on consolidation strategy: **keep all 9**. An exhaustive list is preferred over consolidation.
+- [x] Decide on consolidation strategy: **keep all services**. An exhaustive list is preferred over consolidation.
 
-**Resolved 2026-04-03:** Decision made to keep all 9 services. The breadth reflects actual capability and the exhaustive listing is intentional.
+**Resolved 2026-04-03:** Decision made to keep all services. The breadth reflects actual capability and the exhaustive listing is intentional. AI-Augmented Engineering added as a 10th service 2026-04-04 (see M7).
 
 ---
 
@@ -116,7 +116,7 @@ Significant gaps that meaningfully weaken the site. Address soon after launch.
 
 **Why it matters:** The guide prescribes certification badges, testimonials, "How I Work" section, and specific metrics.
 
-**Partially resolved 2026-03-30:** Custom multi-section homepage with metrics band ($125K+, 200+, Zero), 4-step "How We Work" process timeline, tech trust bar, services grid, featured case studies, and dual CTAs. Certification badge images added 2026-04-03 (see M2). Remaining: testimonials.
+**Partially resolved 2026-03-30:** Custom multi-section homepage with metrics band ($125K+, 200+, Zero, 30+), 4-step "How We Work" process timeline, tech trust bar, services grid, featured case studies, and dual CTAs. Certification badge images added 2026-04-03 (see M2). AI metrics and messaging added 2026-04-04 (see M7). Remaining: testimonials.
 
 **Files:** `content/_index.md`, `data/metrics.toml`, `data/process.toml`, `data/technologies.toml`, `data/certifications.toml`, `layouts/partials/homepage/`, `assets/img/badges/`
 
@@ -236,18 +236,20 @@ Resolved by the About page rewrite. "We" on other pages reads as professional co
 
 ---
 
-### M7. Review AI-related marketing and messaging
+### M7. ~~Review AI-related marketing and messaging~~ Resolved
 
-- [ ] Audit all content pages for AI/automation messaging and positioning
-- [ ] Evaluate whether current AI references align with market positioning and target audience expectations
-- [ ] Review service descriptions for AI/ML-adjacent language (DevOps automation, intelligent pipelines, etc.)
-- [ ] Decide on desired AI narrative: lean into it, keep it neutral, or minimize it
-- [ ] Update copy across affected pages based on the decision
-- [ ] Ensure consistency of AI messaging between homepage, services, case studies, and about page
+- [x] Audit all content pages for AI/automation messaging and positioning
+- [x] Evaluate whether current AI references align with market positioning and target audience expectations
+- [x] Review service descriptions for AI/ML-adjacent language (DevOps automation, intelligent pipelines, etc.)
+- [x] Decide on desired AI narrative: lean into it, keep it neutral, or minimize it
+- [x] Update copy across affected pages based on the decision
+- [x] Ensure consistency of AI messaging between homepage, services, case studies, and about page
 
 **Why it matters:** AI positioning in the DevOps/cloud consulting space is evolving rapidly. The messaging should reflect a deliberate strategy rather than inherited phrasing from initial content creation.
 
-**Files:** `content/` (multiple pages), `content/_index.md` (homepage front matter)
+**Resolved 2026-04-04:** Full AI expert positioning overhaul. Decision: AI-Augmented Engineering as co-equal pillar alongside DevOps/cloud. Tech trust bar restructured (AI tools promoted to page 2 with Claude, Claude Code, Cursor, GitHub Copilot, CodeRabbit). 4th homepage metric added (30+ Repos with AI Code Review). Homepage hero subheadline and problem statement updated with AI messaging. About page bio expanded with AI expertise (CodeRabbit rollout, engineer coaching, AI-augmented workflows). Four service pages updated with AI tool references (CI/CD, IaC, Cloud Migration, DevSecOps). JSON-LD `knowsAbout` expanded with AI terms; `serviceType` made configurable via front matter. Author headline, services section description, and case studies section description all updated. New AI service page and case studies to be generated via `/generate-services` and `/generate-case-studies` commands.
+
+**Files:** `data/technologies.toml`, `data/metrics.toml`, `content/_index.md`, `content/about/index.md`, `content/services/{cicd-automation,infrastructure-as-code,cloud-migration,devsecops-devops}/index.md`, `content/services/_index.md`, `content/case-studies/_index.md`, `config/_default/languages.en.toml`, `layouts/partials/extend-head-uncached.html`, `assets/icons/coderabbit.svg`
 
 ---
 
