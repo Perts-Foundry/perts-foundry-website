@@ -97,23 +97,11 @@ These actively damage credibility or are red flags per the guide. Must fix befor
 
 Significant gaps that meaningfully weaken the site. Address soon after launch.
 
-### H1. Too many services (9 listed; guide recommends 3-5)
+### H1. ~~Too many services (9 listed; guide recommends 3-5)~~ Closed
 
-- [ ] Decide on consolidation strategy (current decision: keep all 9 for now)
+- [x] Decide on consolidation strategy: **keep all 9**. An exhaustive list is preferred over consolidation.
 
-Nine services dilutes positioning and raises questions about solo expertise breadth. Possible future grouping:
-
-| Consolidated Service | Merges |
-|---------------------|--------|
-| Cloud Infrastructure and IaC | Cloud Infrastructure + Infrastructure as Code |
-| CI/CD and Automation | Stays as-is |
-| Kubernetes and Containers | Stays as-is, absorbs container migration |
-| Security and Compliance | DevSecOps (renamed) |
-| Cloud Operations | FinOps + Incident Response + Cloud Migration |
-
-Agile Coaching is the strongest cut candidate (furthest from DevOps core).
-
-**Files:** `content/services/`, `.pa11yci`
+**Resolved 2026-04-03:** Decision made to keep all 9 services. The breadth reflects actual capability and the exhaustive listing is intentional.
 
 ---
 
@@ -148,20 +136,18 @@ Agile Coaching is the strongest cut candidate (furthest from DevOps core).
 
 ---
 
-### H4. Social media links strategy
+### H4. ~~Social media links strategy~~ Resolved
 
-- [ ] Decide on LinkedIn approach: create a Perts Foundry company page, reactivate personal profile, or skip LinkedIn entirely
-- [ ] Evaluate personal visibility and privacy tradeoffs for each option
-- [ ] If proceeding with LinkedIn: create page/profile, ensure messaging matches website
-- [ ] Add chosen social links to `author.links[]` in `languages.en.toml`
-- [ ] Add social links to the Contact page
-- [ ] Consider GitHub org link as a low-risk starting point (no personal exposure)
+- [x] Decide on LinkedIn approach: skip LinkedIn entirely
+- [x] Evaluate personal visibility and privacy tradeoffs for each option
+- [x] Add chosen social links to `author.links[]` in `languages.en.toml`
+- [x] Consider GitHub org link as a low-risk starting point (no personal exposure)
 
 **Why it matters:** Enterprise procurement teams cross-reference website claims against LinkedIn and other social profiles. Social presence decisions must be weighed against personal privacy preferences.
 
-**Current state:** `author.links = []` (empty). Personal LinkedIn is hibernated. No business LinkedIn page exists. GitHub org (Perts-Foundry) is active.
+**Resolved 2026-04-03:** Decision: GitHub org only, no LinkedIn (privacy preference). Added `{ github = "https://github.com/Perts-Foundry" }` to `author.links[]` (emits `<link rel="me">` on all pages). Removed "Other Ways to Reach Us" card from contact page: plaintext email was a spam/scraping target, and GitHub is not a contact method. Email retained only in form error fallback for graceful degradation. Cleaned up orphaned `.contact-links` CSS.
 
-**Files:** `config/_default/languages.en.toml`, `layouts/contact/simple.html`
+**Files:** `config/_default/languages.en.toml`, `layouts/contact/simple.html`, `assets/css/custom.css`
 
 ---
 
