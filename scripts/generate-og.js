@@ -1,5 +1,3 @@
-#!/usr/bin/env node
-
 /**
  * Generate OG social preview images using existing brand assets.
  *
@@ -11,9 +9,16 @@
  *
  * The logo PNG is composited as-is from static/img/logo/. Only the background
  * gradient and tagline text are generated; the logo is never re-rendered.
+ *
+ * Font note: Text is rendered via librsvg using the system's fontconfig.
+ * Trebuchet MS (the brand font) is available on Windows/WSL via Windows fonts.
+ * On systems without it, Liberation Sans or DejaVu Sans are used as fallbacks,
+ * which may produce slightly different letter spacing. Verify output visually
+ * after generating on a new machine.
  */
 
 const sharp = require("sharp");
+const fs = require("fs");
 const path = require("path");
 
 const WIDTH = 1200;
@@ -24,17 +29,17 @@ const LOGO_SRC = path.join(
   "static/img/logo/perts-foundry-horizontal-light@2x.png",
 );
 
-// Brand-matched dark gradient with a subtle blue glow
+// Brand-matched dark gradient with a blue glow accent
 function backgroundSvg() {
   return Buffer.from(`<svg width="${WIDTH}" height="${HEIGHT}" xmlns="http://www.w3.org/2000/svg">
   <defs>
     <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#0c1222"/>
-      <stop offset="50%" stop-color="#1a1545"/>
-      <stop offset="100%" stop-color="#0c1222"/>
+      <stop offset="0%" stop-color="#0f1729"/>
+      <stop offset="50%" stop-color="#1a2548"/>
+      <stop offset="100%" stop-color="#131b36"/>
     </linearGradient>
-    <radialGradient id="glow" cx="50%" cy="40%" r="50%">
-      <stop offset="0%" stop-color="#3B82F6" stop-opacity="0.08"/>
+    <radialGradient id="glow" cx="50%" cy="45%" r="45%">
+      <stop offset="0%" stop-color="#3B82F6" stop-opacity="0.15"/>
       <stop offset="100%" stop-color="#3B82F6" stop-opacity="0"/>
     </radialGradient>
   </defs>
@@ -61,43 +66,48 @@ function textOverlay(lines) {
 }
 
 async function loadLogo(targetWidth) {
-  const resized = await sharp(LOGO_SRC)
+  if (!fs.existsSync(LOGO_SRC)) {
+    throw new Error(`Logo not found: ${LOGO_SRC}`);
+  }
+  const { data, info } = await sharp(LOGO_SRC)
     .resize({ width: targetWidth })
-    .toBuffer();
-  const { width, height } = await sharp(resized).metadata();
-  return { buffer: resized, width, height };
+    .toBuffer({ resolveWithObject: true });
+  return { buffer: data, width: info.width, height: info.height };
 }
 
 async function generateHomepage() {
-  const logo = await loadLogo(480);
+  const logo = await loadLogo(600);
 
-  // Center logo horizontally, place in upper third
-  const logoTop = 140;
+  // Center the content block (logo + taglines) vertically, offset up for URL
+  const contentHeight = logo.height + 60 + 56 + 20 + 28; // logo + gap + tagline + gap + sub
+  const contentTop = Math.round((HEIGHT - contentHeight) / 2) - 20;
+  const logoTop = contentTop;
   const logoLeft = Math.round((WIDTH - logo.width) / 2);
   const belowLogo = logoTop + logo.height;
 
+  // Keep in sync with content/_index.md hero.headline / hero.subheadline
   const text = textOverlay([
     {
-      y: belowLogo + 80,
-      size: 48,
+      y: belowLogo + 65,
+      size: 56,
       weight: 800,
       color: "#FFFFFF",
-      spacing: 3,
+      spacing: 4,
       text: "Build. Scale. Own.",
     },
     {
-      y: belowLogo + 125,
-      size: 24,
-      weight: 400,
-      color: "#94A3B8",
-      spacing: 1,
+      y: belowLogo + 110,
+      size: 28,
+      weight: 500,
+      color: "#60A5FA",
+      spacing: 2,
       text: "Your team, extended.",
     },
     {
-      y: 598,
-      size: 16,
+      y: 605,
+      size: 18,
       weight: 400,
-      color: "#475569",
+      color: "#64748B",
       spacing: 3,
       text: "pertsfoundry.com",
     },
@@ -115,26 +125,29 @@ async function generateHomepage() {
 }
 
 async function generateDefault() {
-  const logo = await loadLogo(420);
+  const logo = await loadLogo(540);
 
-  const logoTop = 170;
+  // Center logo + subtitle as a block
+  const contentHeight = logo.height + 50 + 36;
+  const contentTop = Math.round((HEIGHT - contentHeight) / 2) - 15;
+  const logoTop = contentTop;
   const logoLeft = Math.round((WIDTH - logo.width) / 2);
   const belowLogo = logoTop + logo.height;
 
   const text = textOverlay([
     {
-      y: belowLogo + 70,
-      size: 28,
+      y: belowLogo + 55,
+      size: 36,
       weight: 600,
-      color: "#94A3B8",
-      spacing: 4,
+      color: "#FFFFFF",
+      spacing: 5,
       text: "DevOps Consulting",
     },
     {
-      y: 598,
-      size: 16,
+      y: 605,
+      size: 18,
       weight: 400,
-      color: "#475569",
+      color: "#64748B",
       spacing: 3,
       text: "pertsfoundry.com",
     },
@@ -159,6 +172,6 @@ async function main() {
 }
 
 main().catch((err) => {
-  console.error("Error:", err.message);
+  console.error(err);
   process.exit(1);
 });
