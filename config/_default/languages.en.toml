@@ -12,4 +12,4 @@ title = "Perts Foundry"
   image = "img/author.jpg"
   headline = "DevOps consulting that helps scaling teams ship faster and spend less on infrastructure."
   email = "contact@pertsfoundry.com"
-  links = []
+  links = [{ github = "https://github.com/Perts-Foundry" }]
