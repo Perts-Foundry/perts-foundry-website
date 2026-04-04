@@ -26,7 +26,8 @@ defaultSocialImage = "img/og-default.png"
   showAuthor = false
   showBreadcrumbs = true
   showTableOfContents = true
-  showRelatedContent = false
+  showRelatedContent = true
+  relatedContentLimit = 3
 
 [list]
   showBreadcrumbs = true

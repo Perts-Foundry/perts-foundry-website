@@ -222,13 +222,17 @@ Resolved by the About page rewrite. "We" on other pages reads as professional co
 - [ ] Set up Google Search Console (verify via DNS TXT, submit sitemap)
 - [ ] Evaluate whether page load performance (Core Web Vitals) needs attention via PageSpeed Insights
 - [ ] Consider adding `alt` text audit for all images across the site
-- [ ] Add FAQ sections to service pages (3-5 questions each) with FAQPage JSON-LD
+- [x] Add FAQ sections to service pages (3-5 questions each) with FAQPage JSON-LD
 - [ ] Write 2-3 technical blog posts extracted from case study material (re-enable blog when ready)
-- [ ] Expand service page content to 500+ words (currently ~300)
+- [x] Expand service page content to 500+ words (FAQ sections push all pages to ~700+ words)
+- [x] Add DNS-prefetch hints for external domains (challenges.cloudflare.com, cal.com)
+- [x] Enable Blowfish `showRelatedContent` for tag-based cross-linking between services and case studies
 
-**Partially resolved 2026-04-03:** Meta descriptions audited and fixed (4 short descriptions expanded, 4 long case study descriptions trimmed). Service page titles updated to include "Consulting" keyword. Tags added to all 9 service pages. Organization JSON-LD added to homepage, Service JSON-LD added to all service pages via `extend-head-uncached.html`. `defaultSocialImage` set to logo fallback. Internal cross-links added between all 9 service pages and 10 case studies (bidirectional). Single site-wide OG image regenerated 2026-04-04 via `scripts/generate-og.js` (1200x630, logo + "Build. Scale. Own." tagline) at `assets/img/og-default.png`. Remaining: Google Search Console setup, FAQ sections, blog posts, content expansion.
+**Partially resolved 2026-04-03:** Meta descriptions audited and fixed (4 short descriptions expanded, 4 long case study descriptions trimmed). Service page titles updated to include "Consulting" keyword. Tags added to all 9 service pages. Organization JSON-LD added to homepage, Service JSON-LD added to all service pages via `extend-head-uncached.html`. `defaultSocialImage` set to logo fallback. Internal cross-links added between all 9 service pages and 10 case studies (bidirectional). Single site-wide OG image regenerated 2026-04-04 via `scripts/generate-og.js` (1200x630, logo + "Build. Scale. Own." tagline) at `assets/img/og-default.png`.
 
-**Files:** Content front matter across `content/`, `config/_default/params.toml`, `layouts/partials/extend-head-uncached.html`, `assets/img/og-default.png`
+**Updated 2026-04-04:** FAQ sections with FAQPage JSON-LD added to all 9 service pages (3-4 questions each, consulting-oriented buyer questions). FAQ shortcode (`{{< faqs >}}`) uses native `<details>/<summary>` accordion. DNS-prefetch hints added for cal.com and challenges.cloudflare.com. Related content enabled (`showRelatedContent = true`, `relatedContentLimit = 3`) for tag-based cross-linking. Remaining: Google Search Console setup, blog posts.
+
+**Files:** Content front matter across `content/`, `config/_default/params.toml`, `layouts/partials/extend-head-uncached.html`, `layouts/shortcodes/faqs.html`, `assets/css/custom.css`, `assets/img/og-default.png`
 
 ---
 

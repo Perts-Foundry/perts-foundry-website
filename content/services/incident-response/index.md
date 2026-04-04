@@ -9,6 +9,15 @@ tags:
   - GKE
   - Incident Response
 draft: false
+faqs:
+  - question: "Do you respond to active incidents, or only help us prepare?"
+    answer: "Both. We can embed during an active P0 to help stabilize and resolve, and we also build the processes, runbooks, and team readiness so your next incident is handled faster and more calmly."
+  - question: "What does a blameless postmortem actually look like?"
+    answer: "It focuses on what happened and why, not who made the mistake. We facilitate structured reviews that identify contributing factors across systems, processes, and communication, then track concrete action items to prevent recurrence."
+  - question: "How do you prevent alert fatigue while still catching real incidents?"
+    answer: "We tune alerting thresholds based on actual failure patterns and establish tiered severity levels with clear escalation criteria. The goal is fewer, more actionable alerts so your on-call team responds to signal, not noise."
+  - question: "How long does it take to see improvement in incident response?"
+    answer: "Teams typically see immediate improvement during the first facilitated incident or tabletop exercise. Building lasting organizational muscle memory requires consistent practice and process reinforcement over multiple incident cycles."
 ---
 
 ## The Problem
@@ -37,3 +46,5 @@ We bring structure to your incident response and build the muscle memory your te
    {{< /steps >}}
 
 **See this in action:** [Led P0 Incident Resolution Across Multi-Cloud Systems](/case-studies/incident-response-leadership/)
+
+{{< faqs >}}
