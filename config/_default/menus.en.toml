@@ -32,3 +32,10 @@
   name = "Privacy"
   pageRef = "privacy"
   weight = 20
+
+[[footer]]
+  name = "GitHub"
+  title = "GitHub"
+  url = "https://github.com/Perts-Foundry"
+  weight = 30
+  pre = "github"

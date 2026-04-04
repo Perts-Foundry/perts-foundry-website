@@ -5,7 +5,7 @@
     "chromeLaunchConfig": {
       "args": ["--no-sandbox"]
     },
-    "hideElements": "svg text, .px-2.text-primary-500, .inline-block.rtl\\:rotate-180"
+    "hideElements": "svg text, .inline-block.rtl\\:rotate-180, .homepage-hero-sub"
   },
   "urls": [
     {
@@ -83,10 +83,7 @@
       "url": "http://localhost:8080/case-studies/kubernetes-multi-tenancy-scaling/",
       "ignore": ["color-contrast"]
     },
-    {
-      "url": "http://localhost:8080/case-studies/cicd-modernization-defense/",
-      "ignore": ["color-contrast"]
-    },
+    "http://localhost:8080/case-studies/cicd-modernization-defense/",
     {
       "url": "http://localhost:8080/case-studies/agile-transformation-defense/",
       "ignore": ["color-contrast"]
@@ -97,7 +94,7 @@
     },
     {
       "url": "http://localhost:8080/contact/",
-      "hideElements": "svg text, .px-2.text-primary-500, .inline-block.rtl\\:rotate-180, .form-privacy"
+      "hideElements": "svg text, .inline-block.rtl\\:rotate-180, .homepage-hero-sub, .toc-right, .toc-inside, .form-privacy"
     },
     {
       "url": "http://localhost:8080/accessibility/",
