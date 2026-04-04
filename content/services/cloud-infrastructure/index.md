@@ -1,8 +1,13 @@
 ---
-title: "Cloud Infrastructure"
+title: "Cloud Infrastructure Consulting"
 description: "Design, build, and optimize cloud infrastructure across AWS, GCP, and multi-cloud environments"
 slug: "cloud-infrastructure"
 weight: 1
+tags:
+  - AWS
+  - GCP
+  - Terraform
+  - Kubernetes
 icon: "cloud"
 draft: false
 ---
@@ -31,3 +36,5 @@ We build cloud infrastructure that is fully codified, version-controlled, and re
 3. **Codify & Build** — We implement everything in Terraform with PR-based workflows, validating with your team at each step
 4. **Operational Handoff** — Your team gets documentation, runbooks, and pairing sessions so they own and operate the infrastructure confidently
    {{< /steps >}}
+
+**See this in action:** [Scaled Terraform Operations Across 200+ Projects](/case-studies/terraform-infrastructure-at-scale/) | [Zero-Downtime Platform Upgrades Across Three Cloud Providers](/case-studies/zero-downtime-platform-upgrades/)

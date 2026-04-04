@@ -1,8 +1,14 @@
 ---
-title: "DevSecOps & DevOps"
+title: "DevSecOps & DevOps Consulting"
 description: "Build DevOps foundations and embed security practices into infrastructure and delivery workflows"
 slug: "devsecops-devops"
 weight: 2
+tags:
+  - Vault
+  - Snyk
+  - Terraform
+  - AWS
+  - GCP
 icon: "shield"
 draft: false
 ---
@@ -32,3 +38,5 @@ We embed security into your infrastructure and delivery pipelines so it happens 
 3. **Controls Implementation** — We codify security controls into your infrastructure and pipelines: automated secret rotation, IAM guardrails, and policy-as-code
 4. **Continuous Compliance** — We set up automated auditing and alerting so your security posture stays strong without manual intervention
    {{< /steps >}}
+
+**See this in action:** [Drove the Shift from DevOps to DevSecOps](/case-studies/devops-to-devsecops-transformation/)

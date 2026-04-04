@@ -3,6 +3,11 @@ title: "FinOps & Cloud Cost Optimization"
 description: "Identify and eliminate cloud waste to reduce infrastructure spend"
 slug: "finops"
 weight: 8
+tags:
+  - GCP
+  - AWS
+  - Terraform
+  - FinOps
 draft: false
 ---
 
@@ -29,3 +34,5 @@ We find the waste and eliminate it, then help you build the practices to keep co
 3. **Implementation** — We execute the changes, from storage migrations to cluster right-sizing, with Terraform PRs your team can review
 4. **FinOps Foundation** — We establish ongoing cost visibility and review practices so your team catches waste before it accumulates
    {{< /steps >}}
+
+**See this in action:** [Saved Over $125,000 in Annual Cloud Spend](/case-studies/finops-cloud-cost-savings/)
