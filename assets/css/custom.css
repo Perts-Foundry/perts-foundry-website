@@ -1429,7 +1429,7 @@ html:not(.dark) .tech-label {
 
 /* ===== Contact Page ===== */
 
-/* Contact page layout */
+/* Contact page layout (form first, CTA second in both mobile and desktop) */
 .contact-layout {
   display: flex;
   flex-direction: column;
@@ -1443,13 +1443,10 @@ html:not(.dark) .tech-label {
     gap: 2rem;
   }
   .contact-info {
-    flex: 0 0 45%;
+    flex: 0 0 40%;
     display: flex;
     flex-direction: column;
     gap: 1.5rem;
-  }
-  .contact-info .contact-card:last-child {
-    margin-top: auto;
   }
   .contact-form-column {
     flex: 1;
@@ -1473,6 +1470,8 @@ html:not(.dark) .tech-label {
 
 .contact-form-column {
   min-width: 0;
+  max-width: 100%;
+  overflow-x: hidden;
 }
 
 /* Contact cards */
@@ -1582,43 +1581,29 @@ html:not(.dark) .contact-cta-wrapper {
   border-top-color: rgba(var(--color-slate-base), 0.25);
 }
 
-/* Contact links */
-.contact-links {
-  list-style: none;
-  padding: 0;
-  margin: 0;
+
+/* Turnstile widget: prevent overflow on narrow screens.
+   The iframe renders at a fixed 300px; on viewports narrower than ~400px
+   the card content area is smaller than 300px. CSS max-width/overflow
+   cannot resize the iframe contents, so we scale visually. */
+.cf-turnstile {
+  max-width: 100%;
 }
 
-.contact-links li {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  padding: 0.75rem 0;
-  min-height: 2.75rem;
-  font-size: 0.9375rem;
+@media (max-width: 400px) {
+  .cf-turnstile {
+    transform: scale(0.85);
+    transform-origin: left top;
+    margin-bottom: -10px;
+  }
 }
 
-.contact-links li strong {
-  color: rgb(var(--color-neutral-400));
-  min-width: 3.5rem;
-}
-
-.contact-links a {
-  color: rgb(var(--color-primary-400));
-  text-decoration: none;
-}
-
-.contact-links a:hover,
-.contact-links a:focus-visible {
-  text-decoration: underline;
-}
-
-html:not(.dark) .contact-links li strong {
-  color: rgb(var(--color-neutral-600));
-}
-
-html:not(.dark) .contact-links a {
-  color: rgb(var(--color-primary-700));
+@media (min-width: 401px) and (max-width: 500px) {
+  .cf-turnstile {
+    transform: scale(0.92);
+    transform-origin: left top;
+    margin-bottom: -5px;
+  }
 }
 
 /* Contact form */

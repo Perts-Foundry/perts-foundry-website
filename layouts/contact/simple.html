@@ -22,65 +22,7 @@
     </section>
 
     <div class="contact-layout">
-      {{/* Left column: scheduling, process, contact info */}}
-      <div class="contact-info">
-        <div class="contact-card contact-card--cta" data-reveal>
-          <h2 class="text-xl font-bold text-neutral-900 dark:text-neutral mb-2">
-            Schedule a Discovery Meeting
-          </h2>
-          <p class="text-sm text-neutral-500 dark:text-neutral-400 mb-4">
-            The fastest way to get started. 30 minutes, no commitment.
-          </p>
-
-          <h3 class="text-base font-bold text-neutral-900 dark:text-neutral mb-3 mt-5">
-            What to Expect
-          </h3>
-          <ol class="numbered-steps contact-steps">
-            <li>
-              <strong>A quick intro call</strong>
-              <span>30 minutes to understand your situation and goals</span>
-            </li>
-            <li>
-              <strong>An honest assessment</strong>
-              <span>We'll tell you if we're the right fit</span>
-            </li>
-            <li>
-              <strong>A clear proposal</strong>
-              <span>Scope, timeline, and pricing with no surprises</span>
-            </li>
-          </ol>
-
-          <div class="contact-cta-wrapper">
-            <a href="{{ site.Params.calendarUrl }}"
-               target="_blank"
-               rel="noopener"
-               class="contact-cta-button">
-              Book a 30-Minute Call
-            </a>
-          </div>
-        </div>
-
-        <div class="contact-card" data-reveal>
-          <h3 class="text-lg font-bold text-neutral-900 dark:text-neutral mb-3">
-            Other Ways to Reach Us
-          </h3>
-          <ul class="contact-links">
-            <li>
-              <strong>Email</strong>
-              <a href="mailto:{{ site.Params.author.email }}">{{ site.Params.author.email }}</a>
-            </li>
-            <li>
-              <strong>GitHub</strong>
-              <a href="https://github.com/Perts-Foundry" target="_blank" rel="noopener">Perts-Foundry</a>
-            </li>
-          </ul>
-          <p class="text-sm text-neutral-500 dark:text-neutral-400 mt-3">
-            We typically respond within one business day.
-          </p>
-        </div>
-      </div>
-
-      {{/* Right column: contact form */}}
+      {{/* Left column (mobile: top): contact form */}}
       <div class="contact-form-column">
         <div class="contact-card" data-reveal>
           <h2 class="text-xl font-bold text-neutral-900 dark:text-neutral mb-2">
@@ -147,7 +89,7 @@
             {{/* Turnstile widget */}}
             {{ with site.Params.turnstileSiteKey }}
               <div class="form-group">
-                <div class="cf-turnstile" data-sitekey="{{ . }}" data-theme="auto"></div>
+                <div class="cf-turnstile" data-sitekey="{{ . }}" data-theme="auto" data-size="flexible"></div>
               </div>
             {{ end }}
 
@@ -172,6 +114,45 @@
           <p class="form-privacy">
             <span aria-hidden="true">&#x1f512;</span> Your information stays private. No spam, no sharing.
           </p>
+        </div>
+      </div>
+
+      {{/* Right column (mobile: bottom): scheduling CTA */}}
+      <div class="contact-info">
+        <div class="contact-card contact-card--cta" data-reveal>
+          <h2 class="text-xl font-bold text-neutral-900 dark:text-neutral mb-2">
+            Schedule a Discovery Meeting
+          </h2>
+          <p class="text-sm text-neutral-500 dark:text-neutral-400 mb-4">
+            The fastest way to get started. 30 minutes, no commitment.
+          </p>
+
+          <h3 class="text-base font-bold text-neutral-900 dark:text-neutral mb-3 mt-5">
+            What to Expect
+          </h3>
+          <ol class="numbered-steps contact-steps">
+            <li>
+              <strong>A quick intro call</strong>
+              <span>30 minutes to understand your situation and goals</span>
+            </li>
+            <li>
+              <strong>An honest assessment</strong>
+              <span>We'll tell you if we're the right fit</span>
+            </li>
+            <li>
+              <strong>A clear proposal</strong>
+              <span>Scope, timeline, and pricing with no surprises</span>
+            </li>
+          </ol>
+
+          <div class="contact-cta-wrapper">
+            <a href="{{ site.Params.calendarUrl }}"
+               target="_blank"
+               rel="noopener"
+               class="contact-cta-button">
+              Book a 30-Minute Call
+            </a>
+          </div>
         </div>
       </div>
     </div>
