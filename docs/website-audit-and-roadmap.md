@@ -145,7 +145,7 @@ Significant gaps that meaningfully weaken the site. Address soon after launch.
 
 **Why it matters:** Enterprise procurement teams cross-reference website claims against LinkedIn and other social profiles. Social presence decisions must be weighed against personal privacy preferences.
 
-**Resolved 2026-04-03:** Decision: GitHub org only, no LinkedIn. Personal LinkedIn stays hibernated (overemployment visibility concern; LinkedIn's TOS prohibits a second personal account, and a company page risks algorithmic association with the existing profile). Added `{ github = "https://github.com/Perts-Foundry" }` to `author.links[]` (emits `<link rel="me">` on all pages). Removed "Other Ways to Reach Us" card from contact page: plaintext email was a spam/scraping target, and GitHub is not a contact method. Email retained only in form error fallback for graceful degradation. Cleaned up orphaned `.contact-links` CSS.
+**Resolved 2026-04-03:** Decision: GitHub org only, no LinkedIn (privacy preference). Added `{ github = "https://github.com/Perts-Foundry" }` to `author.links[]` (emits `<link rel="me">` on all pages). Removed "Other Ways to Reach Us" card from contact page: plaintext email was a spam/scraping target, and GitHub is not a contact method. Email retained only in form error fallback for graceful degradation. Cleaned up orphaned `.contact-links` CSS.
 
 **Files:** `config/_default/languages.en.toml`, `layouts/contact/simple.html`, `assets/css/custom.css`
 
