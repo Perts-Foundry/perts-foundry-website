@@ -1,7 +1,6 @@
 ---
 title: "Perts Foundry"
 description: "DevOps and cloud infrastructure consulting for scaling teams. Terraform, Kubernetes, CI/CD, and AWS/GCP expertise you can hand off."
-images: ["img/og-homepage.png"]
 # hero.headline: Main homepage heading (h1), bold text
 # hero.subheadline: One-line supporting text below the heading
 # Body content below the front matter renders as the problem statement in the hero section.

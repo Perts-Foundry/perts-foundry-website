@@ -70,7 +70,7 @@ npx markdownlint-cli2 "content/**/*.md"
 ### 6. Prettier
 Checks formatting of content markdown, workflow YAML, and Worker JS. Config: `.prettierrc.toml`.
 ```bash
-npx prettier --check "content/**/*.md" ".github/**/*.yml" "src/**/*.js"
+npx prettier --check "content/**/*.md" ".github/**/*.yml" "src/**/*.js" "scripts/**/*.js"
 ```
 
 ### 7. actionlint
@@ -111,6 +111,7 @@ assets/css/          # Custom CSS overrides (custom.css) and color schemes (sche
 layouts/             # Custom Hugo layout overrides, shortcodes, and homepage sub-partials
 static/              # Static assets (favicons, images, manifest)
 src/                 # Cloudflare Worker source (contact form API)
+scripts/             # Developer utilities (OG image generation)
 wrangler.toml        # Cloudflare Workers deployment config
 archetypes/          # Content templates (blog.md, case-studies.md, default.md)
 docs/                # Active project documentation (audit, research, guides)
