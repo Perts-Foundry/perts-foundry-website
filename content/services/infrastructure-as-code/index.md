@@ -9,6 +9,15 @@ tags:
   - Atlantis
   - GitHub
 draft: false
+faqs:
+  - question: "Can you work with our existing Terraform code, or do we need to start over?"
+    answer: "We work with what you have. Most engagements start with an audit of your existing modules and state management, then incrementally restructure without disrupting active projects."
+  - question: "How do you structure Terraform for hundreds of consuming projects?"
+    answer: "We use a module registry (HCP Terraform or self-hosted) with semantic versioning and CI/CD pipelines for automated publishing. Consuming projects pin to specific module versions and upgrade on their own schedule."
+  - question: "Do we need HCP Terraform, or can we use open-source Terraform?"
+    answer: "Either works. HCP Terraform adds a private registry and remote state management that are valuable at scale, but we also implement Atlantis-based workflows for teams that prefer open-source tooling."
+  - question: "CloudFormation vs. Terraform, what is the real difference?"
+    answer: "CloudFormation is AWS-only and tightly integrated with AWS services. Terraform works across any cloud provider and has a larger ecosystem of community modules. For multi-cloud or hybrid environments, Terraform is the clearer choice."
 ---
 
 ## The Problem
@@ -37,3 +46,5 @@ We bring structure and scalability to your infrastructure code. You get a module
    {{< /steps >}}
 
 **See this in action:** [Scaled Terraform Operations Across 200+ Projects](/case-studies/terraform-infrastructure-at-scale/) | [Zero-Downtime Platform Upgrades Across Three Cloud Providers](/case-studies/zero-downtime-platform-upgrades/)
+
+{{< faqs >}}

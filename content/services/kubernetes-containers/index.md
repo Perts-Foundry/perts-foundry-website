@@ -11,6 +11,15 @@ tags:
   - Helm
 icon: "docker"
 draft: false
+faqs:
+  - question: "When should we use Kubernetes vs. simpler options like ECS or Fargate?"
+    answer: "Kubernetes makes sense when you need multi-cloud portability, complex scheduling, or multi-tenant isolation. For simpler workloads on AWS, ECS or Fargate can be significantly easier to operate. We help you choose based on your actual requirements, not industry hype."
+  - question: "How do you upgrade Kubernetes clusters without causing downtime?"
+    answer: "We assess every cluster addon and workload dependency before upgrading, then execute in stages with validation at each step. Pod disruption budgets and rolling updates keep traffic flowing throughout the process."
+  - question: "Our platform team is a bottleneck for onboarding new teams. Can you help?"
+    answer: "Yes, that is one of the most common patterns we address. We build self-service onboarding workflows with namespace templates, RBAC policies, and Helm charts so new teams can deploy without waiting on your platform team."
+  - question: "How do you debug container issues in production?"
+    answer: "We combine cluster-level observability (resource metrics, event logs, node conditions) with pod-level debugging (exec, logs, describe) to isolate issues quickly. We also build runbooks for your most common failure modes so your team can handle them independently."
 ---
 
 ## The Problem
@@ -41,3 +50,5 @@ We build and operate container platforms that your teams can actually use. Clust
    {{< /steps >}}
 
 **See this in action:** [Built Multi-Tenant Kubernetes Platform, Scaled Nearly 100x](/case-studies/kubernetes-multi-tenancy-scaling/) | [Deep Container Expertise, Forged at AWS](/case-studies/container-expertise-aws/)
+
+{{< faqs >}}
