@@ -54,3 +54,5 @@ The registry migration earned recognition across the organization for its qualit
 {{< tech-tags "Terraform, HCP, Atlantis, GitHub, Renovatebot" >}}
 
 _This case study has been anonymized at the client's request._
+
+**Related service:** [Infrastructure as Code](/services/infrastructure-as-code/)

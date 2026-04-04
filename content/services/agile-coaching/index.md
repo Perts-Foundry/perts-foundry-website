@@ -3,6 +3,11 @@ title: "Agile Coaching & Process Improvement"
 description: "Implement and improve agile practices to increase team velocity and delivery predictability"
 slug: "agile-coaching"
 weight: 9
+tags:
+  - Jira
+  - Confluence
+  - Agile
+  - Kanban
 draft: false
 ---
 
@@ -28,3 +33,5 @@ We help your team adopt agile practices that actually improve how they work. Not
 3. **Ceremony Coaching** — We facilitate sprint planning, standups, retrospectives, and demos alongside your team until the patterns become natural
 4. **Workflow Optimization** — We configure your tools to match your process, set up intake automation, and establish metrics so your team can see the improvement
    {{< /steps >}}
+
+**See this in action:** [Led Organization-Wide Agile Adoption](/case-studies/agile-transformation-defense/)

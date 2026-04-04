@@ -1,6 +1,6 @@
 ---
 title: "Drove the Shift from DevOps to DevSecOps"
-description: "Designed and executed a DevSecOps integration strategy spanning security governance, credential hardening, secrets management, and structured knowledge transfer across engineering teams."
+description: "Designed and executed a DevSecOps strategy spanning security governance, credential hardening, secrets management, and knowledge transfer."
 slug: "devops-to-devsecops-transformation"
 weight: 40
 draft: false
@@ -58,3 +58,5 @@ The shift to security by default was the most significant outcome. Before the en
 {{< tech-tags "AWS, GCP, Terraform, Vault, Atlantis, GitHub, Jira" >}}
 
 _This case study has been anonymized at the client's request._
+
+**Related service:** [DevSecOps & DevOps](/services/devsecops-devops/)

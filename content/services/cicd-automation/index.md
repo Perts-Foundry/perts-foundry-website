@@ -1,8 +1,13 @@
 ---
-title: "CI/CD & Automation"
+title: "CI/CD & Automation Consulting"
 description: "Build and modernize CI/CD pipelines to accelerate delivery and reduce toil"
 slug: "cicd-automation"
 weight: 3
+tags:
+  - Jenkins
+  - GitHub Actions
+  - GitLab
+  - ArgoCD
 icon: "code"
 draft: false
 ---
@@ -33,3 +38,5 @@ We build CI/CD pipelines that are fast, reliable, and maintainable. Your team sh
 3. **Pipeline Engineering** — We build pipelines with automated testing gates, caching, parallelization, and deployment strategies tailored to your application
 4. **Automation Expansion** — We extend automation beyond deployments: dependency updates, infrastructure changes, and toil reduction across your engineering workflow
    {{< /steps >}}
+
+**See this in action:** [Modernized CI/CD Infrastructure for a Defense Organization](/case-studies/cicd-modernization-defense/)

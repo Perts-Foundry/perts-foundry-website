@@ -213,47 +213,22 @@ Resolved by the About page rewrite. "We" on other pages reads as professional co
 
 ### M6. SEO optimization audit
 
-- [ ] Audit current meta descriptions across all pages for keyword targeting and length (150-160 chars)
-- [ ] Review page titles for keyword placement and consistency
-- [ ] Add ProfessionalService JSON-LD schema to homepage (supersedes L1; template code below)
-- [ ] Set `defaultSocialImage` in `params.toml` so all pages have OG images when shared (supersedes L2)
+- [x] Audit current meta descriptions across all pages for keyword targeting and length (150-160 chars)
+- [x] Review page titles for keyword placement and consistency
+- [x] Add Organization JSON-LD schema to homepage and Service JSON-LD to service pages
+- [x] Set `defaultSocialImage` in `params.toml` so all pages have OG images when shared (supersedes L2)
 - [ ] Regenerate homepage OG image (current `og-homepage.png` shows old "Ship faster..." tagline instead of "Build. Scale. Own.")
-- [ ] Review internal linking strategy (do service pages link to relevant case studies and vice versa?)
-- [ ] Check that `robots.txt` and `sitemap.xml` are correctly generated and submitted to Google Search Console
-- [ ] Evaluate whether page load performance (Core Web Vitals) needs attention
+- [x] Review internal linking strategy (do service pages link to relevant case studies and vice versa?)
+- [ ] Set up Google Search Console (verify via DNS TXT, submit sitemap)
+- [ ] Evaluate whether page load performance (Core Web Vitals) needs attention via PageSpeed Insights
 - [ ] Consider adding `alt` text audit for all images across the site
+- [ ] Add FAQ sections to service pages (3-5 questions each) with FAQPage JSON-LD
+- [ ] Write 2-3 technical blog posts extracted from case study material (re-enable blog when ready)
+- [ ] Expand service page content to 500+ words (currently ~300)
 
-**ProfessionalService JSON-LD** (create `layouts/partials/extend-head.html`):
+**Partially resolved 2026-04-03:** Meta descriptions audited and fixed (4 short descriptions expanded, 4 long case study descriptions trimmed). Service page titles updated to include "Consulting" keyword. Tags added to all 9 service pages. Organization JSON-LD added to homepage, Service JSON-LD added to all service pages via `extend-head-uncached.html`. `defaultSocialImage` set to logo fallback. Internal cross-links added between all 9 service pages and 10 case studies (bidirectional). Remaining: homepage OG image regeneration, Google Search Console setup, FAQ sections, blog posts, content expansion.
 
-```html
-{{- if .IsHome }}
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "ProfessionalService",
-  "name": "{{ site.Title }}",
-  "url": {{ site.Home.Permalink }},
-  "description": "{{ site.Home.Description | safeJS }}",
-  "logo": {
-    "@type": "ImageObject",
-    "url": "{{ "img/logo/perts-foundry-square-dark-1024.png" | absURL }}"
-  },
-  "email": "contact@pertsfoundry.com",
-  "sameAs": [
-    "https://github.com/Perts-Foundry"
-  ],
-  "knowsAbout": [
-    "DevOps", "Cloud Infrastructure", "CI/CD", "Kubernetes",
-    "Terraform", "AWS", "GCP", "Infrastructure as Code"
-  ]
-}
-</script>
-{{- end }}
-```
-
-**Why it matters:** The site has solid SEO fundamentals (sitemap, robots.txt, meta descriptions, proper permalinks, breadcrumb structured data) but has not had a dedicated optimization pass. Organic search is a primary discovery channel for consulting services.
-
-**Files:** Content front matter across `content/`, `config/_default/params.toml`, `layouts/partials/extend-head.html` (new), `static/img/`
+**Files:** Content front matter across `content/`, `config/_default/params.toml`, `layouts/partials/extend-head-uncached.html`, `assets/img/og-default.png`
 
 ---
 
@@ -414,6 +389,12 @@ Tasks to complete after removing Cloudflare Access and making the site public.
 
 - [ ] Confirm Cloudflare Web Analytics dashboard shows traffic from public visitors (not just authenticated Access sessions)
 - [ ] Identify baseline metrics for consulting site KPIs: service/case study page views, contact page visits, referral sources
+
+### SEO
+
+- [ ] Set up Google Search Console: verify pertsfoundry.com via DNS TXT record, submit sitemap, request indexing of key pages
+- [ ] Run PageSpeed Insights on pertsfoundry.com and confirm Core Web Vitals are green
+- [ ] Regenerate homepage OG image with current "Build. Scale. Own." tagline (current `og-homepage.png` shows old tagline)
 
 ---
 

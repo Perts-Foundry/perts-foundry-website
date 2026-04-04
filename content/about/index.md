@@ -1,6 +1,6 @@
 ---
 title: "About"
-description: "Meet the founder behind Perts Foundry."
+description: "Meet Seth Perts, the DevOps engineer behind Perts Foundry. AWS-certified, Terraform-focused, building infrastructure teams can own."
 layout: "simple"
 showTableOfContents: false
 ---

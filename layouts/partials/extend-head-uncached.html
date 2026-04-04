@@ -4,3 +4,53 @@
     <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
   {{ end }}
 {{ end }}
+
+{{/* Organization JSON-LD on the homepage */}}
+{{- if .IsHome }}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "name": "{{ site.Title | safeJS }}",
+  "url": "{{ site.Home.Permalink }}",
+  "logo": "{{ "img/logo/perts-foundry-square-dark-1024.png" | absURL }}",
+  "description": "{{ site.Home.Description | safeJS }}",
+  "founder": {
+    "@type": "Person",
+    "name": "{{ site.Params.Author.name | safeJS }}"
+  },
+  "sameAs": [
+    "https://github.com/Perts-Foundry"
+  ],
+  "knowsAbout": [
+    "DevOps", "Cloud Infrastructure", "CI/CD", "Kubernetes",
+    "Terraform", "AWS", "GCP", "Infrastructure as Code",
+    "DevSecOps", "FinOps"
+  ],
+  "contactPoint": {
+    "@type": "ContactPoint",
+    "contactType": "sales",
+    "url": "{{ "contact/" | absURL }}"
+  }
+}
+</script>
+{{- end }}
+
+{{/* Service JSON-LD on individual service pages */}}
+{{- if and (eq .Section "services") (eq .Kind "page") }}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Service",
+  "name": "{{ .Title | safeJS }}",
+  "description": "{{ .Description | safeJS }}",
+  "provider": {
+    "@type": "Organization",
+    "name": "{{ site.Title | safeJS }}",
+    "url": "{{ site.Home.Permalink }}"
+  },
+  "serviceType": "DevOps Consulting",
+  "url": "{{ .Permalink }}"
+}
+</script>
+{{- end }}

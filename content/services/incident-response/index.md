@@ -1,8 +1,13 @@
 ---
-title: "Incident Response & Reliability"
+title: "Incident Response & Reliability Consulting"
 description: "Lead incident resolution and build processes to prevent recurrence"
 slug: "incident-response"
 weight: 6
+tags:
+  - GCP
+  - AWS
+  - GKE
+  - Incident Response
 draft: false
 ---
 
@@ -30,3 +35,5 @@ We bring structure to your incident response and build the muscle memory your te
 3. **War Room Practice** — We run tabletop exercises based on realistic scenarios so your team builds confidence before the next real incident
 4. **Postmortem Improvement** — We establish a blameless postmortem process with action item tracking that drives actual infrastructure and process improvements
    {{< /steps >}}
+
+**See this in action:** [Led P0 Incident Resolution Across Multi-Cloud Systems](/case-studies/incident-response-leadership/)

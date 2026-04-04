@@ -56,3 +56,5 @@ Results were presented to engineering leadership, connecting the technical findi
 {{< tech-tags "GCP, GKE, GCS, Terraform" >}}
 
 _This case study has been anonymized at the client's request._
+
+**Related service:** [FinOps & Cloud Cost Optimization](/services/finops/)

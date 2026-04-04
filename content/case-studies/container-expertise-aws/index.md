@@ -1,6 +1,6 @@
 ---
 title: "Deep Container Expertise, Forged at AWS"
-description: "Before founding Perts Foundry, our founder served as an AWS Cloud Support Engineer for container services, resolving critical production incidents for enterprise customers across EKS, ECS, and ECR."
+description: "As an AWS Cloud Support Engineer for container services, resolved critical production incidents for enterprise customers across EKS, ECS, and ECR."
 slug: "container-expertise-aws"
 weight: 100
 draft: false
@@ -59,3 +59,5 @@ This is the expertise that Perts Foundry was built on. Every container troublesh
 ## Key Technologies
 
 {{< tech-tags "AWS, EKS, Kubernetes, ECS, ECR, Docker, Terraform, CloudFormation, VPC, Transit Gateway, Bash, Python, Linux" >}}
+
+**Related service:** [Kubernetes & Containers](/services/kubernetes-containers/)
