@@ -1,0 +1,16 @@
+{{/* Renders FAQ accordion from page front matter .Params.faqs array.
+     Each entry: { question: "...", answer: "..." }
+     FAQPage JSON-LD is emitted separately in extend-head-uncached.html. */}}
+{{ with .Page.Params.faqs }}
+<div class="faq-section">
+  <h2>Frequently Asked Questions</h2>
+  {{ range . }}
+  <details class="faq-item">
+    <summary class="faq-question">{{ .question }}</summary>
+    <div class="faq-answer">
+      <p>{{ .answer }}</p>
+    </div>
+  </details>
+  {{ end }}
+</div>
+{{ end }}

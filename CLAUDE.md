@@ -141,20 +141,22 @@ Do not read or reference archived documents unless the user explicitly asks for 
 
 ### Custom Shortcodes
 
-Four custom shortcodes are available for content pages:
+Five custom shortcodes are available for content pages:
 
 - `{{% metric "key" %}}` -- Pulls display values from `data/metrics.toml` by key. Used on the about page for inline metric references.
 - `{{< tech-tags "A, B, C" >}}` -- Comma-separated list rendered as styled pill tags. Used in all case study "Key Technologies" sections.
 - `{{< steps >}}...{{< /steps >}}` -- Wraps an ordered list with numbered circle badges. Used in all service page "What an Engagement Looks Like" sections.
 - `{{< certification-badges >}}` -- Renders image-based certification badges from `data/certifications.toml`. Each badge shows the Credly badge image (resized via Hugo's image pipeline) with a visible name label. Optionally links to a Credly verification URL when the `url` field is present. Used on the about page. The shortcode delegates to a shared partial (`layouts/partials/certification-badges.html`) that is also called by the homepage certifications section.
+- `{{< faqs >}}` -- Renders an FAQ accordion from the page's front matter `faqs` array (objects with `question` and `answer` fields). Uses native `<details>/<summary>` HTML for accessible expand/collapse behavior. Used on all service pages. FAQPage JSON-LD schema is emitted separately in `extend-head-uncached.html` for any page with `faqs` data.
 
 ### Vendor Template Overrides
 
-Three Blowfish theme templates are overridden locally. On theme upgrades, re-diff each override against the new vendor version.
+Four Blowfish theme templates are overridden locally. On theme upgrades, re-diff each override against the new vendor version.
 
 | Local override | Vendor original | Modification | Base version |
 |----------------|----------------|--------------|--------------|
 | `layouts/partials/article-link/simple.html` | `article-link/simple.html` | Decorative alt on featured images, description fallback | v2.100.0 |
+| `layouts/partials/article-link/card-related.html` | `article-link/card-related.html` | Added `alt=""` to decorative featured images for htmltest compliance | v2.100.0 |
 | `layouts/_default/list.html` | `_default/list.html` | `data-reveal-stagger` attribute for scroll-reveal cascade | v2.100.0 |
 | `layouts/contact/simple.html` | `_default/simple.html` | Full custom two-column contact page layout | v2.100.0 |
 
@@ -202,7 +204,7 @@ Set via `wrangler secret put`:
 
 The Turnstile *site key* (public) is in `config/_default/params.toml` as `turnstileSiteKey`.
 
-The `extend-head-uncached.html` partial serves dual purpose: Turnstile script loading on the contact page, and custom JSON-LD structured data (Organization schema on the homepage, Service schema on individual service pages). This partial receives the full page context (not the cached `.Site`), so page-level conditionals like `.IsHome` and `.Section` work correctly. String values in JSON-LD use Hugo's `jsonify` function (not `safeJS`) to guarantee valid JSON escaping of quotes, backslashes, and special characters.
+The `extend-head-uncached.html` partial serves multiple purposes: DNS-prefetch hints for external domains (challenges.cloudflare.com, cal.com), Turnstile script loading on the contact page, and custom JSON-LD structured data (Organization schema on the homepage, Service schema on individual service pages, FAQPage schema on any page with `faqs` front matter data). This partial receives the full page context (not the cached `.Site`), so page-level conditionals like `.IsHome` and `.Section` work correctly. String values in JSON-LD use Hugo's `jsonify` function (not `safeJS`) to guarantee valid JSON escaping of quotes, backslashes, and special characters.
 
 Social links are configured via `author.links` in `config/_default/languages.en.toml` using Blowfish's single-key object format: `links = [{ github = "https://github.com/Perts-Foundry" }]`. Blowfish emits `<link rel="me">` tags in the HTML head for each entry. The visible author card (with clickable icons) is controlled by `showAuthor` in `params.toml` (currently `false`). A visible GitHub icon also appears in the site footer via `menus.en.toml` using Blowfish's `pre = "github"` icon field.
 

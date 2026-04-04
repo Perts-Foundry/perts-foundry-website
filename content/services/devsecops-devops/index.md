@@ -11,6 +11,15 @@ tags:
   - GCP
 icon: "shield"
 draft: false
+faqs:
+  - question: "What is the difference between DevOps and DevSecOps?"
+    answer: "DevOps focuses on delivery speed and infrastructure automation. DevSecOps embeds security into those same pipelines, so security checks run automatically in every PR instead of being a separate phase before release."
+  - question: "How do you handle secret rotation without breaking running applications?"
+    answer: "We implement secrets management through tools like Vault with staged rollouts. New credentials are validated before old ones expire, and applications use dynamic secrets or sidecar injection so rotation is transparent."
+  - question: "Can we add security controls without slowing down deployments?"
+    answer: "Yes. Well-designed security checks add seconds, not minutes, to a pipeline. We focus on automated policy enforcement and pre-commit hooks that catch issues early, when they are cheapest to fix."
+  - question: "How often should we audit our cloud security posture?"
+    answer: "Automated checks should run continuously in your CI/CD pipelines. We set up policy-as-code tools that flag drift in real time, so quarterly manual audits become confirmation rather than discovery."
 ---
 
 ## The Problem
@@ -40,3 +49,5 @@ We embed security into your infrastructure and delivery pipelines so it happens 
    {{< /steps >}}
 
 **See this in action:** [Drove the Shift from DevOps to DevSecOps](/case-studies/devops-to-devsecops-transformation/)
+
+{{< faqs >}}
