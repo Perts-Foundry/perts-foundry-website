@@ -102,6 +102,11 @@ h1.text-4xl {
   font-size: clamp(1.375rem, 1rem + 1.2vw, 1.6875rem);
 }
 
+/* Related content card titles: override .prose h2 scaling */
+.article-link--related h2 {
+  font-size: 0.875rem;
+}
+
 .prose h3 {
   font-size: clamp(1.125rem, 0.9rem + 0.9vw, 1.5rem);
 }
