@@ -15,7 +15,7 @@ faqs:
   - question: "What is the biggest risk in cloud migrations?"
     answer: "Undiscovered dependencies. A service you thought was standalone turns out to depend on three other systems. We invest heavily in the scoping phase to map these dependencies before they become surprises during cutover."
   - question: "How long does a typical migration take?"
-    answer: "It varies widely by scope. A container registry migration might take 4-6 weeks. A multi-cloud platform migration with dozens of services can run 3-6 months. We break every migration into waves so you see progress early and can adjust the timeline as you go."
+    answer: "It varies widely by scope and complexity. A single-service migration is very different from a multi-cloud platform transition with dozens of dependencies. We break every migration into waves so you see progress early and can adjust the plan as you go."
   - question: "Can you help with a migration that is already underway and stuck?"
     answer: "Yes. We often join mid-migration when the scope has grown beyond initial estimates or the team hit unexpected blockers. We assess what is done, identify what is blocking progress, and rebuild the plan from where you are."
 ---

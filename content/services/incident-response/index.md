@@ -17,7 +17,7 @@ faqs:
   - question: "How do you prevent alert fatigue while still catching real incidents?"
     answer: "We tune alerting thresholds based on actual failure patterns and establish tiered severity levels with clear escalation criteria. The goal is fewer, more actionable alerts so your on-call team responds to signal, not noise."
   - question: "How long does it take to see improvement in incident response?"
-    answer: "Teams typically see immediate improvement during the first facilitated incident or tabletop exercise. Building lasting organizational muscle memory takes 2-3 months of consistent practice and process reinforcement."
+    answer: "Teams typically see immediate improvement during the first facilitated incident or tabletop exercise. Building lasting organizational muscle memory requires consistent practice and process reinforcement over multiple incident cycles."
 ---
 
 ## The Problem

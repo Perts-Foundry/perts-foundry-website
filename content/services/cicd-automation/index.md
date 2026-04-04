@@ -18,7 +18,7 @@ faqs:
   - question: "Can we automate dependency updates without breaking our build?"
     answer: "Yes. Tools like Renovatebot open PRs for dependency updates that run through your existing test suite before merging. You get visibility into every change and can set rules for auto-merge based on risk level."
   - question: "What is the typical ROI timeline for CI/CD improvements?"
-    answer: "Most teams see measurable improvement within the first month: faster deployments, fewer manual steps, and reduced failure rates. The full payoff compounds over time as automation replaces recurring toil across the engineering workflow."
+    answer: "Teams typically see faster deployments, fewer manual steps, and reduced failure rates early in the engagement. The full payoff compounds over time as automation replaces recurring toil across the engineering workflow."
 ---
 
 ## The Problem
