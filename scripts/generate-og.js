@@ -3,9 +3,12 @@
  *
  * Usage: node scripts/generate-og.js
  *
- * Produces one image, written to two paths (Hugo resolves them differently):
- *   static/img/og-homepage.png  - Referenced by homepage front matter (absURL)
- *   assets/img/og-default.png   - Referenced by params.toml defaultSocialImage (resources.Get)
+ * Produces:
+ *   assets/img/og-default.png  (1200x630) - Site-wide social preview
+ *
+ * Referenced by params.toml defaultSocialImage. Blowfish resolves it via
+ * resources.Get (assets/). All pages use this as the OG fallback; pages
+ * with a featured image get that image instead.
  *
  * The logo PNG is composited as-is from static/img/logo/. Only the background
  * gradient and tagline text are generated; the logo is never re-rendered.
@@ -29,11 +32,7 @@ const LOGO_SRC = path.join(
   "static/img/logo/perts-foundry-horizontal-light@2x.png",
 );
 
-// Both paths serve the same image; Hugo needs it in two locations
-const OUTPUT_PATHS = [
-  path.join(ROOT, "static/img/og-homepage.png"),
-  path.join(ROOT, "assets/img/og-default.png"),
-];
+const OUTPUT = path.join(ROOT, "assets/img/og-default.png");
 
 // Brand-matched dark gradient with a blue glow accent
 function backgroundSvg() {
@@ -127,16 +126,14 @@ async function generate() {
     .png()
     .toBuffer();
 
-  for (const dest of OUTPUT_PATHS) {
-    await fs.promises.writeFile(dest, image);
-    console.log("  " + path.relative(ROOT, dest));
-  }
+  await fs.promises.writeFile(OUTPUT, image);
+  console.log("  " + path.relative(ROOT, OUTPUT));
 }
 
 async function main() {
   console.log("Generating OG image (1200x630)...");
   await generate();
-  console.log("Done. Same image written to both Hugo paths.");
+  console.log("Done.");
 }
 
 main().catch((err) => {
