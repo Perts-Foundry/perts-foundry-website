@@ -109,16 +109,16 @@ Significant gaps that meaningfully weaken the site. Address soon after launch.
 
 - [x] Add aggregate metrics from case studies
 - [x] Add or duplicate the 3-step engagement process
-- [ ] Add certification badge images below hero
+- [x] Add certification badge images (see M2)
 - [x] Configure `author.image` and `author.headline` in `languages.en.toml`
 - [ ] Plan testimonial placement (add when collected)
 - [ ] Add JSON-LD structured data (Organization, Service, HowTo schemas) for SEO rich snippets
 
 **Why it matters:** The guide prescribes certification badges, testimonials, "How I Work" section, and specific metrics.
 
-**Partially resolved 2026-03-30:** Custom multi-section homepage with metrics band ($125K+, 200+, Zero), 4-step "How We Work" process timeline, tech trust bar, services grid, featured case studies, and dual CTAs. Remaining: certification badge images, testimonials.
+**Partially resolved 2026-03-30:** Custom multi-section homepage with metrics band ($125K+, 200+, Zero), 4-step "How We Work" process timeline, tech trust bar, services grid, featured case studies, and dual CTAs. Certification badge images added 2026-04-03 (see M2). Remaining: testimonials.
 
-**Files:** `content/_index.md`, `data/metrics.toml`, `data/process.toml`, `data/technologies.toml`, `layouts/partials/homepage/`, certification badge images
+**Files:** `content/_index.md`, `data/metrics.toml`, `data/process.toml`, `data/technologies.toml`, `data/certifications.toml`, `layouts/partials/homepage/`, `assets/img/badges/`
 
 ---
 
@@ -169,15 +169,15 @@ Strengthen positioning. Address in subsequent iterations.
 
 ---
 
-### M2. No certification badges displayed visually
+### M2. ~~No certification badges displayed visually~~ Resolved
 
-- [ ] Source badge images (AWS SA Pro, Terraform, etc.)
-- [ ] Add to homepage and About page
-- [ ] Consider reusable Hugo shortcode/partial
+- [x] Source badge images (AWS SA Pro, Terraform, etc.)
+- [x] Add to homepage and About page
+- [x] Consider reusable Hugo shortcode/partial
 
-Certifications are mentioned in service page text but never shown visually. Badge images are quick-scan trust signals for technical buyers.
+**Resolved 2026-04-03:** Official Credly badge images (AWS SA Professional, AWS SA Associate, Terraform Associate) displayed on both the homepage (new certifications section between metrics and services) and the about page. Images stored in `assets/img/badges/` for Hugo image processing. A shared partial (`layouts/partials/certification-badges.html`) is called by both a `certification-badges` shortcode (about page) and the homepage section partial. Data driven from `data/certifications.toml`.
 
-**Files:** New images in `static/img/`, `content/_index.md`, `content/about/index.md`
+**Files:** `assets/img/badges/*.png`, `data/certifications.toml`, `layouts/partials/certification-badges.html`, `layouts/shortcodes/certification-badges.html`, `layouts/partials/homepage/certifications.html`, `layouts/partials/home/custom.html`, `content/about/index.md`, `assets/css/custom.css`
 
 ---
 
@@ -199,13 +199,13 @@ Resolved by the About page rewrite. "We" on other pages reads as professional co
 
 ---
 
-### M5. 21 pages suppress `color-contrast` in pa11y-ci
+### M5. ~~22 pages suppress `color-contrast` in pa11y-ci~~ Partially resolved
 
-- [ ] Identify which failures come from shared Blowfish theme components (nav, footer, hero) vs. custom CSS
-- [ ] Fix theme-level contrast issues centrally (shared component overrides)
+- [x] Identify which failures come from shared Blowfish theme components (nav, footer, hero) vs. custom CSS
+- [x] Fix theme-level contrast issues centrally (shared component overrides)
 - [ ] Remove `"ignore": ["color-contrast"]` from pages as they pass
 
-21 of 27 pages in `.pa11yci` have `color-contrast` suppressed. The contact page was fixed and unsuppressed in PR #37. Many remaining failures likely come from Blowfish theme components rather than custom CSS, so fixing shared components first would unsuppress multiple pages at once.
+**Partially resolved 2026-04-03:** Real contrast issues fixed in CSS: `.tech-bar-heading` (`neutral-500` to `neutral-400`/`600`), `.px-2.text-primary-500` middot separators (new `!important` override to `primary-400`/`700`), numbered-steps circles (semi-transparent to opaque composited colors), `background-color` fallbacks on gradient-border buttons and tech labels. `hideElements` cleaned: removed `.px-2.text-primary-500` (now CSS-fixed); retained `svg text` (SVG internals), `.inline-block.rtl:rotate-180` (pagination arrows, axe indeterminate), `.homepage-hero-sub` (gradient-clipped text). 5 pages unsuppressed (services listing, blog listing, case studies listing, contact, privacy). 22 pages still suppress `color-contrast` but all remaining failures are `needsFurtherReview` false positives from axe-core's inability to resolve backgrounds through Blowfish's TOC flex layout, not real contrast failures.
 
 **Files:** `.pa11yci`, `assets/css/custom.css`
 
@@ -313,14 +313,14 @@ The site defaults to dark mode, so pa11y-ci only validates dark mode contrast an
 
 **Files:** `.pa11yci`, `.github/workflows/validate.yml`
 
-### L8. Investigate pa11y `hideElements` suppression
+### L8. ~~Investigate pa11y `hideElements` suppression~~ Resolved
 
-- [ ] Determine what `.px-2.text-primary-500` and `.inline-block.rtl\:rotate-180` target
-- [ ] If issues are color-contrast only, switch to per-page `ignore` rules instead of global `hideElements`
+- [x] Determine what `.px-2.text-primary-500` and `.inline-block.rtl\:rotate-180` target
+- [x] If issues are color-contrast only, switch to per-page `ignore` rules instead of global `hideElements`
 
-`hideElements` hides elements from ALL axe-core rules (not just contrast), meaning genuine accessibility issues on those elements are invisible to CI. `hideElements` should be reserved for elements that genuinely cannot be tested (e.g., third-party embeds).
+**Resolved 2026-04-03:** `.px-2.text-primary-500` targeted Blowfish article-meta middot separators (6 vendor partials). Fixed via CSS override with `!important` and removed from `hideElements`. `.inline-block.rtl:rotate-180` targeted pagination arrows; retained in `hideElements` because axe-core returns indeterminate results (not a real contrast failure). Added `.homepage-hero-sub` (gradient-clipped text, genuinely untestable). Current `hideElements`: `svg text, .inline-block.rtl:rotate-180, .homepage-hero-sub`.
 
-**Files:** `.pa11yci`
+**Files:** `.pa11yci`, `assets/css/custom.css`
 
 ---
 

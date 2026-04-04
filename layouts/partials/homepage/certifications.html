@@ -1,0 +1,10 @@
+{{ with site.Data.certifications.items }}
+  <section class="homepage-certifications" aria-labelledby="certs-heading">
+    <div class="mx-auto max-w-5xl px-4 pt-10 pb-6" data-reveal>
+      <h2 id="certs-heading" class="certs-heading mb-6 text-center">
+        Certified
+      </h2>
+      {{ partial "certification-badges.html" $ }}
+    </div>
+  </section>
+{{ end }}

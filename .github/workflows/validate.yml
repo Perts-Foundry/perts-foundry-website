@@ -150,8 +150,9 @@ jobs:
         run: |
           ERRORS=""
           HP="public/index.html"
-          # Section structure checks (8 IDs across 7 partials; problem-heading is inside hero)
-          for id in hero-heading tech-bar-heading problem-heading services-heading metrics-heading cases-heading process-heading cta-heading; do
+          # Section structure checks (9 IDs across 8 partials; problem-heading is inside hero)
+          # Listed in rendering order: hero, tech-bar, metrics, certs, services, cases, process, cta
+          for id in hero-heading problem-heading tech-bar-heading metrics-heading certs-heading services-heading cases-heading process-heading cta-heading; do
             if ! grep -qE "id=\"?$id\"?" "$HP"; then
               ERRORS="${ERRORS}Missing section: $id\n"
             fi
@@ -166,17 +167,24 @@ jobs:
           if ! grep -q "Discover" "$HP"; then
             ERRORS="${ERRORS}Missing process step data (expected 'Discover')\n"
           fi
+          if ! grep -q "Terraform Associate" "$HP"; then
+            ERRORS="${ERRORS}Missing certification data (expected 'Terraform Associate')\n"
+          fi
           # Carousel infrastructure checks (JS depends on these DOM IDs)
           for cid in tech-carousel-items tech-carousel-dots services-carousel-grid services-carousel-dots cases-carousel-grid cases-carousel-dots; do
             if ! grep -qE "id=\"?$cid\"?" "$HP"; then
               ERRORS="${ERRORS}Missing carousel ID: $cid\n"
             fi
           done
-          # Section ordering check (metrics must appear before services)
+          # Section ordering checks
           METRICS_POS=$(grep -bo 'metrics-heading' "$HP" | head -1 | cut -d: -f1)
+          CERTS_POS=$(grep -bo 'certs-heading' "$HP" | head -1 | cut -d: -f1)
           SERVICES_POS=$(grep -bo 'services-heading' "$HP" | head -1 | cut -d: -f1)
-          if [ -n "$METRICS_POS" ] && [ -n "$SERVICES_POS" ] && [ "$METRICS_POS" -gt "$SERVICES_POS" ]; then
-            ERRORS="${ERRORS}Section ordering: metrics-heading must appear before services-heading\n"
+          if [ -n "$METRICS_POS" ] && [ -n "$CERTS_POS" ] && [ "$METRICS_POS" -gt "$CERTS_POS" ]; then
+            ERRORS="${ERRORS}Section ordering: metrics-heading must appear before certs-heading\n"
+          fi
+          if [ -n "$CERTS_POS" ] && [ -n "$SERVICES_POS" ] && [ "$CERTS_POS" -gt "$SERVICES_POS" ]; then
+            ERRORS="${ERRORS}Section ordering: certs-heading must appear before services-heading\n"
           fi
           if [ -n "$ERRORS" ]; then
             printf '%b' "$ERRORS"
@@ -217,9 +225,9 @@ jobs:
               ERRORS="${ERRORS}Missing numbered-steps-wrapper: $name\n"
             fi
           done
-          # About: credential badges
-          if ! grep -q 'credential-badges' public/about/index.html; then
-            ERRORS="${ERRORS}Missing credential-badges on about page\n"
+          # About: certification badges
+          if ! grep -q 'certification-badges' public/about/index.html; then
+            ERRORS="${ERRORS}Missing certification-badges on about page\n"
           fi
           # List pages: scroll-reveal stagger
           if ! grep -q 'data-reveal-stagger' public/services/index.html; then
