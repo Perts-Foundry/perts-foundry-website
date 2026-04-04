@@ -53,4 +53,4 @@ This was keep-the-lights-on work at its most demanding: not a single flashy migr
 
 _This case study has been anonymized at the client's request._
 
-**Related services:** [Cloud Infrastructure](/services/cloud-infrastructure/) | [Cloud Migration](/services/cloud-migration/)
+**Related services:** [Cloud Infrastructure Consulting](/services/cloud-infrastructure/) | [Cloud Migration Consulting](/services/cloud-migration/)

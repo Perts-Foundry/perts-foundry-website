@@ -58,4 +58,4 @@ The transformation took a defense software organization from manual, siloed buil
 
 {{< tech-tags "Jenkins, GitLab, Bash, Jira, Confluence, RHEL, GCC, Clang, Bazel, Artifactory, Nexus" >}}
 
-**Related service:** [CI/CD & Automation](/services/cicd-automation/)
+**Related service:** [CI/CD & Automation Consulting](/services/cicd-automation/)

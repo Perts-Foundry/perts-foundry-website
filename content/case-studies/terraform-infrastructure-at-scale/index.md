@@ -55,4 +55,4 @@ The registry migration earned recognition across the organization for its qualit
 
 _This case study has been anonymized at the client's request._
 
-**Related service:** [Infrastructure as Code](/services/infrastructure-as-code/)
+**Related service:** [Infrastructure as Code Consulting](/services/infrastructure-as-code/)

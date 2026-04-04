@@ -20,7 +20,7 @@ No changes needed in these areas.
 | Technical infrastructure | Exceeds | SSL, Hugo on Cloudflare Workers, CDN, minification, responsive images, lazy loading |
 | Security | Exceeds | CSP, X-Frame-Options, Permissions-Policy, Gitleaks in CI, AI bot blocking |
 | Accessibility | Exceeds | WCAG 2.1 AA, 27-page pa11y-ci in CI, dedicated page, custom layouts for alt text |
-| CI/CD validation | Exceeds | 9 automated PR checks (Vitest, Hugo build, homepage smoke test, htmltest, pa11y-ci, markdownlint, Prettier, actionlint, Gitleaks) |
+| CI/CD validation | Exceeds | 10 automated PR checks (Vitest, Hugo build, homepage smoke test, inner page smoke test, htmltest, pa11y-ci, markdownlint, Prettier, actionlint, Gitleaks) |
 | Contact process | Exceeds | Contact form (Workers + Resend + Turnstile), Cal.com scheduling link, email fallback, "What to Expect" steps, response time commitment |
 | SEO fundamentals | Good | Sitemap, robots.txt, meta descriptions on all pages, proper permalinks |
 
@@ -108,11 +108,11 @@ Significant gaps that meaningfully weaken the site. Address soon after launch.
 ### H2. Homepage missing key credibility elements
 
 - [x] Add aggregate metrics from case studies
-- [x] Add or duplicate the 3-step engagement process
+- [x] Add or duplicate the 4-step engagement process
 - [x] Add certification badge images (see M2)
 - [x] Configure `author.image` and `author.headline` in `languages.en.toml`
 - [ ] Plan testimonial placement (add when collected)
-- [ ] Add JSON-LD structured data (Organization, Service, HowTo schemas) for SEO rich snippets
+- [x] Add JSON-LD structured data (Organization on homepage, Service on service pages; completed under M6. HowTo deferred)
 
 **Why it matters:** The guide prescribes certification badges, testimonials, "How I Work" section, and specific metrics.
 
@@ -252,11 +252,12 @@ Resolved by the About page rewrite. "We" on other pages reads as professional co
 ### L1. No structured data / JSON-LD
 
 - [x] Enable breadcrumb structured data (`enableStructuredBreadcrumbs = true`)
-- [ ] Add ProfessionalService or Organization schema via `layouts/partials/extend-head.html` (see M6)
+- [x] Add Organization schema via `layouts/partials/extend-head-uncached.html` (completed under M6)
 
-### L2. No custom Open Graph images
+### L2. ~~No custom Open Graph images~~ Partially resolved
 
-- [ ] Create 1200x630px default OG image for link previews (see M6)
+- [x] Set `defaultSocialImage` fallback in `params.toml` (superseded by M6; uses logo as interim)
+- [ ] Create proper 1200x630px default OG image for link previews
 
 ### L3. Blog post directory naming
 
@@ -395,6 +396,10 @@ Tasks to complete after removing Cloudflare Access and making the site public.
 - [ ] Set up Google Search Console: verify pertsfoundry.com via DNS TXT record, submit sitemap, request indexing of key pages
 - [ ] Run PageSpeed Insights on pertsfoundry.com and confirm Core Web Vitals are green
 - [ ] Regenerate homepage OG image with current "Build. Scale. Own." tagline (current `og-homepage.png` shows old tagline)
+
+### Monitoring & Uptime
+
+- [ ] Investigate liveness probes / synthetic monitoring for the production site. Goal: automated checks that verify key site functionality (homepage loads, contact form POST endpoint responds, static assets serve correctly) and notify when something is down or broken. Options to evaluate: Cloudflare Health Checks, Uptime Robot, Checkly, GitHub Actions on a cron schedule, or a custom Cloudflare Worker on a scheduled trigger. Should cover at minimum: homepage HTTP 200, `/api/contact` POST returns expected error (missing fields), and one case study page loads.
 
 ---
 

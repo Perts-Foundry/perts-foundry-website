@@ -59,4 +59,4 @@ The shift to security by default was the most significant outcome. Before the en
 
 _This case study has been anonymized at the client's request._
 
-**Related service:** [DevSecOps & DevOps](/services/devsecops-devops/)
+**Related service:** [DevSecOps & DevOps Consulting](/services/devsecops-devops/)

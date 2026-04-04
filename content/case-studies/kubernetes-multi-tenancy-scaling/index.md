@@ -56,4 +56,4 @@ The application scaling work proved that the platform could handle significant g
 
 _This case study has been anonymized at the client's request._
 
-**Related service:** [Kubernetes & Containers](/services/kubernetes-containers/)
+**Related service:** [Kubernetes & Container Consulting](/services/kubernetes-containers/)

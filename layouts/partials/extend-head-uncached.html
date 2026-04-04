@@ -5,19 +5,20 @@
   {{ end }}
 {{ end }}
 
-{{/* Organization JSON-LD on the homepage */}}
+{{/* Organization JSON-LD on the homepage.
+     Uses jsonify for string values to guarantee valid JSON escaping. */}}
 {{- if .IsHome }}
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
   "@type": "Organization",
-  "name": "{{ site.Title | safeJS }}",
+  "name": {{ site.Title | jsonify }},
   "url": "{{ site.Home.Permalink }}",
   "logo": "{{ "img/logo/perts-foundry-square-dark-1024.png" | absURL }}",
-  "description": "{{ site.Home.Description | safeJS }}",
+  "description": {{ site.Home.Description | jsonify }},
   "founder": {
     "@type": "Person",
-    "name": "{{ site.Params.Author.name | safeJS }}"
+    "name": {{ site.Params.Author.name | jsonify }}
   },
   "sameAs": [
     "https://github.com/Perts-Foundry"
@@ -42,11 +43,11 @@
 {
   "@context": "https://schema.org",
   "@type": "Service",
-  "name": "{{ .Title | safeJS }}",
-  "description": "{{ .Description | safeJS }}",
+  "name": {{ .Title | jsonify }},
+  "description": {{ .Description | jsonify }},
   "provider": {
     "@type": "Organization",
-    "name": "{{ site.Title | safeJS }}",
+    "name": {{ site.Title | jsonify }},
     "url": "{{ site.Home.Permalink }}"
   },
   "serviceType": "DevOps Consulting",

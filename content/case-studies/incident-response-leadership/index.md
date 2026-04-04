@@ -51,4 +51,4 @@ The pattern across these incidents demonstrated a consistent approach: respond i
 
 _This case study has been anonymized at the client's request._
 
-**Related service:** [Incident Response & Reliability](/services/incident-response/)
+**Related service:** [Incident Response & Reliability Consulting](/services/incident-response/)
