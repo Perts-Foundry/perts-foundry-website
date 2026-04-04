@@ -1,0 +1,11 @@
+[[items]]
+name = "AWS Certified Solutions Architect, Professional"
+image = "img/badges/aws-sa-professional.png"
+
+[[items]]
+name = "AWS Certified Solutions Architect, Associate"
+image = "img/badges/aws-sa-associate.png"
+
+[[items]]
+name = "HashiCorp Certified: Terraform Associate (003)"
+image = "img/badges/terraform-associate.png"

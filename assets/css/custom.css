@@ -120,6 +120,21 @@ h1.text-4xl {
 
 /* ===== Shared Components ===== */
 
+/* Blowfish theme contrast overrides
+   These target Tailwind utility class combos used in Blowfish vendor templates
+   (article-meta, breadcrumbs, pagination). The theme uses primary-500 and
+   neutral-500 which fail WCAG AA contrast in both modes. Re-verify on theme
+   upgrades if Blowfish changes these class names. */
+.px-2.text-primary-500,
+.px-1.text-primary-500 {
+  color: rgb(var(--color-primary-400)) !important;
+}
+
+html:not(.dark) .px-2.text-primary-500,
+html:not(.dark) .px-1.text-primary-500 {
+  color: rgb(var(--color-primary-700)) !important;
+}
+
 /* Headshot with gradient border and glow */
 .headshot + figure {
   text-align: center;
@@ -258,14 +273,16 @@ html:not(.dark) .cta strong {
   justify-content: center;
   font-weight: 700;
   border-radius: 50%;
-  background: rgba(var(--color-primary-500), 0.15);
+  /* Composited: primary-500 at 0.15 opacity on neutral-900 (15,23,42) */
+  background-color: rgb(19, 36, 71);
   color: rgb(var(--color-primary-400));
 }
 
 html:not(.dark) .numbered-steps li::before,
 html:not(.dark) .numbered-steps-wrapper ol li::before {
   color: rgb(var(--color-primary-700));
-  background: rgba(var(--color-primary-500), 0.12);
+  /* Composited: primary-500 at 0.12 opacity on white (255,255,255) */
+  background-color: rgb(235, 240, 248);
 }
 
 /* Contact page variant (2rem circles) */
@@ -327,6 +344,11 @@ html:not(.dark) .numbered-steps-wrapper ol li::before {
   overflow: hidden;
   border-radius: 24px;
   margin: 0 0.75rem 0;
+  background-color: rgb(var(--color-neutral-900));
+}
+
+html:not(.dark) .hero-gradient-bg {
+  background-color: rgb(var(--color-primary-100));
 }
 
 .hero-gradient-bg::before {
@@ -395,7 +417,8 @@ html:not(.dark) .homepage-process {
   font-size: 1.125rem;
   font-weight: 600;
   border-radius: 10px;
-  background: linear-gradient(135deg, var(--accent-blue), var(--accent-purple));
+  background-color: var(--accent-blue);
+  background-image: linear-gradient(135deg, var(--accent-blue), var(--accent-purple));
   color: #fff;
   text-decoration: none;
   transition: transform 0.2s ease, box-shadow 0.2s ease, opacity 0.2s ease;
@@ -416,6 +439,7 @@ html:not(.dark) .homepage-process {
   border-radius: 10px;
   text-decoration: none;
   border: 2px solid transparent;
+  background-color: rgb(var(--color-neutral-900));
   background-image:
     linear-gradient(rgb(var(--color-neutral-900)), rgb(var(--color-neutral-900))),
     linear-gradient(135deg, var(--accent-blue), var(--accent-purple));
@@ -432,6 +456,7 @@ html:not(.dark) .homepage-process {
 }
 
 html:not(.dark) .hero-btn-secondary {
+  background-color: rgb(var(--color-neutral-50));
   background-image:
     linear-gradient(rgb(var(--color-neutral-50)), rgb(var(--color-neutral-50))),
     linear-gradient(135deg, var(--accent-blue), var(--accent-purple));
@@ -603,6 +628,7 @@ html:not(.dark) .service-card-desc {
   font-weight: 600;
   border-radius: 10px;
   border: 2px solid transparent;
+  background-color: rgb(var(--color-neutral-900));
   background-image:
     linear-gradient(rgb(var(--color-neutral-900)), rgb(var(--color-neutral-900))),
     linear-gradient(135deg, var(--accent-blue), var(--accent-purple));
@@ -621,6 +647,7 @@ html:not(.dark) .service-card-desc {
 }
 
 html:not(.dark) .service-view-all {
+  background-color: rgb(var(--color-neutral-50));
   background-image:
     linear-gradient(rgb(var(--color-neutral-50)), rgb(var(--color-neutral-50))),
     linear-gradient(135deg, var(--accent-blue), var(--accent-purple));
@@ -751,6 +778,100 @@ html:not(.dark) .metric-label {
   }
 }
 
+/* ===== Certification Badges ===== */
+
+.certs-heading {
+  font-size: 1rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: rgb(var(--color-neutral-400));
+}
+
+html:not(.dark) .certs-heading {
+  color: rgb(var(--color-neutral-600));
+}
+
+.certification-badges {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 2rem;
+  margin-top: 0.5rem;
+}
+
+.certification-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1.25rem 1.5rem;
+  border-radius: 12px;
+  border: 1px solid transparent;
+  background-color: rgb(var(--color-neutral-900));
+  background-image:
+    linear-gradient(rgb(var(--color-neutral-900)), rgb(var(--color-neutral-900))),
+    linear-gradient(135deg, rgba(var(--color-primary-500), 0.4), rgba(var(--color-secondary-500), 0.4));
+  background-origin: border-box;
+  background-clip: padding-box, border-box;
+  text-decoration: none !important;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.certification-item:hover {
+  transform: translateY(-6px);
+  box-shadow:
+    0 8px 30px rgba(59, 130, 246, 0.15),
+    0 0 20px rgba(139, 92, 246, 0.1);
+}
+
+html:not(.dark) .certification-item {
+  background-color: rgb(var(--color-neutral-50));
+  background-image:
+    linear-gradient(rgb(var(--color-neutral-50)), rgb(var(--color-neutral-50))),
+    linear-gradient(135deg, rgba(var(--color-primary-500), 0.35), rgba(var(--color-secondary-500), 0.35));
+}
+
+html:not(.dark) .certification-item:hover {
+  box-shadow:
+    0 8px 30px rgba(59, 130, 246, 0.1),
+    0 0 15px rgba(139, 92, 246, 0.08);
+}
+
+.certification-img {
+  width: 120px;
+  height: 120px;
+  object-fit: contain;
+  filter: drop-shadow(0 0 8px rgba(59, 130, 246, 0.2));
+}
+
+@media (max-width: 639px) {
+  .certification-img {
+    width: 90px;
+    height: 90px;
+  }
+
+  .certification-badges {
+    gap: 1rem;
+  }
+
+  .certification-item {
+    padding: 1rem 1.25rem;
+  }
+}
+
+.certification-name {
+  font-size: 0.8125rem;
+  font-weight: 500;
+  text-align: center;
+  max-width: 160px;
+  line-height: 1.35;
+  color: rgb(var(--color-neutral-300));
+}
+
+html:not(.dark) .certification-name {
+  color: rgb(var(--color-neutral-600));
+}
 
 /* Case study cards (matches service card style) */
 .homepage-cases a.homepage-case-card {
@@ -1164,7 +1285,11 @@ html:not(.dark) .homepage-cta-card::before {
   font-weight: 500;
   text-transform: uppercase;
   letter-spacing: 0.08em;
-  color: rgb(var(--color-neutral-500));
+  color: rgb(var(--color-neutral-400));
+}
+
+html:not(.dark) .tech-bar-heading {
+  color: rgb(var(--color-neutral-600));
 }
 
 /* Tech bar carousel */
@@ -1347,6 +1472,7 @@ html:not(.dark) .tech-carousel-btn:hover:not(:disabled) {
   padding: 0.75rem 1.25rem;
   border-radius: 10px;
   border: 1px solid transparent;
+  background-color: rgb(var(--color-neutral-900));
   background-image:
     linear-gradient(rgb(var(--color-neutral-900)), rgb(var(--color-neutral-900))),
     linear-gradient(135deg, rgba(var(--color-primary-500), 0.3), rgba(var(--color-secondary-500), 0.3));
@@ -1480,6 +1606,12 @@ html:not(.dark) .tech-label {
   border: 1px solid rgba(var(--color-slate-base), 0.15);
   border-radius: 0.5rem;
   background: rgba(var(--color-slate-base), 0.04);
+}
+
+/* Opacity-only reveal for contact cards (no translateY slide) to prevent
+   a brief page-level scrollbar flash during the reveal animation. */
+.js-reveal-init .contact-card[data-reveal] {
+  transform: none;
 }
 
 .contact-card--cta {
@@ -1831,29 +1963,3 @@ html:not(.dark) .tech-tag {
   background: rgba(var(--color-primary-500), 0.06);
 }
 
-/* ===== Credential Badges (About Page) ===== */
-
-.credential-badges {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.625rem;
-  margin-top: 0.5rem;
-}
-
-.credential-badge {
-  display: inline-flex;
-  align-items: center;
-  padding: 0.5rem 1rem;
-  font-size: 0.875rem;
-  font-weight: 600;
-  border-radius: 0.5rem;
-  color: rgb(var(--color-neutral-200));
-  border: 1px solid rgba(var(--color-slate-base), 0.15);
-  background: rgba(var(--color-slate-base), 0.06);
-}
-
-html:not(.dark) .credential-badge {
-  color: rgb(var(--color-neutral-700));
-  border-color: rgba(var(--color-slate-base), 0.2);
-  background: rgba(var(--color-slate-base), 0.08);
-}

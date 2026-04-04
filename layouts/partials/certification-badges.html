@@ -1,0 +1,35 @@
+{{/* Renders certification badges from data/certifications.toml.
+     Each badge displays an image (resized via Hugo) with a visible name label.
+     If a url field is present, the badge links to the Credly verification page.
+     Image alt="" because the visible text label carries the accessibility info. */}}
+{{ with site.Data.certifications.items }}
+<div class="certification-badges">
+  {{ range . }}
+    {{ $item := . }}
+    {{ $img := resources.Get .image }}
+    {{ if $img }}
+      {{ $resized := $img.Resize "200x" }}
+      {{ if $item.url }}
+        <a href="{{ $item.url }}" class="certification-item" target="_blank" rel="noopener noreferrer"
+           title="Verify {{ $item.name }}">
+      {{ else }}
+        <div class="certification-item">
+      {{ end }}
+          <img
+            src="{{ $resized.RelPermalink }}"
+            alt=""
+            width="{{ $resized.Width }}"
+            height="{{ $resized.Height }}"
+            class="certification-img"
+            loading="lazy"
+            decoding="async">
+          <span class="certification-name">{{ $item.name }}</span>
+      {{ if $item.url }}
+        </a>
+      {{ else }}
+        </div>
+      {{ end }}
+    {{ end }}
+  {{ end }}
+</div>
+{{ end }}
