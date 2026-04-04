@@ -52,3 +52,5 @@ The discovery and triage phase provided a secondary benefit beyond the migration
 {{< tech-tags "GCP, GCR, GAR" >}}
 
 _This case study has been anonymized at the client's request._
+
+**Related service:** [Cloud Migration Consulting](/services/cloud-migration/)

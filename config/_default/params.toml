@@ -9,6 +9,7 @@ disableTextInHeader = true
 enableStructuredBreadcrumbs = true
 turnstileSiteKey = "0x4AAAAAACxUbBWxqsfKfvH-"
 calendarUrl = "https://cal.com/perts-foundry/discovery-meeting"
+defaultSocialImage = "img/og-default.png"
 
 [homepage]
   layout = "custom"

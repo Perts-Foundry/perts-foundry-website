@@ -55,3 +55,5 @@ The application scaling work proved that the platform could handle significant g
 {{< tech-tags "Kubernetes, GKE, Helm, GCP, AWS, Confluence" >}}
 
 _This case study has been anonymized at the client's request._
+
+**Related service:** [Kubernetes & Container Consulting](/services/kubernetes-containers/)

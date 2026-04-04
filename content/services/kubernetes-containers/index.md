@@ -1,8 +1,14 @@
 ---
-title: "Kubernetes & Containers"
+title: "Kubernetes & Container Consulting"
 description: "Deploy, manage, and troubleshoot containerized workloads at scale"
 slug: "kubernetes-containers"
 weight: 4
+tags:
+  - Kubernetes
+  - EKS
+  - GKE
+  - Docker
+  - Helm
 icon: "docker"
 draft: false
 ---
@@ -33,3 +39,5 @@ We build and operate container platforms that your teams can actually use. Clust
 3. **Team Onboarding** — We build documentation, Helm charts, and self-service patterns so new teams can deploy without bottlenecking on your platform team
 4. **Production Readiness** — We set up monitoring, resource limits, and runbooks so your team can diagnose and resolve container issues independently
    {{< /steps >}}
+
+**See this in action:** [Built Multi-Tenant Kubernetes Platform, Scaled Nearly 100x](/case-studies/kubernetes-multi-tenancy-scaling/) | [Deep Container Expertise, Forged at AWS](/case-studies/container-expertise-aws/)

@@ -32,7 +32,7 @@ The dev server is not needed for non-visual changes (CI config, worker code, doc
 
 ## PR Validation Checks
 
-All nine checks must pass before a PR can merge. Run these locally before pushing:
+All ten checks must pass before a PR can merge. Run these locally before pushing:
 
 ### 1. Vitest (Worker unit tests)
 Runs the 43 Worker unit/integration tests. Config: `vitest.config.js`.
@@ -94,6 +94,10 @@ for id in hero-heading problem-heading tech-bar-heading metrics-heading certs-he
   grep -qE "id=\"?$id\"?" public/index.html && echo "OK: $id" || echo "MISSING: $id"
 done
 ```
+
+### 10. Inner page smoke test
+Verifies structural elements on inner pages: `tech-tags` in every case study, `numbered-steps-wrapper` in every service page, `certification-badges` on the about page, and `data-reveal-stagger` on list pages.
+Runs automatically in CI after the Hugo build.
 
 ## Project Structure
 
@@ -174,7 +178,7 @@ The `js-reveal-init` class on `<html>` gates visibility: without JS, all content
 
 ### Section ordering (services, case-studies)
 
-Both `content/services/_index.md` and `content/case-studies/_index.md` use `orderByWeight: true` with cascading display settings (`showDate: false`, `showAuthor: false`, `showReadingTime: false`, `invertPagination: true`, `showHero: true`, `heroStyle: basic`). New pages in these sections must include a `weight` field or they will sort unpredictably. Both sections require a `featured.jpg` in each page bundle for the hero image. Case studies use weight increments of 10 (range 10-100) to allow future insertions. Case studies also require `params.client`, `params.industry`, `params.challenge`, and `params.result` in front matter; these render as a structured metadata card at the top of each page. Hugo merges the `params:` YAML key into `.Params` automatically. The archetype at `archetypes/case-studies.md` scaffolds these fields.
+Both `content/services/_index.md` and `content/case-studies/_index.md` use `orderByWeight: true` with cascading display settings (`showDate: false`, `showAuthor: false`, `showReadingTime: false`, `invertPagination: true`, `showHero: true`, `heroStyle: basic`). New pages in these sections must include a `weight` field or they will sort unpredictably. Both sections require a `featured.jpg` in each page bundle for the hero image. Both sections should include a `tags` field listing relevant technologies (e.g., `AWS`, `Terraform`, `Kubernetes`); these populate `<meta name="keywords">` and JSON-LD keywords for SEO. Case studies use weight increments of 10 (range 10-100) to allow future insertions. Case studies also require `params.client`, `params.industry`, `params.challenge`, and `params.result` in front matter; these render as a structured metadata card at the top of each page. Hugo merges the `params:` YAML key into `.Params` automatically. The archetype at `archetypes/case-studies.md` scaffolds these fields.
 
 ## Code Style
 
@@ -196,6 +200,8 @@ Set via `wrangler secret put`:
 - `TURNSTILE_SECRET_KEY` -- Cloudflare Turnstile secret key for CAPTCHA verification
 
 The Turnstile *site key* (public) is in `config/_default/params.toml` as `turnstileSiteKey`.
+
+The `extend-head-uncached.html` partial serves dual purpose: Turnstile script loading on the contact page, and custom JSON-LD structured data (Organization schema on the homepage, Service schema on individual service pages). This partial receives the full page context (not the cached `.Site`), so page-level conditionals like `.IsHome` and `.Section` work correctly. String values in JSON-LD use Hugo's `jsonify` function (not `safeJS`) to guarantee valid JSON escaping of quotes, backslashes, and special characters.
 
 Social links are configured via `author.links` in `config/_default/languages.en.toml` using Blowfish's single-key object format: `links = [{ github = "https://github.com/Perts-Foundry" }]`. Blowfish emits `<link rel="me">` tags in the HTML head for each entry. The visible author card (with clickable icons) is controlled by `showAuthor` in `params.toml` (currently `false`). A visible GitHub icon also appears in the site footer via `menus.en.toml` using Blowfish's `pre = "github"` icon field.
 

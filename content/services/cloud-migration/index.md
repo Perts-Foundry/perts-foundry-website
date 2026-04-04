@@ -1,8 +1,13 @@
 ---
-title: "Cloud Migration"
+title: "Cloud Migration Consulting"
 description: "Plan and execute migrations across cloud services, platforms, and providers with minimal disruption"
 slug: "cloud-migration"
 weight: 7
+tags:
+  - AWS
+  - GCP
+  - Terraform
+  - Containers
 draft: false
 ---
 
@@ -31,3 +36,5 @@ We plan and execute migrations with a track record of zero downtime across produ
 3. **Execution & Cutover** — We run each wave, monitor for issues, and handle the cutover so your team isn't scrambling during the transition
 4. **Validation & Cleanup** — We verify everything works in the new environment, decommission old resources, and document the new state
    {{< /steps >}}
+
+**See this in action:** [5+ PB Registry Migration with Zero Downtime](/case-studies/zero-downtime-registry-migration/) | [Zero-Downtime Platform Upgrades Across Three Cloud Providers](/case-studies/zero-downtime-platform-upgrades/)

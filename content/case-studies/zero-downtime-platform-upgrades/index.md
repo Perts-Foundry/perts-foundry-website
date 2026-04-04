@@ -1,6 +1,6 @@
 ---
 title: "Zero-Downtime Platform Upgrades Across Three Cloud Providers"
-description: "Upgraded ~15 production Snowflake Terraform projects across AWS, GCP, and Azure, upgraded 3 EKS clusters through multiple major versions, and decommissioned 2 unneeded clusters with zero downtime."
+description: "Upgraded ~15 Snowflake Terraform projects across AWS, GCP, and Azure, plus 3 EKS clusters through multiple major versions, all with zero downtime."
 slug: "zero-downtime-platform-upgrades"
 weight: 60
 draft: false
@@ -52,3 +52,5 @@ This was keep-the-lights-on work at its most demanding: not a single flashy migr
 {{< tech-tags "Snowflake, Terraform, AWS, GCP, Azure, EKS, Kubernetes" >}}
 
 _This case study has been anonymized at the client's request._
+
+**Related services:** [Cloud Infrastructure Consulting](/services/cloud-infrastructure/) | [Cloud Migration Consulting](/services/cloud-migration/)

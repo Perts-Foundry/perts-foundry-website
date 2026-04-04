@@ -1,6 +1,6 @@
 ---
 title: "Led Organization-Wide Agile Adoption"
-description: "Pioneered a three-phase agile transformation from waterfall to optimized Kanban, reducing issue open time by 25% and establishing the reference implementation for the organization."
+description: "Pioneered a three-phase agile transformation from waterfall to optimized Kanban, reducing issue open time by 25% for a defense organization."
 slug: "agile-transformation-defense"
 weight: 90
 draft: false
@@ -56,3 +56,5 @@ The three-phase transformation demonstrated that agile adoption is not a one-siz
 ## Key Technologies
 
 {{< tech-tags "Jira, Jira Service Desk, Confluence" >}}
+
+**Related service:** [Agile Coaching & Process Improvement](/services/agile-coaching/)

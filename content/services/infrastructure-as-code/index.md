@@ -1,8 +1,13 @@
 ---
-title: "Infrastructure as Code"
+title: "Infrastructure as Code Consulting"
 description: "Codify and manage infrastructure with Terraform at scale"
 slug: "infrastructure-as-code"
 weight: 5
+tags:
+  - Terraform
+  - HCP
+  - Atlantis
+  - GitHub
 draft: false
 ---
 
@@ -30,3 +35,5 @@ We bring structure and scalability to your infrastructure code. You get a module
 3. **Workflow Automation** — We set up Atlantis or HCP Terraform for PR-based plan/apply, so every infrastructure change gets reviewed before it reaches any environment
 4. **Migration & Adoption** — We migrate existing click-ops or legacy IaC into the new structure and onboard teams to the self-service workflow
    {{< /steps >}}
+
+**See this in action:** [Scaled Terraform Operations Across 200+ Projects](/case-studies/terraform-infrastructure-at-scale/) | [Zero-Downtime Platform Upgrades Across Three Cloud Providers](/case-studies/zero-downtime-platform-upgrades/)
