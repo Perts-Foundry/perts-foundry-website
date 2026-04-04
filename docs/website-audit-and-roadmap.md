@@ -217,7 +217,7 @@ Resolved by the About page rewrite. "We" on other pages reads as professional co
 - [x] Review page titles for keyword placement and consistency
 - [x] Add Organization JSON-LD schema to homepage and Service JSON-LD to service pages
 - [x] Set `defaultSocialImage` in `params.toml` so all pages have OG images when shared (supersedes L2)
-- [ ] Regenerate homepage OG image (current `og-homepage.png` shows old "Ship faster..." tagline instead of "Build. Scale. Own.")
+- [x] Regenerate homepage OG image (current `og-homepage.png` shows old "Ship faster..." tagline instead of "Build. Scale. Own.")
 - [x] Review internal linking strategy (do service pages link to relevant case studies and vice versa?)
 - [ ] Set up Google Search Console (verify via DNS TXT, submit sitemap)
 - [ ] Evaluate whether page load performance (Core Web Vitals) needs attention via PageSpeed Insights
@@ -226,7 +226,7 @@ Resolved by the About page rewrite. "We" on other pages reads as professional co
 - [ ] Write 2-3 technical blog posts extracted from case study material (re-enable blog when ready)
 - [ ] Expand service page content to 500+ words (currently ~300)
 
-**Partially resolved 2026-04-03:** Meta descriptions audited and fixed (4 short descriptions expanded, 4 long case study descriptions trimmed). Service page titles updated to include "Consulting" keyword. Tags added to all 9 service pages. Organization JSON-LD added to homepage, Service JSON-LD added to all service pages via `extend-head-uncached.html`. `defaultSocialImage` set to logo fallback. Internal cross-links added between all 9 service pages and 10 case studies (bidirectional). Remaining: homepage OG image regeneration, Google Search Console setup, FAQ sections, blog posts, content expansion.
+**Partially resolved 2026-04-03:** Meta descriptions audited and fixed (4 short descriptions expanded, 4 long case study descriptions trimmed). Service page titles updated to include "Consulting" keyword. Tags added to all 9 service pages. Organization JSON-LD added to homepage, Service JSON-LD added to all service pages via `extend-head-uncached.html`. `defaultSocialImage` set to logo fallback. Internal cross-links added between all 9 service pages and 10 case studies (bidirectional). Single site-wide OG image regenerated 2026-04-04 via `scripts/generate-og.js` (1200x630, logo + "Build. Scale. Own." tagline) at `assets/img/og-default.png`. Remaining: Google Search Console setup, FAQ sections, blog posts, content expansion.
 
 **Files:** Content front matter across `content/`, `config/_default/params.toml`, `layouts/partials/extend-head-uncached.html`, `assets/img/og-default.png`
 
@@ -254,10 +254,14 @@ Resolved by the About page rewrite. "We" on other pages reads as professional co
 - [x] Enable breadcrumb structured data (`enableStructuredBreadcrumbs = true`)
 - [x] Add Organization schema via `layouts/partials/extend-head-uncached.html` (completed under M6)
 
-### L2. ~~No custom Open Graph images~~ Partially resolved
+### L2. ~~No custom Open Graph images~~ Resolved
 
 - [x] Set `defaultSocialImage` fallback in `params.toml` (superseded by M6; uses logo as interim)
-- [ ] Create proper 1200x630px default OG image for link previews
+- [x] Create proper 1200x630px default OG image for link previews
+
+**Resolved 2026-04-04:** Single branded 1200x630 OG image (logo + "Build. Scale. Own." tagline on dark gradient) used site-wide. `scripts/generate-og.js` generates `assets/img/og-default.png`, served by Blowfish's `defaultSocialImage` fallback via `resources.Get`. Homepage `images` front matter removed (was redundant with the fallback and caused duplicate `og:image` tags).
+
+**Files:** `assets/img/og-default.png`, `scripts/generate-og.js`
 
 ### L3. Blog post directory naming
 
@@ -395,7 +399,7 @@ Tasks to complete after removing Cloudflare Access and making the site public.
 
 - [ ] Set up Google Search Console: verify pertsfoundry.com via DNS TXT record, submit sitemap, request indexing of key pages
 - [ ] Run PageSpeed Insights on pertsfoundry.com and confirm Core Web Vitals are green
-- [ ] Regenerate homepage OG image with current "Build. Scale. Own." tagline (current `og-homepage.png` shows old tagline)
+- [x] Regenerate homepage OG image with current "Build. Scale. Own." tagline (current `og-homepage.png` shows old tagline)
 
 ### Monitoring & Uptime
 
