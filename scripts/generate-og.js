@@ -1,11 +1,11 @@
 /**
- * Generate OG social preview images using existing brand assets.
+ * Generate the site-wide OG social preview image using existing brand assets.
  *
  * Usage: node scripts/generate-og.js
  *
- * Produces:
- *   static/img/og-homepage.png  (1200x630) - Homepage social preview
- *   assets/img/og-default.png   (1200x630) - Default fallback for all other pages
+ * Produces one image, written to two paths (Hugo resolves them differently):
+ *   static/img/og-homepage.png  - Referenced by homepage front matter (absURL)
+ *   assets/img/og-default.png   - Referenced by params.toml defaultSocialImage (resources.Get)
  *
  * The logo PNG is composited as-is from static/img/logo/. Only the background
  * gradient and tagline text are generated; the logo is never re-rendered.
@@ -28,6 +28,12 @@ const LOGO_SRC = path.join(
   ROOT,
   "static/img/logo/perts-foundry-horizontal-light@2x.png",
 );
+
+// Both paths serve the same image; Hugo needs it in two locations
+const OUTPUT_PATHS = [
+  path.join(ROOT, "static/img/og-homepage.png"),
+  path.join(ROOT, "assets/img/og-default.png"),
+];
 
 // Brand-matched dark gradient with a blue glow accent
 function backgroundSvg() {
@@ -75,7 +81,7 @@ async function loadLogo(targetWidth) {
   return { buffer: data, width: info.width, height: info.height };
 }
 
-async function generateHomepage() {
+async function generate() {
   const logo = await loadLogo(600);
 
   // Center the content block (logo + taglines) vertically, offset up for URL
@@ -113,62 +119,24 @@ async function generateHomepage() {
     },
   ]);
 
-  await sharp(backgroundSvg())
+  const image = await sharp(backgroundSvg())
     .composite([
       { input: logo.buffer, top: logoTop, left: logoLeft },
       { input: text, top: 0, left: 0 },
     ])
     .png()
-    .toFile(path.join(ROOT, "static/img/og-homepage.png"));
+    .toBuffer();
 
-  console.log("  static/img/og-homepage.png");
-}
-
-async function generateDefault() {
-  const logo = await loadLogo(540);
-
-  // Center logo + subtitle as a block
-  const contentHeight = logo.height + 50 + 36;
-  const contentTop = Math.round((HEIGHT - contentHeight) / 2) - 15;
-  const logoTop = contentTop;
-  const logoLeft = Math.round((WIDTH - logo.width) / 2);
-  const belowLogo = logoTop + logo.height;
-
-  const text = textOverlay([
-    {
-      y: belowLogo + 55,
-      size: 36,
-      weight: 600,
-      color: "#FFFFFF",
-      spacing: 5,
-      text: "DevOps Consulting",
-    },
-    {
-      y: 605,
-      size: 18,
-      weight: 400,
-      color: "#64748B",
-      spacing: 3,
-      text: "pertsfoundry.com",
-    },
-  ]);
-
-  await sharp(backgroundSvg())
-    .composite([
-      { input: logo.buffer, top: logoTop, left: logoLeft },
-      { input: text, top: 0, left: 0 },
-    ])
-    .png()
-    .toFile(path.join(ROOT, "assets/img/og-default.png"));
-
-  console.log("  assets/img/og-default.png");
+  for (const dest of OUTPUT_PATHS) {
+    await fs.promises.writeFile(dest, image);
+    console.log("  " + path.relative(ROOT, dest));
+  }
 }
 
 async function main() {
-  console.log("Generating OG images (1200x630)...");
-  await generateHomepage();
-  await generateDefault();
-  console.log("Done.");
+  console.log("Generating OG image (1200x630)...");
+  await generate();
+  console.log("Done. Same image written to both Hugo paths.");
 }
 
 main().catch((err) => {

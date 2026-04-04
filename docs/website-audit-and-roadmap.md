@@ -226,7 +226,7 @@ Resolved by the About page rewrite. "We" on other pages reads as professional co
 - [ ] Write 2-3 technical blog posts extracted from case study material (re-enable blog when ready)
 - [ ] Expand service page content to 500+ words (currently ~300)
 
-**Partially resolved 2026-04-03:** Meta descriptions audited and fixed (4 short descriptions expanded, 4 long case study descriptions trimmed). Service page titles updated to include "Consulting" keyword. Tags added to all 9 service pages. Organization JSON-LD added to homepage, Service JSON-LD added to all service pages via `extend-head-uncached.html`. `defaultSocialImage` set to logo fallback. Internal cross-links added between all 9 service pages and 10 case studies (bidirectional). OG images regenerated 2026-04-04 via `scripts/generate-og.js` (homepage: "Build. Scale. Own." tagline; default: proper 1200x630 branded card). Remaining: Google Search Console setup, FAQ sections, blog posts, content expansion.
+**Partially resolved 2026-04-03:** Meta descriptions audited and fixed (4 short descriptions expanded, 4 long case study descriptions trimmed). Service page titles updated to include "Consulting" keyword. Tags added to all 9 service pages. Organization JSON-LD added to homepage, Service JSON-LD added to all service pages via `extend-head-uncached.html`. `defaultSocialImage` set to logo fallback. Internal cross-links added between all 9 service pages and 10 case studies (bidirectional). Single site-wide OG image regenerated 2026-04-04 via `scripts/generate-og.js` (1200x630, logo + "Build. Scale. Own." tagline); written to both `static/img/` and `assets/img/` for Hugo path compatibility. Remaining: Google Search Console setup, FAQ sections, blog posts, content expansion.
 
 **Files:** Content front matter across `content/`, `config/_default/params.toml`, `layouts/partials/extend-head-uncached.html`, `assets/img/og-default.png`
 
@@ -259,9 +259,9 @@ Resolved by the About page rewrite. "We" on other pages reads as professional co
 - [x] Set `defaultSocialImage` fallback in `params.toml` (superseded by M6; uses logo as interim)
 - [x] Create proper 1200x630px default OG image for link previews
 
-**Resolved 2026-04-04:** `scripts/generate-og.js` generates a branded 1200x630 default OG card (logo + "DevOps Consulting" on dark gradient). Replaces the interim 1024x1024 square logo that cropped poorly on social platforms.
+**Resolved 2026-04-04:** Single branded 1200x630 OG image (logo + "Build. Scale. Own." tagline on dark gradient) used site-wide. `scripts/generate-og.js` generates once and writes to both `static/img/og-homepage.png` (homepage front matter) and `assets/img/og-default.png` (Blowfish `defaultSocialImage`). Hugo requires both paths because the homepage resolves via `absURL` (static/) while the default fallback resolves via `resources.Get` (assets/).
 
-**Files:** `assets/img/og-default.png`, `scripts/generate-og.js`
+**Files:** `static/img/og-homepage.png`, `assets/img/og-default.png`, `scripts/generate-og.js`
 
 ### L3. Blog post directory naming
 
