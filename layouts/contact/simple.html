@@ -22,46 +22,6 @@
     </section>
 
     <div class="contact-layout">
-      {{/* Right column (mobile: bottom): scheduling CTA */}}
-      <div class="contact-info">
-        <div class="contact-card contact-card--cta" data-reveal>
-          <h2 class="text-xl font-bold text-neutral-900 dark:text-neutral mb-2">
-            Schedule a Discovery Meeting
-          </h2>
-          <p class="text-sm text-neutral-500 dark:text-neutral-400 mb-4">
-            The fastest way to get started. 30 minutes, no commitment.
-          </p>
-
-          <h3 class="text-base font-bold text-neutral-900 dark:text-neutral mb-3 mt-5">
-            What to Expect
-          </h3>
-          <ol class="numbered-steps contact-steps">
-            <li>
-              <strong>A quick intro call</strong>
-              <span>30 minutes to understand your situation and goals</span>
-            </li>
-            <li>
-              <strong>An honest assessment</strong>
-              <span>We'll tell you if we're the right fit</span>
-            </li>
-            <li>
-              <strong>A clear proposal</strong>
-              <span>Scope, timeline, and pricing with no surprises</span>
-            </li>
-          </ol>
-
-          <div class="contact-cta-wrapper">
-            <a href="{{ site.Params.calendarUrl }}"
-               target="_blank"
-               rel="noopener"
-               class="contact-cta-button">
-              Book a 30-Minute Call
-            </a>
-          </div>
-        </div>
-
-      </div>
-
       {{/* Left column (mobile: top): contact form */}}
       <div class="contact-form-column">
         <div class="contact-card" data-reveal>
@@ -154,6 +114,45 @@
           <p class="form-privacy">
             <span aria-hidden="true">&#x1f512;</span> Your information stays private. No spam, no sharing.
           </p>
+        </div>
+      </div>
+
+      {{/* Right column (mobile: bottom): scheduling CTA */}}
+      <div class="contact-info">
+        <div class="contact-card contact-card--cta" data-reveal>
+          <h2 class="text-xl font-bold text-neutral-900 dark:text-neutral mb-2">
+            Schedule a Discovery Meeting
+          </h2>
+          <p class="text-sm text-neutral-500 dark:text-neutral-400 mb-4">
+            The fastest way to get started. 30 minutes, no commitment.
+          </p>
+
+          <h3 class="text-base font-bold text-neutral-900 dark:text-neutral mb-3 mt-5">
+            What to Expect
+          </h3>
+          <ol class="numbered-steps contact-steps">
+            <li>
+              <strong>A quick intro call</strong>
+              <span>30 minutes to understand your situation and goals</span>
+            </li>
+            <li>
+              <strong>An honest assessment</strong>
+              <span>We'll tell you if we're the right fit</span>
+            </li>
+            <li>
+              <strong>A clear proposal</strong>
+              <span>Scope, timeline, and pricing with no surprises</span>
+            </li>
+          </ol>
+
+          <div class="contact-cta-wrapper">
+            <a href="{{ site.Params.calendarUrl }}"
+               target="_blank"
+               rel="noopener"
+               class="contact-cta-button">
+              Book a 30-Minute Call
+            </a>
+          </div>
         </div>
       </div>
     </div>

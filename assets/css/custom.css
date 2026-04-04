@@ -118,37 +118,6 @@ h1.text-4xl {
   }
 }
 
-/* ===== Site-Wide Typography Scaling ===== */
-
-/* Override theme's fixed text-4xl (2.25rem / 36px) on page titles.
-   Scales from 30px (mobile) to 36px (desktop).
-   Homepage hero uses .homepage-hero-heading (no text-4xl class), so unaffected. */
-h1.text-4xl {
-  font-size: clamp(1.875rem, 1.5rem + 1vw, 2.25rem);
-  line-height: 1.15;
-}
-
-/* Prose heading responsive scaling (detail pages: services, case studies, about, etc.) */
-.prose h2 {
-  font-size: clamp(1.375rem, 1rem + 1.2vw, 1.6875rem);
-}
-
-.prose h3 {
-  font-size: clamp(1.125rem, 0.9rem + 0.9vw, 1.5rem);
-}
-
-/* Hero feature image: constrain height on mobile */
-.hero-feature-img {
-  max-height: 384px;
-  object-fit: cover;
-}
-
-@media (max-width: 639px) {
-  .hero-feature-img {
-    max-height: 240px;
-  }
-}
-
 /* ===== Shared Components ===== */
 
 /* Headshot with gradient border and glow */
@@ -1467,10 +1436,6 @@ html:not(.dark) .tech-label {
   gap: 1.5rem;
 }
 
-.contact-form-column {
-  order: -1;
-}
-
 @media (min-width: 640px) {
   .contact-layout {
     flex-direction: row;
@@ -1506,7 +1471,7 @@ html:not(.dark) .tech-label {
 .contact-form-column {
   min-width: 0;
   max-width: 100%;
-  overflow: hidden;
+  overflow-x: hidden;
 }
 
 /* Contact cards */
