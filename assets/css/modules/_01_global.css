@@ -1,0 +1,83 @@
+/* ===== Global ===== */
+
+:root {
+  --color-slate-base: 148, 163, 184;
+  --accent-blue: #3B82F6;
+  --accent-blue-light: #60A5FA;
+  --accent-purple: #7C3AED;
+  --accent-red: #DC2626;
+  --accent-orange: #FB923C;
+}
+
+html:not(.dark) {
+  --accent-blue: #2563EB;
+  --accent-blue-light: #2563EB;
+  --accent-orange: #EA580C;
+}
+
+.fixed.inset-x-0.z-100 {
+  padding-top: 0.5rem;
+}
+
+/* Reduce Blowfish fixed header spacer (default 148px is too tall) */
+.min-h-\[148px\] {
+  min-height: 88px;
+}
+
+/* Normalize list page heading to match simple layout (mt-0 instead of mt-5) */
+header > h1.mt-5 {
+  margin-top: 0;
+}
+
+/* Reduce dead space between title and content when article metadata is hidden */
+#single_header .mb-6:last-child:empty,
+#single_header .mb-6:last-child:has(> .flex:empty) {
+  margin-bottom: 0.5rem;
+}
+
+html {
+  scroll-padding-top: 5rem;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Footer nav: always horizontal (only 2 links, no need to stack) */
+#site-footer nav ul {
+  flex-direction: row;
+}
+
+#site-footer nav ul li {
+  margin-bottom: 0;
+  margin-inline-end: 1.75rem;
+}
+
+#site-footer nav ul li:last-child {
+  margin-inline-end: 0;
+}
+
+/* Allow logo to shrink on narrow viewports (e.g., Galaxy Z Fold outer screen).
+   Without min-width: 0, the flex parent won't compress below the SVG's intrinsic width. */
+.main-menu > div:first-child {
+  min-width: 0;
+}
+
+.logo svg {
+  height: 3.5rem;
+  width: auto;
+  max-width: 100%;
+}
+
+.logo img {
+  max-height: 3.5rem;
+  width: auto;
+  max-width: 100%;
+}
