@@ -107,7 +107,7 @@ config/production/   # Production overrides
 config/development/  # Development overrides
 content/             # Markdown content (about, accessibility, blog, case-studies, contact, privacy, services)
 data/                # Structured TOML data files (metrics, process steps, technologies, certifications) used by homepage and about page
-assets/css/          # Custom CSS overrides (custom.css) and color schemes (schemes/)
+assets/css/          # Modular custom CSS (modules/) and color schemes (schemes/)
 layouts/             # Custom Hugo layout overrides, shortcodes, and homepage sub-partials
 static/              # Static assets (favicons, images, manifest)
 src/                 # Cloudflare Worker source (contact form API)
@@ -136,7 +136,7 @@ Do not read or reference archived documents unless the user explicitly asks for 
 - Tags use proper case (`Terraform`, `AWS`, `Kubernetes`, not `terraform`, `aws`)
 - Permalinks for case studies use the `slug` field: `/case-studies/:slug/`
 - Content `slug` values must match their directory name (e.g., `content/services/cloud-infrastructure/` uses `slug: "cloud-infrastructure"`). Structured breadcrumb data relies on this alignment.
-- **Exception: contact page.** The contact page uses a custom template (`layouts/contact/simple.html`) that hardcodes all content in HTML for two-column layout control. The markdown file (`content/contact/index.md`) contains only front matter. Editing the contact page content requires modifying the template, not the markdown file. The layout has two cards: a contact form (left column on desktop, top on mobile) and a scheduling CTA card (right column, bottom on mobile). DOM source order matches visual order. The Turnstile CAPTCHA widget uses `data-size="flexible"` for responsive sizing, with CSS `transform: scale()` fallbacks at viewports below 500px (`custom.css`) to prevent the 300px-wide iframe from overflowing narrow screens. The email address is intentionally absent from the visible page (anti-scraping) and appears only in hidden error fallback elements.
+- **Exception: contact page.** The contact page uses a custom template (`layouts/contact/simple.html`) that hardcodes all content in HTML for two-column layout control. The markdown file (`content/contact/index.md`) contains only front matter. Editing the contact page content requires modifying the template, not the markdown file. The layout has two cards: a contact form (left column on desktop, top on mobile) and a scheduling CTA card (right column, bottom on mobile). DOM source order matches visual order. The Turnstile CAPTCHA widget uses `data-size="flexible"` for responsive sizing, with CSS `transform: scale()` fallbacks at viewports below 500px (`assets/css/modules/_08_contact-page.css`) to prevent the 300px-wide iframe from overflowing narrow screens. The email address is intentionally absent from the visible page (anti-scraping) and appears only in hidden error fallback elements.
 - **Exception: homepage.** The homepage uses a custom layout (`layouts/partials/home/custom.html`) that dispatches to 8 section sub-partials in `layouts/partials/homepage/`. Section order: hero (with inline problem statement), tech bar, metrics band, certifications, services grid, featured cases, process timeline, final CTA. Content comes from 5 sources: `hero.headline`, `hero.subheadline` from `content/_index.md` front matter; the problem statement from `content/_index.md` body (rendered inline in the hero); metrics, process steps, technologies, and certifications from `data/*.toml` files; services and case studies from Hugo section queries. All case studies and services appear on the homepage via paginated carousels (sorted by weight). Services display as image cards using their `featured*` image. The `.homepage` wrapper uses `display: flex; flex-direction: column; gap: 3rem` for consistent inter-section spacing. Three carousels (tech bar, services, cases) depend on specific DOM IDs: `tech-carousel-items`, `services-carousel-grid`, `cases-carousel-grid` and their corresponding `-dots` containers. Renaming these IDs in templates will silently break carousel navigation. Each carousel uses a responsive `perPage` function in `extend-footer.html` that checks `window.innerWidth < 640` to switch between mobile and desktop item counts. This 640px threshold must stay in sync with the CSS `@media (min-width: 640px)` breakpoints that control grid column counts; changing one without the other will cause layout/pagination mismatches. Note: `perPage` is evaluated once at page load and is not recalculated on resize or orientation change.
 
 ### Custom Shortcodes
@@ -149,9 +149,20 @@ Five custom shortcodes are available for content pages:
 - `{{< certification-badges >}}` -- Renders image-based certification badges from `data/certifications.toml`. Each badge shows the Credly badge image (resized via Hugo's image pipeline) with a visible name label. Optionally links to a Credly verification URL when the `url` field is present. Used on the about page. The shortcode delegates to a shared partial (`layouts/partials/certification-badges.html`) that is also called by the homepage certifications section.
 - `{{< faqs >}}` -- Renders an FAQ accordion from the page's front matter `faqs` array (objects with `question` and `answer` fields). Uses native `<details>/<summary>` HTML for accessible expand/collapse behavior. Used on all service pages. FAQPage JSON-LD schema is emitted separately in `extend-head-uncached.html` for any page with `faqs` data.
 
+### Image alt-text conventions
+
+The site meets WCAG 2.1 AA alt-text requirements. Follow these patterns when adding images:
+
+- **Featured images in listing cards and hero sections**: `alt=""` (decorative). The linked card title or page `<h1>` provides the label. Used by `article-link/simple.html`, `article-link/card-related.html`, `hero/basic.html`, and homepage card partials.
+- **Certification/badge images**: `alt=""` with visible text label adjacent. The visible `.certification-name` span carries the accessibility info (see `layouts/partials/certification-badges.html`).
+- **Inline markdown images in content**: descriptive alt text. Example from about page: `![Headshot of Seth Perts](featured.jpg "Seth Perts, Founder of Perts Foundry")`.
+- **Icon SVGs inside buttons**: `aria-label` on the parent button; icons wrapped in `aria-hidden="true"` containers (e.g., carousel prev/next controls, tech-bar icons).
+
+`htmltest` (configured in `.htmltest.yml` with `IgnoreAltEmpty: true`) and `pa11y-ci` enforce these patterns in CI.
+
 ### Vendor Template Overrides
 
-Four Blowfish theme templates are overridden locally. On theme upgrades, re-diff each override against the new vendor version.
+Five Blowfish theme templates are overridden locally. On theme upgrades, re-diff each override against the new vendor version.
 
 | Local override | Vendor original | Modification | Base version |
 |----------------|----------------|--------------|--------------|
@@ -159,15 +170,39 @@ Four Blowfish theme templates are overridden locally. On theme upgrades, re-diff
 | `layouts/partials/article-link/card-related.html` | `article-link/card-related.html` | Added `alt=""` to decorative featured images for htmltest compliance | v2.100.0 |
 | `layouts/_default/list.html` | `_default/list.html` | `data-reveal-stagger` attribute for scroll-reveal cascade | v2.100.0 |
 | `layouts/contact/simple.html` | `_default/simple.html` | Full custom two-column contact page layout | v2.100.0 |
+| `layouts/partials/head.html` | `partials/head.html` | CSS loading via explicit module enumeration over `assets/css/modules/` (search `LOCAL OVERRIDE` for the exact delta) | v2.100.0 |
 
 ### Vendor CSS Contrast Overrides
 
-Two Blowfish Tailwind utility class combinations fail WCAG AA contrast and are overridden in `custom.css` with `!important`. On theme upgrades, verify these class names still exist in the vendor templates.
+Two Blowfish Tailwind utility class combinations fail WCAG AA contrast and are overridden in `assets/css/modules/_04_shared-components.css` with `!important`. On theme upgrades, verify these class names still exist in the vendor templates.
 
 | CSS selector | Vendor usage | Override | Base version |
 |-------------|--------------|----------|--------------|
 | `.px-2.text-primary-500` | Article-meta middot separators | `primary-400` dark / `primary-700` light | v2.100.0 |
 | `.px-1.text-primary-500` | Breadcrumb separators | `primary-400` dark / `primary-700` light | v2.100.0 |
+
+### CSS Module Organization
+
+Custom CSS is split into 9 topic-scoped modules in `assets/css/modules/` and loaded via `layouts/partials/head.html` (the 5th vendor override). Modules are concatenated in explicit numeric order into a single minified + fingerprinted bundle.
+
+| Module | Scope |
+|--------|-------|
+| `_01_global.css` | `:root` variables, base resets, header/footer normalization, global reduced-motion |
+| `_02_typography.css` | Responsive `clamp()` heading sizes, prose sizing, hero image constraints |
+| `_03_animations.css` | All `@keyframes` (heroGradientShift, ctaPulse, techItemExit, techEnterScale, dotProgress) + scroll-reveal base rules |
+| `_04_shared-components.css` | Contrast overrides, `.cta`, `.numbered-steps`, headshot styling |
+| `_05_homepage.css` | Hero, services carousel, metrics band, homepage layout shell |
+| `_06_homepage-cards.css` | Certification badges, case cards, cases carousel, process timeline, final CTA card |
+| `_07_tech-bar.css` | Tech bar carousel, item animations, tech-specific reduced-motion |
+| `_08_contact-page.css` | Contact two-column layout, contact cards, Turnstile scaling, form styling |
+| `_09_article-details.css` | Article-link hovers, results table, tech tags, FAQ accordion, H2 reveal |
+
+**Where to add new CSS:**
+- New homepage section → `_05_homepage.css` or `_06_homepage-cards.css` (depending on whether it's a card/timeline).
+- New page-specific styles → create a new module (e.g. `_10_new-page.css`) and add it to the enumerated list in `layouts/partials/head.html`.
+- New `@keyframes` → always in `_03_animations.css` (keyframe names resolve globally, so placement is independent of usage).
+- Reduced-motion blocks → stay co-located with the animations they modify.
+- Cross-file dependencies (e.g. `_08` and `_09` reference `[data-reveal]` from `_03`) should be documented with a header comment.
 
 ### Scroll-Reveal System
 

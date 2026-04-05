@@ -15,7 +15,7 @@
  *
  * Design mirrors the homepage hero section: dark slate/violet gradient
  * background, white headline, and the multi-color subtitle gradient
- * (blue > purple > red > orange) from custom.css --accent-* variables.
+ * (blue > purple > red > orange) from assets/css/modules/_01_global.css --accent-* variables.
  *
  * Font note: Text is rendered via librsvg using the system's fontconfig.
  * Trebuchet MS (the brand font) is available on Windows/WSL via Windows fonts.
