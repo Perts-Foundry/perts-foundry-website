@@ -221,7 +221,7 @@ Resolved by the About page rewrite. "We" on other pages reads as professional co
 - [x] Review internal linking strategy (do service pages link to relevant case studies and vice versa?)
 - [ ] Set up Google Search Console (verify via DNS TXT, submit sitemap)
 - [ ] Evaluate whether page load performance (Core Web Vitals) needs attention via PageSpeed Insights
-- [ ] Consider adding `alt` text audit for all images across the site
+- [x] Consider adding `alt` text audit for all images across the site
 - [x] Add FAQ sections to service pages (3-5 questions each) with FAQPage JSON-LD
 - [ ] Write 2-3 technical blog posts extracted from case study material (re-enable blog when ready)
 - [x] Expand service page content to 500+ words (FAQ sections push all pages to ~700+ words)
@@ -231,6 +231,8 @@ Resolved by the About page rewrite. "We" on other pages reads as professional co
 **Partially resolved 2026-04-03:** Meta descriptions audited and fixed (4 short descriptions expanded, 4 long case study descriptions trimmed). Service page titles updated to include "Consulting" keyword. Tags added to all 10 service pages. Organization JSON-LD added to homepage, Service JSON-LD added to all service pages via `extend-head-uncached.html`. `defaultSocialImage` set to logo fallback. Internal cross-links added between all 10 service pages and 12 case studies (bidirectional). Single site-wide OG image regenerated 2026-04-04 via `scripts/generate-og.js` (1200x630, logo + "Build. Scale. Own." tagline) at `assets/img/og-default.png`.
 
 **Updated 2026-04-04:** FAQ sections with FAQPage JSON-LD added to all 10 service pages (3-4 questions each, consulting-oriented buyer questions). FAQ shortcode (`{{< faqs >}}`) uses native `<details>/<summary>` accordion. DNS-prefetch hints added for cal.com and challenges.cloudflare.com. Related content enabled (`showRelatedContent = true`, `relatedContentLimit = 3`) for tag-based cross-linking. Remaining: Google Search Console setup, blog posts.
+
+**Updated 2026-04-05:** Alt-text audit completed. ~93 images across the site reviewed; zero gaps identified. Site is WCAG 2.1 AA compliant for image accessibility. Patterns verified and documented in `CLAUDE.md` (new "Image alt-text conventions" subsection): featured images in cards/heroes use `alt=""` (card title/page heading provides the label), certification badges pair `alt=""` with visible text labels, inline markdown images use descriptive alt, icon SVGs use `aria-label` on parent buttons. `htmltest` (with `IgnoreAltEmpty: true`) and `pa11y-ci` enforce these patterns in CI.
 
 **Files:** Content front matter across `content/`, `config/_default/params.toml`, `layouts/partials/extend-head-uncached.html`, `layouts/shortcodes/faqs.html`, `assets/css/custom.css`, `assets/img/og-default.png`
 
@@ -282,13 +284,13 @@ Resolved by the About page rewrite. "We" on other pages reads as professional co
 - [ ] Collect real testimonials from clients
 - [ ] Plan placement on homepage and About page
 
-### L6. Review CSS light mode override organization
+### L6. ~~Review CSS light mode override organization~~ Resolved
 
-- [ ] Revisit `assets/css/custom.css` structure if file exceeds ~500 lines
+- [x] Revisit `assets/css/custom.css` structure if file exceeds ~500 lines
 
-Currently ~45 `html:not(.dark)` light mode rules are co-located with their dark mode counterparts throughout the file (~1,860 lines). The file has significantly exceeded the ~500-line threshold. Consider splitting into separate files (`_homepage.css`, `_contact.css`, `_global.css`) via Hugo `resources.Concat` if it grows further.
+**Resolved 2026-04-05:** `custom.css` (2,038 lines at time of refactor) split into 9 topic-scoped modules in `assets/css/modules/` (`_01_global.css` through `_09_article-details.css`). Modules concatenated via explicit enumeration in a local override of Blowfish's `head.html` partial (now the 5th documented vendor template override). All 5 `@keyframes` definitions consolidated into `_03_animations.css`. Bundle output unchanged: single minified + fingerprinted `main.bundle.*.css` file, same SHA-512 hash-addressable URL, same SRI integrity. Largest module is `_06_homepage-cards.css` at 495 lines; all modules stay under the 500-line guideline. Module conventions documented in `CLAUDE.md` (new "CSS Module Organization" subsection).
 
-**Files:** `assets/css/custom.css`
+**Files:** `assets/css/modules/*.css` (new), `layouts/partials/head.html` (new vendor override), `CLAUDE.md`, `scripts/generate-og.js` (stale comment updated)
 
 ### L7. pa11y-ci runs only in dark mode
 

@@ -1,0 +1,191 @@
+/* ===== Shared Components ===== */
+
+/* Blowfish theme contrast overrides
+   These target Tailwind utility class combos used in Blowfish vendor templates
+   (article-meta, breadcrumbs, pagination). The theme uses primary-500 and
+   neutral-500 which fail WCAG AA contrast in both modes. Re-verify on theme
+   upgrades if Blowfish changes these class names. */
+.px-2.text-primary-500,
+.px-1.text-primary-500 {
+  color: rgb(var(--color-primary-400)) !important;
+}
+
+html:not(.dark) .px-2.text-primary-500,
+html:not(.dark) .px-1.text-primary-500 {
+  color: rgb(var(--color-primary-700)) !important;
+}
+
+/* Headshot with gradient border and glow */
+.headshot + figure {
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
+
+.headshot + figure img {
+  max-width: 260px;
+  border-radius: 16px;
+  margin-inline: auto;
+  object-fit: cover;
+  padding: 3px;
+  background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+  box-shadow:
+    0 0 25px rgba(59, 130, 246, 0.35),
+    0 0 50px rgba(139, 92, 246, 0.18),
+    0 0 80px rgba(59, 130, 246, 0.08);
+}
+
+.headshot + figure figcaption {
+  margin-top: 0.75rem;
+  text-align: center;
+}
+
+.cta {
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  font-size: 1.125rem;
+  padding: 3rem 2rem;
+  margin-top: 3rem;
+  border: 2px solid transparent;
+  border-radius: 0.75rem;
+  background-image:
+    linear-gradient(rgba(var(--color-neutral-900), 1), rgba(var(--color-neutral-900), 1)),
+    linear-gradient(135deg, var(--accent-blue), var(--accent-purple), var(--accent-red));
+  background-origin: border-box;
+  background-clip: padding-box, border-box;
+  box-shadow: 0 0 60px rgba(59, 130, 246, 0.15), 0 0 120px rgba(124, 58, 237, 0.08);
+}
+
+.cta > * {
+  position: relative;
+  z-index: 1;
+}
+
+.cta::before {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  border-radius: inherit;
+  background: radial-gradient(
+    ellipse at 50% 0%,
+    rgba(var(--color-primary-500), 0.08),
+    rgba(var(--color-secondary-500), 0.04),
+    transparent 70%
+  );
+  opacity: 0.9;
+  animation: ctaPulse 6s ease-in-out infinite alternate;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.cta strong {
+  font-size: clamp(1.5rem, 4vw, 2rem);
+  color: rgb(var(--color-neutral-100));
+}
+
+.cta a {
+  display: inline-block;
+  padding: 0.875rem 2rem;
+  background: rgb(var(--color-primary-600));
+  color: #fff;
+  font-weight: 600;
+  font-size: 1.0625rem;
+  border-radius: 0.5rem;
+  text-decoration: none;
+  transition: background-color 0.15s ease, transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.cta a:hover {
+  background: rgb(var(--color-primary-500));
+  color: #fff;
+  text-decoration: none;
+  transform: scale(1.03);
+  box-shadow: 0 0 24px rgba(59, 130, 246, 0.35);
+}
+
+.cta a:focus-visible {
+  outline: 2px solid rgb(var(--color-primary-500));
+  outline-offset: 2px;
+}
+
+html:not(.dark) .cta {
+  background-image:
+    linear-gradient(rgba(var(--color-neutral-50), 1), rgba(var(--color-neutral-50), 1)),
+    linear-gradient(135deg, var(--accent-blue), var(--accent-purple), var(--accent-red));
+  box-shadow: 0 0 40px rgba(59, 130, 246, 0.1);
+}
+
+html:not(.dark) .cta::before {
+  background: radial-gradient(
+    ellipse at 50% 0%,
+    rgba(var(--color-primary-600), 0.06),
+    rgba(var(--color-secondary-600), 0.03),
+    transparent 70%
+  );
+}
+
+html:not(.dark) .cta strong {
+  color: rgb(var(--color-neutral-800));
+}
+
+/* Numbered steps base (shared by contact page and service page shortcode) */
+.numbered-steps,
+.numbered-steps-wrapper ol {
+  list-style: none;
+  counter-reset: steps;
+  padding: 0;
+}
+
+.numbered-steps li,
+.numbered-steps-wrapper ol li {
+  counter-increment: steps;
+  position: relative;
+}
+
+.numbered-steps li::before,
+.numbered-steps-wrapper ol li::before {
+  content: counter(steps);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  border-radius: 50%;
+  /* Composited: primary-500 at 0.15 opacity on neutral-900 (15,23,42) */
+  background-color: rgb(19, 36, 71);
+  color: rgb(var(--color-primary-400));
+}
+
+html:not(.dark) .numbered-steps li::before,
+html:not(.dark) .numbered-steps-wrapper ol li::before {
+  color: rgb(var(--color-primary-700));
+  /* Composited: primary-500 at 0.12 opacity on white (255,255,255) */
+  background-color: rgb(235, 240, 248);
+}
+
+/* Contact page variant (2rem circles) */
+.numbered-steps { margin: 0; }
+
+.numbered-steps li::before {
+  width: 2rem;
+  height: 2rem;
+  font-size: 0.875rem;
+  flex-shrink: 0;
+}
+
+/* Service page variant (1.75rem circles, self-positioning) */
+.numbered-steps-wrapper ol li {
+  padding-left: 2.75rem;
+  margin-bottom: 1rem;
+}
+
+.numbered-steps-wrapper ol li::before {
+  position: absolute;
+  left: 0;
+  top: 0.125rem;
+  width: 1.75rem;
+  height: 1.75rem;
+  font-size: 0.8125rem;
+}
