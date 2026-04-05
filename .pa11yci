@@ -2,6 +2,7 @@
   "defaults": {
     "standard": "WCAG2AA",
     "runners": ["axe"],
+    "rules": ["target-size"],
     "chromeLaunchConfig": {
       "args": ["--no-sandbox"]
     },
