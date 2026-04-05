@@ -14,12 +14,12 @@ No changes needed in these areas.
 
 | Area | Status | Notes |
 |------|--------|-------|
-| Case studies | Exceeds (10 vs. 2-3 minimum) | Anonymized, specific metrics, industry identifiers, deep technical detail, consistent structure |
+| Case studies | Exceeds (12 vs. 2-3 minimum) | Anonymized, specific metrics, industry identifiers, deep technical detail, consistent structure |
 | Service page quality | Strong | The Problem / The Outcome / Technologies / What an Engagement Looks Like. Outcome-framed |
 | Domain and email | Complete | pertsfoundry.com (.com), contact@pertsfoundry.com (domain-matched) |
 | Technical infrastructure | Exceeds | SSL, Hugo on Cloudflare Workers, CDN, minification, responsive images, lazy loading |
 | Security | Exceeds | CSP, X-Frame-Options, Permissions-Policy, Gitleaks in CI, AI bot blocking |
-| Accessibility | Exceeds | WCAG 2.1 AA, 27-page pa11y-ci in CI, dedicated page, custom layouts for alt text |
+| Accessibility | Exceeds | WCAG 2.1 AA, 30-page pa11y-ci in CI, dedicated page, custom layouts for alt text |
 | CI/CD validation | Exceeds | 10 automated PR checks (Vitest, Hugo build, homepage smoke test, inner page smoke test, htmltest, pa11y-ci, markdownlint, Prettier, actionlint, Gitleaks) |
 | Contact process | Exceeds | Contact form (Workers + Resend + Turnstile), Cal.com scheduling link, email fallback, "What to Expect" steps, response time commitment |
 | SEO fundamentals | Good | Sitemap, robots.txt, meta descriptions on all pages, proper permalinks |
@@ -228,9 +228,9 @@ Resolved by the About page rewrite. "We" on other pages reads as professional co
 - [x] Add DNS-prefetch hints for external domains (challenges.cloudflare.com, cal.com)
 - [x] Enable Blowfish `showRelatedContent` for tag-based cross-linking between services and case studies
 
-**Partially resolved 2026-04-03:** Meta descriptions audited and fixed (4 short descriptions expanded, 4 long case study descriptions trimmed). Service page titles updated to include "Consulting" keyword. Tags added to all 9 service pages. Organization JSON-LD added to homepage, Service JSON-LD added to all service pages via `extend-head-uncached.html`. `defaultSocialImage` set to logo fallback. Internal cross-links added between all 9 service pages and 10 case studies (bidirectional). Single site-wide OG image regenerated 2026-04-04 via `scripts/generate-og.js` (1200x630, logo + "Build. Scale. Own." tagline) at `assets/img/og-default.png`.
+**Partially resolved 2026-04-03:** Meta descriptions audited and fixed (4 short descriptions expanded, 4 long case study descriptions trimmed). Service page titles updated to include "Consulting" keyword. Tags added to all 10 service pages. Organization JSON-LD added to homepage, Service JSON-LD added to all service pages via `extend-head-uncached.html`. `defaultSocialImage` set to logo fallback. Internal cross-links added between all 10 service pages and 12 case studies (bidirectional). Single site-wide OG image regenerated 2026-04-04 via `scripts/generate-og.js` (1200x630, logo + "Build. Scale. Own." tagline) at `assets/img/og-default.png`.
 
-**Updated 2026-04-04:** FAQ sections with FAQPage JSON-LD added to all 9 service pages (3-4 questions each, consulting-oriented buyer questions). FAQ shortcode (`{{< faqs >}}`) uses native `<details>/<summary>` accordion. DNS-prefetch hints added for cal.com and challenges.cloudflare.com. Related content enabled (`showRelatedContent = true`, `relatedContentLimit = 3`) for tag-based cross-linking. Remaining: Google Search Console setup, blog posts.
+**Updated 2026-04-04:** FAQ sections with FAQPage JSON-LD added to all 10 service pages (3-4 questions each, consulting-oriented buyer questions). FAQ shortcode (`{{< faqs >}}`) uses native `<details>/<summary>` accordion. DNS-prefetch hints added for cal.com and challenges.cloudflare.com. Related content enabled (`showRelatedContent = true`, `relatedContentLimit = 3`) for tag-based cross-linking. Remaining: Google Search Console setup, blog posts.
 
 **Files:** Content front matter across `content/`, `config/_default/params.toml`, `layouts/partials/extend-head-uncached.html`, `layouts/shortcodes/faqs.html`, `assets/css/custom.css`, `assets/img/og-default.png`
 
@@ -330,7 +330,7 @@ The site defaults to dark mode, so pa11y-ci only validates dark mode contrast an
 
 Every service and case study has a `description` in front matter, but only titles (and word counts) render on listing pages. Visitors must click through each item to learn what it covers.
 
-**Resolved 2026-03-27:** Added `{{ else if .Description }}` fallback block to `article-link/simple.html` template override. Descriptions now render on all 9 service and 10 case study listing cards.
+**Resolved 2026-03-27:** Added `{{ else if .Description }}` fallback block to `article-link/simple.html` template override. Descriptions now render on all 10 service and 12 case study listing cards.
 
 **Files:** `layouts/partials/article-link/simple.html`
 

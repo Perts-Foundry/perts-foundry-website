@@ -5,7 +5,7 @@
     "chromeLaunchConfig": {
       "args": ["--no-sandbox"]
     },
-    "hideElements": "svg text, .inline-block.rtl\\:rotate-180, .homepage-hero-sub"
+    "hideElements": "svg text, .inline-block.rtl\\:rotate-180, .homepage-hero-sub, a[rel=\"next\"], a[rel=\"prev\"]"
   },
   "urls": [
     {
