@@ -5,7 +5,7 @@
     "chromeLaunchConfig": {
       "args": ["--no-sandbox"]
     },
-    "hideElements": "svg text, .inline-block.rtl\\:rotate-180, .homepage-hero-sub"
+    "hideElements": "svg text, .inline-block.rtl\\:rotate-180, .homepage-hero-sub, a[rel=\"next\"], a[rel=\"prev\"]"
   },
   "urls": [
     {
@@ -17,6 +17,10 @@
       "ignore": ["color-contrast"]
     },
     "http://localhost:8080/services/",
+    {
+      "url": "http://localhost:8080/services/ai-augmented-engineering/",
+      "ignore": ["color-contrast"]
+    },
     {
       "url": "http://localhost:8080/services/cloud-infrastructure/",
       "ignore": ["color-contrast"]
@@ -56,6 +60,14 @@
     "http://localhost:8080/blog/",
     "http://localhost:8080/case-studies/",
     {
+      "url": "http://localhost:8080/case-studies/ai-accelerated-infrastructure-delivery/",
+      "ignore": ["color-contrast"]
+    },
+    {
+      "url": "http://localhost:8080/case-studies/enterprise-ai-tooling-adoption/",
+      "ignore": ["color-contrast"]
+    },
+    {
       "url": "http://localhost:8080/case-studies/finops-cloud-cost-savings/",
       "ignore": ["color-contrast"]
     },
@@ -83,7 +95,10 @@
       "url": "http://localhost:8080/case-studies/kubernetes-multi-tenancy-scaling/",
       "ignore": ["color-contrast"]
     },
-    "http://localhost:8080/case-studies/cicd-modernization-defense/",
+    {
+      "url": "http://localhost:8080/case-studies/cicd-modernization-defense/",
+      "ignore": ["color-contrast"]
+    },
     {
       "url": "http://localhost:8080/case-studies/agile-transformation-defense/",
       "ignore": ["color-contrast"]

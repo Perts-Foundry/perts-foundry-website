@@ -2,12 +2,14 @@
 title: "Infrastructure as Code Consulting"
 description: "Codify and manage infrastructure with Terraform at scale"
 slug: "infrastructure-as-code"
-weight: 5
+weight: 6
 tags:
   - Terraform
   - HCP
   - Atlantis
   - GitHub
+  - Cursor
+  - Claude
 draft: false
 faqs:
   - question: "Can you work with our existing Terraform code, or do we need to start over?"
@@ -34,6 +36,7 @@ We bring structure and scalability to your infrastructure code. You get a module
 - **HCP Terraform** — Private Registry for module publishing and versioning, with CI/CD pipelines for automated module releases
 - **Atlantis** — PR-based plan and apply workflows with GitHub App integration, enabling infrastructure changes to follow the same review process as application code
 - **CloudFormation** — AWS-native infrastructure as code for environments where CloudFormation is the established standard
+- **Cursor & Claude** — AI-assisted Terraform development for large-scale module authoring, refactoring, and cross-provider migration work
 
 ## What an Engagement Looks Like
 

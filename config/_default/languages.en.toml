@@ -10,6 +10,6 @@ title = "Perts Foundry"
 [params.author]
   name = "Seth Perts"
   image = "img/author.jpg"
-  headline = "DevOps consulting that helps scaling teams ship faster and spend less on infrastructure."
+  headline = "DevOps and AI-augmented engineering consulting that helps scaling teams ship faster and spend less on infrastructure."
   email = "contact@pertsfoundry.com"
   links = [{ github = "https://github.com/Perts-Foundry" }]

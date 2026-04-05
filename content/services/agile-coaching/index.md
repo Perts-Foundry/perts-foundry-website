@@ -2,7 +2,7 @@
 title: "Agile Coaching & Process Improvement"
 description: "Implement and improve agile practices to increase team velocity and delivery predictability"
 slug: "agile-coaching"
-weight: 9
+weight: 10
 tags:
   - Jira
   - Confluence

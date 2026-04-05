@@ -2,7 +2,7 @@
 title: "Drove the Shift from DevOps to DevSecOps"
 description: "Designed and executed a DevSecOps strategy spanning security governance, credential hardening, secrets management, and knowledge transfer."
 slug: "devops-to-devsecops-transformation"
-weight: 40
+weight: 60
 draft: false
 params:
   client: "multi-cloud SaaS organization"

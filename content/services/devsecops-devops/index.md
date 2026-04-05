@@ -2,13 +2,14 @@
 title: "DevSecOps & DevOps Consulting"
 description: "Build DevOps foundations and embed security practices into infrastructure and delivery workflows"
 slug: "devsecops-devops"
-weight: 2
+weight: 3
 tags:
   - Vault
   - Snyk
   - Terraform
   - AWS
   - GCP
+  - CodeRabbit
 icon: "shield"
 draft: false
 faqs:
@@ -20,6 +21,8 @@ faqs:
     answer: "Yes. Well-designed security checks add seconds, not minutes, to a pipeline. We focus on automated policy enforcement and pre-commit hooks that catch issues early, when they are cheapest to fix."
   - question: "How often should we audit our cloud security posture?"
     answer: "Automated checks should run continuously in your CI/CD pipelines. We set up policy-as-code tools that flag drift in real time, so quarterly manual audits become confirmation rather than discovery."
+  - question: "Can AI tools help with security reviews?"
+    answer: "Yes. AI-powered code review tools like CodeRabbit can flag security patterns, credential exposure, and dependency risks automatically in every PR. They complement human security review by catching the mechanical checks, letting your reviewers focus on architecture and threat modeling."
 ---
 
 ## The Problem

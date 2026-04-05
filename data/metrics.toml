@@ -15,3 +15,8 @@ label = "Terraform Projects Managed"
 key = "migrations"
 value = "Zero"
 label = "Zero-Downtime Migrations"
+
+[[items]]
+key = "ai-repos"
+value = "30+"
+label = "Repos with AI Code Review"

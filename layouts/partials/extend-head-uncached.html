@@ -16,13 +16,13 @@
 {
   "@context": "https://schema.org",
   "@type": "Organization",
-  "name": {{ site.Title | jsonify }},
+  "name": {{ site.Title | jsonify | safeJS }},
   "url": "{{ site.Home.Permalink }}",
   "logo": "{{ "img/logo/perts-foundry-square-dark-1024.png" | absURL }}",
-  "description": {{ site.Home.Description | jsonify }},
+  "description": {{ site.Home.Description | jsonify | safeJS }},
   "founder": {
     "@type": "Person",
-    "name": {{ site.Params.Author.name | jsonify }}
+    "name": {{ site.Params.Author.name | jsonify | safeJS }}
   },
   "sameAs": [
     "https://github.com/Perts-Foundry"
@@ -30,7 +30,8 @@
   "knowsAbout": [
     "DevOps", "Cloud Infrastructure", "CI/CD", "Kubernetes",
     "Terraform", "AWS", "GCP", "Infrastructure as Code",
-    "DevSecOps", "FinOps"
+    "DevSecOps", "FinOps", "AI-Augmented Engineering",
+    "AI Code Review", "AI Developer Tools"
   ],
   "contactPoint": {
     "@type": "ContactPoint",
@@ -47,14 +48,14 @@
 {
   "@context": "https://schema.org",
   "@type": "Service",
-  "name": {{ .Title | jsonify }},
-  "description": {{ .Description | jsonify }},
+  "name": {{ .Title | jsonify | safeJS }},
+  "description": {{ .Description | jsonify | safeJS }},
   "provider": {
     "@type": "Organization",
-    "name": {{ site.Title | jsonify }},
+    "name": {{ site.Title | jsonify | safeJS }},
     "url": "{{ site.Home.Permalink }}"
   },
-  "serviceType": "DevOps Consulting",
+  "serviceType": {{ with .Params.serviceType }}{{ . | jsonify | safeJS }}{{ else }}"DevOps Consulting"{{ end }},
   "url": "{{ .Permalink }}"
 }
 </script>
@@ -71,10 +72,10 @@
     {{- if $i }},{{ end }}
     {
       "@type": "Question",
-      "name": {{ $faq.question | jsonify }},
+      "name": {{ $faq.question | jsonify | safeJS }},
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": {{ $faq.answer | jsonify }}
+        "text": {{ $faq.answer | jsonify | safeJS }}
       }
     }
     {{- end }}
