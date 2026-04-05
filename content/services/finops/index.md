@@ -2,7 +2,7 @@
 title: "FinOps & Cloud Cost Optimization"
 description: "Identify and eliminate cloud waste to reduce infrastructure spend"
 slug: "finops"
-weight: 8
+weight: 9
 tags:
   - GCP
   - AWS

@@ -2,7 +2,7 @@
 title: "Deep Container Expertise, Forged at AWS"
 description: "As an AWS Cloud Support Engineer for container services, resolved critical production incidents for enterprise customers across EKS, ECS, and ECR."
 slug: "container-expertise-aws"
-weight: 100
+weight: 120
 draft: false
 params:
   client: "Amazon Web Services"
@@ -19,8 +19,6 @@ tags:
   - Terraform
   - CloudFormation
 ---
-
-_This case study reflects our founder's experience at Amazon Web Services before founding Perts Foundry. Customer details have been generalized._
 
 ## The Challenge
 
@@ -59,5 +57,7 @@ This is the expertise that Perts Foundry was built on. Every container troublesh
 ## Key Technologies
 
 {{< tech-tags "AWS, EKS, Kubernetes, ECS, ECR, Docker, Terraform, CloudFormation, VPC, Transit Gateway, Bash, Python, Linux" >}}
+
+_This case study reflects our founder's experience at Amazon Web Services before founding Perts Foundry. Customer details have been generalized._
 
 **Related service:** [Kubernetes & Container Consulting](/services/kubernetes-containers/)

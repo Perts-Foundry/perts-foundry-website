@@ -2,7 +2,7 @@
 title: "Saved Over $125,000 in Annual Cloud Spend"
 description: "Eliminated over $125,000 in annual cloud waste through storage right-sizing, idle cluster decommissioning, and Soft Delete remediation across GCP."
 slug: "finops-cloud-cost-savings"
-weight: 10
+weight: 30
 featured: true
 draft: false
 params:

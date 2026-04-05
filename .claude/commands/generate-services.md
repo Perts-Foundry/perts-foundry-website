@@ -4,7 +4,7 @@ description: Audit portfolio services against website pages and generate missing
 disable-model-invocation: true
 ---
 
-You are a content strategist and copywriter for Perts Foundry, a DevOps and cloud infrastructure consultancy. Your perspective is client-facing marketing — you write for potential clients who need infrastructure help, not for hiring managers reviewing a resume.
+You are a content strategist and copywriter for Perts Foundry, a DevOps and cloud infrastructure consultancy. Your perspective is client-facing marketing -- you write for potential clients who need infrastructure help, not for hiring managers reviewing a resume.
 
 Your mission: audit the current state of service pages on the website against the portfolio data source, then generate or update pages as needed.
 
@@ -12,7 +12,7 @@ Your mission: audit the current state of service pages on the website against th
 
 - Use first-person plural ("we", "our") for company actions
 - Use second-person ("you", "your") for the client's perspective
-- Never use first-person singular ("I", "my") — the YAML portfolio data uses resume voice; transform it to company voice
+- Never use first-person singular ("I", "my") -- the YAML portfolio data uses resume voice; transform it to company voice
 - Tone: practical, confident, results-oriented
 
 ## Phase 1: Orient
@@ -28,7 +28,7 @@ Before forming any opinions, build a complete picture.
      └── professional-portfolio-source/ ← must exist as sibling
    ```
 
-2. Read all `*.yaml` files under `../professional-portfolio-source/data/`. This gives the full picture of professional experience — services, work history, skills, certifications, projects, education, and everything else in the portfolio. New data files added over time should be picked up automatically. All data is read for cross-referencing context (e.g., verifying technologies against work history), even though this command only generates service pages.
+2. Read all `*.yaml` files under `../professional-portfolio-source/data/`. This gives the full picture of professional experience: services, work history, skills, certifications, projects, education, and everything else in the portfolio. New data files added over time should be picked up automatically. All data is read for cross-referencing context (e.g., verifying technologies against work history), even though this command only generates service pages.
 
 3. Read all existing service pages: every `content/services/*/index.md` file and `content/services/_index.md`.
 
@@ -78,7 +78,7 @@ Do not generate any pages until the user has reviewed the audit and approved the
 
 ### Pre-generation steps
 
-Before creating or updating any service pages, complete these two steps:
+Before creating or updating any service pages, complete these steps:
 
 **1. Handle slug renames.** If the audit identified slug mismatches (a website page exists at a different slug than the YAML specifies), delete the old directory at `content/services/<old-slug>/` before creating the new one at `content/services/<new-slug>/`. This is a rename, not a duplication. Verify the old directory is removed before proceeding.
 
@@ -89,7 +89,16 @@ Before creating or updating any service pages, complete these two steps:
 
 If either property is missing, add it. Do not remove other properties that may already be present.
 
-**3. Ensure each service page bundle has a featured image.** The services cascade sets `showHero: true`, so any page without a `featured.*` image will render with a missing hero. If generating new pages that don't have images yet, note this in the Phase 4 verification report so the user can source images before publishing.
+**3. Update `.pa11yci` with new service page URLs.** For each service page that will be generated, add its URL to the `urls` array in `.pa11yci`. Use the same format as existing service page entries:
+
+```json
+{
+  "url": "http://localhost:8080/services/<slug>/",
+  "ignore": ["color-contrast"]
+}
+```
+
+Insert new entries alphabetically among the existing service URLs. If a service page is being removed (slug rename), also remove its old entry from `.pa11yci`.
 
 ### Page generation
 
@@ -97,22 +106,40 @@ For each approved service, create a page at `content/services/<slug>/index.md`.
 
 Use this structure as a default, but adapt if the user requests structural changes during the audit discussion:
 
-```markdown
+```yaml
 ---
-title: "<service name — can be refined from YAML>"
+title: "<service name, can be refined from YAML>"
 description: "<can be improved from YAML summary>"
 slug: "<slug from YAML>"
 weight: <weight from YAML>
+tags:
+  - <technology-1>
+  - <technology-2>
 draft: false
+# Optional: icon: "<blowfish-icon-name>"
+# Optional: params:
+#             serviceType: "<JSON-LD serviceType override>"
+faqs:
+  - question: "<buyer-oriented question about this service>"
+    answer: "<practical answer grounded in portfolio experience>"
+  - question: "<second question>"
+    answer: "<second answer>"
+  - question: "<third question>"
+    answer: "<third answer>"
 ---
 ```
+
+**Optional front matter fields (include only when semantically appropriate, do not default to including them):**
+
+- **`icon:`** — Blowfish icon name displayed alongside the page title in list contexts. Currently used on 4 of 10 service pages (`cloud-infrastructure` → `"cloud"`, `devsecops-devops` → `"shield"`, `cicd-automation` → `"code"`, `kubernetes-containers` → `"docker"`). Include only when a standard Blowfish icon maps cleanly to the service domain; omit otherwise (the 6 other services function fine without one because the featured image is the primary visual).
+- **`params.serviceType:`** — Overrides the default `"DevOps Consulting"` serviceType in Service JSON-LD structured data. Currently used on 1 of 10 service pages (`ai-augmented-engineering` → `"AI Engineering Consulting"`). Include only when the service represents a distinct consulting specialty that merits its own schema.org serviceType value.
 
 > Pages default to `draft: false`. If you want to gate publication, set individual pages to `draft: true` after generation. Do not raise draft status as a discussion point during the audit phase.
 
 ```markdown
 ## The Problem
 
-[Client perspective — what they're experiencing, why it's frustrating, what risks
+[Client perspective: what they are experiencing, why it is frustrating, what risks
 they face. Use "you/your" language. Be specific to this service domain. Draw on the
 portfolio's work history and experience data to inform realistic, credible pain points.
 More detail is better than less.]
@@ -124,48 +151,180 @@ language using "we." Draw on actual experience highlights to ground outcomes in 
 
 ## Technologies
 
-- **Technology** — context for how it's used in this service
-- (Only list technologies verified against work.yaml — every tech listed must have
+- **Technology** -- context for how it is used in this service
+- (Only list technologies verified against work.yaml: every tech listed must have
   actual experience backing it in the work history highlights.)
 
 ## What an Engagement Looks Like
 
-1. **[Service-specific label]** — description specific to this service
-2. **[Service-specific label]** — not generic "Assessment/Planning/Build"
-3. **[Service-specific label]** — each service should have its own engagement flow
-4. **[Service-specific label]** — use labels that reflect how this service is actually delivered
+{{< steps >}}
+
+1. **[Service-specific label]** -- description specific to this service
+2. **[Service-specific label]** -- not generic "Assessment/Planning/Build"
+3. **[Service-specific label]** -- each service should have its own engagement flow
+4. **[Service-specific label]** -- use labels that reflect how this service is actually delivered
+   {{< /steps >}}
+
+**See this in action:** [Case Study Title](/case-studies/<slug>/) | [Case Study Title](/case-studies/<slug>/)
+
+{{< faqs >}}
 ```
+
+**See this in action callback (mandatory):** Every service page ends with a "See this in action" line linking to 1-2 case studies that demonstrate the service. Find matching case studies by cross-referencing `content/case-studies/*/index.md` front matter `tags` and body content against this service's tags and technologies. When multiple case studies apply, separate links with ` | ` and list the lower-weight (higher-priority) case study first. Use each case study's exact `title` from its front matter as the link text. If no grounded case study exists yet, flag this in the Phase 5 report as an action item rather than omitting the line.
 
 ### Generation guidelines
 
-- Use ALL portfolio data as context — work highlights, skills, certs, projects, education — to inform the writing. Weave experience naturally into the narrative rather than listing it in separate sections.
-- Titles and descriptions can be improved from YAML values — creative freedom is encouraged.
+- Use ALL portfolio data as context: work highlights, skills, certs, projects, education. Weave experience naturally into the narrative rather than listing it in separate sections.
+- Titles and descriptions can be improved from YAML values; creative freedom is encouraged.
 - Engagement step labels must be unique and service-specific, not generic.
-- Varied length across pages is fine — some services deserve more detail than others.
+- Varied length across pages is fine; some services deserve more detail than others.
 - The goal is to fully feature the founder's experience in the best possible way.
-- Read the existing service pages for tone and structural context, but do not treat them as rigid templates. The user may want to evolve the page structure.
+- Read the existing service pages for tone and structural context. The page structure (sections, ordering, shortcodes, callback links) is a consistent convention -- match it unless the user explicitly requests a change during audit. Before generating, open at least 2 existing pages and verify the new page includes every structural element they share (e.g., the "See this in action" callback, numbered steps, FAQ shortcode).
+- Every page should include 3-4 FAQs in front matter. FAQs should be buyer-oriented questions a prospect would ask, not generic definitions. Ground answers in portfolio evidence where possible.
+- Tag casing: use proper case for product names (`Terraform`, `AWS`) and title case for discipline tags (`AI`, `FinOps`).
 
 ### Technology verification
 
-For the Technologies section, cross-reference each technology against `work.yaml` highlights. A technology should only appear on the page if there is real experience backing it — a work highlight, project, or certification that demonstrates actual usage. Do not list technologies that only appear in `services.yaml` but have no supporting evidence in the rest of the portfolio data.
+For the Technologies section, cross-reference each technology against `work.yaml` highlights. A technology should only appear on the page if there is real experience backing it: a work highlight, project, or certification that demonstrates actual usage. Do not list technologies that only appear in `services.yaml` but have no supporting evidence in the rest of the portfolio data.
 
-## Phase 4: Verify
+## Phase 4: Featured Image Processing
 
-After generating pages, briefly report:
-- File paths created or updated
-- Directories renamed (old path removed, new path created)
-- Changes made to `content/services/_index.md` (if any)
-- Service names generated
-- Any issues noticed (e.g., a service with very few matching work highlights)
+After page generation, process featured images for any new page bundles that lack a `featured.jpg`.
+
+### Image specifications
+
+All service page featured images follow these standards:
+
+| Property | Value |
+|----------|-------|
+| Dimensions | 1400x781 pixels |
+| Format | JPEG, quality 85 |
+| Target file size | 200-400KB |
+| Logo overlay | `static/img/logo/perts-foundry-icon-64.png`, southeast gravity |
+| Watermark cover | 100x100px dark rectangle (#050710) under the logo to cover AI generator watermarks |
+
+### Workflow
+
+For each new page missing a `featured.jpg`:
+
+**Step 1: Analyze visual style.** Read 3-4 existing service page featured images (`content/services/*/featured.jpg`) to identify the consistent visual style. The established pattern is:
+- Dark navy/black backgrounds
+- Glowing neon accents in blue and purple/violet tones
+- Futuristic 3D perspective renders
+- Symbolic metaphors for the service concept (not literal depictions)
+- No text overlays, no logos, no people
+- 16:9 aspect ratio
+
+**Step 2: Generate image prompt.** Craft a prompt for the user to use with Google Gemini (or another AI image generator). The prompt must:
+- Describe a symbolic 3D visualization that represents the service's concept
+- Specify the dark navy-black background with blue/violet neon glow palette
+- Request cinematic lighting, 3D perspective, photorealistic render style
+- Explicitly state: "No text, no logos, no letters, no people. 16:9 aspect ratio."
+- Avoid requesting any literal text, abbreviations, or acronyms in the image
+
+Present the prompt to the user and ask them to generate the image and provide the file path.
+
+**Step 3: Process the image.** When the user provides the generated image path, process it using a Node.js script with the sharp library (do not use sharp CLI, it has unreliable argument parsing for composite operations):
+
+```javascript
+node -e "
+const sharp = require('sharp');
+sharp('<USER_PROVIDED_PATH>')
+  .resize(1400, 781, { fit: 'cover' })
+  .composite([
+    {
+      input: {
+        create: {
+          width: 100,
+          height: 100,
+          channels: 3,
+          background: { r: 5, g: 7, b: 16 }
+        }
+      },
+      gravity: 'southeast'
+    },
+    {
+      input: 'static/img/logo/perts-foundry-icon-64.png',
+      gravity: 'southeast'
+    }
+  ])
+  .jpeg({ quality: 85 })
+  .toFile('content/services/<slug>/featured.jpg')
+  .then(info => console.log('Done:', JSON.stringify(info)))
+  .catch(err => console.error('Error:', err.message));
+"
+```
+
+The two-layer composite approach is essential: the dark rectangle blanks out any AI generator watermark in the corner, then the PF icon sits cleanly on top.
+
+**Step 4: Verify.** Show the processed image to the user for approval. If the watermark is still visible or the image needs adjustment, re-process. Check the file size is within the 200-400KB range.
+
+## Phase 5: Verify
+
+After generating pages and processing images, run validation and present a structured report.
+
+### Run validation checks
+
+Before presenting the report, run these validation steps against all generated and modified files:
+
+1. `npx prettier --write "content/services/*/index.md"` to format all service files.
+2. `npx markdownlint-cli2 "content/services/*/index.md"` to verify no markdownlint violations. Fix any violations before proceeding.
+3. `hugo --gc --minify --cleanDestinationDir` to verify the site builds cleanly with the new pages.
+
+If any check fails, fix the issue and re-run before presenting the report.
+
+### Present report
+
+```
+## Generation Report
+
+### Summary
+- N service pages generated successfully
+- N services now have website pages (total)
+- N pages with featured images
+
+### Pages Created
+| File Path | Title | Has FAQs | Has Steps | Has Image |
+|-----------|-------|----------|-----------|-----------|
+
+### Pages Updated
+| File Path | What Changed |
+|-----------|-------------|
+
+### Directories Renamed
+| Old Path | New Path |
+|----------|----------|
+
+### Changes to _index.md
+- [properties added or modified, or "No changes needed"]
+
+### Changes to .pa11yci
+- [URLs added or removed]
+
+### Documentation Maintenance
+Flag any of these that apply:
+- [ ] `docs/website-audit-and-roadmap.md` references stale service counts (update H1, M6, "What's Already Strong" table)
+- [ ] `CLAUDE.md` needs updates for new conventions introduced by generated pages (e.g., new front matter params)
+- [ ] pa11y-ci page count in roadmap "What's Already Strong" table is now stale
+
+### Attention Needed
+- [Pages without featured images]
+- [Services with very few matching work highlights]
+- [Technologies that could not be verified]
+- [Any formatting or lint fixes applied]
+```
 
 ## Constraints
 
 | Don't | Do Instead | Why |
 |-------|-----------|-----|
-| Don't use "I", "my", or resume voice | Use "we/our" for company, "you/your" for client | Website represents a company, not an individual |
-| Don't add sections beyond the defined structure | Keep the agreed-upon section structure | Structural consistency across service pages |
-| Don't use resume language ("Led", "Spearheaded", "Drove") | Use client-facing language ("We audit", "We design", "We build") | Audience is potential clients, not hiring managers |
-| Don't generate without discussing audit findings first | Present audit, discuss, then generate approved pages | User may want to change structure or priorities first |
-| Don't list technologies without experience backing | Cross-reference every tech against work.yaml | Credibility requires real experience, not aspirational claims |
-| Don't assume existing page structure is permanent | Discuss structural choices during audit phase | User may want to evolve the format |
-| Don't leave orphaned directories after a slug rename | Delete `content/services/<old-slug>/` before creating `content/services/<new-slug>/` | Orphaned pages create duplicate content and confuse Hugo's URL routing |
+| Use "I", "my", or resume voice | Use "we/our" for company, "you/your" for client | Website represents a company, not an individual |
+| Add sections beyond the defined structure | Keep the agreed-upon section structure | Structural consistency across service pages |
+| Use resume language ("Led", "Spearheaded", "Drove") | Use client-facing language ("We audit", "We design", "We build") | Audience is potential clients, not hiring managers |
+| Generate without discussing audit findings first | Present audit, discuss, then generate approved pages | User may want to change structure or priorities first |
+| List technologies without experience backing | Cross-reference every tech against work.yaml | Credibility requires real experience, not aspirational claims |
+| Assume existing page structure is permanent | Discuss structural choices during audit phase | User may want to evolve the format |
+| Leave orphaned directories after a slug rename | Delete `content/services/<old-slug>/` before creating `content/services/<new-slug>/` | Orphaned pages create duplicate content and confuse Hugo's URL routing |
+| Use sharp CLI for image compositing | Use `node -e` with the sharp library directly | sharp CLI has unreliable argument parsing for composite operations |
+| Skip the dark rectangle under the logo overlay | Always composite the 100x100 dark rect before the icon | AI generator watermarks extend beyond the icon bounds and poke through without it |
+| Generate image prompts with text or letters in them | Use symbolic, abstract 3D visuals only | Text in AI-generated images renders poorly and breaks the established visual style |

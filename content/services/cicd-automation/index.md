@@ -2,12 +2,14 @@
 title: "CI/CD & Automation Consulting"
 description: "Build and modernize CI/CD pipelines to accelerate delivery and reduce toil"
 slug: "cicd-automation"
-weight: 3
+weight: 4
 tags:
   - Jenkins
   - GitHub Actions
   - GitLab
   - ArgoCD
+  - CodeRabbit
+  - AI
 icon: "code"
 draft: false
 faqs:
@@ -37,6 +39,7 @@ We build CI/CD pipelines that are fast, reliable, and maintainable. Your team sh
 - **Atlantis** — Terraform PR automation with GitHub App integration, rate limiting optimization, and large PR detection
 - **Renovatebot** — automated dependency scanning and upgrade management across infrastructure repositories
 - **Terraform** — infrastructure pipeline automation with PR-based review and apply workflows
+- **CodeRabbit** — AI-powered code review integrated into CI/CD pipelines, providing automated quality and security feedback on every pull request
 
 ## What an Engagement Looks Like
 
