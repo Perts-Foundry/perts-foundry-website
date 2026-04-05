@@ -2,7 +2,7 @@
 title: "DevSecOps & DevOps Consulting"
 description: "Build DevOps foundations and embed security practices into infrastructure and delivery workflows"
 slug: "devsecops-devops"
-weight: 2
+weight: 3
 tags:
   - Vault
   - Snyk

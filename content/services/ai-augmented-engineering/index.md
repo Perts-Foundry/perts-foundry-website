@@ -2,7 +2,7 @@
 title: "AI-Augmented Engineering Consulting"
 description: "Integrate AI tooling into development and infrastructure workflows to multiply engineering productivity"
 slug: "ai-augmented-engineering"
-weight: 3
+weight: 1
 tags:
   - Claude
   - Cursor
@@ -51,5 +51,7 @@ We bring direct experience from driving AI adoption across a large engineering o
 3. **Pilot & Pairing** -- We roll out with a pilot team through hands-on pairing sessions, building real proficiency on real work rather than contrived demos
 4. **Organization-Wide Rollout** -- We scale adoption with CI/CD integration, an internal best-practices guide, and usage governance so productivity gains compound across the entire engineering org
    {{< /steps >}}
+
+**See this in action:** [Drove Enterprise AI Tooling Adoption Across Engineering](/case-studies/enterprise-ai-tooling-adoption/) | [AI-Accelerated Infrastructure Delivery Across Three Clouds](/case-studies/ai-accelerated-infrastructure-delivery/)
 
 {{< faqs >}}

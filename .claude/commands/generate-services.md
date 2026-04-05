@@ -157,8 +157,12 @@ language using "we." Draw on actual experience highlights to ground outcomes in 
 4. **[Service-specific label]** -- use labels that reflect how this service is actually delivered
    {{< /steps >}}
 
+**See this in action:** [Case Study Title](/case-studies/<slug>/) | [Case Study Title](/case-studies/<slug>/)
+
 {{< faqs >}}
 ```
+
+**See this in action callback (mandatory):** Every service page ends with a "See this in action" line linking to 1-2 case studies that demonstrate the service. Find matching case studies by cross-referencing `content/case-studies/*/index.md` front matter `tags` and body content against this service's tags and technologies. When multiple case studies apply, separate links with ` | ` and list the lower-weight (higher-priority) case study first. Use each case study's exact `title` from its front matter as the link text. If no grounded case study exists yet, flag this in the Phase 5 report as an action item rather than omitting the line.
 
 ### Generation guidelines
 
@@ -167,7 +171,7 @@ language using "we." Draw on actual experience highlights to ground outcomes in 
 - Engagement step labels must be unique and service-specific, not generic.
 - Varied length across pages is fine; some services deserve more detail than others.
 - The goal is to fully feature the founder's experience in the best possible way.
-- Read the existing service pages for tone and structural context, but do not treat them as rigid templates. The user may want to evolve the page structure.
+- Read the existing service pages for tone and structural context. The page structure (sections, ordering, shortcodes, callback links) is a consistent convention -- match it unless the user explicitly requests a change during audit. Before generating, open at least 2 existing pages and verify the new page includes every structural element they share (e.g., the "See this in action" callback, numbered steps, FAQ shortcode).
 - Every page should include 3-4 FAQs in front matter. FAQs should be buyer-oriented questions a prospect would ask, not generic definitions. Ground answers in portfolio evidence where possible.
 - Tag casing: use proper case for product names (`Terraform`, `AWS`) and title case for discipline tags (`AI`, `FinOps`).
 

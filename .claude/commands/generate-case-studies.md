@@ -219,8 +219,6 @@ If the title naturally includes the client descriptor and stays under 60 charact
 #### Body structure (pf-* entries)
 
 ```markdown
-_This case study has been anonymized at the client's request._
-
 ## The Challenge
 
 [Third-person narrative. Use "they/their" or the anonymized descriptor.
@@ -298,8 +296,6 @@ One hundred fifty to three hundred words total.]
 For case studies based on AWS or NSWC work, adjust the structure:
 
 ```markdown
-_Names and identifying details have been generalized for this case study._
-
 ## The Challenge
 
 [Same third-person narrative as above.]
@@ -315,17 +311,25 @@ or passive constructions. Same workstream structure otherwise.]
 [Same as above.]
 ```
 
-#### Key Technologies (optional)
+#### Closing section (mandatory)
 
-If 4+ technologies are involved, add after Results:
+Every case study ends with three elements in this exact order: Key Technologies, anonymization notice, and Related services callback. Do not skip any of these, and do not place the anonymization notice anywhere else (it belongs at the bottom, not under the front matter).
 
 ```markdown
 ## Key Technologies
 
-<comma-separated list>
+{{< tech-tags "Tech1, Tech2, Tech3" >}}
+
+_This case study has been anonymized at the client's request._
+
+**Related services:** [Service Name Consulting](/services/<slug>/) | [Service Name Consulting](/services/<slug>/)
 ```
 
-**Tags vs. Key Technologies:** These serve different purposes. Front matter `tags` drive site taxonomy and filtering; include only the primary technologies and disciplines a reader would use to find this case study. The Key Technologies body section is a comprehensive reference listing all technologies involved, including supporting tools (e.g., Bash, Python, Linux) that would clutter the tag taxonomy. A technology can appear in Key Technologies without appearing in tags, but every tag should also appear in Key Technologies.
+For pre-founding case studies, substitute the anonymization phrasing: `_Names and identifying details have been generalized for this case study._`
+
+If only a single service applies, use `**Related service:**` (singular) with one link. When multiple services apply, use `**Related services:**` (plural) with links separated by ` | `. Identify related services by cross-referencing this case study's tags and technologies against `content/services/*/index.md` front matter. Use each service's exact front matter `title` as link text.
+
+**Tags vs. Key Technologies:** These serve different purposes. Front matter `tags` drive site taxonomy and filtering; include only the primary technologies and disciplines a reader would use to find this case study. The Key Technologies body section (via the `{{< tech-tags >}}` shortcode) is a comprehensive reference listing all technologies involved, including supporting tools (e.g., Bash, Python, Linux) that would clutter the tag taxonomy. A technology can appear in Key Technologies without appearing in tags, but every tag should also appear in Key Technologies.
 
 ### Generation guidelines
 
@@ -333,7 +337,7 @@ If 4+ technologies are involved, add after Results:
 - The anonymization notice is mandatory on every case study page. Use the client-request phrasing for pf-* entries and the generalized phrasing for pre-founding entries.
 - Each case study should feel like a complete story with a clear arc.
 - Varied length is fine. Target 600-1,500 words per case study. Case studies built from 1-3 highlights naturally run 600-750 words; do not pad them to reach a higher target. Case studies built from 4+ highlights or multi-phase engagements typically reach 900-1,200 words.
-- Read existing grounded case study pages for tone context, but do not use ungrounded pages as references.
+- Read existing grounded case study pages for tone context and structural conventions (do not use ungrounded pages as references). Before writing, open at least 2 existing pages end-to-end and verify every new page matches the same structural conventions: section order (Challenge -> Approach -> Results -> Key Technologies), mandatory closing elements (anonymization notice at the BOTTOM followed by Related services callback), shortcode usage (`{{< tech-tags >}}`), and front matter shape. Never copy identifying client details, but do copy the page skeleton.
 
 ### Technology verification
 
@@ -482,6 +486,8 @@ Flag any of these that apply:
 | Use "you/your" for the client | Use "they/their" or the anonymized descriptor | Case studies describe a past client, not a sales pitch |
 | Generate without discussing the report first | Present report, discuss, then generate approved pages | User may want to change scope or structure |
 | List technologies without experience backing | Cross-reference every tech against work.yaml highlights | Credibility requires real experience |
+| Put the anonymization notice at the top of the body | Place it at the bottom, after Key Technologies and before the Related services callback | Matches the established convention across existing case studies |
+| Skip the Related services callback | End every page with `**Related service(s):**` linking 1-2 matching service pages | Drives internal cross-linking for SEO and reader navigation |
 | Skip the anonymization notice | Include on every page (phrasing varies by entry type) | Trust signal for current and prospective clients |
 | Put after-only metrics in the before/after table | Weave after-only metrics into the narrative paragraph | Empty "before" cells undermine the table's credibility |
 | Generate content from assumed data | Flag gaps in Phase 5 rather than inventing details | Credibility depends on accuracy |

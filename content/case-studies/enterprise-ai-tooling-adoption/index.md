@@ -17,8 +17,6 @@ tags:
   - AI
 ---
 
-_This case study has been anonymized at the client's request._
-
 ## The Challenge
 
 The engineering organization was stuck in a familiar pattern. Individual engineers were experimenting with AI development tools on their own, some using free-tier services, others sharing team credentials for paid tools, and a few pasting proprietary code into public-facing AI services without realizing the security implications. There was no organizational strategy, no evaluation framework, and no way to tell whether AI tools were actually making anyone faster or just adding noise.
@@ -54,3 +52,7 @@ The impact went beyond the metrics. Engineers who had been skeptical became advo
 ## Key Technologies
 
 {{< tech-tags "Claude, Claude Enterprise, Cursor, GitHub Copilot, CodeRabbit, GitHub" >}}
+
+_This case study has been anonymized at the client's request._
+
+**Related services:** [AI-Augmented Engineering Consulting](/services/ai-augmented-engineering/) | [CI/CD & Automation Consulting](/services/cicd-automation/)

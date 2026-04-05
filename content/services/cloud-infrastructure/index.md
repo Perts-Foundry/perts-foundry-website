@@ -2,7 +2,7 @@
 title: "Cloud Infrastructure Consulting"
 description: "Design, build, and optimize cloud infrastructure across AWS, GCP, and multi-cloud environments"
 slug: "cloud-infrastructure"
-weight: 1
+weight: 2
 tags:
   - AWS
   - GCP

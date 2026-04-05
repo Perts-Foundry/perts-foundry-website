@@ -20,8 +20,6 @@ tags:
   - AI
 ---
 
-_This case study has been anonymized at the client's request._
-
 ## The Challenge
 
 Two major infrastructure projects were running in parallel, both with aggressive timelines and zero margin for error. The first was a fundamental redesign of a core Terraform configuration framework consumed by 15-20 downstream teams. Years of organic growth had left the framework difficult to extend, and every change required careful cross-team coordination to avoid breaking consuming projects. The second was a wave of production Snowflake upgrades spanning ~15 projects across AWS, GCP, and Azure, each with its own dependency graph, grant structures, and regional considerations.
@@ -52,3 +50,7 @@ The broader impact extended beyond the two projects themselves. The team demonst
 ## Key Technologies
 
 {{< tech-tags "Cursor, Claude, Terraform, Atlantis, Snowflake, AWS, GCP, Azure" >}}
+
+_This case study has been anonymized at the client's request._
+
+**Related services:** [AI-Augmented Engineering Consulting](/services/ai-augmented-engineering/) | [Infrastructure as Code Consulting](/services/infrastructure-as-code/)
