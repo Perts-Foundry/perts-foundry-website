@@ -1,3 +1,11 @@
+# Tech carousel pagination contract: total item count MUST be a multiple of 8.
+# The "# Page N: ..." comment headers below are semantic groupings for humans;
+# Hugo ignores them. Carousel pagination is computed as Math.ceil(N / perPage)
+# with perPage=8 (desktop) in layouts/partials/extend-footer.html. If the total
+# drifts off a multiple of 8, every subsequent page shifts and the AI/Cloud/etc.
+# groupings visually scramble. tech-bar.html emits a Hugo warnf on build if the
+# count is not a multiple of 8.
+
 # Page 1: AI & Developer Productivity
 [[items]]
 name = "Claude"

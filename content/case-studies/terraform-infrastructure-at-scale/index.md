@@ -2,7 +2,7 @@
 title: "Scaled Terraform Operations Across 200+ Projects"
 description: "Centralized module distribution, reduced CI/CD rate limiting by 85%, and redesigned a core Terraform framework consumed by 15-20 downstream teams."
 slug: "terraform-infrastructure-at-scale"
-weight: 30
+weight: 50
 draft: false
 params:
   client: "enterprise SaaS platform"

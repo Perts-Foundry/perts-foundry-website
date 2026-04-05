@@ -13,9 +13,10 @@ Your mission: mine the portfolio work history for case study candidates, present
 | Section | Voice | Pronouns |
 |---------|-------|----------|
 | The Challenge | Third person for the client | "they", "their", "the team" |
-| Our Approach (pf-* entries) | First person plural for the company | "we", "our" |
-| The Approach (pre-founding entries) | Third person for the individual | "the team", "our founder" |
+| Our Approach | First person plural for the company | "we", "our" |
 | Results | Third person for outcomes | "the team", "the client" (metrics table cells are label-only, no pronouns) |
+
+The three pre-founding case studies in `content/case-studies/` use a third-person `"our founder"` voice for their Approach sections, but those are legacy and should not be used as voice references when generating new content.
 
 - Never use first-person singular ("I", "my"). The YAML portfolio data uses resume voice; transform it completely into case study narrative.
 - Never use "you/your" for the client. That voice is reserved for service pages. Case studies are retrospective narratives, not sales pitches.
@@ -58,7 +59,7 @@ Mine `work.yaml` for case study candidates and assess existing pages.
 Analyze all work.yaml highlights for case study potential. Prioritize sources:
 
 1. **`pf-*` work entries** (Perts Foundry consulting engagements). These map directly to case study candidates. Use the `summary` field text as a starting point for anonymized client descriptors (e.g., "enterprise data collaboration platform" from "Embedded with an enterprise data collaboration platform"), but the user will choose the final descriptor during Phase 2 review. Both `pf-*` entries share the same client; to reduce the anonymization correlation surface (SPEC-5), VARY the client descriptor across case studies from the same client (e.g., "enterprise data platform" for one, "enterprise SaaS platform" for another, "large SaaS company" for a third). Present descriptor options during Phase 2 for user selection.
-2. **Pre-founding entries** (AWS, NSWC). These validate expertise depth but require different framing since they predate Perts Foundry. Use "before founding Perts Foundry" or "our founder's experience at [employer]" voice. For AWS, the employer name is not confidential. For NSWC entries, use "a defense software organization" rather than the full department name. NSWC entries span multiple positions at the same organization and may be combined into a single case study.
+2. **Pre-founding entries** (AWS, NSWC) are **legacy content and must not be regenerated**. Three pre-founding case studies already exist in the repo (`container-expertise-aws`, `agile-transformation-defense`, `cicd-modernization-defense`) and should be treated as read-only. Do not propose candidates from pre-founding work entries during Phase 2. If `work.yaml` adds new pre-founding highlights, flag them as "pre-founding; skipped per convention" in the Phase 2 report but do not generate pages for them. All newly generated case studies use the `pf-*` body structure and voice defined below.
 
 Group related highlights thematically. A single work entry may yield multiple case studies, and a single case study may draw from multiple work entries. Many candidates will be narrative-rich rather than metric-rich; this is expected and not a deficiency. Strong candidates have any of:
 - Quantifiable outcomes ("$125K savings", "85% reduction", "zero downtime")
@@ -291,26 +292,6 @@ client's business. If no metrics exist, write 2-3 narrative paragraphs.
 One hundred fifty to three hundred words total.]
 ```
 
-#### Body structure (pre-founding entries)
-
-For case studies based on AWS or NSWC work, adjust the structure:
-
-```markdown
-## The Challenge
-
-[Same third-person narrative as above.]
-
-## The Approach
-
-[Third-person narrative. Do not use "we/our" for work done before
-Perts Foundry existed. Use "Our founder identified...", "The team implemented...",
-or passive constructions. Same workstream structure otherwise.]
-
-## Results
-
-[Same as above.]
-```
-
 #### Closing section (mandatory)
 
 Every case study ends with three elements in this exact order: Key Technologies, anonymization notice, and Related services callback. Do not skip any of these, and do not place the anonymization notice anywhere else (it belongs at the bottom, not under the front matter).
@@ -322,19 +303,17 @@ Every case study ends with three elements in this exact order: Key Technologies,
 
 _This case study has been anonymized at the client's request._
 
-**Related services:** [Service Name Consulting](/services/<slug>/) | [Service Name Consulting](/services/<slug>/)
+**Related service:** [Exact service title from front matter](/services/<slug>/)
 ```
 
-For pre-founding case studies, substitute the anonymization phrasing: `_Names and identifying details have been generalized for this case study._`
-
-If only a single service applies, use `**Related service:**` (singular) with one link. When multiple services apply, use `**Related services:**` (plural) with links separated by ` | `. Identify related services by cross-referencing this case study's tags and technologies against `content/services/*/index.md` front matter. Use each service's exact front matter `title` as link text.
+**Related service vs. Related services:** The singular form `**Related service:**` with one link is the default and matches 9 of 12 existing case studies. Use the plural form `**Related services:**` with links separated by ` | ` only when two services genuinely apply to the same case study. Do not invent a second service match just to fill out a plural template. Identify related services by cross-referencing this case study's `tags` and technologies against `content/services/*/index.md` front matter. Use each service's exact front matter `title` as link text (some end in "Consulting", some do not, e.g., `"FinOps & Cloud Cost Optimization"`, `"Agile Coaching & Process Improvement"`; never invent a "Consulting" suffix).
 
 **Tags vs. Key Technologies:** These serve different purposes. Front matter `tags` drive site taxonomy and filtering; include only the primary technologies and disciplines a reader would use to find this case study. The Key Technologies body section (via the `{{< tech-tags >}}` shortcode) is a comprehensive reference listing all technologies involved, including supporting tools (e.g., Bash, Python, Linux) that would clutter the tag taxonomy. A technology can appear in Key Technologies without appearing in tags, but every tag should also appear in Key Technologies.
 
 ### Generation guidelines
 
 - Use ALL portfolio data as context: work highlights, skills, certs, projects. Weave experience naturally into the narrative.
-- The anonymization notice is mandatory on every case study page. Use the client-request phrasing for pf-* entries and the generalized phrasing for pre-founding entries.
+- The anonymization notice is mandatory on every newly generated case study page, placed at the bottom (between Key Technologies and the Related service callback). Use the phrasing `_This case study has been anonymized at the client's request._` Existing pre-founding case studies use a different phrasing (`_Names and identifying details have been generalized for this case study._` or similar) and are legacy; do not regenerate them.
 - Each case study should feel like a complete story with a clear arc.
 - Varied length is fine. Target 600-1,500 words per case study. Case studies built from 1-3 highlights naturally run 600-750 words; do not pad them to reach a higher target. Case studies built from 4+ highlights or multi-phase engagements typically reach 900-1,200 words.
 - Read existing grounded case study pages for tone context and structural conventions (do not use ungrounded pages as references). Before writing, open at least 2 existing pages end-to-end and verify every new page matches the same structural conventions: section order (Challenge -> Approach -> Results -> Key Technologies), mandatory closing elements (anonymization notice at the BOTTOM followed by Related services callback), shortcode usage (`{{< tech-tags >}}`), and front matter shape. Never copy identifying client details, but do copy the page skeleton.
@@ -481,14 +460,15 @@ Flag any of these that apply:
 
 | Don't | Do Instead | Why |
 |-------|-----------|-----|
-| Use "I", "my", or resume voice | Use "we/our" for company (pf-*), third person for pre-founding | Website represents a company; case studies are retrospective |
+| Use "I", "my", or resume voice | Use "we/our" for company | Website represents a company; case studies are retrospective |
 | Carry through resume phrases in body text | Rewrite into narrative ("The team was facing...", "We identified..."); titles may use action verbs | Audience is potential clients, not hiring managers |
 | Use "you/your" for the client | Use "they/their" or the anonymized descriptor | Case studies describe a past client, not a sales pitch |
 | Generate without discussing the report first | Present report, discuss, then generate approved pages | User may want to change scope or structure |
 | List technologies without experience backing | Cross-reference every tech against work.yaml highlights | Credibility requires real experience |
 | Put the anonymization notice at the top of the body | Place it at the bottom, after Key Technologies and before the Related services callback | Matches the established convention across existing case studies |
-| Skip the Related services callback | End every page with `**Related service(s):**` linking 1-2 matching service pages | Drives internal cross-linking for SEO and reader navigation |
-| Skip the anonymization notice | Include on every page (phrasing varies by entry type) | Trust signal for current and prospective clients |
+| Skip the Related service callback | End every page with `**Related service:**` linking the matching service page (singular is default; use `**Related services:**` plural only when two services genuinely apply) | Drives internal cross-linking for SEO and reader navigation |
+| Skip the anonymization notice | Include on every newly generated page: `_This case study has been anonymized at the client's request._` placed between Key Technologies and the Related service callback | Trust signal for current and prospective clients |
+| Regenerate pre-founding case studies (AWS, NSWC) | Treat the three existing pre-founding pages as read-only; do not propose candidates from pre-founding work entries | Pre-founding case studies are legacy content with different voice conventions |
 | Put after-only metrics in the before/after table | Weave after-only metrics into the narrative paragraph | Empty "before" cells undermine the table's credibility |
 | Generate content from assumed data | Flag gaps in Phase 5 rather than inventing details | Credibility depends on accuracy |
 | Leave orphaned directories after a slug change | Delete old directory before creating new | Orphaned pages create duplicate content |

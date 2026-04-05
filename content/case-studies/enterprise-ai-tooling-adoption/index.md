@@ -2,7 +2,7 @@
 title: "Drove Enterprise AI Tooling Adoption Across Engineering"
 description: "Evaluated, licensed, and rolled out AI-powered development tools across a large engineering organization, integrating AI code review into 30+ repositories and coaching 20+ engineers."
 slug: "enterprise-ai-tooling-adoption"
-weight: 5
+weight: 10
 draft: false
 params:
   client: "large engineering organization"

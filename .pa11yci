@@ -95,7 +95,10 @@
       "url": "http://localhost:8080/case-studies/kubernetes-multi-tenancy-scaling/",
       "ignore": ["color-contrast"]
     },
-    "http://localhost:8080/case-studies/cicd-modernization-defense/",
+    {
+      "url": "http://localhost:8080/case-studies/cicd-modernization-defense/",
+      "ignore": ["color-contrast"]
+    },
     {
       "url": "http://localhost:8080/case-studies/agile-transformation-defense/",
       "ignore": ["color-contrast"]

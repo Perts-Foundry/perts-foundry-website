@@ -116,6 +116,9 @@ tags:
   - <technology-1>
   - <technology-2>
 draft: false
+# Optional: icon: "<blowfish-icon-name>"
+# Optional: params:
+#             serviceType: "<JSON-LD serviceType override>"
 faqs:
   - question: "<buyer-oriented question about this service>"
     answer: "<practical answer grounded in portfolio experience>"
@@ -125,6 +128,11 @@ faqs:
     answer: "<third answer>"
 ---
 ```
+
+**Optional front matter fields (include only when semantically appropriate, do not default to including them):**
+
+- **`icon:`** — Blowfish icon name displayed alongside the page title in list contexts. Currently used on 4 of 10 service pages (`cloud-infrastructure` → `"cloud"`, `devsecops-devops` → `"shield"`, `cicd-automation` → `"code"`, `kubernetes-containers` → `"docker"`). Include only when a standard Blowfish icon maps cleanly to the service domain; omit otherwise (the 6 other services function fine without one because the featured image is the primary visual).
+- **`params.serviceType:`** — Overrides the default `"DevOps Consulting"` serviceType in Service JSON-LD structured data. Currently used on 1 of 10 service pages (`ai-augmented-engineering` → `"AI Engineering Consulting"`). Include only when the service represents a distinct consulting specialty that merits its own schema.org serviceType value.
 
 > Pages default to `draft: false`. If you want to gate publication, set individual pages to `draft: true` after generation. Do not raise draft status as a discussion point during the audit phase.
 

@@ -2,7 +2,7 @@
 title: "AI-Accelerated Infrastructure Delivery Across Three Clouds"
 description: "Used AI-assisted development to accelerate a Terraform framework redesign impacting 15-20 teams and zero-downtime Snowflake upgrades across AWS, GCP, and Azure."
 slug: "ai-accelerated-infrastructure-delivery"
-weight: 8
+weight: 20
 draft: false
 params:
   client: "multi-cloud data platform"

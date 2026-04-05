@@ -2,7 +2,7 @@
 title: "5+ PB Registry Migration with Zero Downtime"
 description: "Completed a 5+ petabyte container registry migration from GCR to GAR with zero service disruption ahead of Google's deprecation deadline."
 slug: "zero-downtime-registry-migration"
-weight: 20
+weight: 40
 featured: true
 draft: false
 params:

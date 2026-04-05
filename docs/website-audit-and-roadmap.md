@@ -199,13 +199,13 @@ Resolved by the About page rewrite. "We" on other pages reads as professional co
 
 ---
 
-### M5. ~~22 pages suppress `color-contrast` in pa11y-ci~~ Partially resolved
+### M5. ~~25 pages suppress `color-contrast` in pa11y-ci~~ Partially resolved
 
 - [x] Identify which failures come from shared Blowfish theme components (nav, footer, hero) vs. custom CSS
 - [x] Fix theme-level contrast issues centrally (shared component overrides)
 - [ ] Remove `"ignore": ["color-contrast"]` from pages as they pass
 
-**Partially resolved 2026-04-03:** Real contrast issues fixed in CSS: `.tech-bar-heading` (`neutral-500` to `neutral-400`/`600`), `.px-2.text-primary-500` middot separators (new `!important` override to `primary-400`/`700`), numbered-steps circles (semi-transparent to opaque composited colors), `background-color` fallbacks on gradient-border buttons and tech labels. `hideElements` cleaned: removed `.px-2.text-primary-500` (now CSS-fixed); retained `svg text` (SVG internals), `.inline-block.rtl:rotate-180` (pagination arrows, axe indeterminate), `.homepage-hero-sub` (gradient-clipped text). 5 pages unsuppressed (services listing, blog listing, case studies listing, contact, privacy). 22 pages still suppress `color-contrast` but all remaining failures are `needsFurtherReview` false positives from axe-core's inability to resolve backgrounds through Blowfish's TOC flex layout, not real contrast failures.
+**Partially resolved 2026-04-03:** Real contrast issues fixed in CSS: `.tech-bar-heading` (`neutral-500` to `neutral-400`/`600`), `.px-2.text-primary-500` middot separators (new `!important` override to `primary-400`/`700`), numbered-steps circles (semi-transparent to opaque composited colors), `background-color` fallbacks on gradient-border buttons and tech labels. `hideElements` cleaned: removed `.px-2.text-primary-500` (now CSS-fixed); retained `svg text` (SVG internals), `.inline-block.rtl:rotate-180` (pagination arrows, axe indeterminate), `.homepage-hero-sub` (gradient-clipped text). 5 pages unsuppressed (services listing, blog listing, case studies listing, contact, privacy). 25 pages still suppress `color-contrast` but all remaining failures are `needsFurtherReview` false positives from axe-core's `imgNode` and `nonBmp` message keys (inability to resolve backgrounds behind images, and symbol-only text), not real contrast failures.
 
 **Files:** `.pa11yci`, `assets/css/custom.css`
 
@@ -410,6 +410,7 @@ Tasks to complete after removing Cloudflare Access and making the site public.
 ### Monitoring & Uptime
 
 - [ ] Investigate liveness probes / synthetic monitoring for the production site. Goal: automated checks that verify key site functionality (homepage loads, contact form POST endpoint responds, static assets serve correctly) and notify when something is down or broken. Options to evaluate: Cloudflare Health Checks, Uptime Robot, Checkly, GitHub Actions on a cron schedule, or a custom Cloudflare Worker on a scheduled trigger. Should cover at minimum: homepage HTTP 200, `/api/contact` POST returns expected error (missing fields), and one case study page loads.
+- [ ] Verify Checkly synthetic monitoring is working after site goes live. Confirm all 10 checks execute on schedule in the Checkly dashboard (9 GET checks + 1 POST check to `/api/contact`), that the check group has been unmuted (flip `muted = false` in Terraform), and that a test alert reaches `contact@pertsfoundry.com`. Confirm projected run count stays within the 10,000/month free tier (~7,300/month at 60-min intervals from 1 location).
 
 ---
 
