@@ -117,7 +117,7 @@ archetypes/          # Content templates (blog.md, case-studies.md, default.md)
 docs/                # Active project documentation (audit, research, guides)
 docs/archive/        # Completed/historical docs; do not reference unless explicitly asked
 .claude/commands/    # Claude Code slash commands (generate-services, generate-case-studies, generate-blog)
-.claude/commands/shared/  # Shared specs referenced by multiple commands (featured-image-processing)
+.claude/commands/shared/  # Shared specs referenced by multiple commands (featured-image-processing, anonymization-spec, portfolio-repo-layout)
 .github/workflows/   # CI: validate.yml (PR checks), deploy.yml (PR comment deploy)
 ```
 
@@ -222,9 +222,9 @@ The `js-reveal-init` class on `<html>` gates visibility: without JS, all content
 - `data/process.toml` has 4 items for the "How We Work" timeline.
 - `data/certifications.toml` has the Credly badge entries displayed on both the homepage certifications section and the about page.
 
-### Section ordering (services, case-studies)
+### Section ordering (services, case-studies, blog)
 
-Both `content/services/_index.md` and `content/case-studies/_index.md` use `orderByWeight: true` with cascading display settings (`showDate: false`, `showAuthor: false`, `showReadingTime: false`, `invertPagination: true`, `showHero: true`, `heroStyle: basic`). New pages in these sections must include a `weight` field or they will sort unpredictably. Both sections require a `featured.jpg` in each page bundle for the hero image. Both sections should include a `tags` field listing relevant technologies (e.g., `AWS`, `Terraform`, `Kubernetes`); these populate `<meta name="keywords">` and JSON-LD keywords for SEO. Case studies use weight increments of 10 (current range 10-120 for 12 case studies) to allow future insertions. Case studies also require `params.client`, `params.industry`, `params.challenge`, and `params.result` in front matter; these render as a structured metadata card at the top of each page. Hugo merges the `params:` YAML key into `.Params` automatically. The archetype at `archetypes/case-studies.md` scaffolds these fields.
+Both `content/services/_index.md` and `content/case-studies/_index.md` use `orderByWeight: true` with cascading display settings (`showDate: false`, `showAuthor: false`, `showReadingTime: false`, `invertPagination: true`, `showHero: true`, `heroStyle: basic`). The blog section (`content/blog/_index.md`) uses the same cascade display settings (`showDate: false`, `showAuthor: false`, `showReadingTime: false`, `showHero: true`, `heroStyle: basic`) but uses Hugo's default date-based ordering instead of `orderByWeight`, so blog posts do not need a `weight` field. New pages in these sections must include a `weight` field or they will sort unpredictably. Both sections require a `featured.jpg` in each page bundle for the hero image. Both sections should include a `tags` field listing relevant technologies (e.g., `AWS`, `Terraform`, `Kubernetes`); these populate `<meta name="keywords">` and JSON-LD keywords for SEO. Case studies use weight increments of 10 (current range 10-120 for 12 case studies) to allow future insertions. Case studies also require `params.client`, `params.industry`, `params.challenge`, and `params.result` in front matter; these render as a structured metadata card at the top of each page. Hugo merges the `params:` YAML key into `.Params` automatically. The archetype at `archetypes/case-studies.md` scaffolds these fields.
 
 ## Code Style
 

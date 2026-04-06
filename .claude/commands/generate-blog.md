@@ -163,7 +163,7 @@ Present 5-10 ideas, each as:
 
 If web search is unavailable or returns insufficient results, note the limitation in the output and weight the remaining two angles (portfolio gaps, strategic fit) more heavily. Do not block ideation on web search availability.
 
-Phases 3 and 4 are skipped; the ideas are the deliverable. If the user selects an idea, continue in the same session. The Phase 1 data is already loaded. Ask which generation mode fits (Portfolio-seeded if portfolio-backed, Interactive if additional user input is needed) and proceed to Phase 2 of that mode. All anonymization rules (SPEC-1 through SPEC-6) apply regardless of the information source, including web search results from Ideate mode.
+Phases 3 and 4 are skipped; the ideas are the deliverable. If the user selects an idea, continue in the same session. The Phase 1 data is already loaded. Ask which generation mode fits (Portfolio-seeded if portfolio-backed, Interactive if additional user input is needed) and proceed to Phase 2 of that mode. All anonymization rules from the shared spec apply regardless of the information source, including web search results from Ideate mode.
 
 ## Phase 3: Generate
 
@@ -173,8 +173,8 @@ Portfolio-seeded and Interactive modes create new page bundles (steps 1-3 below)
 
 Polish mode skips page bundle creation but may still need structural fixes before rewriting:
 
-1. **Fix directory/slug mismatches.** If Phase 1 flagged the target post's directory name as not matching its `slug` front matter field, rename the directory to match the slug.
-2. **Update `.pa11yci`.** If the directory was renamed, update any existing `.pa11yci` entry for the old path. If no entry exists for the post, add one (same format as step 2 below).
+1. **Fix directory/slug mismatches.** If Phase 1 flagged the target post's directory name as not matching its `slug` front matter field, rename the directory to match the slug. If `.pa11yci` has an entry for the old path, update it to the new path.
+2. **Ensure `.pa11yci` entry exists.** Regardless of whether a rename occurred, check that `.pa11yci` contains an entry for the post's URL. If not, add one using the format below.
 
 Then proceed to the Front matter and Body structure sections.
 
@@ -189,9 +189,7 @@ Then proceed to the Front matter and Body structure sections.
   "ignore": ["color-contrast"]
 }
 ```
-Insert alphabetically among existing blog URLs.
-
-**3. Handle directory/slug mismatches (if applicable).** If the target post lives in a directory that does not match its `slug` front matter field (flagged in Phase 1), rename the directory to match the slug before proceeding. Update any existing `.pa11yci` entry for the old path to reflect the new directory name.
+Insert alphabetically among existing blog URLs. If Phase 1 flagged a directory/slug mismatch for an existing post being replaced, rename the directory and update the `.pa11yci` entry as described in the Polish pre-generation steps above.
 
 ### Front matter
 
@@ -204,7 +202,6 @@ description: "<150-160 characters with primary keyword>"
 slug: "<kebab-case matching directory name>"
 tags:
   - <Proper Case Tag>
-showDate: false
 ---
 ```
 
@@ -214,9 +211,9 @@ Blog posts use `draft: false` because content is approved during the Phase 2 dis
 
 **Description:** Serves as both meta description (what Google shows) and listing card text on `/blog/`. A weak description means lower click-through. Aim for 150-160 characters with the primary keyword included.
 
-**Tags:** Proper case for product names (`Terraform`, `AWS`, `Kubernetes`). Title case for discipline tags (`FinOps`, `Incident Response`). Reuse existing tags where possible. During Phase 1, collect the current tag inventory by reading all `tags:` arrays from service pages, case study pages, and existing blog posts. Use this as the reference set for tag validation in Phase 5. Flag any proposed tag that does not already exist in the inventory.
+**Tags:** Proper case for product names (`Terraform`, `AWS`, `Kubernetes`). Title case for discipline tags (`FinOps`, `Incident Response`). Reuse existing tags where possible. During Phase 1, collect the current tag inventory by reading all `tags:` arrays from service pages, case study pages, and existing blog posts. Use this as the reference set for tag validation. If a proposed tag does not exist in the inventory, add it to the writing guide's tag list (Section 14, maintaining alphabetical order and pipe-separated formatting) during generation.
 
-**showDate:** Default `false` for evergreen content (80% of posts). Set `true` only for timely content (tool comparisons with version-specific conclusions, event recaps).
+**showDate:** Inherited from the blog cascade (`content/blog/_index.md` sets `showDate: false`). Do not include `showDate` in individual post front matter unless overriding to `true` for timely content (tool comparisons with version-specific conclusions, event recaps).
 
 **Optional fields for Polish mode (refreshing published posts):**
 - `showDateUpdated: true` -- displays the last-modified date alongside the original date. Add when a published post receives a substantive freshness update.
@@ -287,7 +284,7 @@ Word count target is driven by post type (above). Adjust upward for higher keywo
 - Internal links are mandatory. Every post must link to at least 1 service page and 1 case study. Find the best matches by comparing the post's tags and topic against service page and case study tags collected during Phase 1. Additional internal links (to other blog posts, the about page, etc.) are encouraged for hub-and-spoke linking.
 - Heading hierarchy: H2 then H3, never skip levels. H1 is the page title (set by Hugo).
 - Accessibility: descriptive alt text on content images, language annotations on code blocks, descriptive link text (not "click here").
-- Read at least 2 existing blog posts (if any exist beyond the placeholder) for tone calibration before writing. If fewer than 2 non-placeholder posts exist, calibrate tone from the writing guide's craft section (Section 5) and existing service/case study pages instead.
+- Read at least 2 existing blog posts for tone calibration before writing. If fewer than 2 published posts exist (posts with `draft: false`), calibrate tone from the writing guide's craft section (Section 5) and existing service/case study pages instead.
 
 ### Content pillar alignment
 
@@ -304,7 +301,7 @@ Blog posts target long-tail keywords (3+ words, 2.5x higher conversion rate). Do
 
 ### Anonymization (war stories and portfolio-sourced content)
 
-When blog posts reference specific client work, apply the anonymization boundaries defined in `.claude/commands/shared/anonymization-spec.md` (SPEC-1 through SPEC-6). That shared spec covers client naming, business metrics, proprietary systems, organizational details, descriptor variation, and date handling.
+When blog posts reference specific client work, apply all anonymization boundaries defined in `.claude/commands/shared/anonymization-spec.md`. That shared spec covers client naming, business metrics, proprietary systems, organizational details, descriptor variation, and date handling.
 
 ### Available shortcodes
 
@@ -339,7 +336,7 @@ Run these checks against the generated post and include results in the report:
 | Answer-first pattern | For question-phrased H2s, verify 40-60 word answer follows | All question-H2s covered |
 | CTA present | Check final section for link to service or /contact/ | CTA exists |
 | Em dash check | Search for `—` in prose | None found |
-| Tag validation | Cross-reference tags against the inventory collected in Phase 1 | All known, or new tags flagged and added to writing guide tag list (Section 14). New tags do not block publication |
+| Tag validation | Cross-reference tags against the inventory collected in Phase 1 | All known, or new tags flagged. New tags should have been added to the writing guide tag list during Phase 3. New tags do not block publication |
 | Code block annotations | Every fenced code block has a language specifier | All annotated |
 | Heading frequency | Count words between H2 headings | 200-300 word average |
 | No raw HTML | Search for HTML tags in body prose (outside fenced code blocks) | None found |
@@ -384,7 +381,7 @@ Run these checks against the generated post and include results in the report:
 ### Blog Re-enablement Status
 [Count total blog posts with draft: false. If 3+ posts exist, the blog
 re-enablement checklist from the writing guide (Section 11) is ready:
-- Rename placeholder directory if still needed
+- Fix any directory/slug mismatches flagged in Phase 1
 - Add Blog to nav menu in menus.en.toml (weight: 30)
 - Run full validation suite
 Otherwise note how many posts exist and how many more are needed.]
@@ -401,7 +398,7 @@ Flag any of these that apply:
 - [Word count outside target range]
 - [Any formatting or lint fixes applied]
 - [Bidirectional linking: pages that should link back to this new post]
-- [Placeholder post status if still unaddressed]
+- [Directory/slug mismatches if still unaddressed]
 ```
 
 ## Constraints

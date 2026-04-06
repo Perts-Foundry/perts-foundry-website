@@ -29,11 +29,13 @@ Before forming any opinions, build a complete picture.
 
 1. Verify the sibling portfolio repository exists and read portfolio data. Follow the shared prerequisite check in `.claude/commands/shared/portfolio-repo-layout.md`.
 
-3. Read all existing case study pages: every `content/case-studies/*/index.md` file and `content/case-studies/_index.md`.
+2. Read all existing case study pages: every `content/case-studies/*/index.md` file and `content/case-studies/_index.md`.
 
-4. Apply the anonymization boundaries (SPEC-1 through SPEC-6) defined in `.claude/commands/shared/anonymization-spec.md`. Case-study-specific application notes: for SPEC-1, use the anonymized descriptor chosen during Phase 2 review. For SPEC-5, the Anonymization Assessment in Phase 2 is the primary control for cross-candidate risk.
+3. Apply the anonymization boundaries defined in `.claude/commands/shared/anonymization-spec.md`. Case-study-specific application notes:
+   - For SPEC-1, use the anonymized descriptor chosen during Phase 2 review.
+   - For SPEC-5, the Anonymization Assessment in Phase 2 is the primary control for cross-candidate risk.
 
-5. Evaluate existing case study pages for factual grounding. If a page's content cannot be traced to work.yaml highlights, flag it as "ungrounded" in the Phase 2 report. The page may be placeholder content from early site development. Do not use ungrounded pages as tone references for generation.
+4. Evaluate existing case study pages for factual grounding. If a page's content cannot be traced to work.yaml highlights, flag it as "ungrounded" in the Phase 2 report. The page may be placeholder content from early site development. Do not use ungrounded pages as tone references for generation.
 
 ## Phase 2: Discover & Audit
 
@@ -87,7 +89,7 @@ Assessment definitions:
 
 ### Anonymization Assessment
 [When multiple candidates share a client, evaluate the combined fingerprint.
-Each individual case study may respect SPEC-1 through SPEC-6, but publishing
+Each individual case study may respect the anonymization boundaries, but publishing
 multiple studies from the same client multiplies the correlation surface.
 Note this assessment for the user.]
 
@@ -131,7 +133,7 @@ Do not write any pages to disk until the user has reviewed the report (batch) or
 ### Anonymization rules
 
 - Use anonymized client descriptors chosen during Phase 2 review. The work.yaml `summary` field is a starting point, not the final descriptor. Do not introduce new identifying details beyond what work.yaml already contains.
-- Apply the anonymization boundaries defined in Phase 1, step 4 (SPEC-1 through SPEC-6).
+- Apply all anonymization boundaries defined in Phase 1, step 3 (the shared anonymization spec).
 - For AWS entries, the employer name is not confidential.
 - For NSWC entries, use "a defense software organization" rather than the full department name.
 
@@ -389,7 +391,7 @@ Flag any of these that apply:
 | Put after-only metrics in the before/after table | Weave after-only metrics into the narrative paragraph | Empty "before" cells undermine the table's credibility |
 | Generate content from assumed data | Flag gaps in Phase 5 rather than inventing details | Credibility depends on accuracy |
 | Leave orphaned directories after a slug change | Delete old directory before creating new | Orphaned pages create duplicate content |
-| Add identifying details beyond work.yaml | Use anonymized descriptors chosen during Phase 2 review | Respect SPEC-1 through SPEC-6 anonymization boundaries |
+| Add identifying details beyond work.yaml | Use anonymized descriptors chosen during Phase 2 review | Respect all anonymization boundaries in the shared spec |
 | Use ungrounded pages as tone references | Only reference pages backed by work.yaml data | Fabricated content miscalibrates the generation |
 | Assume existing page structure is permanent | Discuss structural choices during Phase 2 | User may want to evolve the format |
 | Ignore shared image processing spec | Follow `.claude/commands/shared/featured-image-processing.md` for all featured image constraints | Covers sharp usage, dark rectangle, prompt guidelines, and dimensions |

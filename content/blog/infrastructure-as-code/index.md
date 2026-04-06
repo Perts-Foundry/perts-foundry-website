@@ -8,7 +8,6 @@ tags:
   - Terraform
   - DevOps
   - Infrastructure
-showDate: false
 ---
 
 There's a moment in every startup's life where the infrastructure that "just works" starts to become the thing that holds everything back. It usually happens quietly: a deploy that takes longer than it should, an environment that can't be reproduced, a config change that breaks production because nobody remembered it existed.

@@ -21,7 +21,7 @@ Before forming any opinions, build a complete picture.
 
 1. Verify the sibling portfolio repository exists and read portfolio data. Follow the shared prerequisite check in `.claude/commands/shared/portfolio-repo-layout.md`.
 
-3. Read all existing service pages: every `content/services/*/index.md` file and `content/services/_index.md`.
+2. Read all existing service pages: every `content/services/*/index.md` file and `content/services/_index.md`.
 
 ## Phase 2: Audit
 
