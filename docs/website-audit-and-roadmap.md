@@ -409,6 +409,21 @@ Tasks to complete after removing Cloudflare Access and making the site public.
 - [ ] Run PageSpeed Insights on pertsfoundry.com and confirm Core Web Vitals are green
 - [x] Regenerate homepage OG image with current "Build. Scale. Own." tagline (current `og-homepage.png` shows old tagline)
 
+### Core Web Vitals (revisit after 50+ visits)
+
+Initial Cloudflare Web Analytics CWV data (11 visits, 49 page views) shows two metrics with red:
+
+- **CLS (Cumulative Layout Shift)**: ~79% Good, ~4% NI, ~18% Poor. Most concerning. Likely culprits: homepage carousel auto-advance, scroll-reveal animations changing element dimensions, lazy-loaded images without reserved space, or font-loading reflow.
+- **INP (Interaction to Next Paint)**: ~93% Good, ~7% Poor. Likely a single slow interaction from one visitor at this sample size.
+- **LCP**: 100% Good (no issues).
+
+Sample size is too small to act on confidently. Revisit after a week of real traffic (~50+ visits). At that point:
+
+- [ ] Check which specific pages trigger poor CLS in the Cloudflare Web Analytics breakdown table
+- [ ] If CLS stays elevated, investigate homepage carousel auto-advance and scroll-reveal animations as primary suspects
+- [ ] If INP stays elevated, profile JavaScript execution on the affected pages (carousel click handlers, Turnstile on /contact/)
+- [ ] Re-run Lighthouse on flagged pages to reproduce locally and iterate on fixes
+
 ### Monitoring & Uptime
 
 - [ ] Investigate liveness probes / synthetic monitoring for the production site. Goal: automated checks that verify key site functionality (homepage loads, contact form POST endpoint responds, static assets serve correctly) and notify when something is down or broken. Options to evaluate: Cloudflare Health Checks, Uptime Robot, Checkly, GitHub Actions on a cron schedule, or a custom Cloudflare Worker on a scheduled trigger. Should cover at minimum: homepage HTTP 200, `/api/contact` POST returns expected error (missing fields), and one case study page loads.

@@ -2,10 +2,23 @@
 <link rel="dns-prefetch" href="https://challenges.cloudflare.com">
 <link rel="dns-prefetch" href="https://cal.com">
 
-{{/* Load Turnstile script only on the contact page */}}
+{{/* Load Turnstile script only on the contact page.
+     render=explicit disables Turnstile's MutationObserver auto-render, which
+     otherwise fires multiple times when Blowfish's JS manipulates the DOM
+     (causing duplicate/triplicate widgets). The onload callback renders the
+     widget exactly once when the script finishes loading. */}}
 {{ if eq .RelPermalink "/contact/" }}
   {{ with site.Params.turnstileSiteKey }}
-    <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+    <script>
+      window.onloadTurnstileCallback = function () {
+        turnstile.render('.cf-turnstile', {
+          sitekey: '{{ . }}',
+          theme: 'auto',
+          size: 'flexible'
+        });
+      };
+    </script>
+    <script src="https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit&onload=onloadTurnstileCallback" async defer></script>
   {{ end }}
 {{ end }}
 

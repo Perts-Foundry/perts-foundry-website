@@ -86,10 +86,11 @@
               <input type="text" id="contact-website" name="website" tabindex="-1" autocomplete="off" />
             </div>
 
-            {{/* Turnstile widget */}}
+            {{/* Turnstile widget — rendered explicitly by onloadTurnstileCallback
+                 in extend-head-uncached.html. The div is just a mount target. */}}
             {{ with site.Params.turnstileSiteKey }}
               <div class="form-group">
-                <div class="cf-turnstile" data-sitekey="{{ . }}" data-theme="auto" data-size="flexible"></div>
+                <div class="cf-turnstile"></div>
               </div>
             {{ end }}
 
