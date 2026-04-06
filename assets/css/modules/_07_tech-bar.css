@@ -70,7 +70,11 @@ html:not(.dark) .tech-carousel-btn:hover:not(:disabled) {
   color: rgb(var(--color-primary-500));
 }
 
-/* Carousel dots */
+/* Carousel dots.
+   The button element itself is a 24x24 CSS-pixel touch target (WCAG 2.2 SC
+   2.5.8 requires >=24x24). The visible dot is painted by ::before, centered
+   inside the button, so the hit target satisfies axe's target-size check
+   while the visible dot stays small. */
 .tech-carousel-dots {
   display: flex;
   justify-content: center;
@@ -80,22 +84,36 @@ html:not(.dark) .tech-carousel-btn:hover:not(:disabled) {
 
 .tech-carousel-dot {
   position: relative;
+  width: 24px;
+  height: 24px;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  padding: 0;
+}
+
+/* Visible dot: 8x8 circle centered in the 24x24 button. */
+.tech-carousel-dot::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
   width: 0.5rem;
   height: 0.5rem;
   border-radius: 50%;
-  border: none;
   background: rgba(var(--color-neutral-400), 0.3);
-  cursor: pointer;
-  padding: 0;
-  transition: background 0.2s ease, transform 0.2s ease;
+  transform: translate(-50%, -50%);
+  transition: background 0.2s ease, width 0.2s ease, border-radius 0.2s ease, transform 0.2s ease;
 }
 
-.tech-carousel-dot.active {
+/* Active: widen to 24x8 rounded rect and brighten. */
+.tech-carousel-dot.active::before {
+  width: 1.5rem;
+  border-radius: 0.25rem;
   background: rgb(var(--color-primary-500));
-  transform: scale(1.3);
 }
 
-.tech-carousel-dot:hover:not(.active) {
+.tech-carousel-dot:hover:not(.active)::before {
   background: rgba(var(--color-neutral-400), 0.5);
 }
 
@@ -109,36 +127,21 @@ html:not(.dark) .tech-carousel-btn:hover:not(:disabled) {
   animation: techEnterScale 0.4s ease;
 }
 
-/* Invisible touch target expansion (WCAG 2.5.8: 44px minimum).
-   No overflow: hidden on the dot so this ::before is not clipped. */
-.tech-carousel-dot::before {
+/* Progress bar fill: overlays the active ::before dot, anchored to its left
+   edge and growing rightward via width:0 -> 100% (100% of 24px button = 1.5rem,
+   matching the active dot's width). */
+.tech-carousel-dot.active.progressing::after {
   content: '';
   position: absolute;
   top: 50%;
   left: 50%;
-  width: 44px;
-  height: 44px;
-  transform: translate(-50%, -50%);
-}
-
-/* Progress bar fill. border-radius: inherit picks up the dot's border-radius
-   (50% when inactive, 0.25rem when active), keeping the fill shape matched. */
-.tech-carousel-dot.active.progressing::after {
-  content: '';
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  height: 100%;
+  margin-left: -0.75rem;
+  height: 0.5rem;
   width: 0;
   background: rgb(var(--color-primary-400));
-  border-radius: inherit;
-  animation: dotProgress var(--dot-progress-duration, 5s) linear forwards;
-}
-
-/* Make active dots wider to show progress */
-.tech-carousel-dot.active {
-  width: 1.5rem;
   border-radius: 0.25rem;
+  transform: translateY(-50%);
+  animation: dotProgress var(--dot-progress-duration, 5s) linear forwards;
 }
 
 @media (prefers-reduced-motion: reduce) {
