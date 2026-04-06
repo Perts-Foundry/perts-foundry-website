@@ -31,7 +31,7 @@ Ask the user which mode they want after completing Phase 1.
 
 Before forming any opinions, build a complete picture.
 
-1. Verify the sibling portfolio repository exists. Check that `../professional-portfolio-source/data/work.yaml` is present. If not, stop and report this error:
+1. Verify the sibling portfolio repository exists. Check that both `../professional-portfolio-source/data/work.yaml` and `../professional-portfolio-source/data/services.yaml` are present. If not, stop and report this error:
 
    ```
    Portfolio repo not found. Expected layout:
@@ -210,9 +210,13 @@ Blog posts use `draft: false` because content is approved during the Phase 2 dis
 
 **Description:** Serves as both meta description (what Google shows) and listing card text on `/blog/`. A weak description means lower click-through. Aim for 150-160 characters with the primary keyword included.
 
-**Tags:** Proper case for product names (`Terraform`, `AWS`, `Kubernetes`). Title case for discipline tags (`FinOps`, `Incident Response`). Reuse existing tags where possible. The current tag inventory (44 tags): Agile, AI, ArgoCD, Atlantis, AWS, Azure, Bash, Claude, CloudFormation, CodeRabbit, Confluence, Containers, Cursor, DevOps, Docker, ECR, ECS, EKS, FinOps, GAR, GCR, GCP, GCS, GKE, GitHub, GitHub Actions, GitHub Copilot, GitLab, HCP, Helm, Incident Response, Infrastructure, Jenkins, Jira, Jira Service Desk, Kanban, Kubernetes, NFS, Renovatebot, RHEL, Snyk, Snowflake, Terraform, Vault.
+**Tags:** Proper case for product names (`Terraform`, `AWS`, `Kubernetes`). Title case for discipline tags (`FinOps`, `Incident Response`). Reuse existing tags where possible. During Phase 1, collect the current tag inventory by reading all `tags:` arrays from service pages, case study pages, and existing blog posts. Use this as the reference set for tag validation in Phase 5. Flag any proposed tag that does not already exist in the inventory.
 
 **showDate:** Default `false` for evergreen content (80% of posts). Set `true` only for timely content (tool comparisons with version-specific conclusions, event recaps).
+
+**Optional fields for Polish mode (refreshing published posts):**
+- `showDateUpdated: true` -- displays the last-modified date alongside the original date. Add when a published post receives a substantive freshness update.
+- `dateUpdated: <date>` -- the date of the update. Hugo uses this for the displayed "Updated" label.
 
 ### Body structure
 
@@ -313,71 +317,7 @@ When a blog post references the same client engagement as an existing case study
 
 ## Phase 4: Featured Image Processing
 
-After page generation, process a featured image for the post.
-
-### Image specifications
-
-| Property | Value |
-|----------|-------|
-| Dimensions | 1400x781 pixels |
-| Format | JPEG, quality 85 |
-| Target file size | 200-400KB |
-| Logo overlay | `static/img/logo/perts-foundry-icon-64.png`, southeast gravity |
-| Watermark cover | 100x100px dark rectangle (#050710) under the logo to cover AI generator watermarks |
-
-### Workflow
-
-**Step 1: Analyze visual style.** Read 3-4 existing featured images from service or case study pages to identify the consistent visual style:
-- Dark navy/black backgrounds
-- Glowing neon accents in blue and purple/violet tones
-- Futuristic 3D perspective renders
-- Symbolic metaphors for the content's concept (not literal depictions)
-- No text overlays, no logos, no people
-- 16:9 aspect ratio
-
-**Step 2: Generate image prompt.** Craft a prompt for Google Gemini (or another AI image generator):
-- Describe a symbolic 3D visualization representing the post's theme
-- Specify dark navy-black background with blue/violet neon glow palette
-- Request cinematic lighting, 3D perspective, photorealistic render style
-- Explicitly state: "No text, no logos, no letters, no people. 16:9 aspect ratio."
-- Avoid requesting literal text, abbreviations, or acronyms
-
-Present the prompt and ask the user to generate the image and provide the file path.
-
-**Step 3: Process the image.** Use Node.js with the sharp library (do not use sharp CLI):
-
-```javascript
-node -e "
-const sharp = require('sharp');
-sharp('<USER_PROVIDED_PATH>')
-  .resize(1400, 781, { fit: 'cover' })
-  .composite([
-    {
-      input: {
-        create: {
-          width: 100,
-          height: 100,
-          channels: 3,
-          background: { r: 5, g: 7, b: 16 }
-        }
-      },
-      gravity: 'southeast'
-    },
-    {
-      input: 'static/img/logo/perts-foundry-icon-64.png',
-      gravity: 'southeast'
-    }
-  ])
-  .jpeg({ quality: 85 })
-  .toFile('content/blog/<slug>/featured.jpg')
-  .then(info => console.log('Done:', JSON.stringify(info)))
-  .catch(err => console.error('Error:', err.message));
-"
-```
-
-The two-layer composite is essential: the dark rectangle blanks out any AI generator watermark, then the PF icon sits cleanly on top.
-
-**Step 4: Verify.** Show the processed image for approval. If the watermark is visible or needs adjustment, re-process. Check file size is within 200-400KB.
+After page generation, process a featured image for the post. Follow the shared image processing workflow in `.claude/commands/shared/featured-image-processing.md`, using `content/blog/<slug>/featured.jpg` as the output path.
 
 ## Phase 5: Verify
 
@@ -399,7 +339,7 @@ Run these checks against the generated post and include results in the report:
 | Answer-first pattern | For question-phrased H2s, verify 40-60 word answer follows | All question-H2s covered |
 | CTA present | Check final section for link to service or /contact/ | CTA exists |
 | Em dash check | Search for `—` in prose | None found |
-| Tag validation | Cross-reference tags against the 44-tag inventory | All known, or new tags flagged |
+| Tag validation | Cross-reference tags against the inventory collected in Phase 1 | All known, or new tags flagged |
 | Code block annotations | Every fenced code block has a language specifier | All annotated |
 | Heading frequency | Count words between H2 headings | 200-300 word average |
 | No raw HTML | Search for HTML tags in body prose (outside fenced code blocks) | None found |
