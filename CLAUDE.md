@@ -117,6 +117,7 @@ archetypes/          # Content templates (blog.md, case-studies.md, default.md)
 docs/                # Active project documentation (audit, research, guides)
 docs/archive/        # Completed/historical docs; do not reference unless explicitly asked
 .claude/commands/    # Claude Code slash commands (generate-services, generate-case-studies, generate-blog)
+.claude/commands/shared/  # Shared specs referenced by multiple commands (featured-image-processing)
 .github/workflows/   # CI: validate.yml (PR checks), deploy.yml (PR comment deploy)
 ```
 
@@ -132,7 +133,7 @@ Do not read or reference archived documents unless the user explicitly asks for 
 - New case studies: `hugo new content case-studies/<slug>/index.md` (uses `archetypes/case-studies.md`)
 - Content files live under `content/` as page bundles (directory with `index.md`)
 - Front matter uses YAML delimiters (`---`)
-- All new content starts as `draft: true`
+- Archetypes default to `draft: true` for manual authoring. The generate commands (`generate-services`, `generate-case-studies`, `generate-blog`) override to `draft: false` because content is approved interactively during their Phase 2.
 - Tags use proper case (`Terraform`, `AWS`, `Kubernetes`, not `terraform`, `aws`)
 - Permalinks for case studies use the `slug` field: `/case-studies/:slug/`
 - Content `slug` values must match their directory name (e.g., `content/services/cloud-infrastructure/` uses `slug: "cloud-infrastructure"`). Structured breadcrumb data relies on this alignment.
