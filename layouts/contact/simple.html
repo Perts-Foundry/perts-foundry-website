@@ -190,7 +190,7 @@
         // Get Turnstile response
         var turnstileResponse = "";
         if (typeof turnstile !== "undefined") {
-          turnstileResponse = turnstile.getResponse();
+          turnstileResponse = turnstile.getResponse(window.turnstileWidgetId);
           if (!turnstileResponse) {
             showError("Please complete the verification challenge.");
             return;
@@ -230,7 +230,7 @@
               submitBtn.disabled = false;
               submitBtn.textContent = "Start the Conversation";
               if (typeof turnstile !== "undefined") {
-                turnstile.reset();
+                turnstile.reset(window.turnstileWidgetId);
               }
             }
           })
@@ -241,7 +241,7 @@
             submitBtn.disabled = false;
             submitBtn.textContent = "Start the Conversation";
             if (typeof turnstile !== "undefined") {
-              turnstile.reset();
+              turnstile.reset(window.turnstileWidgetId);
             }
           });
       });

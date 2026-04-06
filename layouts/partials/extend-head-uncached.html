@@ -11,14 +11,14 @@
   {{ with site.Params.turnstileSiteKey }}
     <script>
       window.onloadTurnstileCallback = function () {
-        turnstile.render('.cf-turnstile', {
-          sitekey: '{{ . }}',
+        window.turnstileWidgetId = turnstile.render('.cf-turnstile', {
+          sitekey: {{ . | jsonify | safeJS }},
           theme: 'auto',
           size: 'flexible'
         });
       };
     </script>
-    <script src="https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit&onload=onloadTurnstileCallback" async defer></script>
+    <script src="https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit&onload=onloadTurnstileCallback" defer></script>
   {{ end }}
 {{ end }}
 
