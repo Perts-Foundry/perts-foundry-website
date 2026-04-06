@@ -22,7 +22,7 @@ Ask the user which mode they want after completing Phase 1.
 
 | Mode | When to Use | Output |
 |------|-------------|--------|
-| **Portfolio-seeded** | Mine work history for blog-worthy stories | Complete blog post |
+| **Portfolio-seeded** | Mine portfolio data for blog-worthy stories | Complete blog post |
 | **Interactive** | User has a topic in mind | Complete blog post |
 | **Polish** | Upgrade an existing draft or refresh a published post | Improved blog post |
 | **Ideate** | Brainstorm topics from portfolio gaps and industry trends | 5-10 researched topic ideas (skip Phases 3-4) |
@@ -128,7 +128,7 @@ Read the existing post. Run the full blog post checklist (writing guide Section 
 
 Quality checks: hook, internal links, CTA, heading structure, description length, tag validation, em dashes, code annotations, accessibility. Freshness checks: version annotations in code blocks referencing outdated tool versions, recommendations that have changed, internal links to service or case study pages added since the post was written, metrics or claims that may need updating, whether `showDateUpdated: true` should be added. Run all checks regardless of draft status.
 
-Discuss the plan with the user before rewriting.
+Discuss the plan with the user before making changes.
 
 ### Ideate mode
 
@@ -166,7 +166,9 @@ Present 5-10 ideas, each as:
 **Priority:** [High / Medium / Low] -- [rationale]
 ```
 
-Phases 3 and 4 are skipped; the ideas are the deliverable. The user may select one to generate immediately by switching to Portfolio-seeded or Interactive mode.
+If web search is unavailable or returns insufficient results, note the limitation in the output and weight the remaining two angles (portfolio gaps, strategic fit) more heavily. Do not block ideation on web search availability.
+
+Phases 3 and 4 are skipped; the ideas are the deliverable. If the user selects an idea, continue in the same session. The Phase 1 data is already loaded. Ask which generation mode fits (Portfolio-seeded if portfolio-backed, Interactive if additional user input is needed) and proceed to Phase 2 of that mode. All anonymization rules (SPEC-1 through SPEC-6) apply regardless of the information source, including web search results from Ideate mode.
 
 ## Phase 3: Generate
 
@@ -208,7 +210,7 @@ Blog posts use `draft: false` because content is approved during the Phase 2 dis
 
 **Description:** Serves as both meta description (what Google shows) and listing card text on `/blog/`. A weak description means lower click-through. Aim for 150-160 characters with the primary keyword included.
 
-**Tags:** Proper case for product names (`Terraform`, `AWS`, `Kubernetes`). Title case for discipline tags (`FinOps`, `Incident Response`). Reuse existing tags where possible. The current tag inventory: Agile, AI, ArgoCD, Atlantis, AWS, Azure, Bash, Claude, CloudFormation, CodeRabbit, Confluence, Containers, Cursor, DevOps, Docker, ECR, ECS, EKS, FinOps, GAR, GCR, GCP, GCS, GKE, GitHub, GitHub Actions, GitHub Copilot, HCP, Helm, Incident Response, Infrastructure, Jenkins, Jira, Jira Service Desk, Kanban, Kubernetes, NFS, Renovatebot, RHEL, Snyk, Snowflake, Terraform, Vault.
+**Tags:** Proper case for product names (`Terraform`, `AWS`, `Kubernetes`). Title case for discipline tags (`FinOps`, `Incident Response`). Reuse existing tags where possible. The current tag inventory (44 tags): Agile, AI, ArgoCD, Atlantis, AWS, Azure, Bash, Claude, CloudFormation, CodeRabbit, Confluence, Containers, Cursor, DevOps, Docker, ECR, ECS, EKS, FinOps, GAR, GCR, GCP, GCS, GKE, GitHub, GitHub Actions, GitHub Copilot, GitLab, HCP, Helm, Incident Response, Infrastructure, Jenkins, Jira, Jira Service Desk, Kanban, Kubernetes, NFS, Renovatebot, RHEL, Snyk, Snowflake, Terraform, Vault.
 
 **showDate:** Default `false` for evergreen content (80% of posts). Set `true` only for timely content (tool comparisons with version-specific conclusions, event recaps).
 
@@ -397,7 +399,7 @@ Run these checks against the generated post and include results in the report:
 | Answer-first pattern | For question-phrased H2s, verify 40-60 word answer follows | All question-H2s covered |
 | CTA present | Check final section for link to service or /contact/ | CTA exists |
 | Em dash check | Search for `—` in prose | None found |
-| Tag validation | Cross-reference tags against the 43-tag inventory | All known, or new tags flagged |
+| Tag validation | Cross-reference tags against the 44-tag inventory | All known, or new tags flagged |
 | Code block annotations | Every fenced code block has a language specifier | All annotated |
 | Heading frequency | Count words between H2 headings | 200-300 word average |
 | No raw HTML | Search for HTML tags in body prose (outside fenced code blocks) | None found |
