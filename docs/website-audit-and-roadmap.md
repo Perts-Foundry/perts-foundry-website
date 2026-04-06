@@ -394,7 +394,7 @@ Tasks to complete after removing Cloudflare Access and making the site public.
 
 ### Security
 
-- [ ] Submit `pertsfoundry.com` to [hstspreload.org](https://hstspreload.org/) for HSTS preload list inclusion (currently eligible; `preload` directive is set)
+- [x] Submit `pertsfoundry.com` to [hstspreload.org](https://hstspreload.org/) for HSTS preload list inclusion (currently eligible; `preload` directive is set)
 - [ ] Monitor browser console for CSP violations during the first week of public traffic (especially contact page with Turnstile and analytics beacon)
 - [ ] Verify `/api/contact` responses include security headers from Transform Rules (not just static asset responses)
 
