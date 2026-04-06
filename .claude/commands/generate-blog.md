@@ -31,28 +31,23 @@ Ask the user which mode they want after completing Phase 1.
 
 Before forming any opinions, build a complete picture.
 
-1. Verify the sibling portfolio repository exists. Check that both `../professional-portfolio-source/data/work.yaml` and `../professional-portfolio-source/data/services.yaml` are present. If not, stop and report this error:
+1. Verify the sibling portfolio repository exists and read portfolio data. Follow the shared prerequisite check in `.claude/commands/shared/portfolio-repo-layout.md`.
 
-   ```
-   Portfolio repo not found. Expected layout:
-     repos/Perts-Foundry/
-     ├── perts-foundry-website/        ← you are here
-     └── professional-portfolio-source/ ← must exist as sibling
-   ```
+2. Read all existing blog posts: every `content/blog/*/index.md` file. For each post, check that the directory name matches the `slug` front matter field; flag any mismatches for correction in Phase 2.
 
-2. Read all `*.yaml` files under `../professional-portfolio-source/data/`. This gives the full picture of professional experience: work history, services, skills, certifications, projects, education, and everything else in the portfolio. New data files added over time should be picked up automatically.
+3. Read `content/blog/_index.md`. Verify it has the required cascade settings (`showHero: true`, `heroStyle: basic`, `showDate: false`, `showAuthor: false`, `showReadingTime: false`). If any are missing, add them before generation. This matches the convention used by `content/case-studies/_index.md` and `content/services/_index.md`.
 
-3. Read all existing blog posts: every `content/blog/*/index.md` file and `content/blog/_index.md`. Note the placeholder post at `content/blog/placeholder-first-post/index.md` — it has known issues (em dash in title, directory name does not match slug, no featured image).
+4. Read `.pa11yci` to confirm the file exists and note any existing blog post URLs.
 
-4. Read all service pages (`content/services/*/index.md`) and case study pages (`content/case-studies/*/index.md`). These are internal link targets; collect their titles, slugs, and tags for link matching in Phase 2.
+5. Collect titles, slugs, and tags from service page and case study page front matter (`content/services/*/index.md` and `content/case-studies/*/index.md`). Read only front matter, not full page content. These are internal link targets for Phase 2 matching. Read full page content only for pages that will be directly linked or referenced in the post.
 
-5. Read `docs/technical-blog-writing-guide.md` for the full craft reference. Internalize the writing patterns, SEO guidance, hook styles, and common mistakes. This guide is the quality standard. If the guide's advice conflicts with this command's explicit instructions, this command takes precedence; the guide provides supplementary craft detail.
+6. Read `docs/technical-blog-writing-guide.md` for the full craft reference. Internalize the writing patterns, SEO guidance, hook styles, and common mistakes. This guide is the quality standard. If the guide's advice conflicts with this command's explicit instructions, this command takes precedence; the guide provides supplementary craft detail.
 
 ## Phase 2: Discover/Audit
 
 Behavior depends on the selected mode. All modes present a plan for user approval before any generation.
 
-**Placeholder check (all modes):** If the placeholder post at `content/blog/placeholder-first-post/` still exists with its known issues (em dash in title, slug/directory mismatch, no featured image), flag it. If this run will not address it, note it in the Phase 5 report under Attention Needed so it is not forgotten across invocations.
+**Directory/slug check (all modes):** If Phase 1 flagged any blog post where the directory name does not match the `slug` front matter field, report the mismatch here. If this run will address it (e.g., Polish mode on the affected post), note the planned rename. If not, note it in the Phase 5 report under Attention Needed so it is not forgotten across invocations.
 
 ### Portfolio-seeded mode
 
@@ -172,9 +167,18 @@ Phases 3 and 4 are skipped; the ideas are the deliverable. If the user selects a
 
 ## Phase 3: Generate
 
-Portfolio-seeded and Interactive modes create new page bundles (steps 1-3 below). Polish mode skips page creation and starts from the existing file. Ideate mode does not enter Phase 3.
+Portfolio-seeded and Interactive modes create new page bundles (steps 1-3 below). Polish mode uses the Polish pre-generation steps below instead. Ideate mode does not enter Phase 3.
 
-### Pre-generation steps
+### Polish pre-generation steps
+
+Polish mode skips page bundle creation but may still need structural fixes before rewriting:
+
+1. **Fix directory/slug mismatches.** If Phase 1 flagged the target post's directory name as not matching its `slug` front matter field, rename the directory to match the slug.
+2. **Update `.pa11yci`.** If the directory was renamed, update any existing `.pa11yci` entry for the old path. If no entry exists for the post, add one (same format as step 2 below).
+
+Then proceed to the Front matter and Body structure sections.
+
+### Pre-generation steps (Portfolio-seeded and Interactive)
 
 **1. Create the page bundle.** Run `hugo new content blog/<slug>/index.md` to create the page from the archetype. This sets up the correct directory structure and populates default front matter.
 
@@ -187,7 +191,7 @@ Portfolio-seeded and Interactive modes create new page bundles (steps 1-3 below)
 ```
 Insert alphabetically among existing blog URLs.
 
-**3. Handle the placeholder post (if applicable).** If the post being generated is the IaC article (Article 1 from the writing guide slate), rename `content/blog/placeholder-first-post/` to `content/blog/infrastructure-as-code/` and rewrite in place rather than creating a new directory. Remove the old `.pa11yci` entry if one exists.
+**3. Handle directory/slug mismatches (if applicable).** If the target post lives in a directory that does not match its `slug` front matter field (flagged in Phase 1), rename the directory to match the slug before proceeding. Update any existing `.pa11yci` entry for the old path to reflect the new directory name.
 
 ### Front matter
 
@@ -258,6 +262,8 @@ Contact direct: `Working through a similar challenge? [Let's talk](/contact/) ab
 
 Case study: `For a deeper look at how this played out in practice, read our case study on [case study title](/case-studies/<slug>/).`
 
+**When to use which:** Service link CTA for posts that address a problem your service solves. Contact direct CTA for opinion pieces. Case study CTA for war stories that have a companion case study.
+
 ### Post-type-specific guidance
 
 | Post Type | Structure Emphasis | Word Count | Key Requirement |
@@ -268,6 +274,8 @@ Case study: `For a deeper look at how this played out in practice, read our case
 | Comparison/Decision Guide | Side-by-side with recommendation framework | 2,000-2,500 | Must recommend, not just list; include "when to choose which" |
 | Deep Dive | Comprehensive single-topic coverage | 2,500+ | Architecture explanations with concrete examples |
 | Listicle | Numbered items, each standalone | 1,500-2,000 | Each item needs a concrete example or metric, not generic advice |
+
+Word count target is driven by post type (above). Adjust upward for higher keyword difficulty (see writing guide Section 6).
 
 ### Generation guidelines
 
@@ -296,15 +304,7 @@ Blog posts target long-tail keywords (3+ words, 2.5x higher conversion rate). Do
 
 ### Anonymization (war stories and portfolio-sourced content)
 
-When blog posts reference specific client work, apply the same anonymization boundaries as case studies (SPEC-1 through SPEC-6, defined in `generate-case-studies.md`):
-- SPEC-1: Never name the client organization
-- SPEC-2: Do not disclose revenue, headcount, or other client business metrics not in work.yaml
-- SPEC-3: Do not name specific internal tools or proprietary systems unless the technology is public
-- SPEC-4: Do not reference specific teams, managers, or organizational structure by name
-- SPEC-5: Vary client descriptors across blog posts and case studies referencing the same client
-- SPEC-6: Do not use specific dates, quarters, or narrow time ranges; use relative durations
-
-When a blog post references the same client engagement as an existing case study, evaluate whether the combination increases the identification surface beyond what either piece alone would reveal. Do not incorporate personal contact information from `basics.yaml` (phone, email, personal profile URLs) into generated content; blog posts should link to `/contact/` for reader follow-up.
+When blog posts reference specific client work, apply the anonymization boundaries defined in `.claude/commands/shared/anonymization-spec.md` (SPEC-1 through SPEC-6). That shared spec covers client naming, business metrics, proprietary systems, organizational details, descriptor variation, and date handling.
 
 ### Available shortcodes
 
@@ -339,7 +339,7 @@ Run these checks against the generated post and include results in the report:
 | Answer-first pattern | For question-phrased H2s, verify 40-60 word answer follows | All question-H2s covered |
 | CTA present | Check final section for link to service or /contact/ | CTA exists |
 | Em dash check | Search for `—` in prose | None found |
-| Tag validation | Cross-reference tags against the inventory collected in Phase 1 | All known, or new tags flagged |
+| Tag validation | Cross-reference tags against the inventory collected in Phase 1 | All known, or new tags flagged and added to writing guide tag list (Section 14). New tags do not block publication |
 | Code block annotations | Every fenced code block has a language specifier | All annotated |
 | Heading frequency | Count words between H2 headings | 200-300 word average |
 | No raw HTML | Search for HTML tags in body prose (outside fenced code blocks) | None found |
@@ -419,9 +419,7 @@ Flag any of these that apply:
 | Skip internal links | At least 1 service page + 1 case study per post | Drives the blog-to-conversion funnel |
 | Write generic hooks ("In today's DevOps landscape...") | Pain-point, counter-intuitive, or specific-metric hooks | Generic hooks signal no value follows |
 | Pad word count | Meet targets through depth, not filler | Quality over quantity; short-and-sharp beats long-and-hollow |
-| Use sharp CLI for image compositing | Use `node -e` with the sharp library directly | sharp CLI has unreliable argument parsing for composite operations |
-| Skip the dark rectangle under the logo overlay | Always composite the 100x100 dark rect before the icon | AI generator watermarks poke through without it |
-| Generate image prompts with text or letters | Symbolic, abstract 3D visuals only | Text in AI-generated images renders poorly |
+| Ignore shared image processing spec | Follow `.claude/commands/shared/featured-image-processing.md` for all featured image constraints | Covers sharp usage, dark rectangle, prompt guidelines, and dimensions |
 | Use lowercase tags | Proper case: Terraform, AWS, Kubernetes | Project tag convention across all content types |
 | Write for peers instead of buyers | Include business context (cost, time, risk) alongside technical detail | The person who hires you cares about outcomes, not implementation details |
 | Give away the recipe without the judgment | Share methodology and thinking process, not step-by-step instructions | Clients hire for judgment (knowing which approach fits), not for instructions |

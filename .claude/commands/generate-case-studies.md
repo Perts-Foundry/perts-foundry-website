@@ -27,26 +27,11 @@ The three pre-founding case studies in `content/case-studies/` use a third-perso
 
 Before forming any opinions, build a complete picture.
 
-1. Verify the sibling portfolio repository exists. Check that `../professional-portfolio-source/data/work.yaml` and `../professional-portfolio-source/data/services.yaml` are both present. If not, stop and report this error:
-
-   ```
-   Portfolio repo not found. Expected layout:
-     repos/Perts-Foundry/
-     ├── perts-foundry-website/        ← you are here
-     └── professional-portfolio-source/ ← must exist as sibling
-   ```
-
-2. Read all `*.yaml` files under `../professional-portfolio-source/data/`. This gives the full picture of professional experience: work history, services, skills, certifications, projects, education, and everything else in the portfolio. New data files added over time should be picked up automatically. All data is read for cross-referencing context (verifying technologies against work history, linking case studies to service offerings).
+1. Verify the sibling portfolio repository exists and read portfolio data. Follow the shared prerequisite check in `.claude/commands/shared/portfolio-repo-layout.md`.
 
 3. Read all existing case study pages: every `content/case-studies/*/index.md` file and `content/case-studies/_index.md`.
 
-4. Apply the following anonymization boundaries (SPEC-1 through SPEC-6):
-   - SPEC-1: Never name the client organization. Use the anonymized descriptor chosen during Phase 2 review.
-   - SPEC-2: Do not disclose revenue, headcount, or other client business metrics not already in work.yaml.
-   - SPEC-3: Do not name specific internal tools, products, or proprietary systems unless the technology is public (e.g., Snowflake, Terraform).
-   - SPEC-4: Do not reference specific teams, managers, or organizational structure by name.
-   - SPEC-5: When publishing multiple case studies from the same client, vary descriptors across studies to reduce the correlation surface. Note that descriptor variation reduces casual identification but does not defeat deliberate correlation analysis; the Anonymization Assessment in Phase 2 is the primary control for cross-candidate risk.
-   - SPEC-6: Do not use specific dates, quarters, or narrow time ranges. Use relative durations (e.g., "over the course of a quarter", "approximately six months") rather than calendar references.
+4. Apply the anonymization boundaries (SPEC-1 through SPEC-6) defined in `.claude/commands/shared/anonymization-spec.md`. Case-study-specific application notes: for SPEC-1, use the anonymized descriptor chosen during Phase 2 review. For SPEC-5, the Anonymization Assessment in Phase 2 is the primary control for cross-candidate risk.
 
 5. Evaluate existing case study pages for factual grounding. If a page's content cannot be traced to work.yaml highlights, flag it as "ungrounded" in the Phase 2 report. The page may be placeholder content from early site development. Do not use ungrounded pages as tone references for generation.
 
@@ -407,6 +392,4 @@ Flag any of these that apply:
 | Add identifying details beyond work.yaml | Use anonymized descriptors chosen during Phase 2 review | Respect SPEC-1 through SPEC-6 anonymization boundaries |
 | Use ungrounded pages as tone references | Only reference pages backed by work.yaml data | Fabricated content miscalibrates the generation |
 | Assume existing page structure is permanent | Discuss structural choices during Phase 2 | User may want to evolve the format |
-| Use sharp CLI for image compositing | Use `node -e` with the sharp library directly | sharp CLI has unreliable argument parsing for composite operations |
-| Skip the dark rectangle under the logo overlay | Always composite the 100x100 dark rect before the icon | AI generator watermarks extend beyond the icon bounds and poke through without it |
-| Generate image prompts with text or letters in them | Use symbolic, abstract 3D visuals only | Text in AI-generated images renders poorly and breaks the established visual style |
+| Ignore shared image processing spec | Follow `.claude/commands/shared/featured-image-processing.md` for all featured image constraints | Covers sharp usage, dark rectangle, prompt guidelines, and dimensions |
