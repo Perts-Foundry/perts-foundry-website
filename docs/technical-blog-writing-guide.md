@@ -169,7 +169,7 @@ Copy-pasteable template with all fields:
 ---
 title: "Your Post Title Here"
 date: 2026-04-06
-draft: true
+draft: false
 description: "150-160 character description with primary keyword."
 slug: "your-post-slug"
 tags:
@@ -179,13 +179,18 @@ showDate: false
 ---
 ```
 
+Posts use `draft: false` when content has been reviewed and approved via the
+`generate-blog` command's Phase 2 discussion. Posts go live on merge. The blog archetype
+(`archetypes/blog.md`) defaults to `draft: true` for manual authoring; the command
+overrides this to match the service and case study page convention.
+
 ### Front Matter Fields
 
 | Field | Required | Default | Notes |
 |-------|----------|---------|-------|
 | `title` | Yes | Auto-generated from directory name | Keep under 60 characters; include primary keyword early |
 | `date` | Yes | Auto-populated | Used for sort order; not displayed when `showDate: false` |
-| `draft` | Yes | `true` | Set to `false` when ready to publish |
+| `draft` | Yes | `true` (archetype) | Command-generated posts use `false`; content approved during Phase 2 |
 | `description` | Yes | Empty | 150-160 characters; serves as meta description AND listing card text |
 | `slug` | Yes | Directory name | Must match directory name; forms the URL `/blog/<slug>/` |
 | `tags` | Yes | Empty | Use proper case (e.g., `Terraform`, not `terraform`); reuse existing tags to power related content cross-linking |
@@ -196,6 +201,7 @@ showDate: false
 | Field | Purpose |
 |-------|---------|
 | `showDateUpdated` | Set to `true` to display the last-modified date when updating evergreen content |
+| `dateUpdated` | The date of the update (e.g., `2026-06-15`); Hugo uses this for the displayed "Updated" label. Pair with `showDateUpdated: true` |
 | `weight` | Manual sort order (lower = first); only needed if `orderByWeight: true` is added to `content/blog/_index.md` |
 
 ### Date Display Inheritance
@@ -314,6 +320,29 @@ session."** The test: after reading, does the reader think "this person clearly
 understands my problem and has a framework for solving it"? If the answer is yes,
 you have demonstrated judgment. If the reader just learned a fact, you have
 demonstrated knowledge (less valuable for lead generation).
+
+### Anonymization for War Stories and Portfolio-Sourced Content
+
+When blog posts reference specific client work (war stories, case study extracts, or any
+post grounded in portfolio experience), the same anonymization boundaries that apply to
+case studies must be followed. These are defined as SPEC-1 through SPEC-6 in the
+`generate-case-studies` command (`.claude/commands/generate-case-studies.md`):
+
+- **SPEC-1:** Never name the client organization.
+- **SPEC-2:** Do not disclose revenue, headcount, or other client business metrics not in
+  the portfolio data.
+- **SPEC-3:** Do not name specific internal tools or proprietary systems unless the
+  technology is public (e.g., Snowflake, Terraform).
+- **SPEC-4:** Do not reference specific teams, managers, or organizational structure by
+  name.
+- **SPEC-5:** Vary client descriptors across blog posts and case studies referencing the
+  same client to reduce the correlation surface.
+- **SPEC-6:** Do not use specific dates, quarters, or narrow time ranges. Use relative
+  durations (e.g., "over the course of a quarter").
+
+When a blog post references the same client engagement as an existing case study, evaluate
+whether the combination increases the identification surface beyond what either piece
+alone would reveal.
 
 ---
 
@@ -1013,7 +1042,7 @@ hugo new content blog/<slug>/index.md
 ---
 title: "Your Post Title Here"
 date: 2026-04-06
-draft: true
+draft: false
 description: "150-160 character description with primary keyword."
 slug: "your-post-slug"
 tags:
