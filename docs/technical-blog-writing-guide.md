@@ -201,6 +201,7 @@ overrides this to match the service and case study page convention.
 | Field | Purpose |
 |-------|---------|
 | `showDateUpdated` | Set to `true` to display the last-modified date when updating evergreen content |
+| `dateUpdated` | The date of the update (e.g., `2026-06-15`); Hugo uses this for the displayed "Updated" label. Pair with `showDateUpdated: true` |
 | `weight` | Manual sort order (lower = first); only needed if `orderByWeight: true` is added to `content/blog/_index.md` |
 
 ### Date Display Inheritance

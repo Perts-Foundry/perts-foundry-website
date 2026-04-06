@@ -16,7 +16,7 @@ Shared specification for processing featured images across all content generatio
 
 For each new page missing a `featured.jpg`:
 
-**Step 1: Analyze visual style.** Read 3-4 existing featured images from service or case study pages to identify the consistent visual style. The established pattern is:
+**Step 1: Analyze visual style.** Read 3-4 existing featured images (e.g., `content/services/*/featured.jpg`, `content/case-studies/*/featured.jpg`) to confirm the visual style still matches the established pattern:
 - Dark navy/black backgrounds
 - Glowing neon accents in blue and purple/violet tones
 - Futuristic 3D perspective renders
@@ -66,4 +66,4 @@ sharp('<USER_PROVIDED_PATH>')
 
 The two-layer composite approach is essential: the dark rectangle blanks out any AI generator watermark in the corner, then the PF icon sits cleanly on top.
 
-**Step 4: Verify.** Show the processed image to the user for approval. If the watermark is still visible or the image needs adjustment, re-process. Check the file size is within the 200-400KB range.
+**Step 4: Verify.** Show the processed image to the user for approval. If the watermark is still visible or the image needs adjustment, re-process. Check the file size is within the 200-400KB range. If it exceeds 400KB, re-run with `quality: 75`. If it falls below 200KB, the source image may be too small; flag to the user.
