@@ -116,7 +116,7 @@ wrangler.toml        # Cloudflare Workers deployment config
 archetypes/          # Content templates (blog.md, case-studies.md, default.md)
 docs/                # Active project documentation (audit, research, guides)
 docs/archive/        # Completed/historical docs; do not reference unless explicitly asked
-.claude/commands/    # Claude Code slash commands (generate-services, generate-case-studies)
+.claude/commands/    # Claude Code slash commands (generate-services, generate-case-studies, generate-blog)
 .github/workflows/   # CI: validate.yml (PR checks), deploy.yml (PR comment deploy)
 ```
 
