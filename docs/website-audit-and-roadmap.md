@@ -395,18 +395,18 @@ Tasks to complete after removing Cloudflare Access and making the site public.
 ### Security
 
 - [x] Submit `pertsfoundry.com` to [hstspreload.org](https://hstspreload.org/) for HSTS preload list inclusion (currently eligible; `preload` directive is set)
-- [ ] Monitor browser console for CSP violations during the first week of public traffic (especially contact page with Turnstile and analytics beacon)
-- [ ] Verify `/api/contact` responses include security headers from Transform Rules (not just static asset responses)
+- [x] Monitor browser console for CSP violations during the first week of public traffic (especially contact page with Turnstile and analytics beacon)
+- [x] Verify `/api/contact` responses include security headers from Transform Rules (not just static asset responses)
 
 ### Analytics
 
-- [ ] Confirm Cloudflare Web Analytics dashboard shows traffic from public visitors (not just authenticated Access sessions)
+- [x] Confirm Cloudflare Web Analytics dashboard shows traffic from public visitors (not just authenticated Access sessions)
 - [ ] Identify baseline metrics for consulting site KPIs: service/case study page views, contact page visits, referral sources
 
 ### SEO
 
 - [ ] Set up Google Search Console: verify pertsfoundry.com via DNS TXT record, submit sitemap, request indexing of key pages
-- [ ] Run PageSpeed Insights on pertsfoundry.com and confirm Core Web Vitals are green
+- [x] Run PageSpeed Insights on pertsfoundry.com and confirm Core Web Vitals are green
 - [x] Regenerate homepage OG image with current "Build. Scale. Own." tagline (current `og-homepage.png` shows old tagline)
 
 ### Core Web Vitals (revisit after 50+ visits)
@@ -426,8 +426,8 @@ Sample size is too small to act on confidently. Revisit after a week of real tra
 
 ### Monitoring & Uptime
 
-- [ ] Investigate liveness probes / synthetic monitoring for the production site. Goal: automated checks that verify key site functionality (homepage loads, contact form POST endpoint responds, static assets serve correctly) and notify when something is down or broken. Options to evaluate: Cloudflare Health Checks, Uptime Robot, Checkly, GitHub Actions on a cron schedule, or a custom Cloudflare Worker on a scheduled trigger. Should cover at minimum: homepage HTTP 200, `/api/contact` POST returns expected error (missing fields), and one case study page loads.
-- [ ] Verify Checkly synthetic monitoring is working after site goes live. Confirm all 10 checks execute on schedule in the Checkly dashboard (9 GET checks + 1 POST check to `/api/contact`), that the check group has been unmuted (flip `muted = false` in Terraform), and that a test alert reaches `contact@pertsfoundry.com`. Confirm projected run count stays within the 10,000/month free tier (~7,300/month at 60-min intervals from 1 location).
+- [x] Investigate liveness probes / synthetic monitoring for the production site. Implemented via Checkly: 10 checks (9 GET page availability + 1 POST `/api/contact`), 60-min frequency from us-east-1, ~7,300 runs/month (73% of 10K free tier). Alert emails to `contact+checkly@pertsfoundry.com` on failure, recovery, and degraded states. Managed in Terraform (`Perts-Foundry/infrastructure` repo, `checkly.tf`).
+- [x] Verify Checkly synthetic monitoring is working after site goes live. All 10 checks passing (Contact Form API required `should_fail = true` for expected 400 response; fixed in infrastructure#32). Check group unmuted, alerts active.
 
 ---
 
