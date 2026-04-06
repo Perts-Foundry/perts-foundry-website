@@ -19,18 +19,9 @@ Your mission: audit the current state of service pages on the website against th
 
 Before forming any opinions, build a complete picture.
 
-1. Verify the sibling portfolio repository exists. Check that both `../professional-portfolio-source/data/work.yaml` and `../professional-portfolio-source/data/services.yaml` are present. If not, stop and report this error:
+1. Verify the sibling portfolio repository exists and read portfolio data. Follow the shared prerequisite check in `.claude/commands/shared/portfolio-repo-layout.md`.
 
-   ```
-   Portfolio repo not found. Expected layout:
-     repos/Perts-Foundry/
-     ├── perts-foundry-website/        ← you are here
-     └── professional-portfolio-source/ ← must exist as sibling
-   ```
-
-2. Read all `*.yaml` files under `../professional-portfolio-source/data/`. This gives the full picture of professional experience: services, work history, skills, certifications, projects, education, and everything else in the portfolio. New data files added over time should be picked up automatically. All data is read for cross-referencing context (e.g., verifying technologies against work history), even though this command only generates service pages.
-
-3. Read all existing service pages: every `content/services/*/index.md` file and `content/services/_index.md`.
+2. Read all existing service pages: every `content/services/*/index.md` file and `content/services/_index.md`.
 
 ## Phase 2: Audit
 
@@ -257,6 +248,4 @@ Flag any of these that apply:
 | List technologies without experience backing | Cross-reference every tech against work.yaml | Credibility requires real experience, not aspirational claims |
 | Assume existing page structure is permanent | Discuss structural choices during audit phase | User may want to evolve the format |
 | Leave orphaned directories after a slug rename | Delete `content/services/<old-slug>/` before creating `content/services/<new-slug>/` | Orphaned pages create duplicate content and confuse Hugo's URL routing |
-| Use sharp CLI for image compositing | Use `node -e` with the sharp library directly | sharp CLI has unreliable argument parsing for composite operations |
-| Skip the dark rectangle under the logo overlay | Always composite the 100x100 dark rect before the icon | AI generator watermarks extend beyond the icon bounds and poke through without it |
-| Generate image prompts with text or letters in them | Use symbolic, abstract 3D visuals only | Text in AI-generated images renders poorly and breaks the established visual style |
+| Ignore shared image processing spec | Follow `.claude/commands/shared/featured-image-processing.md` for all featured image constraints | Covers sharp usage, dark rectangle, prompt guidelines, and dimensions |

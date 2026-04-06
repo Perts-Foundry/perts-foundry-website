@@ -271,9 +271,9 @@ Resolved by the About page rewrite. "We" on other pages reads as professional co
 
 **Files:** `assets/img/og-default.png`, `scripts/generate-og.js`
 
-### L3. Blog post directory naming
+### L3. Blog post directory naming (**Resolved**)
 
-- [ ] Rename `content/blog/placeholder-first-post/` to `content/blog/infrastructure-as-code/`
+- [x] Rename `content/blog/placeholder-first-post/` to `content/blog/infrastructure-as-code/`
 
 ### L4. Self-authored quote on About page
 

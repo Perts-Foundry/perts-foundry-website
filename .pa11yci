@@ -59,6 +59,10 @@
       "ignore": ["color-contrast"]
     },
     "http://localhost:8080/blog/",
+    {
+      "url": "http://localhost:8080/blog/infrastructure-as-code/",
+      "ignore": ["color-contrast"]
+    },
     "http://localhost:8080/case-studies/",
     {
       "url": "http://localhost:8080/case-studies/ai-accelerated-infrastructure-delivery/",
