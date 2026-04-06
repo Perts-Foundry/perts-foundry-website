@@ -19,7 +19,7 @@ Your mission: audit the current state of service pages on the website against th
 
 Before forming any opinions, build a complete picture.
 
-1. Verify the sibling portfolio repository exists. Check that `../professional-portfolio-source/data/services.yaml` is present. If not, stop and report this error:
+1. Verify the sibling portfolio repository exists. Check that both `../professional-portfolio-source/data/work.yaml` and `../professional-portfolio-source/data/services.yaml` are present. If not, stop and report this error:
 
    ```
    Portfolio repo not found. Expected layout:
@@ -189,75 +189,7 @@ For the Technologies section, cross-reference each technology against `work.yaml
 
 ## Phase 4: Featured Image Processing
 
-After page generation, process featured images for any new page bundles that lack a `featured.jpg`.
-
-### Image specifications
-
-All service page featured images follow these standards:
-
-| Property | Value |
-|----------|-------|
-| Dimensions | 1400x781 pixels |
-| Format | JPEG, quality 85 |
-| Target file size | 200-400KB |
-| Logo overlay | `static/img/logo/perts-foundry-icon-64.png`, southeast gravity |
-| Watermark cover | 100x100px dark rectangle (#050710) under the logo to cover AI generator watermarks |
-
-### Workflow
-
-For each new page missing a `featured.jpg`:
-
-**Step 1: Analyze visual style.** Read 3-4 existing service page featured images (`content/services/*/featured.jpg`) to identify the consistent visual style. The established pattern is:
-- Dark navy/black backgrounds
-- Glowing neon accents in blue and purple/violet tones
-- Futuristic 3D perspective renders
-- Symbolic metaphors for the service concept (not literal depictions)
-- No text overlays, no logos, no people
-- 16:9 aspect ratio
-
-**Step 2: Generate image prompt.** Craft a prompt for the user to use with Google Gemini (or another AI image generator). The prompt must:
-- Describe a symbolic 3D visualization that represents the service's concept
-- Specify the dark navy-black background with blue/violet neon glow palette
-- Request cinematic lighting, 3D perspective, photorealistic render style
-- Explicitly state: "No text, no logos, no letters, no people. 16:9 aspect ratio."
-- Avoid requesting any literal text, abbreviations, or acronyms in the image
-
-Present the prompt to the user and ask them to generate the image and provide the file path.
-
-**Step 3: Process the image.** When the user provides the generated image path, process it using a Node.js script with the sharp library (do not use sharp CLI, it has unreliable argument parsing for composite operations):
-
-```javascript
-node -e "
-const sharp = require('sharp');
-sharp('<USER_PROVIDED_PATH>')
-  .resize(1400, 781, { fit: 'cover' })
-  .composite([
-    {
-      input: {
-        create: {
-          width: 100,
-          height: 100,
-          channels: 3,
-          background: { r: 5, g: 7, b: 16 }
-        }
-      },
-      gravity: 'southeast'
-    },
-    {
-      input: 'static/img/logo/perts-foundry-icon-64.png',
-      gravity: 'southeast'
-    }
-  ])
-  .jpeg({ quality: 85 })
-  .toFile('content/services/<slug>/featured.jpg')
-  .then(info => console.log('Done:', JSON.stringify(info)))
-  .catch(err => console.error('Error:', err.message));
-"
-```
-
-The two-layer composite approach is essential: the dark rectangle blanks out any AI generator watermark in the corner, then the PF icon sits cleanly on top.
-
-**Step 4: Verify.** Show the processed image to the user for approval. If the watermark is still visible or the image needs adjustment, re-process. Check the file size is within the 200-400KB range.
+After page generation, process featured images for any new page bundles that lack a `featured.jpg`. Follow the shared image processing workflow in `.claude/commands/shared/featured-image-processing.md`, using `content/services/<slug>/featured.jpg` as the output path.
 
 ## Phase 5: Verify
 

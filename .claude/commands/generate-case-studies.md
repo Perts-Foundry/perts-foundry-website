@@ -40,7 +40,7 @@ Before forming any opinions, build a complete picture.
 
 3. Read all existing case study pages: every `content/case-studies/*/index.md` file and `content/case-studies/_index.md`.
 
-4. Apply the following anonymization boundaries (previously codified as SPEC-1 through SPEC-5, now embedded directly):
+4. Apply the following anonymization boundaries (SPEC-1 through SPEC-6):
    - SPEC-1: Never name the client organization. Use the anonymized descriptor chosen during Phase 2 review.
    - SPEC-2: Do not disclose revenue, headcount, or other client business metrics not already in work.yaml.
    - SPEC-3: Do not name specific internal tools, products, or proprietary systems unless the technology is public (e.g., Snowflake, Terraform).
@@ -102,7 +102,7 @@ Assessment definitions:
 
 ### Anonymization Assessment
 [When multiple candidates share a client, evaluate the combined fingerprint.
-Each individual case study may respect SPEC-1 through SPEC-5, but publishing
+Each individual case study may respect SPEC-1 through SPEC-6, but publishing
 multiple studies from the same client multiplies the correlation surface.
 Note this assessment for the user.]
 
@@ -146,7 +146,7 @@ Do not write any pages to disk until the user has reviewed the report (batch) or
 ### Anonymization rules
 
 - Use anonymized client descriptors chosen during Phase 2 review. The work.yaml `summary` field is a starting point, not the final descriptor. Do not introduce new identifying details beyond what work.yaml already contains.
-- Apply the anonymization boundaries defined in Phase 1, step 4 (SPEC-1 through SPEC-5).
+- Apply the anonymization boundaries defined in Phase 1, step 4 (SPEC-1 through SPEC-6).
 - For AWS entries, the employer name is not confidential.
 - For NSWC entries, use "a defense software organization" rather than the full department name.
 
@@ -324,75 +324,7 @@ Cross-reference each technology against `work.yaml` highlights for the specific 
 
 ## Phase 4: Featured Image Processing
 
-After page generation, process featured images for any new page bundles that lack a `featured.jpg`.
-
-### Image specifications
-
-All case study featured images follow these standards:
-
-| Property | Value |
-|----------|-------|
-| Dimensions | 1400x781 pixels |
-| Format | JPEG, quality 85 |
-| Target file size | 200-400KB |
-| Logo overlay | `static/img/logo/perts-foundry-icon-64.png`, southeast gravity |
-| Watermark cover | 100x100px dark rectangle (#050710) under the logo to cover AI generator watermarks |
-
-### Workflow
-
-For each new page missing a `featured.jpg`:
-
-**Step 1: Analyze visual style.** Read 3-4 existing case study featured images (`content/case-studies/*/featured.jpg`) to identify the consistent visual style. The established pattern is:
-- Dark navy/black backgrounds
-- Glowing neon accents in blue and purple/violet tones
-- Futuristic 3D perspective renders
-- Symbolic metaphors for the case study's concept (not literal depictions)
-- No text overlays, no logos, no people
-- 16:9 aspect ratio
-
-**Step 2: Generate image prompt.** Craft a prompt for the user to use with Google Gemini (or another AI image generator). The prompt must:
-- Describe a symbolic 3D visualization that represents the case study's theme
-- Specify the dark navy-black background with blue/violet neon glow palette
-- Request cinematic lighting, 3D perspective, photorealistic render style
-- Explicitly state: "No text, no logos, no letters, no people. 16:9 aspect ratio."
-- Avoid requesting any literal text, abbreviations, or acronyms in the image
-
-Present the prompt to the user and ask them to generate the image and provide the file path.
-
-**Step 3: Process the image.** When the user provides the generated image path, process it using a Node.js script with the sharp library (do not use sharp CLI, it has unreliable argument parsing for composite operations):
-
-```javascript
-node -e "
-const sharp = require('sharp');
-sharp('<USER_PROVIDED_PATH>')
-  .resize(1400, 781, { fit: 'cover' })
-  .composite([
-    {
-      input: {
-        create: {
-          width: 100,
-          height: 100,
-          channels: 3,
-          background: { r: 5, g: 7, b: 16 }
-        }
-      },
-      gravity: 'southeast'
-    },
-    {
-      input: 'static/img/logo/perts-foundry-icon-64.png',
-      gravity: 'southeast'
-    }
-  ])
-  .jpeg({ quality: 85 })
-  .toFile('content/case-studies/<slug>/featured.jpg')
-  .then(info => console.log('Done:', JSON.stringify(info)))
-  .catch(err => console.error('Error:', err.message));
-"
-```
-
-The two-layer composite approach is essential: the dark rectangle blanks out any AI generator watermark in the corner, then the PF icon sits cleanly on top.
-
-**Step 4: Verify.** Show the processed image to the user for approval. If the watermark is still visible or the image needs adjustment, re-process. Check the file size is within the 200-400KB range.
+After page generation, process featured images for any new page bundles that lack a `featured.jpg`. Follow the shared image processing workflow in `.claude/commands/shared/featured-image-processing.md`, using `content/case-studies/<slug>/featured.jpg` as the output path.
 
 ## Phase 5: Verify
 
@@ -472,7 +404,7 @@ Flag any of these that apply:
 | Put after-only metrics in the before/after table | Weave after-only metrics into the narrative paragraph | Empty "before" cells undermine the table's credibility |
 | Generate content from assumed data | Flag gaps in Phase 5 rather than inventing details | Credibility depends on accuracy |
 | Leave orphaned directories after a slug change | Delete old directory before creating new | Orphaned pages create duplicate content |
-| Add identifying details beyond work.yaml | Use anonymized descriptors chosen during Phase 2 review | Respect SPEC-1 through SPEC-5 anonymization boundaries |
+| Add identifying details beyond work.yaml | Use anonymized descriptors chosen during Phase 2 review | Respect SPEC-1 through SPEC-6 anonymization boundaries |
 | Use ungrounded pages as tone references | Only reference pages backed by work.yaml data | Fabricated content miscalibrates the generation |
 | Assume existing page structure is permanent | Discuss structural choices during Phase 2 | User may want to evolve the format |
 | Use sharp CLI for image compositing | Use `node -e` with the sharp library directly | sharp CLI has unreliable argument parsing for composite operations |
