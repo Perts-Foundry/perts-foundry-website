@@ -206,11 +206,12 @@ overrides this to match the service and case study page convention.
 
 ### Date Display Inheritance
 
-The `showDate` setting has three layers:
+The `showDate` setting has four layers:
 
 1. **Global:** `config/_default/params.toml` sets `showDate = false` under `[article]`
-2. **Archetype:** `archetypes/blog.md` reinforces `showDate: false`
-3. **Per-post:** Individual posts can override with `showDate: true` for timely content
+2. **Section cascade:** `content/blog/_index.md` sets `showDate: false` (along with `showAuthor: false`, `showReadingTime: false`, `showHero: true`, `heroStyle: basic`) via cascade, matching the convention used by services and case studies
+3. **Archetype:** `archetypes/blog.md` reinforces `showDate: false`
+4. **Per-post:** Individual posts can override with `showDate: true` for timely content. Do not include `showDate: false` in individual post front matter; the cascade handles the default
 
 The credibility guide explicitly recommends hiding dates on evergreen articles. When
 a post is timely (tool release reaction, ecosystem opinion), override with `showDate:
@@ -800,25 +801,25 @@ The credibility guide recommends launching with **3-5 strong evergreen articles*
 hidden publication dates, rather than publishing a single post. Write all initial posts
 before enabling the blog in navigation, then publish as a batch.
 
-### Existing Placeholder Post
+### Article 1 Status
 
-A drafted blog post exists at `content/blog/placeholder-first-post/index.md`:
+Article 1 exists at `content/blog/infrastructure-as-code/index.md`:
 
-- **Title:** "Why Your Startup Needs Infrastructure as Code -- Yesterday"
-- **Status:** `draft: true`
-- **Quality:** Well-written, 41 lines, solid structure
-- **Issues to fix:** Title contains a project-convention-violating em dash; directory
-  name does not match slug (`placeholder-first-post` vs. `infrastructure-as-code`);
-  no `featured.jpg`
+- **Title:** "Why Your Startup Needs Infrastructure as Code"
+- **Status:** `draft: false` (complete, ready to publish on merge)
+- **Word count:** 826 words (opinion piece, within 800-1,000 target)
+- **Featured image:** Present (1400x781, logo overlay applied)
+- **Internal links:** IaC service page (x2, including CTA), Terraform at Scale case study
 
-**Action:** Rework as Article 1. Rename directory to `infrastructure-as-code` (resolves
-roadmap item L3), fix title formatting, add featured image.
+Previously the placeholder post at `placeholder-first-post/`. Directory renamed,
+title fixed (em dash removed), content expanded from ~330 to 826 words with
+portfolio-backed depth, featured image processed. Roadmap item L3 resolved.
 
 ### The 5-Article Slate
 
 | # | Working Title | Post Type | Pillar | Target Keywords | Links To | Priority |
 |---|---------------|-----------|--------|-----------------|----------|----------|
-| 1 | Why Your Startup Needs Infrastructure as Code | Opinion | DevOps & Infrastructure | infrastructure as code startup, IaC benefits, when to adopt terraform | Service: [IaC](/services/infrastructure-as-code/), Case Study: [Terraform at Scale](/case-studies/terraform-infrastructure-at-scale/) | High (existing draft) |
+| 1 | Why Your Startup Needs Infrastructure as Code | Opinion | DevOps & Infrastructure | infrastructure as code startup, IaC benefits, when to adopt terraform | Service: [IaC](/services/infrastructure-as-code/), Case Study: [Terraform at Scale](/case-studies/terraform-infrastructure-at-scale/) | Complete |
 | 2 | How We Eliminated CI/CD Rate Limiting by Migrating to a GitHub App | War Story | DevOps & Infrastructure | atlantis rate limiting, github app migration, terraform CI/CD | Service: [CI/CD](/services/cicd-automation/), Service: [IaC](/services/infrastructure-as-code/), Case Study: [Terraform at Scale](/case-studies/terraform-infrastructure-at-scale/) | High (rich source material) |
 | 3 | CodeRabbit vs. GitHub Copilot Code Review: What We Learned Rolling Out Both | Comparison | AI-Augmented Engineering | coderabbit vs copilot, AI code review tools, automated code review | Service: [AI Engineering](/services/ai-augmented-engineering/), Case Study: [Enterprise AI Tooling](/case-studies/enterprise-ai-tooling-adoption/) | High (differentiating topic, thin competition) |
 | 4 | The 5 AWS Cost Leaks Every Scaling Startup Ignores | Listicle | Cloud Architecture | AWS cost optimization, cloud cost reduction, FinOps startup | Service: [FinOps](/services/finops/), Case Study: [FinOps Savings](/case-studies/finops-cloud-cost-savings/) | Medium |
@@ -896,7 +897,7 @@ tag.
 
 When 3+ articles are ready to publish:
 
-- [ ] Rename `content/blog/placeholder-first-post/` to `content/blog/infrastructure-as-code/`
+- [x] Rename `content/blog/placeholder-first-post/` to `content/blog/infrastructure-as-code/`
 - [ ] All posts have `draft: false`
 - [ ] All posts have a `featured.jpg` in their page bundle
 - [ ] Add Blog to nav menu in `config/_default/menus.en.toml` (weight: 30, between
