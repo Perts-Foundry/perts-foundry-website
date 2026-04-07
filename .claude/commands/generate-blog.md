@@ -29,7 +29,7 @@ Ask the user which mode they want after completing Phase 1.
 
 ## Phase 1: Orient
 
-Before forming any opinions, build a complete picture. Maximize parallel tool calls; steps 1-6 are independent reads that should be batched into 2-3 parallel groups, not run sequentially.
+Before forming any opinions, build a complete picture. Maximize parallel tool calls; steps 1-5 are independent reads that should be batched into 2-3 parallel groups, not run sequentially. Step 6 depends on step 5's output and runs after step 5 completes.
 
 1. Verify the sibling portfolio repository exists and read portfolio data. Follow the shared prerequisite check in `.claude/commands/shared/portfolio-repo-layout.md`.
 
@@ -121,7 +121,7 @@ Read the existing post. Run the full quality audit (Phase 5 content quality audi
 2. [specific change]
 ```
 
-Quality checks: hook, internal links, CTA, heading structure, description length, tag validation, em dashes, code annotations, accessibility. Freshness checks: version annotations in code blocks referencing outdated tool versions, recommendations that have changed, internal links to service or case study pages added since the post was written, metrics or claims that may need updating, whether `showDateUpdated: true` should be added. Run all checks regardless of draft status.
+Quality checks use the Phase 5 content quality audit table (all 11 checks). Freshness checks (in addition to those quality checks): version annotations in code blocks referencing outdated tool versions, recommendations that have changed, internal links to service or case study pages added since the post was written, metrics or claims that may need updating, whether `showDateUpdated: true` should be added. Run all checks regardless of draft status.
 
 Discuss the plan with the user before making changes.
 
@@ -189,7 +189,7 @@ Then proceed to the Front matter and Body structure sections.
   "ignore": ["color-contrast"]
 }
 ```
-Insert alphabetically among existing blog URLs. If Phase 1 flagged a directory/slug mismatch for an existing post being replaced, rename the directory and update the `.pa11yci` entry as described in the Polish pre-generation steps above.
+`color-contrast` is ignored because the Blowfish theme has known contrast issues that are overridden in custom CSS; pa11y-ci does not see the custom overrides. Insert alphabetically among existing blog URLs. If Phase 1 flagged a directory/slug mismatch for an existing post being replaced, rename the directory and update the `.pa11yci` entry as described in the Polish pre-generation steps above.
 
 ### Front matter
 
@@ -294,14 +294,14 @@ For a new blog on a new domain, target low and medium difficulty keywords first.
 - No raw HTML. Goldmark runs with `unsafe = false`; raw HTML will be stripped. Use shortcodes instead: `{{< tech-tags >}}`, `{{< steps >}}`, `{{< faqs >}}`, `{{% metric %}}`.
 - Code blocks must have language annotations (` ```hcl `, ` ```yaml `, etc.) and a version comment (e.g., `# Tested with Terraform 1.9`, `# Requires EKS 1.29+`). Code must be complete and functional, not fragments requiring assembly.
 - Internal links are mandatory. Every post must link to at least 1 service page and 1 case study. Find the best matches by comparing the post's tags and topic against service page and case study tags collected during Phase 1. Additional internal links (to other blog posts, the about page, etc.) are encouraged for hub-and-spoke linking.
-- **Bidirectional linking.** When publishing a new blog post, also update 2-3 related existing pages (other blog posts, case studies, or service pages) to link back to the new post. Orphaned pages with no inbound internal links are harder for search engines to discover.
+- **Bidirectional linking.** When publishing a new blog post, identify 2-3 related existing pages (other blog posts, case studies, or service pages) that should link back to the new post, with the specific paragraph or section where a link would fit naturally. List these in the Phase 5 Attention Needed section for user approval. Orphaned pages with no inbound internal links are harder for search engines to discover.
 - Heading hierarchy: H2 then H3, never skip levels. H1 is the page title (set by Hugo).
 - Accessibility: descriptive alt text on content images, language annotations on code blocks, descriptive link text (not "click here").
 - Read at least 2 existing blog posts for tone calibration before writing. If fewer than 2 published posts exist (posts with `draft: false`), calibrate tone from existing service/case study pages instead.
 - **Answer-first enforcement.** For every H2 phrased as a question (starting with What, Why, How, When), write the answer-first paragraph (40-60 words) before writing the rest of that section. Verify each answer-first paragraph meets the 40-60 word target during drafting, not just in Phase 5 verification.
 - **Description length.** Count the description character length immediately after writing it. Adjust to 150-160 characters before proceeding to body content.
-- **Date collisions.** If another blog post already exists with today's date, use a time offset in the date field (e.g., `2026-04-06T12:00:00-04:00` vs `2026-04-06T00:00:00-04:00`) to ensure deterministic sort order on the listing page. Newer posts should use a later time.
-- **Tag propagation.** When introducing a new tag, identify service pages and case study pages that should also carry it (based on their content and existing tags). Add the new tag to those pages' front matter during generation so cross-linking works immediately. Update the writing guide's Section 14 tag inventory with the new tag.
+- **Date collisions.** If any existing blog post uses today's date (with or without a time offset), set the new post's date to a time later than the latest existing timestamp for today. Use ISO 8601 format with timezone (e.g., `2026-04-06T14:00:00-04:00`). If no existing post has a time offset, use `T12:00:00` for the new post.
+- **Tag propagation.** When introducing a new tag, identify service pages and case study pages that should also carry it (based on their content and existing tags). List recommended tag additions in the Phase 5 Attention Needed section for user approval. Update the writing guide's Section 14 tag inventory with the new tag.
 
 ### Content pillar alignment
 
@@ -318,7 +318,7 @@ Blog posts target long-tail keywords (3+ words, 2.5x higher conversion rate). Do
 
 ### Anonymization (war stories and portfolio-sourced content)
 
-When blog posts reference specific client work, apply all anonymization boundaries defined in `.claude/commands/shared/anonymization-spec.md`. That shared spec covers client naming, business metrics, proprietary systems, organizational details, descriptor variation, and date handling.
+When blog posts reference specific client work, apply all anonymization boundaries defined in `.claude/commands/shared/anonymization-spec.md`. That shared spec covers client naming, business metrics, proprietary systems, organizational details, descriptor variation, and date handling. For SPEC-5 (descriptor variation), check existing case studies and blog posts that reference the same client engagement and use a different descriptor than any already published. If unsure which descriptor to use, present options to the user during Phase 2.
 
 ### Available shortcodes
 
@@ -396,12 +396,17 @@ Run these checks against the generated post and include results in the report:
 - [URL added/removed]
 
 ### Blog Re-enablement Status
-[Count total blog posts with draft: false. If 3+ posts exist, the blog
-re-enablement checklist from the writing guide (Section 11) is ready:
+[Count total blog posts with draft: false. If Blog is already in
+menus.en.toml, report "Blog is live" and skip this section.
+Otherwise, if 3+ posts exist, the re-enablement checklist is ready:
+- All posts have draft: false
+- All posts have a featured.jpg in their page bundle
 - Fix any directory/slug mismatches flagged in Phase 1
 - Add Blog to nav menu in menus.en.toml (weight: 30)
-- Run full validation suite
-Otherwise note how many posts exist and how many more are needed.]
+- Optionally set showRecent = true in params.toml
+- Run full validation suite (all 10 PR checks pass)
+- Mark C2 as complete in docs/website-audit-and-roadmap.md
+If fewer than 3 posts exist, note how many more are needed.]
 
 ### Documentation Maintenance
 Flag any of these that apply:
