@@ -13,9 +13,6 @@ permissions:
   pull-requests: write
   checks: read
 
-env:
-  NO_COLOR: "1"
-
 jobs:
   deploy:
     if: github.event.issue.pull_request && github.event.comment.body == 'deploy'

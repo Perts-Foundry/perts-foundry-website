@@ -15,9 +15,6 @@ concurrency:
 permissions:
   contents: read
 
-env:
-  NO_COLOR: "1"
-
 jobs:
   deploy:
     runs-on: ubuntu-24.04
@@ -55,4 +52,10 @@ jobs:
             STAGE="Cloudflare Workers Deploy"
             DETAIL="${DEPLOY_STDERR:-${DEPLOY_OUTPUT:-No output captured.}}"
           fi
-          echo "::error title=Scheduled deploy failed at ${STAGE}::${DETAIL}"
+          echo "::error title=Scheduled deploy failed at ${STAGE}::${DETAIL:0:500}"
+          {
+            echo "## Scheduled deploy failed at ${STAGE}"
+            echo '```'
+            echo "${DETAIL}"
+            echo '```'
+          } >> "$GITHUB_STEP_SUMMARY"
