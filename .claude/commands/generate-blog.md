@@ -29,13 +29,13 @@ Ask the user which mode they want after completing Phase 1.
 
 ## Phase 1: Orient
 
-Before forming any opinions, build a complete picture. Maximize parallel tool calls; steps 1-5 are independent reads that should be batched into 2-3 parallel groups, not run sequentially. Step 6 depends on step 5's output and runs after step 5 completes.
+Before forming any opinions, build a complete picture. Maximize parallel tool calls; steps 1-5 are independent reads that should be batched into 2-3 parallel groups, not run sequentially. Step 6 depends on step 5's output and runs after step 5 completes. **Ideate mode:** steps 3, 4, and 6 can be skipped (they only matter for generation and verification).
 
 1. Verify the sibling portfolio repository exists and read portfolio data. Follow the shared prerequisite check in `.claude/commands/shared/portfolio-repo-layout.md`.
 
 2. Read all existing blog posts: every `content/blog/*/index.md` file. For each post, check that the directory name matches the `slug` front matter field; flag any mismatches for correction in Phase 2.
 
-3. Read `content/blog/_index.md`. Verify it has the required cascade settings (`showHero: true`, `heroStyle: basic`, `showDate: false`, `showAuthor: false`, `showReadingTime: false`). If any are missing, add them before generation. This matches the convention used by `content/case-studies/_index.md` and `content/services/_index.md`.
+3. Read `content/blog/_index.md`. Verify it has the required cascade settings (`showHero: true`, `heroStyle: basic`, `showDate: true`, `showAuthor: false`, `showReadingTime: false`). If any are missing, add them before generation.
 
 4. Read `.pa11yci` to confirm the file exists and note any existing blog post URLs.
 
@@ -213,7 +213,7 @@ Blog posts use `draft: false` because content is approved during the Phase 2 dis
 
 **Tags:** Proper case for product names (`Terraform`, `AWS`, `Kubernetes`). Title case for discipline tags (`FinOps`, `Incident Response`). Reuse existing tags where possible. The tag inventory from Phase 1 step 6 is the reference set. If a proposed tag does not exist in the inventory, add it to the writing guide's tag list (Section 14, maintaining alphabetical order and pipe-separated formatting) during generation.
 
-**showDate:** Inherited from the blog cascade (`content/blog/_index.md` sets `showDate: false`). Do not include `showDate` in individual post front matter unless overriding to `true` for timely content (tool comparisons with version-specific conclusions, event recaps).
+**showDate:** Inherited from the blog cascade (`content/blog/_index.md` sets `showDate: true`). Do not include `showDate` in individual post front matter unless overriding to `false`.
 
 **Optional fields for Polish mode (refreshing published posts):**
 - `showDateUpdated: true` -- displays the last-modified date alongside the original date. Add when a published post receives a substantive freshness update.
@@ -294,14 +294,14 @@ For a new blog on a new domain, target low and medium difficulty keywords first.
 - No raw HTML. Goldmark runs with `unsafe = false`; raw HTML will be stripped. Use shortcodes instead: `{{< tech-tags >}}`, `{{< steps >}}`, `{{< faqs >}}`, `{{% metric %}}`.
 - Code blocks must have language annotations (` ```hcl `, ` ```yaml `, etc.) and a version comment (e.g., `# Tested with Terraform 1.9`, `# Requires EKS 1.29+`). Code must be complete and functional, not fragments requiring assembly.
 - Internal links are mandatory. Every post must link to at least 1 service page and 1 case study. Find the best matches by comparing the post's tags and topic against service page and case study tags collected during Phase 1. Additional internal links (to other blog posts, the about page, etc.) are encouraged for hub-and-spoke linking.
-- **Bidirectional linking.** When publishing a new blog post, identify 2-3 related existing pages (other blog posts, case studies, or service pages) that should link back to the new post, with the specific paragraph or section where a link would fit naturally. List these in the Phase 5 Attention Needed section for user approval. Orphaned pages with no inbound internal links are harder for search engines to discover.
+- **Bidirectional linking.** When publishing a new blog post, identify 2-3 related existing pages (other blog posts, case studies, or service pages) that should link back to the new post. Apply these links directly during Phase 3 by adding a `**Related reading:**` line to each target page. Report the changes in the Phase 5 report under "Cross-Links Added" but do not wait for approval.
 - Heading hierarchy: H2 then H3, never skip levels. H1 is the page title (set by Hugo).
 - Accessibility: descriptive alt text on content images, language annotations on code blocks, descriptive link text (not "click here").
-- Read at least 2 existing blog posts for tone calibration before writing. If fewer than 2 published posts exist (posts with `draft: false`), calibrate tone from existing service/case study pages instead.
+- Use the blog posts read during Phase 1 for tone calibration. If fewer than 2 published posts exist (posts with `draft: false`), also calibrate from existing service/case study pages.
 - **Answer-first enforcement.** For every H2 phrased as a question (starting with What, Why, How, When), write the answer-first paragraph (40-60 words) before writing the rest of that section. Verify each answer-first paragraph meets the 40-60 word target during drafting, not just in Phase 5 verification.
 - **Description length.** Count the description character length immediately after writing it. Adjust to 150-160 characters before proceeding to body content.
-- **Date collisions.** If any existing blog post uses today's date (with or without a time offset), set the new post's date to a time later than the latest existing timestamp for today. Use ISO 8601 format with timezone (e.g., `2026-04-06T14:00:00-04:00`). If no existing post has a time offset, use `T12:00:00` for the new post.
-- **Tag propagation.** When introducing a new tag, identify service pages and case study pages that should also carry it (based on their content and existing tags). List recommended tag additions in the Phase 5 Attention Needed section for user approval. Update the writing guide's Section 14 tag inventory with the new tag.
+- **Date collisions.** Set the date to today. If another blog post already has today's date, append a time offset (e.g., `T14:00:00-04:00`) to ensure deterministic sort order.
+- **Tag propagation.** When introducing a new tag, identify service pages and case study pages that should also carry it (based on their content and existing tags). Apply the tag additions directly and update the writing guide's Section 14 tag inventory. Report what was changed in the Phase 5 report.
 
 ### Content pillar alignment
 
@@ -395,33 +395,37 @@ Run these checks against the generated post and include results in the report:
 ### Changes to .pa11yci
 - [URL added/removed]
 
-### Blog Re-enablement Status
-[Count total blog posts with draft: false. If Blog is already in
-menus.en.toml, report "Blog is live" and skip this section.
-Otherwise, if 3+ posts exist, the re-enablement checklist is ready:
-- All posts have draft: false
-- All posts have a featured.jpg in their page bundle
-- Fix any directory/slug mismatches flagged in Phase 1
-- Add Blog to nav menu in menus.en.toml (weight: 30)
-- Optionally set showRecent = true in params.toml
-- Run full validation suite (all 10 PR checks pass)
-- Mark C2 as complete in docs/website-audit-and-roadmap.md
-If fewer than 3 posts exist, note how many more are needed.]
+### Cross-Links Added
+- [existing page path] -- added "Related reading" link to new post
+- [or "None" if no bidirectional links were applicable]
 
-### Documentation Maintenance
-Flag any of these that apply:
-- [ ] `docs/website-audit-and-roadmap.md` blog-related items may need updating
-- [ ] `CLAUDE.md` needs updates for new conventions
-- [ ] New tags introduced that do not exist on any service or case study page
+### Tags Propagated
+- [tag added to page path, or "No new tags introduced"]
 
 ### Attention Needed
 - [Any content quality checklist failures]
 - [Code blocks that could not be verified against portfolio data]
 - [Word count outside target range]
 - [Any formatting or lint fixes applied]
-- [Bidirectional linking: pages that should link back to this new post]
 - [Directory/slug mismatches if still unaddressed]
 ```
+
+## Phase 6: Preview
+
+After presenting the report, start the Hugo dev server so the user can preview the post immediately:
+
+1. Kill any existing Hugo server: `pkill -f "hugo server" 2>/dev/null || true`
+2. Start a fresh server in background: `hugo server`
+3. Tell the user the preview URL: `http://localhost:1313/blog/<slug>/`
+
+## Phase 7: Ship
+
+After the user confirms the preview looks good:
+
+1. Create a feature branch, commit all changes (blog post, featured image, `.pa11yci` update, cross-link additions, writing guide tag updates, any doc fixes).
+2. Push and create a PR.
+
+Blog content changes do not require pre-PR review agents. The Phase 5 validation checks (Prettier, markdownlint, Hugo build) and the content quality audit provide sufficient quality gates. Proceed directly to PR creation.
 
 ## Constraints
 

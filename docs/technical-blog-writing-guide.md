@@ -795,14 +795,14 @@ coverage, and proposes candidates for user approval each session.
 
 When 3+ articles are ready to publish:
 
-- [ ] All posts have `draft: false`
-- [ ] All posts have a `featured.jpg` in their page bundle
-- [ ] Add Blog to nav menu in `config/_default/menus.en.toml` (weight: 30, between
+- [x] All posts have `draft: false`
+- [x] All posts have a `featured.jpg` in their page bundle
+- [x] Add Blog to nav menu in `config/_default/menus.en.toml` (weight: 30, between
   Case Studies and About)
 - [ ] Optionally set `showRecent = true` in `params.toml` to surface recent posts on
   the homepage
 - [ ] Run full validation suite (all 10 PR checks pass)
-- [ ] Mark C2 as complete in `docs/website-audit-and-roadmap.md`
+- [x] Mark C2 as complete in `docs/website-audit-and-roadmap.md`
 
 ---
 
@@ -1003,6 +1003,14 @@ Tags are used for related content cross-linking. Reuse these before creating new
 | Scaled Terraform Across 200+ Projects | `/case-studies/terraform-infrastructure-at-scale/` |
 | Zero-Downtime Platform Upgrades | `/case-studies/zero-downtime-platform-upgrades/` |
 | 5+ PB Registry Migration | `/case-studies/zero-downtime-registry-migration/` |
+
+### Blog Post URLs (3)
+
+| Blog Post | URL |
+|-----------|-----|
+| What Engineering Teams Get Wrong About AI Tooling Adoption | `/blog/ai-tooling-adoption/` |
+| How We Fixed Atlantis Rate Limiting with a GitHub App | `/blog/atlantis-rate-limiting-github-app/` |
+| Why Your Startup Needs Infrastructure as Code | `/blog/infrastructure-as-code/` |
 
 ### CTA Templates
 

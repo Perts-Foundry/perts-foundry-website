@@ -54,3 +54,5 @@ The broader impact extended beyond the two projects themselves. The team demonst
 _This case study has been anonymized at the client's request._
 
 **Related services:** [AI-Augmented Engineering Consulting](/services/ai-augmented-engineering/) | [Infrastructure as Code Consulting](/services/infrastructure-as-code/)
+
+**Related reading:** [What Engineering Teams Get Wrong About AI Tooling Adoption](/blog/ai-tooling-adoption/)
