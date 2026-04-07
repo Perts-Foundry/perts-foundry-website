@@ -16,6 +16,7 @@ tags:
   - Jira
   - Confluence
   - RHEL
+  - CI/CD
 ---
 
 ## The Challenge

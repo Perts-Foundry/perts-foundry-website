@@ -175,7 +175,6 @@ slug: "your-post-slug"
 tags:
   - Terraform
   - AWS
-showDate: false
 ---
 ```
 
@@ -839,8 +838,8 @@ portfolio-backed depth, featured image processed. Roadmap item L3 resolved.
 
 - Extract from the Terraform at Scale case study's Atlantis rate-limiting narrative
 - PAR structure: silent GitHub API failures -> root cause investigation -> GitHub App
-  migration -> zero failures
-- Include specific metrics (3 users/week affected -> zero post-migration)
+  migration -> 85% reduction in rate limiting
+- Include specific metrics (3 users/week affected -> 85% reduction within first month)
 - Technical depth: explain GitHub App vs. OAuth App token model
 - Target word count: 1,500-2,000 (war story, medium keyword difficulty)
 
@@ -958,7 +957,7 @@ Reference: `docs/web-accessibility-compliance-guide.md` for full WCAG 2.1 AA det
 - [ ] `tags`: Proper case, reusing existing tags where possible
   ([Section 14](#14-quick-reference-card) has the full list)
 - [ ] `draft: false` (when ready to publish)
-- [ ] `showDate: false` (default for evergreen; set `true` for timely content)
+- [ ] No `showDate` in front matter (cascade default is `false`; override to `true` for timely content only)
 - [ ] `featured.jpg` present in the page bundle directory
 
 ### Before Publishing
@@ -1049,7 +1048,6 @@ slug: "your-post-slug"
 tags:
   - Terraform
   - AWS
-showDate: false
 ---
 ```
 
@@ -1065,7 +1063,7 @@ showDate: false
 | Markdown only | No raw HTML; `goldmark.renderer.unsafe = false` |
 | Internal links | At least 1 service page + 1 case study per post |
 
-### Existing Tags (44 total)
+### Existing Tags (45 total)
 
 Tags are used for related content cross-linking. Reuse these before creating new ones.
 
@@ -1077,11 +1075,12 @@ Tags are used for related content cross-linking. Reuse these before creating new
 | Containers | Cursor | DevOps | Docker |
 | ECR | ECS | EKS | FinOps |
 | GAR | GCR | GCP | GCS |
-| GKE | GitHub | GitHub Actions | GitHub Copilot |
-| HCP | Helm | Incident Response | Infrastructure |
-| Jenkins | Jira | Jira Service Desk | Kanban |
-| Kubernetes | NFS | Renovatebot | RHEL |
-| Snyk | Snowflake | Terraform | Vault |
+| GKE | GitLab | GitHub | GitHub Actions |
+| GitHub Copilot | HCP | Helm | Incident Response |
+| Infrastructure | Jenkins | Jira | Jira Service Desk |
+| Kanban | Kubernetes | NFS | Renovatebot |
+| RHEL | Snyk | Snowflake | Terraform |
+| Vault | | | |
 
 ### Service Page URLs (10)
 
