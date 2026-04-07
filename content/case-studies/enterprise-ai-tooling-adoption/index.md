@@ -56,3 +56,5 @@ The impact went beyond the metrics. Engineers who had been skeptical became advo
 _This case study has been anonymized at the client's request._
 
 **Related services:** [AI-Augmented Engineering Consulting](/services/ai-augmented-engineering/) | [CI/CD & Automation Consulting](/services/cicd-automation/)
+
+**Related reading:** [What Engineering Teams Get Wrong About AI Tooling Adoption](/blog/ai-tooling-adoption/)
