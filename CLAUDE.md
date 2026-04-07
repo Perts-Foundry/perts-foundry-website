@@ -70,7 +70,7 @@ npx markdownlint-cli2 "content/**/*.md"
 ### 6. Prettier
 Checks formatting of content markdown, workflow YAML, and Worker JS. Config: `.prettierrc.toml`.
 ```bash
-npx prettier --check "content/**/*.md" ".github/**/*.yml" "src/**/*.js" "scripts/**/*.js"
+npx prettier --check "content/**/*.md" ".github/**/*.yml" ".github/scripts/**/*.js" "src/**/*.js" "scripts/**/*.js"
 ```
 
 ### 7. actionlint
@@ -119,7 +119,8 @@ docs/archive/        # Completed/historical docs; do not reference unless explic
 .claude/commands/    # Claude Code slash commands (generate-services, generate-case-studies, generate-blog)
 .claude/commands/shared/  # Shared specs referenced by multiple commands (featured-image-processing, anonymization-spec, portfolio-repo-layout)
 .github/actions/     # Composite actions: hugo-deploy (shared build+deploy steps)
-.github/workflows/   # CI: validate.yml (PR checks), deploy.yml (PR comment deploy), scheduled-deploy.yml (cron rebuild)
+.github/scripts/     # Shared JS helpers for workflow scripts (retry logic)
+.github/workflows/   # CI: validate.yml (PR checks), deploy.yml (PR comment deploy), dependabot-auto-deploy.yml (auto-deploy Dependabot PRs), scheduled-deploy.yml (cron rebuild)
 ```
 
 ## Documentation
@@ -282,6 +283,7 @@ All infrastructure changes (DNS, Workers config, R2 buckets, etc.) must be codif
 - Main branch: `main`
 - Feature branches merge via PR after all validation checks pass
 - Deployment is triggered by commenting `deploy` on a PR (not automatic on merge)
+- Dependabot PRs that pass all 10 validation checks are auto-deployed and merged by `dependabot-auto-deploy.yml` (no `deploy` comment needed). To prevent auto-deploy on a specific PR, add the `manual-review` label before validation completes. Non-Dependabot Validate completions show as "skipped" auto-deploy runs in the Actions tab (expected behavior).
 - Scheduled deploys run on the 1st and 15th of each month at 9 AM ET via `scheduled-deploy.yml`, rebuilding from `main` to publish any content whose `publishDate` has passed
 - Manual deploys can be triggered anytime via the "Scheduled Deploy" workflow's `workflow_dispatch` in the Actions tab (bypasses the schedule)
 - GitHub auto-disables scheduled workflows after 60 days of repo inactivity; re-enable from the Actions tab if this occurs

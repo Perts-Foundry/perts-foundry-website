@@ -1,3 +1,5 @@
+# WARNING: dependabot-auto-deploy.yml triggers on this exact workflow name.
+# Renaming it will silently break Dependabot auto-deploy.
 name: Validate
 
 on:
@@ -337,6 +339,7 @@ jobs:
           npx prettier --no-color --check \
             "content/**/*.md" \
             ".github/**/*.yml" \
+            ".github/scripts/**/*.js" \
             "src/**/*.js" \
             "scripts/**/*.js" 2>&1 | tee /tmp/prettier.txt || true
           EXIT_CODE=${PIPESTATUS[0]}
