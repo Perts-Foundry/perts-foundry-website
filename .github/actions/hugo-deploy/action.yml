@@ -1,0 +1,86 @@
+name: Hugo Build & Deploy
+description: Build Hugo site and deploy to Cloudflare Workers
+
+inputs:
+  cloudflare-api-token:
+    description: Cloudflare API token for wrangler deploy
+    required: true
+  cloudflare-account-id:
+    description: Cloudflare account ID
+    required: true
+
+outputs:
+  build-output:
+    description: Last 20 lines of Hugo build output (color-stripped)
+    value: ${{ steps.build.outputs.output }}
+  build-exit-code:
+    description: Hugo build exit code
+    value: ${{ steps.build.outputs.exit_code }}
+  deploy-output:
+    description: Wrangler deploy stdout
+    value: ${{ steps.wrangler.outputs.command-output }}
+  deploy-stderr:
+    description: Wrangler deploy stderr
+    value: ${{ steps.wrangler.outputs.command-stderr }}
+
+runs:
+  using: composite
+  steps:
+    - name: Read Hugo version
+      id: hugo-version
+      shell: bash
+      run: echo "version=$(cat .hugo-version)" >> "$GITHUB_OUTPUT"
+
+    - name: Setup Node.js
+      uses: actions/setup-node@53b83947a5a98c8d113130e565377fae1a50d02f # v6.3.0
+      with:
+        node-version: "22"
+        cache: "npm"
+
+    - name: Setup Go
+      uses: actions/setup-go@4a3601121dd01d1626a1e23e37211e3254c1c06c # v6
+      with:
+        go-version-file: "go.mod"
+
+    - name: Cache Hugo resources
+      uses: actions/cache@668228422ae6a00e4ad889ee87cd7109ec5666a7 # v5
+      with:
+        path: |
+          ~/.cache/hugo_cache
+          resources/_gen
+        key: ${{ runner.os }}-hugo-${{ hashFiles('go.sum') }}
+        restore-keys: |
+          ${{ runner.os }}-hugo-
+
+    - name: Setup Hugo
+      uses: peaceiris/actions-hugo@75d2e84710de30f6ff7268e08f310b60ef14033f # v3
+      with:
+        hugo-version: ${{ steps.hugo-version.outputs.version }}
+        extended: true
+
+    - name: Build
+      id: build
+      shell: bash
+      run: |
+        set +e
+        OUTPUT=$(hugo --gc --minify --cleanDestinationDir 2>&1)
+        EXIT_CODE=$?
+        echo "$OUTPUT"
+        echo "exit_code=$EXIT_CODE" >> "$GITHUB_OUTPUT"
+        {
+          echo "output<<GHEOF"
+          echo "$OUTPUT" | sed 's/\x1b\[[0-9;]*m//g' | tail -20
+          echo "GHEOF"
+        } >> "$GITHUB_OUTPUT"
+        exit "$EXIT_CODE"
+      env:
+        HUGO_ENVIRONMENT: production
+        NO_COLOR: "1"
+
+    - name: Deploy to Cloudflare Workers
+      id: wrangler
+      uses: cloudflare/wrangler-action@da0e0dfe58b7a431659754fdf3f186c529afbe65 # v3
+      with:
+        apiToken: ${{ inputs.cloudflare-api-token }}
+        accountId: ${{ inputs.cloudflare-account-id }}
+        command: deploy
