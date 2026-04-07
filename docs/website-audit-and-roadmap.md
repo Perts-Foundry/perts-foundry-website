@@ -52,14 +52,15 @@ These actively damage credibility or are red flags per the guide. Must fix befor
 
 - [x] Set `showRecent = false` in `config/_default/params.toml`
 - [x] Remove Blog from nav menu in `config/_default/menus.en.toml`
-- [x] Set existing post to `draft: true` in `content/blog/placeholder-first-post/index.md`
-- [ ] (Future) Write 3-5 evergreen articles when ready to re-enable
+- [x] Set existing post to `draft: true` in `content/blog/infrastructure-as-code/index.md`
+- [x] Write 3+ evergreen articles and re-enable blog
 
 **Why it matters:** The guide states "a blog with one stale post from six months ago actively hurts your credibility more than having no blog at all."
 
 **Resolved 2026-03-27:** Blog disabled (nav removed, post drafted, homepage recent section hidden).
+**Re-enabled 2026-04-06:** 3 articles published (`infrastructure-as-code`, `atlantis-rate-limiting-github-app`, `ai-tooling-adoption`), blog added back to nav menu at weight 30.
 
-**Files:** `config/_default/params.toml`, `config/_default/menus.en.toml`, `content/blog/placeholder-first-post/index.md`
+**Files:** `config/_default/params.toml`, `config/_default/menus.en.toml`, `content/blog/infrastructure-as-code/index.md`
 
 ---
 
@@ -223,7 +224,7 @@ Resolved by the About page rewrite. "We" on other pages reads as professional co
 - [ ] Evaluate whether page load performance (Core Web Vitals) needs attention via PageSpeed Insights
 - [x] Consider adding `alt` text audit for all images across the site
 - [x] Add FAQ sections to service pages (3-5 questions each) with FAQPage JSON-LD
-- [ ] Write 2-3 technical blog posts extracted from case study material (re-enable blog when ready)
+- [x] Write 2-3 technical blog posts extracted from case study material and re-enable blog
 - [x] Expand service page content to 500+ words (FAQ sections push all pages to ~700+ words)
 - [x] Add DNS-prefetch hints for external domains (challenges.cloudflare.com, cal.com)
 - [x] Enable Blowfish `showRelatedContent` for tag-based cross-linking between services and case studies
