@@ -29,7 +29,7 @@ Ask the user which mode they want after completing Phase 1.
 
 ## Phase 1: Orient
 
-Before forming any opinions, build a complete picture.
+Before forming any opinions, build a complete picture. Maximize parallel tool calls; steps 1-6 are independent reads that should be batched into 2-3 parallel groups, not run sequentially.
 
 1. Verify the sibling portfolio repository exists and read portfolio data. Follow the shared prerequisite check in `.claude/commands/shared/portfolio-repo-layout.md`.
 
@@ -39,9 +39,11 @@ Before forming any opinions, build a complete picture.
 
 4. Read `.pa11yci` to confirm the file exists and note any existing blog post URLs.
 
-5. Collect titles, slugs, and tags from service page and case study page front matter (`content/services/*/index.md` and `content/case-studies/*/index.md`). Read only front matter, not full page content. These are internal link targets for Phase 2 matching. Read full page content only for pages that will be directly linked or referenced in the post.
+5. Read the writing guide's Section 14 (Quick Reference Card) in `docs/technical-blog-writing-guide.md`. This section contains the complete service page URL table, case study URL table, tag inventory, CTA templates, shortcode reference, and front matter template. Use it as the primary reference for link targets and tag validation. Do not read all 22 service/case study front matter files individually. Read individual page front matter or content only when you need to verify details for pages that will be directly linked or referenced in the post.
 
-6. Read `docs/technical-blog-writing-guide.md` for the full craft reference. Internalize the writing patterns, SEO guidance, hook styles, and common mistakes. This guide is the quality standard. If the guide's advice conflicts with this command's explicit instructions, this command takes precedence; the guide provides supplementary craft detail.
+6. Read the writing guide's Section 5 (Writing Craft) and Section 12 (Blog Post Checklist) for craft patterns and quality checks. Do not read the entire guide; Sections 1-4, 7-10, and 13 are strategic background not needed during generation. If the guide's advice conflicts with this command's explicit instructions, this command takes precedence.
+
+7. **Tag inventory validation.** After reading the tag inventory from Section 14, run a quick grep across all content front matter (`content/*/index.md` and `content/*/*/index.md`) to extract actual tags in use. Diff against the Section 14 list. If tags exist in content but are missing from the inventory, flag them and add them to Section 14 during Phase 3. This prevents tag drift from accumulating across sessions.
 
 ## Phase 2: Discover/Audit
 
@@ -57,7 +59,7 @@ Mine the portfolio data for blog-worthy angles. Work history highlights are the 
 - Technical depth with transferable patterns
 - Alignment with a content pillar and service offering
 
-Cross-reference candidates against the 5-article slate in the writing guide (Section 11). Note which planned articles already have drafts or are published. Once all 5 launch articles exist, mine portfolio data for new candidates beyond the initial slate.
+Cross-reference candidates against existing blog posts to avoid duplicating topics already covered. Check which service pages and case studies lack companion blog posts driving traffic to them.
 
 Present a candidate report:
 
@@ -211,7 +213,7 @@ Blog posts use `draft: false` because content is approved during the Phase 2 dis
 
 **Description:** Serves as both meta description (what Google shows) and listing card text on `/blog/`. A weak description means lower click-through. Aim for 150-160 characters with the primary keyword included.
 
-**Tags:** Proper case for product names (`Terraform`, `AWS`, `Kubernetes`). Title case for discipline tags (`FinOps`, `Incident Response`). Reuse existing tags where possible. During Phase 1, collect the current tag inventory by reading all `tags:` arrays from service pages, case study pages, and existing blog posts. Use this as the reference set for tag validation. If a proposed tag does not exist in the inventory, add it to the writing guide's tag list (Section 14, maintaining alphabetical order and pipe-separated formatting) during generation.
+**Tags:** Proper case for product names (`Terraform`, `AWS`, `Kubernetes`). Title case for discipline tags (`FinOps`, `Incident Response`). Reuse existing tags where possible. The tag inventory from Phase 1 step 7 is the reference set. If a proposed tag does not exist in the inventory, add it to the writing guide's tag list (Section 14, maintaining alphabetical order and pipe-separated formatting) during generation.
 
 **showDate:** Inherited from the blog cascade (`content/blog/_index.md` sets `showDate: false`). Do not include `showDate` in individual post front matter unless overriding to `true` for timely content (tool comparisons with version-specific conclusions, event recaps).
 
@@ -272,19 +274,23 @@ Case study: `For a deeper look at how this played out in practice, read our case
 | Deep Dive | Comprehensive single-topic coverage | 2,500+ | Architecture explanations with concrete examples |
 | Listicle | Numbered items, each standalone | 1,500-2,000 | Each item needs a concrete example or metric, not generic advice |
 
-Word count target is driven by post type (above). Adjust upward for higher keyword difficulty (see writing guide Section 6).
+Word count target is driven by post type (above). Adjust upward for higher keyword difficulty (see writing guide Section 6). **Target the midpoint of the range** (e.g., 1,750 for a 1,500-2,000 range). It is cheaper to trim excess than to expand thin content. If the draft falls below the minimum after writing, expand before proceeding to Phase 4.
 
 ### Generation guidelines
 
 - Use ALL portfolio data as context: work highlights, skills, certs, projects. Weave experience naturally into the narrative rather than citing it explicitly.
 - Show the decision-making process, not just the solution. Explain WHY one approach was chosen over alternatives. Include the non-obvious lesson or the thing that surprised you. Generic advice fails the mini-consulting test.
-- No em dashes. Use commas, semicolons, parens, or periods instead.
+- No em dashes. Use commas, semicolons, parens, or periods instead. After writing, search the generated content for `—` before proceeding.
 - No raw HTML. Goldmark runs with `unsafe = false`; raw HTML will be stripped. Use shortcodes instead: `{{< tech-tags >}}`, `{{< steps >}}`, `{{< faqs >}}`, `{{% metric %}}`.
 - Code blocks must have language annotations (` ```hcl `, ` ```yaml `, etc.) and a version comment (e.g., `# Tested with Terraform 1.9`, `# Requires EKS 1.29+`). Code must be complete and functional, not fragments requiring assembly.
 - Internal links are mandatory. Every post must link to at least 1 service page and 1 case study. Find the best matches by comparing the post's tags and topic against service page and case study tags collected during Phase 1. Additional internal links (to other blog posts, the about page, etc.) are encouraged for hub-and-spoke linking.
 - Heading hierarchy: H2 then H3, never skip levels. H1 is the page title (set by Hugo).
 - Accessibility: descriptive alt text on content images, language annotations on code blocks, descriptive link text (not "click here").
 - Read at least 2 existing blog posts for tone calibration before writing. If fewer than 2 published posts exist (posts with `draft: false`), calibrate tone from the writing guide's craft section (Section 5) and existing service/case study pages instead.
+- **Answer-first enforcement.** For every H2 phrased as a question (starting with What, Why, How, When), write the answer-first paragraph (40-60 words) before writing the rest of that section. Verify each answer-first paragraph meets the 40-60 word target during drafting, not just in Phase 5 verification.
+- **Description length.** Count the description character length immediately after writing it. Adjust to 150-160 characters before proceeding to body content.
+- **Date collisions.** If another blog post already exists with today's date, use a time offset in the date field (e.g., `2026-04-06T12:00:00-04:00` vs `2026-04-06T00:00:00-04:00`) to ensure deterministic sort order on the listing page. Newer posts should use a later time.
+- **Tag propagation.** When introducing a new tag, identify service pages and case study pages that should also carry it (based on their content and existing tags). Add the new tag to those pages' front matter during generation so cross-linking works immediately. Update the writing guide's Section 14 tag inventory with the new tag.
 
 ### Content pillar alignment
 
