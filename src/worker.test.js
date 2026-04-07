@@ -257,7 +257,7 @@ describe("isRateLimited", () => {
 });
 
 // ---------------------------------------------------------------------------
-// handleContactForm (via SELF integration tests)
+// handleContactForm (via exports.default integration tests)
 // ---------------------------------------------------------------------------
 
 describe("handleContactForm", () => {
@@ -299,7 +299,7 @@ describe("handleContactForm", () => {
   // -- Rate limiting --------------------------------------------------------
 
   it("returns 429 when rate limited", async () => {
-    // Exhaust rate limit for the "unknown" IP (no CF-Connecting-IP header in SELF)
+    // Exhaust rate limit for the "unknown" IP (no CF-Connecting-IP header via exports.default.fetch)
     for (let i = 0; i < 5; i++) {
       rateLimitMap.set("unknown", [
         Date.now(),
@@ -376,7 +376,7 @@ describe("handleContactForm", () => {
   // -- Missing env secrets --------------------------------------------------
 
   it("returns 503 when env secrets are missing", async () => {
-    // SELF uses the env from wrangler.toml, which has no secrets configured.
+    // exports.default.fetch() uses the env from wrangler.toml, which has no secrets configured.
     // We send a valid request that passes validation and CRLF checks.
     // Since TURNSTILE_SECRET_KEY and RESEND_API_KEY are not set, it returns 503.
     const res = await exports.default.fetch("https://example.com/api/contact", {
@@ -405,6 +405,9 @@ describe("handleContactForm with secrets", () => {
 
   beforeEach(() => {
     rateLimitMap.clear();
+    vi.spyOn(globalThis, "fetch").mockRejectedValue(
+      new Error("Unexpected outbound fetch"),
+    );
   });
 
   afterEach(() => {
