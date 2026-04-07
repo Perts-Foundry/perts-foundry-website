@@ -118,7 +118,8 @@ docs/                # Active project documentation (audit, research, guides)
 docs/archive/        # Completed/historical docs; do not reference unless explicitly asked
 .claude/commands/    # Claude Code slash commands (generate-services, generate-case-studies, generate-blog)
 .claude/commands/shared/  # Shared specs referenced by multiple commands (featured-image-processing, anonymization-spec, portfolio-repo-layout)
-.github/workflows/   # CI: validate.yml (PR checks), deploy.yml (PR comment deploy)
+.github/actions/     # Composite actions: hugo-deploy (shared build+deploy steps)
+.github/workflows/   # CI: validate.yml (PR checks), deploy.yml (PR comment deploy), scheduled-deploy.yml (cron rebuild)
 ```
 
 ## Documentation
@@ -134,6 +135,7 @@ Do not read or reference archived documents unless the user explicitly asks for 
 - Content files live under `content/` as page bundles (directory with `index.md`)
 - Front matter uses YAML delimiters (`---`)
 - Archetypes default to `draft: true` for manual authoring. The generate commands (`generate-services`, `generate-case-studies`, `generate-blog`) override to `draft: false` because content is approved interactively during their Phase 2.
+- **Scheduled publishing:** Set `publishDate` to a future date and `draft: false` to schedule a blog post. Hugo excludes pages with a future `publishDate` regardless of the `buildFuture` config setting (`buildFuture` controls only the `date` field and should remain unset). Set both `date` and `publishDate` to the desired go-live date so the displayed date matches. The `scheduled-deploy.yml` workflow rebuilds the site on the 1st and 15th of each month, publishing any posts whose `publishDate` has passed.
 - Tags use proper case (`Terraform`, `AWS`, `Kubernetes`, not `terraform`, `aws`)
 - Permalinks for case studies use the `slug` field: `/case-studies/:slug/`
 - Content `slug` values must match their directory name (e.g., `content/services/cloud-infrastructure/` uses `slug: "cloud-infrastructure"`). Structured breadcrumb data relies on this alignment.
@@ -280,3 +282,6 @@ All infrastructure changes (DNS, Workers config, R2 buckets, etc.) must be codif
 - Main branch: `main`
 - Feature branches merge via PR after all validation checks pass
 - Deployment is triggered by commenting `deploy` on a PR (not automatic on merge)
+- Scheduled deploys run on the 1st and 15th of each month at 9 AM ET via `scheduled-deploy.yml`, rebuilding from `main` to publish any content whose `publishDate` has passed
+- Manual deploys can be triggered anytime via the "Scheduled Deploy" workflow's `workflow_dispatch` in the Actions tab (bypasses the schedule)
+- GitHub auto-disables scheduled workflows after 60 days of repo inactivity; re-enable from the Actions tab if this occurs

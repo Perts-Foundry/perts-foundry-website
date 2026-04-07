@@ -1,0 +1,58 @@
+name: Scheduled Deploy
+
+on:
+  schedule:
+    - cron: "0 13 1,15 * *" # 1st and 15th at 9 AM ET (13:00 UTC)
+  workflow_dispatch: # Manual trigger for on-demand rebuilds
+
+# Shares concurrency group with deploy.yml (PR deploys).
+# With cancel-in-progress: false, scheduled deploys queue behind
+# running PR deploys (and vice versa).
+concurrency:
+  group: deploy-production
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+env:
+  NO_COLOR: "1"
+
+jobs:
+  deploy:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    environment: production
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
+        with:
+          ref: main
+          fetch-depth: 0
+
+      - name: Build and Deploy
+        id: hugo-deploy
+        uses: ./.github/actions/hugo-deploy
+        with:
+          cloudflare-api-token: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          cloudflare-account-id: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+
+      - name: Report failure
+        if: failure()
+        shell: bash
+        env:
+          BUILD_EXIT: ${{ steps.hugo-deploy.outputs.build-exit-code }}
+          BUILD_OUTPUT: ${{ steps.hugo-deploy.outputs.build-output }}
+          DEPLOY_OUTPUT: ${{ steps.hugo-deploy.outputs.deploy-output }}
+          DEPLOY_STDERR: ${{ steps.hugo-deploy.outputs.deploy-stderr }}
+        run: |
+          if [[ -z "$BUILD_EXIT" ]]; then
+            STAGE="Setup"
+            DETAIL="Build never started. Check tool setup steps."
+          elif [[ "$BUILD_EXIT" != "0" ]]; then
+            STAGE="Hugo Build"
+            DETAIL="${BUILD_OUTPUT:-No output captured.}"
+          else
+            STAGE="Cloudflare Workers Deploy"
+            DETAIL="${DEPLOY_STDERR:-${DEPLOY_OUTPUT:-No output captured.}}"
+          fi
+          echo "::error title=Scheduled deploy failed at ${STAGE}::${DETAIL}"

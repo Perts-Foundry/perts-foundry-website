@@ -102,69 +102,20 @@ jobs:
           ref: ${{ steps.pr.outputs.ref }}
           fetch-depth: 0
 
-      - name: Read Hugo version
-        id: hugo-version
-        run: echo "version=$(cat .hugo-version)" >> "$GITHUB_OUTPUT"
-
-      - name: Setup Node.js
-        uses: actions/setup-node@53b83947a5a98c8d113130e565377fae1a50d02f # v6.3.0
+      - name: Build and Deploy
+        id: hugo-deploy
+        uses: ./.github/actions/hugo-deploy
         with:
-          node-version: "22"
-          cache: "npm"
-
-      - name: Setup Go
-        uses: actions/setup-go@4a3601121dd01d1626a1e23e37211e3254c1c06c # v6
-        with:
-          go-version-file: "go.mod"
-
-      - name: Cache Hugo resources
-        uses: actions/cache@668228422ae6a00e4ad889ee87cd7109ec5666a7 # v5
-        with:
-          path: |
-            ~/.cache/hugo_cache
-            resources/_gen
-          key: ${{ runner.os }}-hugo-${{ hashFiles('go.sum') }}
-          restore-keys: |
-            ${{ runner.os }}-hugo-
-
-      - name: Setup Hugo
-        uses: peaceiris/actions-hugo@75d2e84710de30f6ff7268e08f310b60ef14033f # v3
-        with:
-          hugo-version: ${{ steps.hugo-version.outputs.version }}
-          extended: true
-
-      - name: Build
-        id: build
-        run: |
-          set +e
-          OUTPUT=$(hugo --gc --minify --cleanDestinationDir 2>&1)
-          EXIT_CODE=$?
-          echo "$OUTPUT"
-          echo "exit_code=$EXIT_CODE" >> "$GITHUB_OUTPUT"
-          {
-            echo "output<<GHEOF"
-            echo "$OUTPUT" | sed 's/\x1b\[[0-9;]*m//g' | tail -20
-            echo "GHEOF"
-          } >> "$GITHUB_OUTPUT"
-          exit "$EXIT_CODE"
-        env:
-          HUGO_ENVIRONMENT: production
-
-      - name: Deploy to Cloudflare Workers
-        id: wrangler
-        uses: cloudflare/wrangler-action@da0e0dfe58b7a431659754fdf3f186c529afbe65 # v3
-        with:
-          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          command: deploy
+          cloudflare-api-token: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          cloudflare-account-id: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
 
       # ── Success: comment, merge, delete branch ──────────────────
       - name: Merge PR and report success
         if: success()
         uses: actions/github-script@ed597411d8f924073f98dfc5c65a23a2325f34cd # v8.0.0
         env:
-          BUILD_OUTPUT: ${{ steps.build.outputs.output }}
-          DEPLOY_OUTPUT: ${{ steps.wrangler.outputs.command-output }}
+          BUILD_OUTPUT: ${{ steps.hugo-deploy.outputs.build-output }}
+          DEPLOY_OUTPUT: ${{ steps.hugo-deploy.outputs.deploy-output }}
           PR_SHORT_SHA: ${{ steps.pr.outputs.short_sha }}
           PR_REF: ${{ steps.pr.outputs.ref }}
           PR_BASE_REF: ${{ steps.pr.outputs.base_ref }}
@@ -324,10 +275,10 @@ jobs:
         if: failure() && steps.pr.outcome == 'success'
         uses: actions/github-script@ed597411d8f924073f98dfc5c65a23a2325f34cd # v8.0.0
         env:
-          BUILD_EXIT: ${{ steps.build.outputs.exit_code }}
-          BUILD_OUTPUT: ${{ steps.build.outputs.output }}
-          DEPLOY_OUTPUT: ${{ steps.wrangler.outputs.command-output }}
-          DEPLOY_STDERR: ${{ steps.wrangler.outputs.command-stderr }}
+          BUILD_EXIT: ${{ steps.hugo-deploy.outputs.build-exit-code }}
+          BUILD_OUTPUT: ${{ steps.hugo-deploy.outputs.build-output }}
+          DEPLOY_OUTPUT: ${{ steps.hugo-deploy.outputs.deploy-output }}
+          DEPLOY_STDERR: ${{ steps.hugo-deploy.outputs.deploy-stderr }}
           PR_SHORT_SHA: ${{ steps.pr.outputs.short_sha }}
           PR_REF: ${{ steps.pr.outputs.ref }}
         with:
