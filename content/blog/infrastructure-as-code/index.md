@@ -27,7 +27,7 @@ We've seen this pattern repeatedly across client engagements. One team's entire 
 IaC isn't about the tool (Terraform, Pulumi, CloudFormation, CDK). It's about the workflow it unlocks:
 
 - **Version control.** Every change is a commit. You can see who changed what, when, and why. When something breaks, you can look at the last five changes instead of guessing.
-- **Code review.** Infrastructure changes go through the same PR process as application code. A second pair of eyes catches the security group rule that opens port 22 to the world.
+- **Code review.** Infrastructure changes go through the same PR process as application code. Tools like [Atlantis](/blog/atlantis-rate-limiting-github-app/) automate Terraform plan and apply from within pull requests, so a second pair of eyes catches the security group rule that opens port 22 to the world.
 - **Reproducibility.** Spin up a complete copy of your environment for testing in minutes, not days. Your staging environment actually matches production because they're defined by the same code.
 - **Drift detection.** Know when reality has diverged from your defined state. Console changes that bypass the code path get caught instead of lurking as invisible configuration debt.
 
