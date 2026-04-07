@@ -2,7 +2,7 @@
 title: "Led P0 Incident Resolution Across Multi-Cloud Systems"
 description: "Coordinated war room response for high-severity production incidents spanning NFS failures, network policy misconfigurations, and domain expiry across GCP and AWS."
 slug: "incident-response-leadership"
-weight: 50
+weight: 70
 draft: false
 params:
   client: "large SaaS company"
@@ -50,3 +50,5 @@ The pattern across these incidents demonstrated a consistent approach: respond i
 {{< tech-tags "GCP, GKE, NFS, AWS" >}}
 
 _This case study has been anonymized at the client's request._
+
+**Related service:** [Incident Response & Reliability Consulting](/services/incident-response/)

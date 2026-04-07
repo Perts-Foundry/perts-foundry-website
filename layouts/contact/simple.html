@@ -86,10 +86,11 @@
               <input type="text" id="contact-website" name="website" tabindex="-1" autocomplete="off" />
             </div>
 
-            {{/* Turnstile widget */}}
+            {{/* Turnstile widget — rendered explicitly by onloadTurnstileCallback
+                 in extend-head-uncached.html. The div is just a mount target. */}}
             {{ with site.Params.turnstileSiteKey }}
               <div class="form-group">
-                <div class="cf-turnstile" data-sitekey="{{ . }}" data-theme="auto" data-size="flexible"></div>
+                <div class="cf-turnstile"></div>
               </div>
             {{ end }}
 
@@ -189,7 +190,7 @@
         // Get Turnstile response
         var turnstileResponse = "";
         if (typeof turnstile !== "undefined") {
-          turnstileResponse = turnstile.getResponse();
+          turnstileResponse = turnstile.getResponse(window.turnstileWidgetId);
           if (!turnstileResponse) {
             showError("Please complete the verification challenge.");
             return;
@@ -229,7 +230,7 @@
               submitBtn.disabled = false;
               submitBtn.textContent = "Start the Conversation";
               if (typeof turnstile !== "undefined") {
-                turnstile.reset();
+                turnstile.reset(window.turnstileWidgetId);
               }
             }
           })
@@ -240,7 +241,7 @@
             submitBtn.disabled = false;
             submitBtn.textContent = "Start the Conversation";
             if (typeof turnstile !== "undefined") {
-              turnstile.reset();
+              turnstile.reset(window.turnstileWidgetId);
             }
           });
       });

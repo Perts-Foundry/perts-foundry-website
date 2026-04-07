@@ -1,0 +1,495 @@
+/* ===== Certification Badges, Case Cards, Process Timeline, Final CTA ===== */
+
+.certs-heading {
+  font-size: 1rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: rgb(var(--color-neutral-400));
+}
+
+html:not(.dark) .certs-heading {
+  color: rgb(var(--color-neutral-600));
+}
+
+.certification-badges {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 2rem;
+  margin-top: 0.5rem;
+}
+
+.certification-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1.25rem 1.5rem;
+  border-radius: 12px;
+  border: 1px solid transparent;
+  background-color: rgb(var(--color-neutral-900));
+  background-image:
+    linear-gradient(rgb(var(--color-neutral-900)), rgb(var(--color-neutral-900))),
+    linear-gradient(135deg, rgba(var(--color-primary-500), 0.4), rgba(var(--color-secondary-500), 0.4));
+  background-origin: border-box;
+  background-clip: padding-box, border-box;
+  text-decoration: none !important;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.certification-item:hover {
+  transform: translateY(-6px);
+  box-shadow:
+    0 8px 30px rgba(59, 130, 246, 0.15),
+    0 0 20px rgba(139, 92, 246, 0.1);
+}
+
+html:not(.dark) .certification-item {
+  background-color: rgb(var(--color-neutral-50));
+  background-image:
+    linear-gradient(rgb(var(--color-neutral-50)), rgb(var(--color-neutral-50))),
+    linear-gradient(135deg, rgba(var(--color-primary-500), 0.35), rgba(var(--color-secondary-500), 0.35));
+}
+
+html:not(.dark) .certification-item:hover {
+  box-shadow:
+    0 8px 30px rgba(59, 130, 246, 0.1),
+    0 0 15px rgba(139, 92, 246, 0.08);
+}
+
+.certification-img {
+  width: 120px;
+  height: 120px;
+  object-fit: contain;
+  filter: drop-shadow(0 0 8px rgba(59, 130, 246, 0.2));
+}
+
+@media (max-width: 639px) {
+  .certification-img {
+    width: 90px;
+    height: 90px;
+  }
+
+  .certification-badges {
+    gap: 1rem;
+  }
+
+  .certification-item {
+    padding: 1rem 1.25rem;
+  }
+}
+
+.certification-name {
+  font-size: 0.8125rem;
+  font-weight: 500;
+  text-align: center;
+  max-width: 160px;
+  line-height: 1.35;
+  color: rgb(var(--color-neutral-300));
+}
+
+html:not(.dark) .certification-name {
+  color: rgb(var(--color-neutral-600));
+}
+
+/* Case study cards (matches service card style) */
+.homepage-cases a.homepage-case-card {
+  position: relative;
+  min-height: 260px;
+  border: 1px solid rgba(var(--color-neutral-400), 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+  transition-property: transform, box-shadow, border-color;
+}
+
+.homepage-cases a.homepage-case-card:hover,
+.homepage-cases a.homepage-case-card:focus-visible {
+  transform: translateY(-12px) scale(1.02);
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.4);
+  border-color: rgba(var(--color-primary-500), 0.4);
+}
+
+.homepage-cases a.homepage-case-card:focus-visible {
+  outline: 2px solid rgb(var(--color-primary-500));
+  outline-offset: 2px;
+}
+
+html:not(.dark) .homepage-cases a.homepage-case-card {
+  border-color: rgba(var(--color-neutral-400), 0.2);
+}
+
+html:not(.dark) .homepage-cases a.homepage-case-card:hover {
+  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.12);
+}
+
+.case-card-overlay {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 2rem;
+  min-height: 260px;
+  background: linear-gradient(
+    to top,
+    rgba(var(--color-neutral-900), 0.95) 0%,
+    rgba(var(--color-neutral-900), 0.7) 50%,
+    rgba(var(--color-neutral-900), 0.45) 100%
+  );
+}
+
+html:not(.dark) .case-card-overlay {
+  background: linear-gradient(
+    to top,
+    rgba(255, 255, 255, 0.95) 0%,
+    rgba(255, 255, 255, 0.7) 50%,
+    rgba(255, 255, 255, 0.3) 100%
+  );
+}
+
+.case-card-title {
+  font-size: clamp(1.125rem, 3.5vw, 1.25rem);
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  line-height: 1.3;
+  color: #fff;
+}
+
+html:not(.dark) .case-card-title {
+  color: rgb(var(--color-neutral-900));
+}
+
+/* Cases carousel */
+.cases-carousel {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.cases-carousel-track {
+  flex: 1;
+  overflow: visible;
+}
+
+.cases-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+  align-content: start;
+  padding: 1rem 0;
+}
+
+@media (min-width: 640px) {
+  .cases-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.cases-view-all-wrap {
+  text-align: center;
+  margin-top: 1.5rem;
+}
+
+/* Process heading */
+.process-heading {
+  text-align: center;
+  font-weight: 700;
+  font-size: clamp(1.75rem, 3.5vw, 2.5rem);
+  letter-spacing: -0.01em;
+  color: rgb(var(--color-neutral-100));
+  margin-bottom: 2.5rem;
+}
+
+html:not(.dark) .process-heading {
+  color: rgb(var(--color-neutral-800));
+}
+
+/* Process timeline */
+.process-timeline-wrap {
+  position: relative;
+}
+
+.process-timeline {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+@media (min-width: 640px) {
+  .process-timeline {
+    flex-direction: row;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 2rem;
+  }
+}
+
+/* Individual step */
+.process-timeline-step {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  flex: 1;
+  cursor: default;
+  transition: transform 0.3s ease;
+}
+
+@media (min-width: 1024px) {
+  .process-timeline-step {
+    max-width: 220px;
+  }
+}
+
+.homepage-process .process-timeline-step:hover {
+  transform: translateY(-12px);
+}
+
+/* Step number circle with gradient border */
+.process-step-number {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 4rem;
+  height: 4rem;
+  border-radius: 50%;
+  margin-bottom: 1rem;
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: rgb(var(--color-primary-400));
+  background:
+    linear-gradient(rgb(var(--color-neutral-900)), rgb(var(--color-neutral-900))),
+    linear-gradient(135deg, var(--accent-blue), var(--accent-purple));
+  background-origin: border-box;
+  background-clip: padding-box, border-box;
+  border: 2px solid transparent;
+}
+
+html:not(.dark) .process-step-number {
+  color: rgb(var(--color-primary-600));
+  background:
+    linear-gradient(rgb(var(--color-neutral-50)), rgb(var(--color-neutral-50))),
+    linear-gradient(135deg, var(--accent-blue), var(--accent-purple));
+  background-origin: border-box;
+  background-clip: padding-box, border-box;
+}
+
+/* Step title */
+.process-step-name {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: rgb(var(--color-neutral-100));
+  margin-bottom: 0.5rem;
+}
+
+html:not(.dark) .process-step-name {
+  color: rgb(var(--color-neutral-800));
+}
+
+/* Step description */
+.process-step-text {
+  font-size: 0.875rem;
+  line-height: 1.6;
+  color: rgb(var(--color-neutral-400));
+}
+
+html:not(.dark) .process-step-text {
+  color: rgb(var(--color-neutral-500));
+}
+
+/* Connecting arrows between steps */
+.process-timeline-arrow {
+  display: none;
+  list-style: none;
+}
+
+@media (min-width: 640px) {
+  .process-timeline-arrow {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding-top: 1.25rem;
+    color: rgba(var(--color-primary-400), 0.5);
+    flex-shrink: 0;
+    margin: 0 0.5rem;
+  }
+
+  .process-timeline-arrow svg {
+    width: 1.5rem;
+    height: 1.5rem;
+  }
+}
+
+/* Mobile: down arrows */
+@media (max-width: 639px) {
+  .process-timeline-arrow {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: rgba(var(--color-primary-400), 0.5);
+    list-style: none;
+  }
+
+  .process-timeline-arrow svg {
+    width: 1.25rem;
+    height: 1.25rem;
+    transform: rotate(90deg);
+  }
+}
+
+/* Process beam (desktop gradient connector between steps) */
+.process-beam,
+.process-beam-glow {
+  position: absolute;
+  left: 12%;
+  right: 12%;
+  z-index: 0;
+  opacity: 0;
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: opacity 0.8s ease 0.3s, transform 0.8s ease 0.3s;
+}
+
+.process-timeline.revealed ~ .process-beam,
+.process-timeline.revealed ~ .process-beam-glow {
+  opacity: 1;
+  transform: scaleX(1);
+}
+
+.process-beam {
+  top: 2rem;
+  height: 2px;
+  background: linear-gradient(90deg, transparent 0%, var(--accent-blue) 15%, var(--accent-purple) 50%, var(--accent-red) 85%, transparent 100%);
+}
+
+.process-beam-glow {
+  top: 1.25rem;
+  height: 1.5rem;
+  background: linear-gradient(90deg, transparent 0%, rgba(59, 130, 246, 0.2) 15%, rgba(124, 58, 237, 0.2) 50%, rgba(220, 38, 38, 0.12) 85%, transparent 100%);
+  filter: blur(10px);
+  pointer-events: none;
+}
+
+/* Final CTA card */
+.homepage-cta-card {
+  position: relative;
+  overflow: hidden;
+  padding: 4.5rem 3.5rem;
+  border: 2px solid transparent;
+  background-image:
+    linear-gradient(rgba(var(--color-neutral-900), 1), rgba(var(--color-neutral-900), 1)),
+    linear-gradient(135deg, var(--accent-blue), var(--accent-purple), var(--accent-red));
+  background-origin: border-box;
+  background-clip: padding-box, border-box;
+  box-shadow: 0 0 60px rgba(59, 130, 246, 0.15), 0 0 120px rgba(124, 58, 237, 0.08);
+}
+
+@media (max-width: 639px) {
+  .homepage-cta-card {
+    padding: 3rem 1.5rem;
+  }
+}
+
+.homepage-cta-card h2 {
+  font-size: clamp(1.75rem, 4vw, 2.75rem);
+}
+
+.homepage-cta-card > * {
+  position: relative;
+  z-index: 1;
+}
+
+/* Pulsing radial glow behind CTA card */
+.homepage-cta-card::before {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  border-radius: inherit;
+  background: radial-gradient(
+    ellipse at 50% 0%,
+    rgba(var(--color-primary-500), 0.08),
+    rgba(var(--color-secondary-500), 0.04),
+    transparent 70%
+  );
+  opacity: 0.9;
+  animation: ctaPulse 6s ease-in-out infinite alternate;
+  pointer-events: none;
+  z-index: 0;
+}
+
+html:not(.dark) .homepage-cta-card {
+  background-image:
+    linear-gradient(rgba(var(--color-neutral-50), 1), rgba(var(--color-neutral-50), 1)),
+    linear-gradient(135deg, var(--accent-blue), var(--accent-purple), var(--accent-red));
+  box-shadow: 0 0 40px rgba(59, 130, 246, 0.1);
+}
+
+html:not(.dark) .homepage-cta-card::before {
+  background: radial-gradient(
+    ellipse at 50% 0%,
+    rgba(var(--color-primary-600), 0.06),
+    rgba(var(--color-secondary-600), 0.03),
+    transparent 70%
+  );
+}
+
+/* Mobile: tighter card, button, and process sizing */
+@media (max-width: 639px) {
+  .service-card-overlay,
+  .case-card-overlay {
+    padding: 1.25rem;
+    min-height: 200px;
+  }
+
+  .homepage-services a.homepage-service-card,
+  .homepage-cases a.homepage-case-card {
+    min-height: 200px;
+  }
+
+  .hero-btn-primary,
+  .hero-btn-secondary {
+    padding: 13px 24px;
+    font-size: 1rem;
+  }
+
+  .process-step-number {
+    width: 3.5rem;
+    height: 3.5rem;
+    font-size: 1.25rem;
+  }
+}
+
+/* Card transitions and gradient border glow */
+.homepage-service-card,
+.homepage-case-card {
+  transition:
+    transform 0.3s ease,
+    box-shadow 0.3s ease,
+    border-color 0.3s ease,
+    background-color 0.3s ease;
+}
+
+/* Gradient border glow on hover (dark mode only) */
+.dark .homepage-service-card::after {
+  content: none;
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1px;
+  background: linear-gradient(
+    135deg,
+    rgba(var(--color-primary-500), 0.4),
+    rgba(var(--color-secondary-500), 0.4)
+  );
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+
+.dark .homepage-service-card:hover::after {
+  content: '';
+}

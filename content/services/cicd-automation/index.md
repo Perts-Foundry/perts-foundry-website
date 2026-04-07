@@ -1,10 +1,27 @@
 ---
-title: "CI/CD & Automation"
+title: "CI/CD & Automation Consulting"
 description: "Build and modernize CI/CD pipelines to accelerate delivery and reduce toil"
 slug: "cicd-automation"
-weight: 3
+weight: 4
+tags:
+  - Jenkins
+  - GitHub Actions
+  - GitLab
+  - ArgoCD
+  - CodeRabbit
+  - AI
+  - CI/CD
 icon: "code"
 draft: false
+faqs:
+  - question: "Jenkins vs. GitHub Actions vs. GitLab CI, which should we use?"
+    answer: "It depends on your codebase, team size, and existing infrastructure. Jenkins offers maximum flexibility for complex pipelines. GitHub Actions integrates tightly with GitHub workflows. GitLab CI works best when your source code already lives in GitLab. We help you choose based on your specific constraints."
+  - question: "How do we migrate from manual deployments to CI/CD without breaking things?"
+    answer: "We start by automating what you already do manually, then incrementally add testing gates and deployment strategies. The first pipeline mirrors your current process so the team builds trust before we optimize."
+  - question: "Can we automate dependency updates without breaking our build?"
+    answer: "Yes. Tools like Renovatebot open PRs for dependency updates that run through your existing test suite before merging. You get visibility into every change and can set rules for auto-merge based on risk level."
+  - question: "What is the typical ROI timeline for CI/CD improvements?"
+    answer: "Teams typically see faster deployments, fewer manual steps, and reduced failure rates early in the engagement. The full payoff compounds over time as automation replaces recurring toil across the engineering workflow."
 ---
 
 ## The Problem
@@ -23,6 +40,7 @@ We build CI/CD pipelines that are fast, reliable, and maintainable. Your team sh
 - **Atlantis** — Terraform PR automation with GitHub App integration, rate limiting optimization, and large PR detection
 - **Renovatebot** — automated dependency scanning and upgrade management across infrastructure repositories
 - **Terraform** — infrastructure pipeline automation with PR-based review and apply workflows
+- **CodeRabbit** — AI-powered code review integrated into CI/CD pipelines, providing automated quality and security feedback on every pull request
 
 ## What an Engagement Looks Like
 
@@ -33,3 +51,7 @@ We build CI/CD pipelines that are fast, reliable, and maintainable. Your team sh
 3. **Pipeline Engineering** — We build pipelines with automated testing gates, caching, parallelization, and deployment strategies tailored to your application
 4. **Automation Expansion** — We extend automation beyond deployments: dependency updates, infrastructure changes, and toil reduction across your engineering workflow
    {{< /steps >}}
+
+**See this in action:** [Modernized CI/CD Infrastructure for a Defense Organization](/case-studies/cicd-modernization-defense/)
+
+{{< faqs >}}

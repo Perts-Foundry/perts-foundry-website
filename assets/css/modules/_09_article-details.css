@@ -1,0 +1,162 @@
+/* ===== Article-Link Card Hover (List Pages) ===== */
+
+/* Depends on base reveal styles in _03_animations.css ([data-prose-reveal] selectors). */
+
+.article-link--simple {
+  transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+  border-radius: 0.5rem;
+  border: 1px solid transparent;
+}
+
+.article-link--simple:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.3);
+  border-color: rgba(var(--color-primary-500), 0.25);
+}
+
+html:not(.dark) .article-link--simple:hover {
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+  border-color: rgba(var(--color-primary-500), 0.2);
+}
+
+.article-link--simple:focus-within {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.3);
+  border-color: rgba(var(--color-primary-500), 0.25);
+}
+
+html:not(.dark) .article-link--simple:focus-within {
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+  border-color: rgba(var(--color-primary-500), 0.2);
+}
+
+/* ===== Results Table Enhancement ===== */
+
+.article-content table {
+  border-radius: 0.25rem;
+}
+
+.article-content tbody tr:nth-child(even) {
+  background: rgba(var(--color-slate-base), 0.05);
+}
+
+html:not(.dark) .article-content tbody tr:nth-child(even) {
+  background: rgba(var(--color-slate-base), 0.08);
+}
+
+/* Case study anonymization disclaimer */
+.article-content > p:last-child > em:only-child {
+  display: block;
+  margin-top: 2rem;
+  font-size: 0.8125rem;
+  color: rgb(var(--color-neutral-400));
+}
+
+html:not(.dark) .article-content > p:last-child > em:only-child {
+  color: rgb(var(--color-neutral-500));
+}
+
+/* ===== Single Page H2 Scroll Reveal ===== */
+
+.js-reveal-init .article-content h2[data-prose-reveal] {
+  opacity: 0;
+  transition: opacity 0.4s ease;
+}
+
+.article-content h2[data-prose-reveal].revealed {
+  opacity: 1;
+}
+
+/* ===== Tech Tags (Case Study Key Technologies) ===== */
+
+.tech-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+.tech-tag {
+  display: inline-block;
+  padding: 0.375rem 0.875rem;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  border-radius: 9999px;
+  color: rgb(var(--color-neutral-300));
+  border: 1px solid rgba(var(--color-primary-500), 0.3);
+  background: rgba(var(--color-primary-500), 0.08);
+}
+
+html:not(.dark) .tech-tag {
+  color: rgb(var(--color-neutral-600));
+  border-color: rgba(var(--color-primary-500), 0.25);
+  background: rgba(var(--color-primary-500), 0.06);
+}
+
+/* ===== FAQ Accordion (Service Pages) ===== */
+
+.faq-section {
+  margin-top: 2rem;
+}
+
+.faq-item {
+  border-bottom: 1px solid rgba(var(--color-neutral-400), 0.15);
+}
+
+.faq-item:last-child {
+  border-bottom: none;
+}
+
+.faq-question {
+  cursor: pointer;
+  padding: 1rem 0;
+  font-weight: 600;
+  font-size: 1.0625rem;
+  color: rgb(var(--color-neutral-200));
+  list-style: none;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.faq-question::-webkit-details-marker {
+  display: none;
+}
+
+.faq-question::before {
+  content: "+";
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.5rem;
+  height: 1.5rem;
+  min-width: 1.5rem;
+  font-size: 1.125rem;
+  font-weight: 700;
+  border-radius: 50%;
+  background: rgba(var(--color-primary-500), 0.08);
+  color: rgb(var(--color-primary-400));
+  transition: background 0.2s ease;
+}
+
+details[open] > .faq-question::before {
+  content: "\2212";
+}
+
+html:not(.dark) .faq-question {
+  color: rgb(var(--color-neutral-700));
+}
+
+html:not(.dark) .faq-question::before {
+  color: rgb(var(--color-primary-700));
+  background: rgba(var(--color-primary-500), 0.06);
+}
+
+.faq-answer {
+  padding: 0 0 1rem 2.25rem;
+  color: rgb(var(--color-neutral-400));
+}
+
+html:not(.dark) .faq-answer {
+  color: rgb(var(--color-neutral-500));
+}

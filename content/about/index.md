@@ -1,6 +1,6 @@
 ---
 title: "About"
-description: "Meet the founder behind Perts Foundry."
+description: "Meet Seth Perts, the DevOps and AI-augmented engineering expert behind Perts Foundry. AWS-certified, Terraform-focused, AI-powered, building infrastructure teams can own."
 layout: "simple"
 showTableOfContents: false
 ---
@@ -12,7 +12,7 @@ showTableOfContents: false
 
 I'm a DevOps engineer at heart. I live in the terminal, think in infrastructure-as-code, and my instinct with any manual process is to automate it out of existence. My measure of a good system is whether the team forgets it's there because it just works.
 
-I founded Perts Foundry to bring that mindset to teams that need it. I can work in any cloud, especially AWS and GCP, with Terraform and the command line as my daily tools. The work takes me across the full stack: cloud infrastructure and Kubernetes, DevSecOps, CI/CD, incident response, cloud cost optimization, migrations, and agile process improvements. The thread through all of it is the same: find what's slowing your team down, automate what can be automated, and build what's left to be maintainable without me.
+I founded Perts Foundry to bring that mindset to teams that need it. I can work in any cloud, especially AWS and GCP, with Terraform and the command line as my daily tools. The work takes me across the full stack: cloud infrastructure and Kubernetes, DevSecOps, CI/CD, incident response, cloud cost optimization, migrations, and agile process improvements. Increasingly, AI is woven into everything I do, from Claude and Cursor accelerating daily infrastructure work to rolling out AI-powered code review across entire organizations and coaching engineers on AI-augmented workflows. The thread through all of it is the same: find what's slowing your team down, automate what can be automated, and build what's left to be maintainable without me.
 
 I got my start as a developer before spending most of my career in DevOps and DevSecOps, so I know what the daily annoyances look like from your engineers' perspective. The friction they assume is just how things work? That's where I start.
 
@@ -24,6 +24,7 @@ I got my start as a developer before spending most of my career in DevOps and De
 - **P0 incident response** led across multi-cloud systems, driving resolution within minutes of paging
 - **{{% metric "terraform" %}}** Terraform projects migrated to a centralized module registry with fully automated CI/CD
 - **CI/CD modernization** for a defense organization, from legacy systems to automated quality gates
+- **{{% metric "ai-repos" %}}** repositories with AI-powered code review integrated into CI/CD pipelines
 
 See the full [case studies](/case-studies/) for the details behind each engagement.
 

@@ -2,8 +2,22 @@
 title: "FinOps & Cloud Cost Optimization"
 description: "Identify and eliminate cloud waste to reduce infrastructure spend"
 slug: "finops"
-weight: 8
+weight: 9
+tags:
+  - GCP
+  - AWS
+  - Terraform
+  - FinOps
 draft: false
+faqs:
+  - question: "How much can we typically save with cloud cost optimization?"
+    answer: "It depends on your current spend and how much waste has accumulated. We have identified and executed savings initiatives totaling over $125,000 in annual spend for a single client. Most environments have 20-40% recoverable waste if they have never been optimized."
+  - question: "What is the most common source of cloud waste?"
+    answer: "Idle and oversized resources. Clusters running at low utilization, storage volumes attached to deleted instances, and services provisioned for peak traffic that rarely arrives. These accumulate silently because nobody is watching the bill at the resource level."
+  - question: "Does right-sizing infrastructure affect application performance?"
+    answer: "Not when done carefully. We baseline actual utilization before recommending changes and implement them as Terraform PRs your team can review. If a change impacts performance, it is reversible within minutes."
+  - question: "How do we keep costs from creeping back up after optimization?"
+    answer: "We establish ongoing cost visibility through dashboards, budget alerts, and regular review cadences. The goal is building a FinOps practice within your team so cost awareness becomes part of how you make infrastructure decisions."
 ---
 
 ## The Problem
@@ -29,3 +43,7 @@ We find the waste and eliminate it, then help you build the practices to keep co
 3. **Implementation** — We execute the changes, from storage migrations to cluster right-sizing, with Terraform PRs your team can review
 4. **FinOps Foundation** — We establish ongoing cost visibility and review practices so your team catches waste before it accumulates
    {{< /steps >}}
+
+**See this in action:** [Saved Over $125,000 in Annual Cloud Spend](/case-studies/finops-cloud-cost-savings/)
+
+{{< faqs >}}

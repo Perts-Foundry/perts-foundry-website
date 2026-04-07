@@ -1,4 +1,46 @@
-# Page 1: Cloud & IaC
+# Tech carousel pagination contract: total item count MUST be a multiple of 8.
+# The "# Page N: ..." comment headers below are semantic groupings for humans;
+# Hugo ignores them. Carousel pagination is computed as Math.ceil(N / perPage)
+# with perPage=8 (desktop) in layouts/partials/extend-footer.html. If the total
+# drifts off a multiple of 8, every subsequent page shifts and the AI/Cloud/etc.
+# groupings visually scramble. tech-bar.html emits a Hugo warnf on build if the
+# count is not a multiple of 8.
+
+# Page 1: AI & Developer Productivity
+[[items]]
+name = "Claude"
+icon = "claude"
+
+# Claude Code uses the same Anthropic icon intentionally
+[[items]]
+name = "Claude Code"
+icon = "claude"
+
+[[items]]
+name = "Cursor"
+icon = "cursor"
+
+[[items]]
+name = "GitHub Copilot"
+icon = "github"
+
+[[items]]
+name = "CodeRabbit"
+icon = "coderabbit"
+
+[[items]]
+name = "Python"
+icon = "python"
+
+[[items]]
+name = "Bash"
+icon = "terminal"
+
+[[items]]
+name = "GitHub Actions"
+icon = "github-actions"
+
+# Page 2: Cloud & IaC
 [[items]]
 name = "AWS"
 icon = "aws"
@@ -31,7 +73,7 @@ icon = "docker"
 name = "Helm"
 icon = "helm"
 
-# Page 2: Container platforms & CI/CD
+# Page 3: Container Platforms & CI/CD
 [[items]]
 name = "ArgoCD"
 icon = "argocd"
@@ -49,10 +91,6 @@ name = "GKE"
 icon = "gcp"
 
 [[items]]
-name = "GitHub Actions"
-icon = "github-actions"
-
-[[items]]
 name = "Jenkins"
 icon = "jenkins"
 
@@ -64,7 +102,11 @@ icon = "gitlab"
 name = "GitOps"
 icon = "gitops"
 
-# Page 3: Monitoring, Security, Automation
+[[items]]
+name = "Renovate"
+icon = "renovate"
+
+# Page 4: Monitoring & Security
 [[items]]
 name = "Grafana"
 icon = "grafana"
@@ -90,47 +132,14 @@ name = "Dependabot"
 icon = "github"
 
 [[items]]
-name = "Renovate"
-icon = "renovate"
-
-[[items]]
-name = "Python"
-icon = "python"
-
-# Page 4: Languages, OS, Storage
-[[items]]
-name = "Bash"
-icon = "terminal"
-
-[[items]]
-name = "YAML"
-icon = "code"
-
-[[items]]
-name = "JSON"
-icon = "code"
-
-[[items]]
 name = "Linux"
 icon = "linux"
-
-[[items]]
-name = "S3"
-icon = "aws"
 
 [[items]]
 name = "Snowflake"
 icon = "snowflake"
 
-[[items]]
-name = "GCS"
-icon = "gcp"
-
-[[items]]
-name = "ALB / NLB"
-icon = "aws"
-
-# Page 5: Collaboration & AI
+# Page 5: Collaboration & Storage
 [[items]]
 name = "Jira"
 icon = "jira"
@@ -144,9 +153,21 @@ name = "Slack"
 icon = "slack"
 
 [[items]]
-name = "Claude AI"
-icon = "claude"
+name = "YAML"
+icon = "code"
 
 [[items]]
-name = "Cursor AI"
-icon = "cursor"
+name = "JSON"
+icon = "code"
+
+[[items]]
+name = "S3"
+icon = "aws"
+
+[[items]]
+name = "GCS"
+icon = "gcp"
+
+[[items]]
+name = "ALB / NLB"
+icon = "aws"

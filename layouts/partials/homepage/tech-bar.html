@@ -1,6 +1,14 @@
 {{ with site.Data.technologies.items }}
   {{ $items := . }}
   {{ $perPage := 8 }}
+  {{/* Tech carousel pagination contract: item count MUST be a multiple of $perPage (8)
+       so the semantic groupings in data/technologies.toml comment headers
+       (# Page 1: AI & Developer Productivity, etc.) align with the JS-paginated visual
+       pages. The perPage value must stay in sync with the desktop perPage in
+       layouts/partials/extend-footer.html (window.innerWidth >= 640 branch). */}}
+  {{ if ne (mod (len $items) $perPage) 0 }}
+    {{ warnf "tech-bar: data/technologies.toml has %d items (must be a multiple of %d). Page groupings will drift across visual pages. Add or remove items so the count is a multiple of %d." (len $items) $perPage $perPage }}
+  {{ end }}
   <section class="homepage-tech-bar" aria-labelledby="tech-bar-heading">
     <div class="mx-auto max-w-5xl px-4 py-14" data-reveal>
       <h2 id="tech-bar-heading" class="tech-bar-heading mb-5 text-center">

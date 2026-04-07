@@ -1,10 +1,24 @@
 ---
-title: "Cloud Infrastructure"
+title: "Cloud Infrastructure Consulting"
 description: "Design, build, and optimize cloud infrastructure across AWS, GCP, and multi-cloud environments"
 slug: "cloud-infrastructure"
-weight: 1
+weight: 2
+tags:
+  - AWS
+  - GCP
+  - Terraform
+  - Kubernetes
 icon: "cloud"
 draft: false
+faqs:
+  - question: "AWS or GCP, how do you help us choose?"
+    answer: "We evaluate based on your existing team skills, workload requirements, and organizational constraints. Many clients run both. The goal is a deliberate multi-cloud strategy, not accidental sprawl."
+  - question: "Can you work with infrastructure we already have, or does everything start from scratch?"
+    answer: "We work with what exists. Most engagements start by auditing and codifying current infrastructure into Terraform, then incrementally improving it. We avoid unnecessary rebuilds."
+  - question: "How long does a typical infrastructure engagement take?"
+    answer: "It depends on the scope and complexity of your environment. We start with an audit and architecture design, then move into implementation. Every engagement is different, so we scope timelines after assessing what exists."
+  - question: "What happens after you leave?"
+    answer: "Your team owns everything. We deliver documentation, runbooks, and pairing sessions so your engineers can operate and extend the infrastructure independently. The goal is capability transfer, not ongoing dependency."
 ---
 
 ## The Problem
@@ -31,3 +45,7 @@ We build cloud infrastructure that is fully codified, version-controlled, and re
 3. **Codify & Build** — We implement everything in Terraform with PR-based workflows, validating with your team at each step
 4. **Operational Handoff** — Your team gets documentation, runbooks, and pairing sessions so they own and operate the infrastructure confidently
    {{< /steps >}}
+
+**See this in action:** [Scaled Terraform Operations Across 200+ Projects](/case-studies/terraform-infrastructure-at-scale/) | [Zero-Downtime Platform Upgrades Across Three Cloud Providers](/case-studies/zero-downtime-platform-upgrades/)
+
+{{< faqs >}}

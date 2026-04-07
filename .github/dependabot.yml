@@ -4,17 +4,41 @@ updates:
     directory: "/"
     schedule:
       interval: "weekly"
+      day: "monday"
+    labels:
+      - "dependencies"
     groups:
       github-actions:
         patterns: ["*"]
+
   - package-ecosystem: "npm"
     directory: "/"
     schedule:
       interval: "weekly"
+      day: "monday"
+    labels:
+      - "dependencies"
     groups:
-      npm:
+      cloudflare-vitest:
+        patterns:
+          - "@cloudflare/*"
+          - "vitest"
+      npm-tooling:
         patterns: ["*"]
+        exclude-patterns:
+          - "@cloudflare/*"
+          - "vitest"
+
   - package-ecosystem: "gomod"
     directory: "/"
     schedule:
-      interval: "monthly"
+      interval: "weekly"
+      day: "monday"
+    labels:
+      - "dependencies"
+    groups:
+      hugo-modules:
+        patterns: ["*"]
+        update-types:
+          - "minor"
+          - "patch"

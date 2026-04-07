@@ -2,7 +2,7 @@
 title: "Scaled Terraform Operations Across 200+ Projects"
 description: "Centralized module distribution, reduced CI/CD rate limiting by 85%, and redesigned a core Terraform framework consumed by 15-20 downstream teams."
 slug: "terraform-infrastructure-at-scale"
-weight: 30
+weight: 50
 draft: false
 params:
   client: "enterprise SaaS platform"
@@ -15,6 +15,9 @@ tags:
   - Atlantis
   - GitHub
   - Renovatebot
+  - Cursor
+  - Claude
+  - AI
 ---
 
 ## The Challenge
@@ -33,7 +36,7 @@ We focused on four workstreams:
 
 - **Atlantis CI/CD Optimization** -- We upgraded Atlantis and integrated it with a GitHub App, replacing the previous authentication model that was responsible for the API rate limiting. This reduced rate limiting issues by 85% within the first month, turning a persistent source of developer friction into a non-issue. We also built a Large PR Detection check into Atlantis, giving all consuming projects an automatic guardrail against oversized infrastructure changes.
 
-- **Core Framework Restructuring** -- We redesigned a core Terraform configuration framework consumed by 15-20 downstream teams. The work included updating the Terraform provider and restructuring the framework to reduce maintenance overhead, delivered iteratively through Atlantis-managed workflows to minimize disruption to consumers.
+- **Core Framework Restructuring** -- We redesigned a core Terraform configuration framework consumed by 15-20 downstream teams, leveraging AI-assisted development tools (Cursor and Claude) to accelerate the iterative cycle of cross-team requirements analysis, implementation, and review. The work included updating the Terraform provider and restructuring the framework to reduce maintenance overhead, delivered iteratively through Atlantis-managed workflows to minimize disruption to consumers.
 
 - **Automated Dependency Management** -- We deployed Renovatebot to production in the infrastructure mono repo, enabling automated dependency scanning and upgrade pull requests. This eliminated manual upgrade toil and kept Terraform providers and modules current without human intervention.
 
@@ -51,6 +54,8 @@ The registry migration earned recognition across the organization for its qualit
 
 ## Key Technologies
 
-{{< tech-tags "Terraform, HCP, Atlantis, GitHub, Renovatebot" >}}
+{{< tech-tags "Terraform, HCP, Atlantis, GitHub, Renovatebot, Cursor, Claude" >}}
 
 _This case study has been anonymized at the client's request._
+
+**Related service:** [Infrastructure as Code Consulting](/services/infrastructure-as-code/)

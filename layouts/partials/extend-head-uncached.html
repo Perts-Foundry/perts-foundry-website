@@ -1,6 +1,98 @@
-{{/* Load Turnstile script only on the contact page */}}
+{{/* DNS-prefetch for external domains used on the contact page */}}
+<link rel="dns-prefetch" href="https://challenges.cloudflare.com">
+<link rel="dns-prefetch" href="https://cal.com">
+
+{{/* Load Turnstile script only on the contact page.
+     render=explicit disables Turnstile's MutationObserver auto-render, which
+     otherwise fires multiple times when Blowfish's JS manipulates the DOM
+     (causing duplicate/triplicate widgets). The onload callback renders the
+     widget exactly once when the script finishes loading. */}}
 {{ if eq .RelPermalink "/contact/" }}
   {{ with site.Params.turnstileSiteKey }}
-    <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+    <script>
+      window.onloadTurnstileCallback = function () {
+        window.turnstileWidgetId = turnstile.render('.cf-turnstile', {
+          sitekey: {{ . | jsonify | safeJS }},
+          theme: 'auto',
+          size: 'flexible'
+        });
+      };
+    </script>
+    <script src="https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit&onload=onloadTurnstileCallback" defer></script>
   {{ end }}
 {{ end }}
+
+{{/* Organization JSON-LD on the homepage.
+     Uses jsonify for string values to guarantee valid JSON escaping. */}}
+{{- if .IsHome }}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "name": {{ site.Title | jsonify | safeJS }},
+  "url": "{{ site.Home.Permalink }}",
+  "logo": "{{ "img/logo/perts-foundry-square-dark-1024.png" | absURL }}",
+  "description": {{ site.Home.Description | jsonify | safeJS }},
+  "founder": {
+    "@type": "Person",
+    "name": {{ site.Params.Author.name | jsonify | safeJS }}
+  },
+  "sameAs": [
+    "https://github.com/Perts-Foundry"
+  ],
+  "knowsAbout": [
+    "DevOps", "Cloud Infrastructure", "CI/CD", "Kubernetes",
+    "Terraform", "AWS", "GCP", "Infrastructure as Code",
+    "DevSecOps", "FinOps", "AI-Augmented Engineering",
+    "AI Code Review", "AI Developer Tools"
+  ],
+  "contactPoint": {
+    "@type": "ContactPoint",
+    "contactType": "sales",
+    "url": "{{ "contact/" | absURL }}"
+  }
+}
+</script>
+{{- end }}
+
+{{/* Service JSON-LD on individual service pages */}}
+{{- if and (eq .Section "services") (eq .Kind "page") }}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Service",
+  "name": {{ .Title | jsonify | safeJS }},
+  "description": {{ .Description | jsonify | safeJS }},
+  "provider": {
+    "@type": "Organization",
+    "name": {{ site.Title | jsonify | safeJS }},
+    "url": "{{ site.Home.Permalink }}"
+  },
+  "serviceType": {{ with .Params.serviceType }}{{ . | jsonify | safeJS }}{{ else }}"DevOps Consulting"{{ end }},
+  "url": "{{ .Permalink }}"
+}
+</script>
+{{- end }}
+
+{{/* FAQPage JSON-LD on pages with structured FAQ data */}}
+{{- with .Params.faqs }}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {{- range $i, $faq := . }}
+    {{- if $i }},{{ end }}
+    {
+      "@type": "Question",
+      "name": {{ $faq.question | jsonify | safeJS }},
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": {{ $faq.answer | jsonify | safeJS }}
+      }
+    }
+    {{- end }}
+  ]
+}
+</script>
+{{- end }}
