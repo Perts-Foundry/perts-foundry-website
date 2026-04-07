@@ -175,7 +175,6 @@ slug: "your-post-slug"
 tags:
   - Terraform
   - AWS
-showDate: false
 ---
 ```
 
@@ -326,24 +325,10 @@ demonstrated knowledge (less valuable for lead generation).
 
 When blog posts reference specific client work (war stories, case study extracts, or any
 post grounded in portfolio experience), the same anonymization boundaries that apply to
-case studies must be followed. These are defined as SPEC-1 through SPEC-6 in the
-`generate-case-studies` command (`.claude/commands/generate-case-studies.md`):
-
-- **SPEC-1:** Never name the client organization.
-- **SPEC-2:** Do not disclose revenue, headcount, or other client business metrics not in
-  the portfolio data.
-- **SPEC-3:** Do not name specific internal tools or proprietary systems unless the
-  technology is public (e.g., Snowflake, Terraform).
-- **SPEC-4:** Do not reference specific teams, managers, or organizational structure by
-  name.
-- **SPEC-5:** Vary client descriptors across blog posts and case studies referencing the
-  same client to reduce the correlation surface.
-- **SPEC-6:** Do not use specific dates, quarters, or narrow time ranges. Use relative
-  durations (e.g., "over the course of a quarter").
-
-When a blog post references the same client engagement as an existing case study, evaluate
-whether the combination increases the identification surface beyond what either piece
-alone would reveal.
+case studies must be followed. These are defined as SPEC-1 through SPEC-6 in the shared
+anonymization spec (`.claude/commands/shared/anonymization-spec.md`). See that file for
+the full specification covering client naming, business metrics, proprietary systems,
+organizational details, descriptor variation, and date handling.
 
 ---
 
@@ -792,8 +777,8 @@ generic blogging advice misses.
 
 ## 11. Launch Plan
 
-**Purpose:** The specific, sequenced plan to re-enable the blog with 5 articles. This
-section directly addresses roadmap item C2.
+**Purpose:** The plan to re-enable the blog in site navigation. This section directly
+addresses roadmap item C2.
 
 ### Launch Strategy
 
@@ -801,112 +786,23 @@ The credibility guide recommends launching with **3-5 strong evergreen articles*
 hidden publication dates, rather than publishing a single post. Write all initial posts
 before enabling the blog in navigation, then publish as a batch.
 
-### Article 1 Status
-
-Article 1 exists at `content/blog/infrastructure-as-code/index.md`:
-
-- **Title:** "Why Your Startup Needs Infrastructure as Code"
-- **Status:** `draft: false` (complete, ready to publish on merge)
-- **Word count:** 826 words (opinion piece, within 800-1,000 target)
-- **Featured image:** Present (1400x781, logo overlay applied)
-- **Internal links:** IaC service page (x2, including CTA), Terraform at Scale case study
-
-Previously the placeholder post at `placeholder-first-post/`. Directory renamed,
-title fixed (em dash removed), content expanded from ~330 to 826 words with
-portfolio-backed depth, featured image processed. Roadmap item L3 resolved.
-
-### The 5-Article Slate
-
-| # | Working Title | Post Type | Pillar | Target Keywords | Links To | Priority |
-|---|---------------|-----------|--------|-----------------|----------|----------|
-| 1 | Why Your Startup Needs Infrastructure as Code | Opinion | DevOps & Infrastructure | infrastructure as code startup, IaC benefits, when to adopt terraform | Service: [IaC](/services/infrastructure-as-code/), Case Study: [Terraform at Scale](/case-studies/terraform-infrastructure-at-scale/) | Complete |
-| 2 | How We Eliminated CI/CD Rate Limiting by Migrating to a GitHub App | War Story | DevOps & Infrastructure | atlantis rate limiting, github app migration, terraform CI/CD | Service: [CI/CD](/services/cicd-automation/), Service: [IaC](/services/infrastructure-as-code/), Case Study: [Terraform at Scale](/case-studies/terraform-infrastructure-at-scale/) | High (rich source material) |
-| 3 | CodeRabbit vs. GitHub Copilot Code Review: What We Learned Rolling Out Both | Comparison | AI-Augmented Engineering | coderabbit vs copilot, AI code review tools, automated code review | Service: [AI Engineering](/services/ai-augmented-engineering/), Case Study: [Enterprise AI Tooling](/case-studies/enterprise-ai-tooling-adoption/) | High (differentiating topic, thin competition) |
-| 4 | The 5 AWS Cost Leaks Every Scaling Startup Ignores | Listicle | Cloud Architecture | AWS cost optimization, cloud cost reduction, FinOps startup | Service: [FinOps](/services/finops/), Case Study: [FinOps Savings](/case-studies/finops-cloud-cost-savings/) | Medium |
-| 5 | Zero-Downtime Container Registry Migrations: A Step-by-Step Guide | Tutorial / Deep Dive | Cloud Architecture | container registry migration, ECR to GAR, zero downtime migration | Service: [Cloud Migration](/services/cloud-migration/), Case Study: [Registry Migration](/case-studies/zero-downtime-registry-migration/) | Medium |
-
-### Content Outlines
-
-#### Article 1: Why Your Startup Needs Infrastructure as Code
-
-- Existing draft is solid; needs title fix, featured image, and CTA addition
-- Keep the Console Trap / What IaC Gives You / When to Switch structure
-- Add a CTA linking to the IaC service page
-- Add an internal link to the Terraform at Scale case study
-- Target word count: 800-1,000 (opinion piece, low keyword difficulty)
-
-#### Article 2: How We Eliminated CI/CD Rate Limiting
-
-- Extract from the Terraform at Scale case study's Atlantis rate-limiting narrative
-- PAR structure: silent GitHub API failures -> root cause investigation -> GitHub App
-  migration -> zero failures
-- Include specific metrics (3 users/week affected -> zero post-migration)
-- Technical depth: explain GitHub App vs. OAuth App token model
-- Target word count: 1,500-2,000 (war story, medium keyword difficulty)
-
-#### Article 3: CodeRabbit vs. GitHub Copilot Code Review
-
-- Draw from AI tooling adoption case study and personal experience
-- Structure: what each tool does, where each excels, where each falls short, rollout
-  lessons, recommendation framework
-- Include practical setup examples (not just feature comparison)
-- Target word count: 2,000-2,500 (comparison guide, medium-high keyword difficulty)
-
-#### Article 4: The 5 AWS Cost Leaks
-
-- Extract patterns from the FinOps case study ($125K+ savings)
-- Each "leak" is a standalone section: idle resources, oversized instances, missing
-  reservations, data transfer costs, unused EBS volumes
-- Include cost-per-month estimates for each leak type
-- Target word count: 1,500-2,000 (listicle, competitive keyword space)
-
-#### Article 5: Zero-Downtime Container Registry Migrations
-
-- Step-by-step from the 5+ PB registry migration case study
-- Technical tutorial with real migration commands and patterns
-- Address the dual-write period, cutover strategy, and rollback plan
-- Target word count: 2,000-2,500 (tutorial, very specific long-tail keyword)
-
-### Recommended Sequencing
-
-1. **Rework Article 1** (fastest; existing draft needs minor fixes)
-2. **Write Article 3** (AI differentiator; thin keyword competition; positions the
-   AI-Augmented Engineering pillar early)
-3. **Write Article 2** (case study extract; strong narrative material from Terraform
-   at Scale)
-4. **Evaluate traffic and response** after 3 articles are live
-5. **Write Articles 4 and 5** based on what performs (if AI content outperforms
-   infrastructure content, prioritize more AI topics)
-6. **Re-enable blog in navigation** once 3+ posts are live
-
-### Tag Strategy for Launch Articles
-
-| Article | Tags | Cross-Links With |
-|---------|------|-----------------|
-| 1 | Terraform, DevOps, Infrastructure | 4 service pages, 3 case studies with Terraform tag |
-| 2 | Terraform, GitHub, Atlantis, CI/CD (new tag) | IaC and CI/CD service pages, Terraform case study |
-| 3 | CodeRabbit, GitHub Copilot, AI, Claude, Cursor | AI service page, AI case studies |
-| 4 | AWS, FinOps | FinOps service, Cloud Infrastructure service, FinOps case study |
-| 5 | GCP, GCR, GAR, Containers | Cloud Migration service, Registry Migration case study |
-
-Note: "CI/CD" would be a new tag (not currently in use). Adding it would help blog
-posts about CI/CD cross-link with the CI/CD service page if that page also adds the
-tag.
+Article selection, outlining, and sequencing are handled dynamically by the
+`generate-blog` command during its Phase 2 (Discover/Audit). This guide does not
+prescribe specific articles; the command mines portfolio data, evaluates gaps in content
+coverage, and proposes candidates for user approval each session.
 
 ### Blog Re-Enablement Checklist
 
 When 3+ articles are ready to publish:
 
-- [x] Rename `content/blog/placeholder-first-post/` to `content/blog/infrastructure-as-code/`
-- [ ] All posts have `draft: false`
-- [ ] All posts have a `featured.jpg` in their page bundle
-- [ ] Add Blog to nav menu in `config/_default/menus.en.toml` (weight: 30, between
+- [x] All posts have `draft: false`
+- [x] All posts have a `featured.jpg` in their page bundle
+- [x] Add Blog to nav menu in `config/_default/menus.en.toml` (weight: 30, between
   Case Studies and About)
 - [ ] Optionally set `showRecent = true` in `params.toml` to surface recent posts on
   the homepage
 - [ ] Run full validation suite (all 10 PR checks pass)
-- [ ] Mark C2 as complete in `docs/website-audit-and-roadmap.md`
-- [ ] Mark L3 as complete in `docs/website-audit-and-roadmap.md` (directory rename)
+- [x] Mark C2 as complete in `docs/website-audit-and-roadmap.md`
 
 ---
 
@@ -958,7 +854,7 @@ Reference: `docs/web-accessibility-compliance-guide.md` for full WCAG 2.1 AA det
 - [ ] `tags`: Proper case, reusing existing tags where possible
   ([Section 14](#14-quick-reference-card) has the full list)
 - [ ] `draft: false` (when ready to publish)
-- [ ] `showDate: false` (default for evergreen; set `true` for timely content)
+- [ ] No `showDate` in front matter (cascade default is `false`; override to `true` for timely content only)
 - [ ] `featured.jpg` present in the page bundle directory
 
 ### Before Publishing
@@ -991,14 +887,7 @@ table as posts move through the pipeline.
 
 | Month | Topic | Post Type | Pillar | Status | Target Keywords | Linked Service | Linked Case Study |
 |-------|-------|-----------|--------|--------|-----------------|----------------|-------------------|
-| TBD | Why Your Startup Needs IaC | Opinion | DevOps & Infra | Draft exists | infrastructure as code startup | IaC | Terraform at Scale |
-| TBD | CodeRabbit vs. Copilot Code Review | Comparison | AI Engineering | Planned | coderabbit vs copilot, AI code review | AI Engineering | Enterprise AI Tooling |
-| TBD | How We Eliminated CI/CD Rate Limiting | War Story | DevOps & Infra | Planned | atlantis rate limiting, github app migration | CI/CD, IaC | Terraform at Scale |
-| TBD | 5 AWS Cost Leaks Startups Ignore | Listicle | Cloud Architecture | Planned | AWS cost optimization, cloud cost reduction | FinOps | FinOps Savings |
-| TBD | Zero-Downtime Container Registry Migration | Tutorial | Cloud Architecture | Planned | container registry migration, zero downtime | Cloud Migration | Registry Migration |
-| +1 month | (to be determined based on performance) | | | Idea | | | |
-| +2 months | | | | Idea | | | |
-| +3 months | | | | Idea | | | |
+| | (populated by generate-blog command) | | | | | | |
 
 ### Status Values
 
@@ -1049,7 +938,6 @@ slug: "your-post-slug"
 tags:
   - Terraform
   - AWS
-showDate: false
 ---
 ```
 
@@ -1065,23 +953,24 @@ showDate: false
 | Markdown only | No raw HTML; `goldmark.renderer.unsafe = false` |
 | Internal links | At least 1 service page + 1 case study per post |
 
-### Existing Tags (43 total)
+### Existing Tags (45 total)
 
 Tags are used for related content cross-linking. Reuse these before creating new ones.
 
 | Tag | Tag | Tag | Tag |
 |-----|-----|-----|-----|
 | Agile | AI | ArgoCD | Atlantis |
-| AWS | Azure | Bash | Claude |
-| CloudFormation | CodeRabbit | Confluence | Containers |
-| Cursor | DevOps | Docker | ECR |
-| ECS | EKS | FinOps | GAR |
-| GCR | GCP | GCS | GKE |
-| GitHub | GitHub Actions | GitHub Copilot | HCP |
-| Helm | Incident Response | Infrastructure | Jenkins |
-| Jira | Jira Service Desk | Kanban | Kubernetes |
-| NFS | Renovatebot | RHEL | Snyk |
-| Snowflake | Terraform | Vault | |
+| AWS | Azure | Bash | CI/CD |
+| Claude | CloudFormation | CodeRabbit | Confluence |
+| Containers | Cursor | DevOps | Docker |
+| ECR | ECS | EKS | FinOps |
+| GAR | GCR | GCP | GCS |
+| GKE | GitLab | GitHub | GitHub Actions |
+| GitHub Copilot | HCP | Helm | Incident Response |
+| Infrastructure | Jenkins | Jira | Jira Service Desk |
+| Kanban | Kubernetes | NFS | Renovatebot |
+| RHEL | Snyk | Snowflake | Terraform |
+| Vault | | | |
 
 ### Service Page URLs (10)
 
@@ -1114,6 +1003,14 @@ Tags are used for related content cross-linking. Reuse these before creating new
 | Scaled Terraform Across 200+ Projects | `/case-studies/terraform-infrastructure-at-scale/` |
 | Zero-Downtime Platform Upgrades | `/case-studies/zero-downtime-platform-upgrades/` |
 | 5+ PB Registry Migration | `/case-studies/zero-downtime-registry-migration/` |
+
+### Blog Post URLs (3)
+
+| Blog Post | URL |
+|-----------|-----|
+| What Engineering Teams Get Wrong About AI Tooling Adoption | `/blog/ai-tooling-adoption/` |
+| How We Fixed Atlantis Rate Limiting with a GitHub App | `/blog/atlantis-rate-limiting-github-app/` |
+| Why Your Startup Needs Infrastructure as Code | `/blog/infrastructure-as-code/` |
 
 ### CTA Templates
 

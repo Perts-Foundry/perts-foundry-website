@@ -118,7 +118,8 @@ docs/                # Active project documentation (audit, research, guides)
 docs/archive/        # Completed/historical docs; do not reference unless explicitly asked
 .claude/commands/    # Claude Code slash commands (generate-services, generate-case-studies, generate-blog)
 .claude/commands/shared/  # Shared specs referenced by multiple commands (featured-image-processing, anonymization-spec, portfolio-repo-layout)
-.github/workflows/   # CI: validate.yml (PR checks), deploy.yml (PR comment deploy)
+.github/actions/     # Composite actions: hugo-deploy (shared build+deploy steps)
+.github/workflows/   # CI: validate.yml (PR checks), deploy.yml (PR comment deploy), scheduled-deploy.yml (cron rebuild)
 ```
 
 ## Documentation
@@ -134,6 +135,7 @@ Do not read or reference archived documents unless the user explicitly asks for 
 - Content files live under `content/` as page bundles (directory with `index.md`)
 - Front matter uses YAML delimiters (`---`)
 - Archetypes default to `draft: true` for manual authoring. The generate commands (`generate-services`, `generate-case-studies`, `generate-blog`) override to `draft: false` because content is approved interactively during their Phase 2.
+- **Scheduled publishing:** Set `publishDate` to a future date and `draft: false` to schedule a blog post. Hugo excludes pages with a future `publishDate` by default. The `buildFuture` config overrides this exclusion and should remain unset so that scheduled posts stay hidden until the next rebuild after their `publishDate` passes. Set both `date` and `publishDate` to the desired go-live date so the displayed date matches. The `scheduled-deploy.yml` workflow rebuilds the site on the 1st and 15th of each month, publishing any posts whose `publishDate` has passed.
 - Tags use proper case (`Terraform`, `AWS`, `Kubernetes`, not `terraform`, `aws`)
 - Permalinks for case studies use the `slug` field: `/case-studies/:slug/`
 - Content `slug` values must match their directory name (e.g., `content/services/cloud-infrastructure/` uses `slug: "cloud-infrastructure"`). Structured breadcrumb data relies on this alignment.
@@ -224,7 +226,7 @@ The `js-reveal-init` class on `<html>` gates visibility: without JS, all content
 
 ### Section ordering (services, case-studies, blog)
 
-Both `content/services/_index.md` and `content/case-studies/_index.md` use `orderByWeight: true` with cascading display settings (`showDate: false`, `showAuthor: false`, `showReadingTime: false`, `invertPagination: true`, `showHero: true`, `heroStyle: basic`). The blog section (`content/blog/_index.md`) uses the same cascade display settings (`showDate: false`, `showAuthor: false`, `showReadingTime: false`, `showHero: true`, `heroStyle: basic`) but uses Hugo's default date-based ordering instead of `orderByWeight`, so blog posts do not need a `weight` field. New pages in these sections must include a `weight` field or they will sort unpredictably. Both sections require a `featured.jpg` in each page bundle for the hero image. Both sections should include a `tags` field listing relevant technologies (e.g., `AWS`, `Terraform`, `Kubernetes`); these populate `<meta name="keywords">` and JSON-LD keywords for SEO. Case studies use weight increments of 10 (current range 10-120 for 12 case studies) to allow future insertions. Case studies also require `params.client`, `params.industry`, `params.challenge`, and `params.result` in front matter; these render as a structured metadata card at the top of each page. Hugo merges the `params:` YAML key into `.Params` automatically. The archetype at `archetypes/case-studies.md` scaffolds these fields.
+Both `content/services/_index.md` and `content/case-studies/_index.md` use `orderByWeight: true` with cascading display settings (`showDate: false`, `showAuthor: false`, `showReadingTime: false`, `invertPagination: true`, `showHero: true`, `heroStyle: basic`). The blog section (`content/blog/_index.md`) uses cascade display settings (`showDate: true`, `showAuthor: false`, `showReadingTime: false`, `showHero: true`, `heroStyle: basic`) and uses Hugo's default date-based ordering instead of `orderByWeight`, so blog posts do not need a `weight` field. New pages in these sections must include a `weight` field or they will sort unpredictably. Both sections require a `featured.jpg` in each page bundle for the hero image. Both sections should include a `tags` field listing relevant technologies (e.g., `AWS`, `Terraform`, `Kubernetes`); these populate `<meta name="keywords">` and JSON-LD keywords for SEO. Case studies use weight increments of 10 (current range 10-120 for 12 case studies) to allow future insertions. Case studies also require `params.client`, `params.industry`, `params.challenge`, and `params.result` in front matter; these render as a structured metadata card at the top of each page. Hugo merges the `params:` YAML key into `.Params` automatically. The archetype at `archetypes/case-studies.md` scaffolds these fields.
 
 ## Code Style
 
@@ -280,3 +282,6 @@ All infrastructure changes (DNS, Workers config, R2 buckets, etc.) must be codif
 - Main branch: `main`
 - Feature branches merge via PR after all validation checks pass
 - Deployment is triggered by commenting `deploy` on a PR (not automatic on merge)
+- Scheduled deploys run on the 1st and 15th of each month at 9 AM ET via `scheduled-deploy.yml`, rebuilding from `main` to publish any content whose `publishDate` has passed
+- Manual deploys can be triggered anytime via the "Scheduled Deploy" workflow's `workflow_dispatch` in the Actions tab (bypasses the schedule)
+- GitHub auto-disables scheduled workflows after 60 days of repo inactivity; re-enable from the Actions tab if this occurs

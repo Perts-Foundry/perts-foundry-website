@@ -54,4 +54,6 @@ We bring direct experience from driving AI adoption across a large engineering o
 
 **See this in action:** [Drove Enterprise AI Tooling Adoption Across Engineering](/case-studies/enterprise-ai-tooling-adoption/) | [AI-Accelerated Infrastructure Delivery Across Three Clouds](/case-studies/ai-accelerated-infrastructure-delivery/)
 
+**Related reading:** [What Engineering Teams Get Wrong About AI Tooling Adoption](/blog/ai-tooling-adoption/)
+
 {{< faqs >}}

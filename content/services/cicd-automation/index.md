@@ -10,6 +10,7 @@ tags:
   - ArgoCD
   - CodeRabbit
   - AI
+  - CI/CD
 icon: "code"
 draft: false
 faqs:

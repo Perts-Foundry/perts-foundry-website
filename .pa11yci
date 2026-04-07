@@ -60,6 +60,14 @@
     },
     "http://localhost:8080/blog/",
     {
+      "url": "http://localhost:8080/blog/ai-tooling-adoption/",
+      "ignore": ["color-contrast"]
+    },
+    {
+      "url": "http://localhost:8080/blog/atlantis-rate-limiting-github-app/",
+      "ignore": ["color-contrast"]
+    },
+    {
       "url": "http://localhost:8080/blog/infrastructure-as-code/",
       "ignore": ["color-contrast"]
     },

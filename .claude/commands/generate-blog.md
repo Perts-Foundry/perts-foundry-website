@@ -29,19 +29,19 @@ Ask the user which mode they want after completing Phase 1.
 
 ## Phase 1: Orient
 
-Before forming any opinions, build a complete picture.
+Before forming any opinions, build a complete picture. Maximize parallel tool calls; steps 1-5 are independent reads that should be batched into 2-3 parallel groups, not run sequentially. Step 6 depends on step 5's output and runs after step 5 completes. **Ideate mode:** steps 3, 4, and 6 can be skipped (they only matter for generation and verification).
 
 1. Verify the sibling portfolio repository exists and read portfolio data. Follow the shared prerequisite check in `.claude/commands/shared/portfolio-repo-layout.md`.
 
 2. Read all existing blog posts: every `content/blog/*/index.md` file. For each post, check that the directory name matches the `slug` front matter field; flag any mismatches for correction in Phase 2.
 
-3. Read `content/blog/_index.md`. Verify it has the required cascade settings (`showHero: true`, `heroStyle: basic`, `showDate: false`, `showAuthor: false`, `showReadingTime: false`). If any are missing, add them before generation. This matches the convention used by `content/case-studies/_index.md` and `content/services/_index.md`.
+3. Read `content/blog/_index.md`. Verify it has the required cascade settings (`showHero: true`, `heroStyle: basic`, `showDate: true`, `showAuthor: false`, `showReadingTime: false`). If any are missing, add them before generation.
 
 4. Read `.pa11yci` to confirm the file exists and note any existing blog post URLs.
 
-5. Collect titles, slugs, and tags from service page and case study page front matter (`content/services/*/index.md` and `content/case-studies/*/index.md`). Read only front matter, not full page content. These are internal link targets for Phase 2 matching. Read full page content only for pages that will be directly linked or referenced in the post.
+5. Read the writing guide's **Section 14 (Quick Reference Card) only** from `docs/technical-blog-writing-guide.md`. This section contains the service page URL table, case study URL table, tag inventory, CTA templates, shortcode reference, and front matter template. Use it as the primary reference for link targets and tag validation. Do not read other sections of the writing guide; all craft guidance, quality checks, and operational rules are in this command. Do not read all service/case study front matter files individually. Read individual page front matter or content only when you need to verify details for pages that will be directly linked or referenced in the post.
 
-6. Read `docs/technical-blog-writing-guide.md` for the full craft reference. Internalize the writing patterns, SEO guidance, hook styles, and common mistakes. This guide is the quality standard. If the guide's advice conflicts with this command's explicit instructions, this command takes precedence; the guide provides supplementary craft detail.
+6. **Tag inventory validation.** After reading the tag inventory from Section 14, run a quick grep across all content front matter (`content/*/index.md` and `content/*/*/index.md`) to extract actual tags in use. Diff against the Section 14 list. If tags exist in content but are missing from the inventory, flag them and add them to Section 14 during Phase 3. This prevents tag drift from accumulating across sessions.
 
 ## Phase 2: Discover/Audit
 
@@ -57,7 +57,7 @@ Mine the portfolio data for blog-worthy angles. Work history highlights are the 
 - Technical depth with transferable patterns
 - Alignment with a content pillar and service offering
 
-Cross-reference candidates against the 5-article slate in the writing guide (Section 11). Note which planned articles already have drafts or are published. Once all 5 launch articles exist, mine portfolio data for new candidates beyond the initial slate.
+Cross-reference candidates against existing blog posts to avoid duplicating topics already covered. Check which service pages and case studies lack companion blog posts driving traffic to them.
 
 Present a candidate report:
 
@@ -95,7 +95,7 @@ Present a structured plan (title, post type, outline, link targets, word count t
 
 ### Polish mode
 
-Read the existing post. Run the full blog post checklist (writing guide Section 12) against it AND check for freshness issues. Present a combined audit:
+Read the existing post. Run the full quality audit (Phase 5 content quality audit table below) against it AND check for freshness issues. Present a combined audit:
 
 ```
 ## Post Audit: [title]
@@ -121,7 +121,7 @@ Read the existing post. Run the full blog post checklist (writing guide Section 
 2. [specific change]
 ```
 
-Quality checks: hook, internal links, CTA, heading structure, description length, tag validation, em dashes, code annotations, accessibility. Freshness checks: version annotations in code blocks referencing outdated tool versions, recommendations that have changed, internal links to service or case study pages added since the post was written, metrics or claims that may need updating, whether `showDateUpdated: true` should be added. Run all checks regardless of draft status.
+Quality checks use the Phase 5 content quality audit table (all 11 checks). Freshness checks (in addition to those quality checks): version annotations in code blocks referencing outdated tool versions, recommendations that have changed, internal links to service or case study pages added since the post was written, metrics or claims that may need updating, whether `showDateUpdated: true` should be added. Run all checks regardless of draft status.
 
 Discuss the plan with the user before making changes.
 
@@ -189,7 +189,7 @@ Then proceed to the Front matter and Body structure sections.
   "ignore": ["color-contrast"]
 }
 ```
-Insert alphabetically among existing blog URLs. If Phase 1 flagged a directory/slug mismatch for an existing post being replaced, rename the directory and update the `.pa11yci` entry as described in the Polish pre-generation steps above.
+`color-contrast` is ignored because the Blowfish theme has known contrast issues that are overridden in custom CSS; pa11y-ci does not see the custom overrides. Insert alphabetically among existing blog URLs. If Phase 1 flagged a directory/slug mismatch for an existing post being replaced, rename the directory and update the `.pa11yci` entry as described in the Polish pre-generation steps above.
 
 ### Front matter
 
@@ -211,9 +211,9 @@ Blog posts use `draft: false` because content is approved during the Phase 2 dis
 
 **Description:** Serves as both meta description (what Google shows) and listing card text on `/blog/`. A weak description means lower click-through. Aim for 150-160 characters with the primary keyword included.
 
-**Tags:** Proper case for product names (`Terraform`, `AWS`, `Kubernetes`). Title case for discipline tags (`FinOps`, `Incident Response`). Reuse existing tags where possible. During Phase 1, collect the current tag inventory by reading all `tags:` arrays from service pages, case study pages, and existing blog posts. Use this as the reference set for tag validation. If a proposed tag does not exist in the inventory, add it to the writing guide's tag list (Section 14, maintaining alphabetical order and pipe-separated formatting) during generation.
+**Tags:** Proper case for product names (`Terraform`, `AWS`, `Kubernetes`). Title case for discipline tags (`FinOps`, `Incident Response`). Reuse existing tags where possible. The tag inventory from Phase 1 step 6 is the reference set. If a proposed tag does not exist in the inventory, add it to the writing guide's tag list (Section 14, maintaining alphabetical order and pipe-separated formatting) during generation.
 
-**showDate:** Inherited from the blog cascade (`content/blog/_index.md` sets `showDate: false`). Do not include `showDate` in individual post front matter unless overriding to `true` for timely content (tool comparisons with version-specific conclusions, event recaps).
+**showDate:** Inherited from the blog cascade (`content/blog/_index.md` sets `showDate: true`). Do not include `showDate` in individual post front matter unless overriding to `false`.
 
 **Optional fields for Polish mode (refreshing published posts):**
 - `showDateUpdated: true` -- displays the last-modified date alongside the original date. Add when a published post receives a substantive freshness update.
@@ -272,19 +272,36 @@ Case study: `For a deeper look at how this played out in practice, read our case
 | Deep Dive | Comprehensive single-topic coverage | 2,500+ | Architecture explanations with concrete examples |
 | Listicle | Numbered items, each standalone | 1,500-2,000 | Each item needs a concrete example or metric, not generic advice |
 
-Word count target is driven by post type (above). Adjust upward for higher keyword difficulty (see writing guide Section 6).
+Word count target is driven by post type (above). Adjust upward for higher keyword difficulty:
+
+| Keyword Difficulty | Recommended Word Count | Notes |
+|-------------------|----------------------|-------|
+| Low (0-30) | 800-1,500 words | Long-tail queries, niche topics |
+| Medium (30-60) | 1,500-2,500 words | Competitive but targeted |
+| High (60+) | 2,500+ words | Requires comprehensive coverage to compete |
+
+For a new blog on a new domain, target low and medium difficulty keywords first. **Target the midpoint of the range** (e.g., 1,750 for a 1,500-2,000 range). It is cheaper to trim excess than to expand thin content. If the draft falls below the minimum after writing, expand before proceeding to Phase 4.
 
 ### Generation guidelines
 
 - Use ALL portfolio data as context: work highlights, skills, certs, projects. Weave experience naturally into the narrative rather than citing it explicitly.
 - Show the decision-making process, not just the solution. Explain WHY one approach was chosen over alternatives. Include the non-obvious lesson or the thing that surprised you. Generic advice fails the mini-consulting test.
-- No em dashes. Use commas, semicolons, parens, or periods instead.
+- **Storytelling with data.** Stories are 22x more memorable than statistics alone. Combine narrative with specific metrics:
+  - Weak: "Terraform reduces infrastructure deployment time."
+  - Strong: "The team was deploying changes through a manual runbook that took 2 hours per environment. After codifying the process in Terraform with Atlantis for CI/CD, the same change took 8 minutes and went through code review."
+- **PAR framework** for war stories and case study extracts: Problem (what was broken and why it mattered), Action (what you did; this is where the judgment lives), Result (specific, measurable outcomes).
+- No em dashes. Use commas, semicolons, parens, or periods instead. After writing, search the generated content for `—` before proceeding.
 - No raw HTML. Goldmark runs with `unsafe = false`; raw HTML will be stripped. Use shortcodes instead: `{{< tech-tags >}}`, `{{< steps >}}`, `{{< faqs >}}`, `{{% metric %}}`.
 - Code blocks must have language annotations (` ```hcl `, ` ```yaml `, etc.) and a version comment (e.g., `# Tested with Terraform 1.9`, `# Requires EKS 1.29+`). Code must be complete and functional, not fragments requiring assembly.
 - Internal links are mandatory. Every post must link to at least 1 service page and 1 case study. Find the best matches by comparing the post's tags and topic against service page and case study tags collected during Phase 1. Additional internal links (to other blog posts, the about page, etc.) are encouraged for hub-and-spoke linking.
+- **Bidirectional linking.** When publishing a new blog post, identify 2-3 related existing pages (other blog posts, case studies, or service pages) that should link back to the new post. Apply these links directly during Phase 3 by adding a `**Related reading:**` line to each target page. Report the changes in the Phase 5 report under "Cross-Links Added" but do not wait for approval.
 - Heading hierarchy: H2 then H3, never skip levels. H1 is the page title (set by Hugo).
 - Accessibility: descriptive alt text on content images, language annotations on code blocks, descriptive link text (not "click here").
-- Read at least 2 existing blog posts for tone calibration before writing. If fewer than 2 published posts exist (posts with `draft: false`), calibrate tone from the writing guide's craft section (Section 5) and existing service/case study pages instead.
+- Use the blog posts read during Phase 1 for tone calibration. If fewer than 2 published posts exist (posts with `draft: false`), also calibrate from existing service/case study pages.
+- **Answer-first enforcement.** For every H2 phrased as a question (starting with What, Why, How, When), write the answer-first paragraph (40-60 words) before writing the rest of that section. Verify each answer-first paragraph meets the 40-60 word target during drafting, not just in Phase 5 verification.
+- **Description length.** Count the description character length immediately after writing it. Adjust to 150-160 characters before proceeding to body content.
+- **Date collisions.** Set the date to today. If another blog post already has today's date, append a time offset (e.g., `T14:00:00-04:00`) to ensure deterministic sort order.
+- **Tag propagation.** When introducing a new tag, identify service pages and case study pages that should also carry it (based on their content and existing tags). Apply the tag additions directly and update the writing guide's Section 14 tag inventory. Report what was changed in the Phase 5 report.
 
 ### Content pillar alignment
 
@@ -301,7 +318,7 @@ Blog posts target long-tail keywords (3+ words, 2.5x higher conversion rate). Do
 
 ### Anonymization (war stories and portfolio-sourced content)
 
-When blog posts reference specific client work, apply all anonymization boundaries defined in `.claude/commands/shared/anonymization-spec.md`. That shared spec covers client naming, business metrics, proprietary systems, organizational details, descriptor variation, and date handling.
+When blog posts reference specific client work, apply all anonymization boundaries defined in `.claude/commands/shared/anonymization-spec.md`. That shared spec covers client naming, business metrics, proprietary systems, organizational details, descriptor variation, and date handling. For SPEC-5 (descriptor variation), check existing case studies and blog posts that reference the same client engagement and use a different descriptor than any already published. If unsure which descriptor to use, present options to the user during Phase 2.
 
 ### Available shortcodes
 
@@ -378,28 +395,37 @@ Run these checks against the generated post and include results in the report:
 ### Changes to .pa11yci
 - [URL added/removed]
 
-### Blog Re-enablement Status
-[Count total blog posts with draft: false. If 3+ posts exist, the blog
-re-enablement checklist from the writing guide (Section 11) is ready:
-- Fix any directory/slug mismatches flagged in Phase 1
-- Add Blog to nav menu in menus.en.toml (weight: 30)
-- Run full validation suite
-Otherwise note how many posts exist and how many more are needed.]
+### Cross-Links Added
+- [existing page path] -- added "Related reading" link to new post
+- [or "None" if no bidirectional links were applicable]
 
-### Documentation Maintenance
-Flag any of these that apply:
-- [ ] `docs/website-audit-and-roadmap.md` blog-related items may need updating
-- [ ] `CLAUDE.md` needs updates for new conventions
-- [ ] New tags introduced that do not exist on any service or case study page
+### Tags Propagated
+- [tag added to page path, or "No new tags introduced"]
 
 ### Attention Needed
 - [Any content quality checklist failures]
 - [Code blocks that could not be verified against portfolio data]
 - [Word count outside target range]
 - [Any formatting or lint fixes applied]
-- [Bidirectional linking: pages that should link back to this new post]
 - [Directory/slug mismatches if still unaddressed]
 ```
+
+## Phase 6: Preview
+
+After presenting the report, start the Hugo dev server so the user can preview the post immediately:
+
+1. Kill any existing Hugo server: `pkill -f "hugo server" 2>/dev/null || true`
+2. Start a fresh server in background: `hugo server`
+3. Tell the user the preview URL: `http://localhost:1313/blog/<slug>/`
+
+## Phase 7: Ship
+
+After the user confirms the preview looks good:
+
+1. Create a feature branch, commit all changes (blog post, featured image, `.pa11yci` update, cross-link additions, writing guide tag updates, any doc fixes).
+2. Push and create a PR.
+
+Blog content changes do not require pre-PR review agents. The Phase 5 validation checks (Prettier, markdownlint, Hugo build) and the content quality audit provide sufficient quality gates. Proceed directly to PR creation.
 
 ## Constraints
 

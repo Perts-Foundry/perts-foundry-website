@@ -1,10 +1,10 @@
 # Perts Foundry Website: Audit & Roadmap
 
-> **Last updated:** 2026-04-03
+> **Last updated:** 2026-04-06
 > **Reference:** `docs/building-a-credible-solo-devops-consulting-website.md`
 > **Visual research:** `docs/archive/visual-enhancement-research.md`
 
-This document tracks every gap between the current website and a credible, launch-ready MVP for a solo DevOps consulting business. Items are prioritized and meant to be worked through over time. Mark items `[x]` as they are completed.
+This document tracks every gap identified between the website and a credible solo DevOps consulting presence. The site launched publicly on 2026-04-05. All critical, high, and medium priority items are resolved. Remaining work is low priority, data-dependent (CWV after traffic), or blocked on external input (testimonials).
 
 ---
 
@@ -26,9 +26,9 @@ No changes needed in these areas.
 
 ---
 
-## Critical (MVP Blockers)
+## Critical (MVP Blockers) -- All Resolved
 
-These actively damage credibility or are red flags per the guide. Must fix before launch.
+All critical items were resolved before launch.
 
 ### C1. About page has no real person
 
@@ -52,14 +52,15 @@ These actively damage credibility or are red flags per the guide. Must fix befor
 
 - [x] Set `showRecent = false` in `config/_default/params.toml`
 - [x] Remove Blog from nav menu in `config/_default/menus.en.toml`
-- [x] Set existing post to `draft: true` in `content/blog/placeholder-first-post/index.md`
-- [ ] (Future) Write 3-5 evergreen articles when ready to re-enable
+- [x] Set existing post to `draft: true` in `content/blog/infrastructure-as-code/index.md`
+- [x] Write 3+ evergreen articles and re-enable blog
 
 **Why it matters:** The guide states "a blog with one stale post from six months ago actively hurts your credibility more than having no blog at all."
 
 **Resolved 2026-03-27:** Blog disabled (nav removed, post drafted, homepage recent section hidden).
+**Re-enabled 2026-04-06:** 3 articles published (`infrastructure-as-code`, `atlantis-rate-limiting-github-app`, `ai-tooling-adoption`), blog added back to nav menu at weight 30.
 
-**Files:** `config/_default/params.toml`, `config/_default/menus.en.toml`, `content/blog/placeholder-first-post/index.md`
+**Files:** `config/_default/params.toml`, `config/_default/menus.en.toml`, `content/blog/infrastructure-as-code/index.md`
 
 ---
 
@@ -93,9 +94,9 @@ These actively damage credibility or are red flags per the guide. Must fix befor
 
 ---
 
-## High Priority
+## High Priority -- All Resolved
 
-Significant gaps that meaningfully weaken the site. Address soon after launch.
+All high priority items are resolved. H2 testimonials remain as a low-priority item blocked on client input.
 
 ### H1. ~~Too many services (9 listed; guide recommends 3-5)~~ Closed
 
@@ -151,9 +152,9 @@ Significant gaps that meaningfully weaken the site. Address soon after launch.
 
 ---
 
-## Medium Priority
+## Medium Priority -- All Resolved
 
-Strengthen positioning. Address in subsequent iterations.
+All medium priority items are resolved.
 
 ### M1. HSTS max-age is 300 seconds (should be 31536000)
 
@@ -181,11 +182,11 @@ Strengthen positioning. Address in subsequent iterations.
 
 ---
 
-### M3. "We" vs "I" voice not using recommended hybrid
+### M3. ~~"We" vs "I" voice not using recommended hybrid~~ Resolved
 
-- [ ] Switch About page to first-person (addressed by C1)
+- [x] Switch About page to first-person (addressed by C1)
 
-Resolved by the About page rewrite. "We" on other pages reads as professional company voice once a real person is identified on About.
+**Resolved 2026-03-27:** About page rewrite (C1) switched to first-person voice. "We" on other pages reads as professional company voice once a real person is identified on About.
 
 ---
 
@@ -211,7 +212,7 @@ Resolved by the About page rewrite. "We" on other pages reads as professional co
 
 ---
 
-### M6. SEO optimization audit
+### M6. ~~SEO optimization audit~~ Resolved
 
 - [x] Audit current meta descriptions across all pages for keyword targeting and length (150-160 chars)
 - [x] Review page titles for keyword placement and consistency
@@ -219,20 +220,16 @@ Resolved by the About page rewrite. "We" on other pages reads as professional co
 - [x] Set `defaultSocialImage` in `params.toml` so all pages have OG images when shared (supersedes L2)
 - [x] Regenerate homepage OG image (current `og-homepage.png` shows old "Ship faster..." tagline instead of "Build. Scale. Own.")
 - [x] Review internal linking strategy (do service pages link to relevant case studies and vice versa?)
-- [ ] Set up Google Search Console (verify via DNS TXT, submit sitemap)
-- [ ] Evaluate whether page load performance (Core Web Vitals) needs attention via PageSpeed Insights
+- [x] Set up Google Search Console (verify via DNS TXT, submit sitemap)
+- [x] Evaluate whether page load performance (Core Web Vitals) needs attention via PageSpeed Insights
 - [x] Consider adding `alt` text audit for all images across the site
 - [x] Add FAQ sections to service pages (3-5 questions each) with FAQPage JSON-LD
-- [ ] Write 2-3 technical blog posts extracted from case study material (re-enable blog when ready)
+- [x] Write 2-3 technical blog posts extracted from case study material and re-enable blog
 - [x] Expand service page content to 500+ words (FAQ sections push all pages to ~700+ words)
 - [x] Add DNS-prefetch hints for external domains (challenges.cloudflare.com, cal.com)
 - [x] Enable Blowfish `showRelatedContent` for tag-based cross-linking between services and case studies
 
-**Partially resolved 2026-04-03:** Meta descriptions audited and fixed (4 short descriptions expanded, 4 long case study descriptions trimmed). Service page titles updated to include "Consulting" keyword. Tags added to all 10 service pages. Organization JSON-LD added to homepage, Service JSON-LD added to all service pages via `extend-head-uncached.html`. `defaultSocialImage` set to logo fallback. Internal cross-links added between all 10 service pages and 12 case studies (bidirectional). Single site-wide OG image regenerated 2026-04-04 via `scripts/generate-og.js` (1200x630, logo + "Build. Scale. Own." tagline) at `assets/img/og-default.png`.
-
-**Updated 2026-04-04:** FAQ sections with FAQPage JSON-LD added to all 10 service pages (3-4 questions each, consulting-oriented buyer questions). FAQ shortcode (`{{< faqs >}}`) uses native `<details>/<summary>` accordion. DNS-prefetch hints added for cal.com and challenges.cloudflare.com. Related content enabled (`showRelatedContent = true`, `relatedContentLimit = 3`) for tag-based cross-linking. Remaining: Google Search Console setup, blog posts.
-
-**Updated 2026-04-05:** Alt-text audit completed. ~93 images across the site reviewed; zero gaps identified. Site is WCAG 2.1 AA compliant for image accessibility. Patterns verified and documented in `CLAUDE.md` (new "Image alt-text conventions" subsection): featured images in cards/heroes use `alt=""` (card title/page heading provides the label), certification badges pair `alt=""` with visible text labels, inline markdown images use descriptive alt, icon SVGs use `aria-label` on parent buttons. `htmltest` (with `IgnoreAltEmpty: true`) and `pa11y-ci` enforce these patterns in CI.
+**Resolved 2026-04-06:** All sub-items complete. Meta descriptions audited and fixed (4 short expanded, 4 long trimmed). Service page titles updated with "Consulting" keyword. Tags on all 10 service pages. Organization JSON-LD on homepage, Service JSON-LD on all service pages. OG image regenerated (1200x630, "Build. Scale. Own."). Internal cross-links between all 10 services and 12 case studies. FAQ sections with FAQPage JSON-LD on all 10 service pages. DNS-prefetch hints for cal.com and challenges.cloudflare.com. Related content enabled. Alt-text audit passed (~93 images, zero gaps). 3 blog posts published. Google Search Console verified and sitemap submitted 2026-04-06.
 
 **Files:** Content front matter across `content/`, `config/_default/params.toml`, `layouts/partials/extend-head-uncached.html`, `layouts/shortcodes/faqs.html`, `assets/css/custom.css`, `assets/img/og-default.png`
 
@@ -257,10 +254,12 @@ Resolved by the About page rewrite. "We" on other pages reads as professional co
 
 ## Low Priority / Nice-to-Have
 
-### L1. No structured data / JSON-LD
+### L1. ~~No structured data / JSON-LD~~ Resolved
 
 - [x] Enable breadcrumb structured data (`enableStructuredBreadcrumbs = true`)
 - [x] Add Organization schema via `layouts/partials/extend-head-uncached.html` (completed under M6)
+
+**Resolved 2026-04-04:** Breadcrumbs enabled, Organization and Service JSON-LD added (see M6).
 
 ### L2. ~~No custom Open Graph images~~ Resolved
 
@@ -373,41 +372,41 @@ See `docs/archive/visual-enhancement-research.md` for detailed research with tec
 
 ---
 
-## MVP Summary
+## MVP Summary -- All Complete
 
-The minimum changes to pass the "is this person legit?" test:
+All MVP items were resolved before the 2026-04-05 launch.
 
-| # | Change | Impact | Effort |
-|---|--------|--------|--------|
-| 1 | Rewrite About page (C1) | "Anonymous company" to "real consultant" | Medium |
-| 2 | Disable blog (C2) | Removes active credibility damage | Low |
-| 3 | Add privacy policy (C3) | Closes procurement checklist gap | Low |
-| 4 | Enable analytics (C4) | Enables measuring effectiveness | Low |
-| 5 | Decide on social links strategy (H4) | Enables cross-referencing (if pursued) | Medium |
-| 6 | HSTS max-age to 1 year (M1) | Security header fix | Trivial |
+| # | Change | Status |
+|---|--------|--------|
+| 1 | Rewrite About page (C1) | Resolved 2026-03-27 |
+| 2 | Disable blog (C2) | Resolved 2026-03-27; re-enabled 2026-04-06 with 3 articles |
+| 3 | Add privacy policy (C3) | Resolved 2026-03-27 |
+| 4 | Enable analytics (C4) | Resolved 2026-04-03 |
+| 5 | Decide on social links strategy (H4) | Resolved 2026-04-03 |
+| 6 | HSTS max-age to 1 year (M1) | Resolved 2026-03-27 |
 
 ---
 
 ## Post-Launch Tasks
 
-Tasks to complete after removing Cloudflare Access and making the site public.
+Site went public 2026-04-05. Security, SEO, and monitoring tasks are complete. Remaining items are data-dependent.
 
-### Security
+### Security -- Complete
 
-- [x] Submit `pertsfoundry.com` to [hstspreload.org](https://hstspreload.org/) for HSTS preload list inclusion (currently eligible; `preload` directive is set)
-- [x] Monitor browser console for CSP violations during the first week of public traffic (especially contact page with Turnstile and analytics beacon)
-- [x] Verify `/api/contact` responses include security headers from Transform Rules (not just static asset responses)
+- [x] Submit `pertsfoundry.com` to [hstspreload.org](https://hstspreload.org/) for HSTS preload list inclusion
+- [x] Monitor browser console for CSP violations during first week of public traffic
+- [x] Verify `/api/contact` responses include security headers from Transform Rules
 
-### Analytics
+### Analytics -- Complete
 
-- [x] Confirm Cloudflare Web Analytics dashboard shows traffic from public visitors (not just authenticated Access sessions)
-- [ ] Identify baseline metrics for consulting site KPIs: service/case study page views, contact page visits, referral sources
+- [x] Confirm Cloudflare Web Analytics dashboard shows public visitor traffic
+- [x] Identify baseline KPIs: service/case study page views, contact page visits, referral sources (ongoing via Cloudflare Web Analytics dashboard)
 
-### SEO
+### SEO -- Complete
 
-- [ ] Set up Google Search Console: verify pertsfoundry.com via DNS TXT record, submit sitemap, request indexing of key pages
-- [x] Run PageSpeed Insights on pertsfoundry.com and confirm Core Web Vitals are green
-- [x] Regenerate homepage OG image with current "Build. Scale. Own." tagline (current `og-homepage.png` shows old tagline)
+- [x] Set up Google Search Console: verified via DNS TXT, sitemap submitted, key pages submitted for indexing (2026-04-06)
+- [x] Run PageSpeed Insights and confirm Core Web Vitals are green
+- [x] Regenerate homepage OG image with current "Build. Scale. Own." tagline
 
 ### Core Web Vitals (revisit after 50+ visits)
 
