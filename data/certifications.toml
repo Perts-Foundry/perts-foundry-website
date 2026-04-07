@@ -1,3 +1,12 @@
+# Certification badge entries. Rendered by layouts/partials/certification-badges.html
+# on both the homepage certifications section and the about page.
+#
+# Accessibility: The image files are DECORATIVE. The template renders each badge
+# with alt="" and pairs it with a visible text label (the `name` field below).
+# See CLAUDE.md "Image alt-text conventions" for the full pattern.
+#
+# Optional `url` field (not used here currently) links to Credly verification.
+
 [[items]]
 name = "AWS Certified Solutions Architect, Professional"
 image = "img/badges/aws-sa-professional.png"

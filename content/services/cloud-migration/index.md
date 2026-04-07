@@ -1,9 +1,25 @@
 ---
-title: "Cloud Migration"
+title: "Cloud Migration Consulting"
 description: "Plan and execute migrations across cloud services, platforms, and providers with minimal disruption"
 slug: "cloud-migration"
-weight: 7
+weight: 8
+tags:
+  - AWS
+  - GCP
+  - Terraform
+  - Containers
+  - Cursor
+  - Claude
 draft: false
+faqs:
+  - question: "How do you migrate production workloads without downtime?"
+    answer: "We use staged migration waves with parallel-running environments, traffic shifting, and validation gates at each step. Each wave has defined rollback procedures so we can revert quickly if something unexpected surfaces."
+  - question: "What is the biggest risk in cloud migrations?"
+    answer: "Undiscovered dependencies. A service you thought was standalone turns out to depend on three other systems. We invest heavily in the scoping phase to map these dependencies before they become surprises during cutover."
+  - question: "How long does a typical migration take?"
+    answer: "It varies widely by scope and complexity. A single-service migration is very different from a multi-cloud platform transition with dozens of dependencies. We break every migration into waves so you see progress early and can adjust the plan as you go."
+  - question: "Can you help with a migration that is already underway and stuck?"
+    answer: "Yes. We often join mid-migration when the scope has grown beyond initial estimates or the team hit unexpected blockers. We assess what is done, identify what is blocking progress, and rebuild the plan from where you are."
 ---
 
 ## The Problem
@@ -21,6 +37,7 @@ We plan and execute migrations with a track record of zero downtime across produ
 - **Kubernetes** — EKS cluster upgrades across multiple clusters, with dependency assessment and downstream impact analysis
 - **Snowflake** — multi-wave production account migrations across cloud providers and regions, including grant management for 15+ Terraform projects
 - **Docker** — container registry migrations (GCR to GAR) across 5+ petabytes of resources with zero downtime
+- **Cursor & Claude** — AI-assisted development for large-scale migration planning and Terraform/Snowflake configuration across cloud providers
 
 ## What an Engagement Looks Like
 
@@ -31,3 +48,7 @@ We plan and execute migrations with a track record of zero downtime across produ
 3. **Execution & Cutover** — We run each wave, monitor for issues, and handle the cutover so your team isn't scrambling during the transition
 4. **Validation & Cleanup** — We verify everything works in the new environment, decommission old resources, and document the new state
    {{< /steps >}}
+
+**See this in action:** [5+ PB Registry Migration with Zero Downtime](/case-studies/zero-downtime-registry-migration/) | [Zero-Downtime Platform Upgrades Across Three Cloud Providers](/case-studies/zero-downtime-platform-upgrades/)
+
+{{< faqs >}}

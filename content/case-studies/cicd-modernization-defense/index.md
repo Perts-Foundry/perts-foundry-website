@@ -2,7 +2,7 @@
 title: "Modernized CI/CD Infrastructure for a Defense Organization"
 description: "Transformed build and delivery infrastructure from legacy manual processes to modern CI/CD pipelines serving 10+ agile teams across a four-year engagement."
 slug: "cicd-modernization-defense"
-weight: 80
+weight: 100
 draft: false
 params:
   client: "a defense software organization"
@@ -16,9 +16,8 @@ tags:
   - Jira
   - Confluence
   - RHEL
+  - CI/CD
 ---
-
-_Names and identifying details have been generalized for this case study._
 
 ## The Challenge
 
@@ -57,3 +56,7 @@ The transformation took a defense software organization from manual, siloed buil
 ## Key Technologies
 
 {{< tech-tags "Jenkins, GitLab, Bash, Jira, Confluence, RHEL, GCC, Clang, Bazel, Artifactory, Nexus" >}}
+
+_Names and identifying details have been generalized for this case study._
+
+**Related service:** [CI/CD & Automation Consulting](/services/cicd-automation/)

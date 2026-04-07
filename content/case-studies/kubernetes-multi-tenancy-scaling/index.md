@@ -2,7 +2,7 @@
 title: "Built Multi-Tenant Kubernetes Platform, Scaled Nearly 100x"
 description: "Onboarded 4 teams to multi-tenant GKE clusters, tuned a critical application for nearly 100x scale, and managed cluster lifecycle across the organization."
 slug: "kubernetes-multi-tenancy-scaling"
-weight: 70
+weight: 90
 featured: true
 draft: false
 params:
@@ -55,3 +55,5 @@ The application scaling work proved that the platform could handle significant g
 {{< tech-tags "Kubernetes, GKE, Helm, GCP, AWS, Confluence" >}}
 
 _This case study has been anonymized at the client's request._
+
+**Related service:** [Kubernetes & Container Consulting](/services/kubernetes-containers/)

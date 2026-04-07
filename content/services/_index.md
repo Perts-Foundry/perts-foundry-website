@@ -1,6 +1,6 @@
 ---
 title: "Services"
-description: "DevOps and cloud infrastructure consulting services."
+description: "DevOps, cloud infrastructure, and AI-augmented engineering consulting services."
 orderByWeight: true
 cascade:
   showDate: false

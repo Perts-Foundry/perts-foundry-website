@@ -2,7 +2,7 @@
 title: "Saved Over $125,000 in Annual Cloud Spend"
 description: "Eliminated over $125,000 in annual cloud waste through storage right-sizing, idle cluster decommissioning, and Soft Delete remediation across GCP."
 slug: "finops-cloud-cost-savings"
-weight: 10
+weight: 30
 featured: true
 draft: false
 params:
@@ -56,3 +56,5 @@ Results were presented to engineering leadership, connecting the technical findi
 {{< tech-tags "GCP, GKE, GCS, Terraform" >}}
 
 _This case study has been anonymized at the client's request._
+
+**Related service:** [FinOps & Cloud Cost Optimization](/services/finops/)

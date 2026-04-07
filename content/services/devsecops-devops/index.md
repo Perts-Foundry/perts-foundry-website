@@ -1,10 +1,28 @@
 ---
-title: "DevSecOps & DevOps"
+title: "DevSecOps & DevOps Consulting"
 description: "Build DevOps foundations and embed security practices into infrastructure and delivery workflows"
 slug: "devsecops-devops"
-weight: 2
+weight: 3
+tags:
+  - Vault
+  - Snyk
+  - Terraform
+  - AWS
+  - GCP
+  - CodeRabbit
 icon: "shield"
 draft: false
+faqs:
+  - question: "What is the difference between DevOps and DevSecOps?"
+    answer: "DevOps focuses on delivery speed and infrastructure automation. DevSecOps embeds security into those same pipelines, so security checks run automatically in every PR instead of being a separate phase before release."
+  - question: "How do you handle secret rotation without breaking running applications?"
+    answer: "We implement secrets management through tools like Vault with staged rollouts. New credentials are validated before old ones expire, and applications use dynamic secrets or sidecar injection so rotation is transparent."
+  - question: "Can we add security controls without slowing down deployments?"
+    answer: "Yes. Well-designed security checks add seconds, not minutes, to a pipeline. We focus on automated policy enforcement and pre-commit hooks that catch issues early, when they are cheapest to fix."
+  - question: "How often should we audit our cloud security posture?"
+    answer: "Automated checks should run continuously in your CI/CD pipelines. We set up policy-as-code tools that flag drift in real time, so quarterly manual audits become confirmation rather than discovery."
+  - question: "Can AI tools help with security reviews?"
+    answer: "Yes. AI-powered code review tools like CodeRabbit can flag security patterns, credential exposure, and dependency risks automatically in every PR. They complement human security review by catching the mechanical checks, letting your reviewers focus on architecture and threat modeling."
 ---
 
 ## The Problem
@@ -32,3 +50,7 @@ We embed security into your infrastructure and delivery pipelines so it happens 
 3. **Controls Implementation** — We codify security controls into your infrastructure and pipelines: automated secret rotation, IAM guardrails, and policy-as-code
 4. **Continuous Compliance** — We set up automated auditing and alerting so your security posture stays strong without manual intervention
    {{< /steps >}}
+
+**See this in action:** [Drove the Shift from DevOps to DevSecOps](/case-studies/devops-to-devsecops-transformation/)
+
+{{< faqs >}}
