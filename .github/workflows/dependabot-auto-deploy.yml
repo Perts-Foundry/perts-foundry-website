@@ -1,9 +1,14 @@
-name: Deploy
+name: Dependabot Auto-Deploy
+# WARNING: This workflow triggers on the "Validate" workflow name (exact match).
+# Renaming validate.yml's `name:` field will silently break auto-deploy.
 
 on:
-  issue_comment:
-    types: [created]
+  workflow_run:
+    workflows: ["Validate"]
+    types: [completed]
 
+# Shares concurrency group with deploy.yml and scheduled-deploy.yml.
+# With cancel-in-progress: false, auto-deploys queue behind running deploys.
 concurrency:
   group: deploy-production
   cancel-in-progress: false
@@ -13,59 +18,76 @@ permissions:
   pull-requests: write
   checks: read
 
+env:
+  # Set to "true" for dry-run mode (runs verification, skips deploy/merge).
+  # Remove after confirming the workflow works on the first Dependabot PR.
+  DRY_RUN: "true"
+
 jobs:
-  deploy:
-    if: github.event.issue.pull_request && github.event.comment.body == 'deploy'
+  auto-deploy:
+    # Fires for ALL Validate completions; non-Dependabot runs show as "skipped"
+    # in the Actions tab. This is expected -- workflow_run cannot filter by
+    # triggering branch at the trigger level.
+    if: >-
+      github.event.workflow_run.conclusion == 'success' &&
+      startsWith(github.event.workflow_run.head_branch, 'dependabot/')
     runs-on: ubuntu-24.04
     timeout-minutes: 15
+    environment: production
     steps:
-      - name: React with eyes
-        continue-on-error: true
-        uses: actions/github-script@ed597411d8f924073f98dfc5c65a23a2325f34cd # v8.0.0
-        with:
-          script: |
-            await github.rest.reactions.createForIssueComment({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              comment_id: context.payload.comment.id,
-              content: 'eyes',
-            });
-
-      - name: Validate deployer permissions
-        uses: actions/github-script@ed597411d8f924073f98dfc5c65a23a2325f34cd # v8.0.0
-        with:
-          script: |
-            const { data } = await github.rest.repos.getCollaboratorPermissionLevel({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              username: context.payload.comment.user.login,
-            });
-            if (!['admin', 'write'].includes(data.permission)) {
-              core.setFailed(
-                `@${context.payload.comment.user.login} does not have write access.`
-              );
-            }
-
-      - name: Get PR details
+      # ── Find PR and verify Dependabot author ────────────────────
+      - name: Find PR and verify Dependabot author
         id: pr
         uses: actions/github-script@ed597411d8f924073f98dfc5c65a23a2325f34cd # v8.0.0
         with:
           script: |
-            const { data: pr } = await github.rest.pulls.get({
+            const branch = context.payload.workflow_run.head_branch;
+            const validatedSha = context.payload.workflow_run.head_sha;
+
+            const { data: prs } = await github.rest.pulls.list({
               owner: context.repo.owner,
               repo: context.repo.repo,
-              pull_number: context.issue.number,
+              head: `${context.repo.owner}:${branch}`,
+              state: 'open',
             });
-            if (pr.state !== 'open') {
-              core.setFailed('This PR is not open.');
+
+            if (prs.length === 0) {
+              core.info(`No open PR found for branch ${branch}`);
               return;
             }
+
+            const pr = prs[0];
+
+            if (pr.user.login !== 'dependabot[bot]' || pr.user.type !== 'Bot') {
+              core.info(
+                `PR #${pr.number} author is ${pr.user.login} (${pr.user.type}), not dependabot[bot]. Skipping.`
+              );
+              return;
+            }
+
+            if (pr.head.sha !== validatedSha) {
+              core.info(
+                `PR #${pr.number} HEAD (${pr.head.sha}) differs from validated commit (${validatedSha}). Skipping.`
+              );
+              return;
+            }
+
+            const labels = pr.labels.map((l) => l.name);
+            if (labels.includes('manual-review')) {
+              core.info(`PR #${pr.number} has manual-review label. Skipping auto-deploy.`);
+              return;
+            }
+
+            core.setOutput('number', pr.number);
             core.setOutput('sha', pr.head.sha);
             core.setOutput('short_sha', pr.head.sha.substring(0, 7));
             core.setOutput('ref', pr.head.ref);
             core.setOutput('base_ref', pr.base.ref);
+            core.info(`Will auto-deploy Dependabot PR #${pr.number} (${branch})`);
 
+      # ── Verify validation passed on HEAD commit ─────────────────
       - name: Verify validation passed
+        if: steps.pr.outputs.number
         uses: actions/github-script@ed597411d8f924073f98dfc5c65a23a2325f34cd # v8.0.0
         env:
           PR_SHA: ${{ steps.pr.outputs.sha }}
@@ -81,7 +103,7 @@ jobs:
             );
             if (!validate) {
               core.setFailed(
-                'No validation run found for this commit. Push to trigger validation first.'
+                'No validation run found for this commit.'
               );
               return;
             }
@@ -90,59 +112,85 @@ jobs:
               validate.conclusion !== 'success'
             ) {
               core.setFailed(
-                `Validation has not passed (${validate.status}/${validate.conclusion}). All checks must pass before deploying.`
+                `Validation not passed (${validate.status}/${validate.conclusion}).`
               );
             }
 
+      # ── Checkout PR branch ──────────────────────────────────────
+      # Always checkout (even in dry-run or after verify-step failure)
+      # so require() can resolve the shared retry helper in the
+      # merge/report and failure-report steps.
+      # Pins to the validated SHA (not branch name) to prevent TOCTOU
+      # if someone force-pushes between verification and checkout.
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
+        if: "!cancelled() && steps.pr.outputs.number"
         with:
-          ref: ${{ steps.pr.outputs.ref }}
+          ref: ${{ steps.pr.outputs.sha }}
           fetch-depth: 0
 
+      # ── Build and deploy ────────────────────────────────────────
       - name: Build and Deploy
+        if: steps.pr.outputs.number && env.DRY_RUN != 'true'
         id: hugo-deploy
         uses: ./.github/actions/hugo-deploy
         with:
           cloudflare-api-token: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           cloudflare-account-id: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
 
-      # ── Success: comment, merge, delete branch ──────────────────
+      # ── Merge PR and report success ─────────────────────────────
       - name: Merge PR and report success
-        if: success()
+        if: success() && steps.pr.outputs.number
         uses: actions/github-script@ed597411d8f924073f98dfc5c65a23a2325f34cd # v8.0.0
         env:
-          BUILD_OUTPUT: ${{ steps.hugo-deploy.outputs.build-output }}
-          DEPLOY_OUTPUT: ${{ steps.hugo-deploy.outputs.deploy-output }}
+          PR_NUMBER: ${{ steps.pr.outputs.number }}
+          PR_SHA: ${{ steps.pr.outputs.sha }}
           PR_SHORT_SHA: ${{ steps.pr.outputs.short_sha }}
           PR_REF: ${{ steps.pr.outputs.ref }}
           PR_BASE_REF: ${{ steps.pr.outputs.base_ref }}
+          BUILD_OUTPUT: ${{ steps.hugo-deploy.outputs.build-output }}
+          DEPLOY_OUTPUT: ${{ steps.hugo-deploy.outputs.deploy-output }}
+          IS_DRY_RUN: ${{ env.DRY_RUN }}
         with:
           script: |
             const { withRetry } = require('./.github/scripts/github-api-retry.js');
 
-            const marker = '<!-- deploy-result -->';
-            const prNumber = context.issue.number;
+            const prNumber = parseInt(process.env.PR_NUMBER, 10);
+            const prSha = process.env.PR_SHA;
             const sha = process.env.PR_SHORT_SHA;
             const ref = process.env.PR_REF;
             const baseRef = process.env.PR_BASE_REF;
             const runUrl = `${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}`;
-            const deployer = context.payload.comment.user.login;
+            const isDryRun = process.env.IS_DRY_RUN === 'true';
+
+            if (isDryRun) {
+              const body = [
+                '<!-- dependabot-auto-deploy -->',
+                '# Dependabot Auto-Deploy (Dry Run)',
+                '',
+                'Verification passed. Would have deployed, merged, and deleted the branch.',
+                '',
+                '| | |',
+                '|:--|:--|',
+                `| **Commit** | \`${sha}\` |`,
+                `| **Branch** | \`${ref}\` |`,
+                `| **Workflow run** | [#${context.runNumber}](${runUrl}) |`,
+                '',
+                'Remove the `DRY_RUN` env var in `dependabot-auto-deploy.yml` to enable live deploys.',
+              ].join('\n');
+
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: prNumber,
+                body,
+              });
+              return;
+            }
+
             const buildOutput = process.env.BUILD_OUTPUT || 'No output captured.';
             const deployOutput = process.env.DEPLOY_OUTPUT || 'No output captured.';
 
-            // React with rocket on success
-            try {
-              await github.rest.reactions.createForIssueComment({
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                comment_id: context.payload.comment.id,
-                content: 'rocket',
-              });
-            } catch (e) {
-              // Non-critical
-            }
-
-            // Merge the PR (retry transient failures)
+            // Squash merge with SHA guard (merge only if HEAD still matches)
             let merged = true;
             let mergeError = '';
             try {
@@ -153,6 +201,7 @@ jobs:
                     repo: context.repo.repo,
                     pull_number: prNumber,
                     merge_method: 'squash',
+                    sha: prSha,
                   }),
                 { attempts: 3, delayMs: 2000, label: 'Squash merge', core }
               );
@@ -161,7 +210,7 @@ jobs:
               mergeError = e.message;
             }
 
-            // Delete the branch (retry transient failures)
+            // Delete branch
             let branchDeleted = false;
             if (merged) {
               try {
@@ -181,20 +230,19 @@ jobs:
             }
 
             const mergeStatus = merged
-              ? `🔀 Merged \`${ref}\` → \`${baseRef}\`${branchDeleted ? ' and deleted the branch.' : '.'}`
-              : `⚠️ **Merge failed:** ${mergeError}\n\nThe deployment is live, but the PR must be merged manually.`;
+              ? `Merged \`${ref}\` into \`${baseRef}\`${branchDeleted ? ' and deleted the branch.' : '.'}`
+              : `**Merge failed:** ${mergeError}\n\nThe deployment is live, but the PR must be merged manually.`;
 
             const body = [
-              marker,
+              '<!-- dependabot-auto-deploy -->',
               '# Deployment Report',
               '',
-              '✅ **Deployed successfully** — changes are now live.',
+              'Deployed successfully via Dependabot auto-deploy.',
               '',
               '| | |',
               '|:--|:--|',
               `| **Commit** | \`${sha}\` |`,
-              `| **Branch** | \`${ref}\` → \`${baseRef}\` |`,
-              `| **Deployed by** | @${deployer} |`,
+              `| **Branch** | \`${ref}\` |`,
               `| **Workflow run** | [#${context.runNumber}](${runUrl}) |`,
               '',
               '---',
@@ -220,7 +268,6 @@ jobs:
               mergeStatus,
             ].join('\n');
 
-            // Post the deployment report (retry transient failures)
             await withRetry(
               () =>
                 github.rest.issues.createComment({
@@ -232,38 +279,26 @@ jobs:
               { attempts: 3, delayMs: 2000, label: 'Post deploy comment', core }
             );
 
-      # ── Failure: comment with error details ─────────────────────
+      # ── Report failure ──────────────────────────────────────────
       - name: Report failure
-        if: failure() && steps.pr.outcome == 'success'
+        if: failure() && steps.pr.outputs.number
         uses: actions/github-script@ed597411d8f924073f98dfc5c65a23a2325f34cd # v8.0.0
         env:
+          PR_NUMBER: ${{ steps.pr.outputs.number }}
+          PR_SHORT_SHA: ${{ steps.pr.outputs.short_sha }}
+          PR_REF: ${{ steps.pr.outputs.ref }}
           BUILD_EXIT: ${{ steps.hugo-deploy.outputs.build-exit-code }}
           BUILD_OUTPUT: ${{ steps.hugo-deploy.outputs.build-output }}
           DEPLOY_OUTPUT: ${{ steps.hugo-deploy.outputs.deploy-output }}
           DEPLOY_STDERR: ${{ steps.hugo-deploy.outputs.deploy-stderr }}
-          PR_SHORT_SHA: ${{ steps.pr.outputs.short_sha }}
-          PR_REF: ${{ steps.pr.outputs.ref }}
         with:
           script: |
             const { withRetry } = require('./.github/scripts/github-api-retry.js');
 
-            const marker = '<!-- deploy-result -->';
-            const prNumber = context.issue.number;
+            const prNumber = parseInt(process.env.PR_NUMBER, 10);
             const sha = process.env.PR_SHORT_SHA;
             const ref = process.env.PR_REF;
             const runUrl = `${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}`;
-
-            // React with -1 on failure
-            try {
-              await github.rest.reactions.createForIssueComment({
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                comment_id: context.payload.comment.id,
-                content: '-1',
-              });
-            } catch (e) {
-              // Non-critical
-            }
 
             const buildExit = process.env.BUILD_EXIT || '';
             const buildOutput = process.env.BUILD_OUTPUT || '';
@@ -274,7 +309,7 @@ jobs:
             if (buildExit === '') {
               failStage = 'Pre-deploy Checks';
               errorDetail =
-                'Validation or permission checks failed before the build started. See the workflow run for details.';
+                'Validation or setup failed before the build started. See the workflow run for details.';
             } else if (buildExit !== '0') {
               failStage = 'Hugo Build';
               errorDetail =
@@ -286,10 +321,10 @@ jobs:
             }
 
             const body = [
-              marker,
+              '<!-- dependabot-auto-deploy -->',
               '# Deployment Report',
               '',
-              `❌ **Deployment failed** at **${failStage}** — the PR remains open.`,
+              `Auto-deploy failed at **${failStage}**. The PR remains open for manual review.`,
               '',
               '| | |',
               '|:--|:--|',
@@ -310,10 +345,9 @@ jobs:
               '',
               '---',
               '',
-              '⚠️ Fix the issue, push a new commit, wait for validation to pass, then comment `deploy` to retry.',
+              'Fix the issue, push a new commit, and wait for validation. Auto-deploy will retry automatically.',
             ].join('\n');
 
-            // Post the failure report (retry transient failures)
             await withRetry(
               () =>
                 github.rest.issues.createComment({

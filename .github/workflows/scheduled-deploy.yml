@@ -5,9 +5,9 @@ on:
     - cron: "0 13 1,15 * *" # 1st and 15th at 9 AM ET (13:00 UTC)
   workflow_dispatch: # Manual trigger for on-demand rebuilds
 
-# Shares concurrency group with deploy.yml (PR deploys).
+# Shares concurrency group with deploy.yml and dependabot-auto-deploy.yml.
 # With cancel-in-progress: false, scheduled deploys queue behind
-# running PR deploys (and vice versa).
+# running PR or auto-deploys (and vice versa).
 concurrency:
   group: deploy-production
   cancel-in-progress: false
