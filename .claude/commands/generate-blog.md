@@ -39,11 +39,9 @@ Before forming any opinions, build a complete picture. Maximize parallel tool ca
 
 4. Read `.pa11yci` to confirm the file exists and note any existing blog post URLs.
 
-5. Read the writing guide's Section 14 (Quick Reference Card) in `docs/technical-blog-writing-guide.md`. This section contains the complete service page URL table, case study URL table, tag inventory, CTA templates, shortcode reference, and front matter template. Use it as the primary reference for link targets and tag validation. Do not read all 22 service/case study front matter files individually. Read individual page front matter or content only when you need to verify details for pages that will be directly linked or referenced in the post.
+5. Read the writing guide's **Section 14 (Quick Reference Card) only** from `docs/technical-blog-writing-guide.md`. This section contains the service page URL table, case study URL table, tag inventory, CTA templates, shortcode reference, and front matter template. Use it as the primary reference for link targets and tag validation. Do not read other sections of the writing guide; all craft guidance, quality checks, and operational rules are in this command. Do not read all service/case study front matter files individually. Read individual page front matter or content only when you need to verify details for pages that will be directly linked or referenced in the post.
 
-6. Read the writing guide's Section 5 (Writing Craft) and Section 12 (Blog Post Checklist) for craft patterns and quality checks. Do not read the entire guide; Sections 1-4, 7-10, and 13 are strategic background not needed during generation. If the guide's advice conflicts with this command's explicit instructions, this command takes precedence.
-
-7. **Tag inventory validation.** After reading the tag inventory from Section 14, run a quick grep across all content front matter (`content/*/index.md` and `content/*/*/index.md`) to extract actual tags in use. Diff against the Section 14 list. If tags exist in content but are missing from the inventory, flag them and add them to Section 14 during Phase 3. This prevents tag drift from accumulating across sessions.
+6. **Tag inventory validation.** After reading the tag inventory from Section 14, run a quick grep across all content front matter (`content/*/index.md` and `content/*/*/index.md`) to extract actual tags in use. Diff against the Section 14 list. If tags exist in content but are missing from the inventory, flag them and add them to Section 14 during Phase 3. This prevents tag drift from accumulating across sessions.
 
 ## Phase 2: Discover/Audit
 
@@ -97,7 +95,7 @@ Present a structured plan (title, post type, outline, link targets, word count t
 
 ### Polish mode
 
-Read the existing post. Run the full blog post checklist (writing guide Section 12) against it AND check for freshness issues. Present a combined audit:
+Read the existing post. Run the full quality audit (Phase 5 content quality audit table below) against it AND check for freshness issues. Present a combined audit:
 
 ```
 ## Post Audit: [title]
@@ -213,7 +211,7 @@ Blog posts use `draft: false` because content is approved during the Phase 2 dis
 
 **Description:** Serves as both meta description (what Google shows) and listing card text on `/blog/`. A weak description means lower click-through. Aim for 150-160 characters with the primary keyword included.
 
-**Tags:** Proper case for product names (`Terraform`, `AWS`, `Kubernetes`). Title case for discipline tags (`FinOps`, `Incident Response`). Reuse existing tags where possible. The tag inventory from Phase 1 step 7 is the reference set. If a proposed tag does not exist in the inventory, add it to the writing guide's tag list (Section 14, maintaining alphabetical order and pipe-separated formatting) during generation.
+**Tags:** Proper case for product names (`Terraform`, `AWS`, `Kubernetes`). Title case for discipline tags (`FinOps`, `Incident Response`). Reuse existing tags where possible. The tag inventory from Phase 1 step 6 is the reference set. If a proposed tag does not exist in the inventory, add it to the writing guide's tag list (Section 14, maintaining alphabetical order and pipe-separated formatting) during generation.
 
 **showDate:** Inherited from the blog cascade (`content/blog/_index.md` sets `showDate: false`). Do not include `showDate` in individual post front matter unless overriding to `true` for timely content (tool comparisons with version-specific conclusions, event recaps).
 
@@ -274,19 +272,32 @@ Case study: `For a deeper look at how this played out in practice, read our case
 | Deep Dive | Comprehensive single-topic coverage | 2,500+ | Architecture explanations with concrete examples |
 | Listicle | Numbered items, each standalone | 1,500-2,000 | Each item needs a concrete example or metric, not generic advice |
 
-Word count target is driven by post type (above). Adjust upward for higher keyword difficulty (see writing guide Section 6). **Target the midpoint of the range** (e.g., 1,750 for a 1,500-2,000 range). It is cheaper to trim excess than to expand thin content. If the draft falls below the minimum after writing, expand before proceeding to Phase 4.
+Word count target is driven by post type (above). Adjust upward for higher keyword difficulty:
+
+| Keyword Difficulty | Recommended Word Count | Notes |
+|-------------------|----------------------|-------|
+| Low (0-30) | 800-1,500 words | Long-tail queries, niche topics |
+| Medium (30-60) | 1,500-2,500 words | Competitive but targeted |
+| High (60+) | 2,500+ words | Requires comprehensive coverage to compete |
+
+For a new blog on a new domain, target low and medium difficulty keywords first. **Target the midpoint of the range** (e.g., 1,750 for a 1,500-2,000 range). It is cheaper to trim excess than to expand thin content. If the draft falls below the minimum after writing, expand before proceeding to Phase 4.
 
 ### Generation guidelines
 
 - Use ALL portfolio data as context: work highlights, skills, certs, projects. Weave experience naturally into the narrative rather than citing it explicitly.
 - Show the decision-making process, not just the solution. Explain WHY one approach was chosen over alternatives. Include the non-obvious lesson or the thing that surprised you. Generic advice fails the mini-consulting test.
+- **Storytelling with data.** Stories are 22x more memorable than statistics alone. Combine narrative with specific metrics:
+  - Weak: "Terraform reduces infrastructure deployment time."
+  - Strong: "The team was deploying changes through a manual runbook that took 2 hours per environment. After codifying the process in Terraform with Atlantis for CI/CD, the same change took 8 minutes and went through code review."
+- **PAR framework** for war stories and case study extracts: Problem (what was broken and why it mattered), Action (what you did; this is where the judgment lives), Result (specific, measurable outcomes).
 - No em dashes. Use commas, semicolons, parens, or periods instead. After writing, search the generated content for `—` before proceeding.
 - No raw HTML. Goldmark runs with `unsafe = false`; raw HTML will be stripped. Use shortcodes instead: `{{< tech-tags >}}`, `{{< steps >}}`, `{{< faqs >}}`, `{{% metric %}}`.
 - Code blocks must have language annotations (` ```hcl `, ` ```yaml `, etc.) and a version comment (e.g., `# Tested with Terraform 1.9`, `# Requires EKS 1.29+`). Code must be complete and functional, not fragments requiring assembly.
 - Internal links are mandatory. Every post must link to at least 1 service page and 1 case study. Find the best matches by comparing the post's tags and topic against service page and case study tags collected during Phase 1. Additional internal links (to other blog posts, the about page, etc.) are encouraged for hub-and-spoke linking.
+- **Bidirectional linking.** When publishing a new blog post, also update 2-3 related existing pages (other blog posts, case studies, or service pages) to link back to the new post. Orphaned pages with no inbound internal links are harder for search engines to discover.
 - Heading hierarchy: H2 then H3, never skip levels. H1 is the page title (set by Hugo).
 - Accessibility: descriptive alt text on content images, language annotations on code blocks, descriptive link text (not "click here").
-- Read at least 2 existing blog posts for tone calibration before writing. If fewer than 2 published posts exist (posts with `draft: false`), calibrate tone from the writing guide's craft section (Section 5) and existing service/case study pages instead.
+- Read at least 2 existing blog posts for tone calibration before writing. If fewer than 2 published posts exist (posts with `draft: false`), calibrate tone from existing service/case study pages instead.
 - **Answer-first enforcement.** For every H2 phrased as a question (starting with What, Why, How, When), write the answer-first paragraph (40-60 words) before writing the rest of that section. Verify each answer-first paragraph meets the 40-60 word target during drafting, not just in Phase 5 verification.
 - **Description length.** Count the description character length immediately after writing it. Adjust to 150-160 characters before proceeding to body content.
 - **Date collisions.** If another blog post already exists with today's date, use a time offset in the date field (e.g., `2026-04-06T12:00:00-04:00` vs `2026-04-06T00:00:00-04:00`) to ensure deterministic sort order on the listing page. Newer posts should use a later time.
