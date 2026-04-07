@@ -1,5 +1,13 @@
-import { describe, it, expect, beforeEach, afterEach, beforeAll } from "vitest";
-import { SELF, fetchMock } from "cloudflare:test";
+import {
+  describe,
+  it,
+  expect,
+  beforeEach,
+  afterEach,
+  beforeAll,
+  vi,
+} from "vitest";
+import { exports } from "cloudflare:workers";
 import {
   validateFields,
   hasCRLF,
@@ -249,30 +257,25 @@ describe("isRateLimited", () => {
 });
 
 // ---------------------------------------------------------------------------
-// handleContactForm (via SELF integration tests)
+// handleContactForm (via exports.default integration tests)
 // ---------------------------------------------------------------------------
 
 describe("handleContactForm", () => {
-  beforeAll(() => {
-    fetchMock.activate();
-    fetchMock.disableNetConnect();
-  });
-
   beforeEach(() => {
     rateLimitMap.clear();
-    fetchMock.deactivate();
-    fetchMock.activate();
-    fetchMock.disableNetConnect();
+    vi.spyOn(globalThis, "fetch").mockRejectedValue(
+      new Error("Unexpected outbound fetch"),
+    );
   });
 
   afterEach(() => {
-    fetchMock.deactivate();
+    vi.restoreAllMocks();
   });
 
   // -- Method checks -------------------------------------------------------
 
   it("returns 405 for non-POST request", async () => {
-    const res = await SELF.fetch("https://example.com/api/contact", {
+    const res = await exports.default.fetch("https://example.com/api/contact", {
       method: "GET",
     });
     expect(res.status).toBe(405);
@@ -283,7 +286,7 @@ describe("handleContactForm", () => {
   // -- JSON parsing ---------------------------------------------------------
 
   it("returns 400 for invalid JSON body", async () => {
-    const res = await SELF.fetch("https://example.com/api/contact", {
+    const res = await exports.default.fetch("https://example.com/api/contact", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: "not json",
@@ -296,7 +299,7 @@ describe("handleContactForm", () => {
   // -- Rate limiting --------------------------------------------------------
 
   it("returns 429 when rate limited", async () => {
-    // Exhaust rate limit for the "unknown" IP (no CF-Connecting-IP header in SELF)
+    // Exhaust rate limit for the "unknown" IP (no CF-Connecting-IP header via exports.default.fetch)
     for (let i = 0; i < 5; i++) {
       rateLimitMap.set("unknown", [
         Date.now(),
@@ -307,7 +310,7 @@ describe("handleContactForm", () => {
       ]);
     }
 
-    const res = await SELF.fetch("https://example.com/api/contact", {
+    const res = await exports.default.fetch("https://example.com/api/contact", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(validBody()),
@@ -320,7 +323,7 @@ describe("handleContactForm", () => {
   // -- Honeypot -------------------------------------------------------------
 
   it("silently accepts when honeypot field is present", async () => {
-    const res = await SELF.fetch("https://example.com/api/contact", {
+    const res = await exports.default.fetch("https://example.com/api/contact", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ ...validBody(), website: "http://spam.example" }),
@@ -333,7 +336,7 @@ describe("handleContactForm", () => {
   // -- Validation errors ----------------------------------------------------
 
   it("returns 400 with first validation error", async () => {
-    const res = await SELF.fetch("https://example.com/api/contact", {
+    const res = await exports.default.fetch("https://example.com/api/contact", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ name: "", email: "", message: "" }),
@@ -347,7 +350,7 @@ describe("handleContactForm", () => {
 
   it("returns 400 when email contains trailing CRLF", async () => {
     // Trailing \n passes regex after trim() but triggers the hasCRLF check
-    const res = await SELF.fetch("https://example.com/api/contact", {
+    const res = await exports.default.fetch("https://example.com/api/contact", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(validBody({ email: "jane@example.com\n" })),
@@ -358,7 +361,7 @@ describe("handleContactForm", () => {
   });
 
   it("returns 400 when name contains CRLF (header injection)", async () => {
-    const res = await SELF.fetch("https://example.com/api/contact", {
+    const res = await exports.default.fetch("https://example.com/api/contact", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(
@@ -373,10 +376,10 @@ describe("handleContactForm", () => {
   // -- Missing env secrets --------------------------------------------------
 
   it("returns 503 when env secrets are missing", async () => {
-    // SELF uses the env from wrangler.toml, which has no secrets configured.
+    // exports.default.fetch() uses the env from wrangler.toml, which has no secrets configured.
     // We send a valid request that passes validation and CRLF checks.
     // Since TURNSTILE_SECRET_KEY and RESEND_API_KEY are not set, it returns 503.
-    const res = await SELF.fetch("https://example.com/api/contact", {
+    const res = await exports.default.fetch("https://example.com/api/contact", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(validBody()),
@@ -398,19 +401,17 @@ describe("handleContactForm with secrets", () => {
 
   beforeAll(async () => {
     worker = (await import("./worker.js")).default;
-    fetchMock.activate();
-    fetchMock.disableNetConnect();
   });
 
   beforeEach(() => {
     rateLimitMap.clear();
-    fetchMock.deactivate();
-    fetchMock.activate();
-    fetchMock.disableNetConnect();
+    vi.spyOn(globalThis, "fetch").mockRejectedValue(
+      new Error("Unexpected outbound fetch"),
+    );
   });
 
   afterEach(() => {
-    fetchMock.deactivate();
+    vi.restoreAllMocks();
   });
 
   function mockEnv(overrides = {}) {
@@ -454,12 +455,15 @@ describe("handleContactForm with secrets", () => {
   // -- Failed Turnstile verification ----------------------------------------
 
   it("returns 403 when Turnstile verification fails", async () => {
-    fetchMock
-      .get("https://challenges.cloudflare.com")
-      .intercept({ path: "/turnstile/v0/siteverify", method: "POST" })
-      .reply(200, JSON.stringify({ success: false }), {
-        headers: { "Content-Type": "application/json" },
-      });
+    vi.spyOn(globalThis, "fetch").mockImplementation(async (input) => {
+      const url = typeof input === "string" ? input : input.url;
+      if (url.includes("challenges.cloudflare.com/turnstile/v0/siteverify")) {
+        return new Response(JSON.stringify({ success: false }), {
+          headers: { "Content-Type": "application/json" },
+        });
+      }
+      throw new Error(`Unexpected fetch: ${url}`);
+    });
 
     const req = contactRequest(validBody());
     const res = await worker.fetch(req, mockEnv());
@@ -471,10 +475,9 @@ describe("handleContactForm with secrets", () => {
   // -- Turnstile network failure (catch branch) ------------------------------
 
   it("returns 500 when Turnstile API call throws", async () => {
-    fetchMock
-      .get("https://challenges.cloudflare.com")
-      .intercept({ path: "/turnstile/v0/siteverify", method: "POST" })
-      .replyWithError(new Error("DNS resolution failed"));
+    vi.spyOn(globalThis, "fetch").mockRejectedValue(
+      new Error("DNS resolution failed"),
+    );
 
     const req = contactRequest(validBody());
     const res = await worker.fetch(req, mockEnv());
@@ -486,19 +489,20 @@ describe("handleContactForm with secrets", () => {
   // -- Successful end-to-end flow -------------------------------------------
 
   it("returns 200 on successful Turnstile + Resend flow", async () => {
-    fetchMock
-      .get("https://challenges.cloudflare.com")
-      .intercept({ path: "/turnstile/v0/siteverify", method: "POST" })
-      .reply(200, JSON.stringify({ success: true }), {
-        headers: { "Content-Type": "application/json" },
-      });
-
-    fetchMock
-      .get("https://api.resend.com")
-      .intercept({ path: "/emails", method: "POST" })
-      .reply(200, JSON.stringify({ id: "msg_123" }), {
-        headers: { "Content-Type": "application/json" },
-      });
+    vi.spyOn(globalThis, "fetch").mockImplementation(async (input) => {
+      const url = typeof input === "string" ? input : input.url;
+      if (url.includes("challenges.cloudflare.com/turnstile/v0/siteverify")) {
+        return new Response(JSON.stringify({ success: true }), {
+          headers: { "Content-Type": "application/json" },
+        });
+      }
+      if (url.includes("api.resend.com/emails")) {
+        return new Response(JSON.stringify({ id: "msg_123" }), {
+          headers: { "Content-Type": "application/json" },
+        });
+      }
+      throw new Error(`Unexpected fetch: ${url}`);
+    });
 
     const req = contactRequest(validBody());
     const res = await worker.fetch(req, mockEnv());
@@ -510,19 +514,21 @@ describe("handleContactForm with secrets", () => {
   // -- Resend returns non-ok status -----------------------------------------
 
   it("returns 500 when Resend API returns non-ok", async () => {
-    fetchMock
-      .get("https://challenges.cloudflare.com")
-      .intercept({ path: "/turnstile/v0/siteverify", method: "POST" })
-      .reply(200, JSON.stringify({ success: true }), {
-        headers: { "Content-Type": "application/json" },
-      });
-
-    fetchMock
-      .get("https://api.resend.com")
-      .intercept({ path: "/emails", method: "POST" })
-      .reply(500, JSON.stringify({ error: "internal" }), {
-        headers: { "Content-Type": "application/json" },
-      });
+    vi.spyOn(globalThis, "fetch").mockImplementation(async (input) => {
+      const url = typeof input === "string" ? input : input.url;
+      if (url.includes("challenges.cloudflare.com/turnstile/v0/siteverify")) {
+        return new Response(JSON.stringify({ success: true }), {
+          headers: { "Content-Type": "application/json" },
+        });
+      }
+      if (url.includes("api.resend.com/emails")) {
+        return new Response(JSON.stringify({ error: "internal" }), {
+          status: 500,
+          headers: { "Content-Type": "application/json" },
+        });
+      }
+      throw new Error(`Unexpected fetch: ${url}`);
+    });
 
     const req = contactRequest(validBody());
     const res = await worker.fetch(req, mockEnv());
@@ -534,17 +540,18 @@ describe("handleContactForm with secrets", () => {
   // -- Resend throws --------------------------------------------------------
 
   it("returns 500 when Resend API call throws", async () => {
-    fetchMock
-      .get("https://challenges.cloudflare.com")
-      .intercept({ path: "/turnstile/v0/siteverify", method: "POST" })
-      .reply(200, JSON.stringify({ success: true }), {
-        headers: { "Content-Type": "application/json" },
-      });
-
-    fetchMock
-      .get("https://api.resend.com")
-      .intercept({ path: "/emails", method: "POST" })
-      .replyWithError(new Error("network failure"));
+    vi.spyOn(globalThis, "fetch").mockImplementation(async (input) => {
+      const url = typeof input === "string" ? input : input.url;
+      if (url.includes("challenges.cloudflare.com/turnstile/v0/siteverify")) {
+        return new Response(JSON.stringify({ success: true }), {
+          headers: { "Content-Type": "application/json" },
+        });
+      }
+      if (url.includes("api.resend.com/emails")) {
+        throw new Error("network failure");
+      }
+      throw new Error(`Unexpected fetch: ${url}`);
+    });
 
     const req = contactRequest(validBody());
     const res = await worker.fetch(req, mockEnv());
