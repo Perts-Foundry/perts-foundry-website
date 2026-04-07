@@ -35,7 +35,7 @@ The dev server is not needed for non-visual changes (CI config, worker code, doc
 All ten checks must pass before a PR can merge. Run these locally before pushing:
 
 ### 1. Vitest (Worker unit tests)
-Runs the 43 Worker unit/integration tests. Config: `vitest.config.js`.
+Runs the 43 Worker unit/integration tests. Config: `vitest.config.mjs`.
 ```bash
 npx vitest run
 ```
@@ -257,7 +257,7 @@ Social links are configured via `author.links` in `config/_default/languages.en.
 ### Testing
 
 The Worker has 43 unit tests using Vitest with `@cloudflare/vitest-pool-workers`.
-Config: `vitest.config.js`. Test file: `src/worker.test.js`.
+Config: `vitest.config.mjs`. Test file: `src/worker.test.js`.
 
 ```bash
 npx vitest run
