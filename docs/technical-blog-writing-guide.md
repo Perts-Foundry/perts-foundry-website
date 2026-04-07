@@ -1065,23 +1065,23 @@ showDate: false
 | Markdown only | No raw HTML; `goldmark.renderer.unsafe = false` |
 | Internal links | At least 1 service page + 1 case study per post |
 
-### Existing Tags (43 total)
+### Existing Tags (44 total)
 
 Tags are used for related content cross-linking. Reuse these before creating new ones.
 
 | Tag | Tag | Tag | Tag |
 |-----|-----|-----|-----|
 | Agile | AI | ArgoCD | Atlantis |
-| AWS | Azure | Bash | Claude |
-| CloudFormation | CodeRabbit | Confluence | Containers |
-| Cursor | DevOps | Docker | ECR |
-| ECS | EKS | FinOps | GAR |
-| GCR | GCP | GCS | GKE |
-| GitHub | GitHub Actions | GitHub Copilot | HCP |
-| Helm | Incident Response | Infrastructure | Jenkins |
-| Jira | Jira Service Desk | Kanban | Kubernetes |
-| NFS | Renovatebot | RHEL | Snyk |
-| Snowflake | Terraform | Vault | |
+| AWS | Azure | Bash | CI/CD |
+| Claude | CloudFormation | CodeRabbit | Confluence |
+| Containers | Cursor | DevOps | Docker |
+| ECR | ECS | EKS | FinOps |
+| GAR | GCR | GCP | GCS |
+| GKE | GitHub | GitHub Actions | GitHub Copilot |
+| HCP | Helm | Incident Response | Infrastructure |
+| Jenkins | Jira | Jira Service Desk | Kanban |
+| Kubernetes | NFS | Renovatebot | RHEL |
+| Snyk | Snowflake | Terraform | Vault |
 
 ### Service Page URLs (10)
 
