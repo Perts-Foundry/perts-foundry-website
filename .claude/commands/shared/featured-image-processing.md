@@ -10,7 +10,7 @@ Shared specification for processing featured images across all content generatio
 | Format | JPEG, quality 85 |
 | Target file size | 200-400KB |
 | Logo overlay | `static/img/logo/perts-foundry-icon-64.png`, southeast gravity |
-| Watermark cover | 100x100px dark rectangle (#050710) under the logo to cover AI generator watermarks |
+| Watermark cover | 68x68px dark rectangle (#050710) under the logo to cover AI generator watermarks |
 
 ## Workflow
 
@@ -44,8 +44,8 @@ sharp('<USER_PROVIDED_PATH>')
     {
       input: {
         create: {
-          width: 100,
-          height: 100,
+          width: 68,
+          height: 68,
           channels: 3,
           background: { r: 5, g: 7, b: 16 }
         }
