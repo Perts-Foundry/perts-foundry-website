@@ -18,6 +18,7 @@ jobs:
     if: github.event.issue.pull_request && github.event.comment.body == 'deploy'
     runs-on: ubuntu-24.04
     timeout-minutes: 15
+    environment: production
     steps:
       - name: React with eyes
         continue-on-error: true

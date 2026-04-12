@@ -333,52 +333,11 @@ describe("handleContactForm", () => {
     expect(body.success).toBe(true);
   });
 
-  // -- Validation errors ----------------------------------------------------
-
-  it("returns 400 with first validation error", async () => {
-    const res = await exports.default.fetch("https://example.com/api/contact", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ name: "", email: "", message: "" }),
-    });
-    expect(res.status).toBe(400);
-    const body = await res.json();
-    expect(body.error).toBe("Name is required.");
-  });
-
-  // -- CRLF injection check ------------------------------------------------
-
-  it("returns 400 when email contains trailing CRLF", async () => {
-    // Trailing \n passes regex after trim() but triggers the hasCRLF check
-    const res = await exports.default.fetch("https://example.com/api/contact", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(validBody({ email: "jane@example.com\n" })),
-    });
-    expect(res.status).toBe(400);
-    const body = await res.json();
-    expect(body.error).toContain("Invalid");
-  });
-
-  it("returns 400 when name contains CRLF (header injection)", async () => {
-    const res = await exports.default.fetch("https://example.com/api/contact", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(
-        validBody({ name: "Jane\r\nBcc: attacker@evil.com" }),
-      ),
-    });
-    expect(res.status).toBe(400);
-    const body = await res.json();
-    expect(body.error).toContain("Invalid");
-  });
-
   // -- Missing env secrets --------------------------------------------------
 
   it("returns 503 when env secrets are missing", async () => {
     // exports.default.fetch() uses the env from wrangler.toml, which has no secrets configured.
-    // We send a valid request that passes validation and CRLF checks.
-    // Since TURNSTILE_SECRET_KEY and RESEND_API_KEY are not set, it returns 503.
+    // Secrets check happens before Turnstile and field validation.
     const res = await exports.default.fetch("https://example.com/api/contact", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -425,10 +384,62 @@ describe("handleContactForm with secrets", () => {
     };
   }
 
+  // Helper: mock Turnstile to pass so we can test downstream validation
+  function mockTurnstilePass() {
+    vi.spyOn(globalThis, "fetch").mockImplementation(async (input) => {
+      const url = typeof input === "string" ? input : input.url;
+      if (url.includes("challenges.cloudflare.com/turnstile/v0/siteverify")) {
+        return new Response(JSON.stringify({ success: true }), {
+          headers: { "Content-Type": "application/json" },
+        });
+      }
+      throw new Error(`Unexpected fetch: ${url}`);
+    });
+  }
+
+  // -- Validation errors (after Turnstile passes) -----------------------------
+
+  it("returns 400 with first validation error", async () => {
+    mockTurnstilePass();
+    const body = {
+      name: "",
+      email: "",
+      message: "",
+      "cf-turnstile-response": "test-token",
+    };
+    const req = contactRequest(body);
+    const res = await worker.fetch(req, mockEnv());
+    expect(res.status).toBe(400);
+    const data = await res.json();
+    expect(data.error).toBe("Name is required.");
+  });
+
+  // -- CRLF injection check (after Turnstile passes) --------------------------
+
+  it("returns 400 when email contains trailing CRLF", async () => {
+    mockTurnstilePass();
+    const req = contactRequest(validBody({ email: "jane@example.com\n" }));
+    const res = await worker.fetch(req, mockEnv());
+    expect(res.status).toBe(400);
+    const data = await res.json();
+    expect(data.error).toContain("Invalid");
+  });
+
+  it("returns 400 when name contains CRLF (header injection)", async () => {
+    mockTurnstilePass();
+    const req = contactRequest(
+      validBody({ name: "Jane\r\nBcc: attacker@evil.com" }),
+    );
+    const res = await worker.fetch(req, mockEnv());
+    expect(res.status).toBe(400);
+    const data = await res.json();
+    expect(data.error).toContain("Invalid");
+  });
+
   // -- Body size enforcement ----------------------------------------------------
 
-  it("returns 413 when request body exceeds 10000 bytes", async () => {
-    const oversized = { ...validBody(), message: "x".repeat(11000) };
+  it("returns 413 when request body exceeds 4000 bytes", async () => {
+    const oversized = { ...validBody(), message: "x".repeat(5000) };
     const req = new Request("https://example.com/api/contact", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
