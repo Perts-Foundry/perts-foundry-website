@@ -3,7 +3,7 @@
 ## Reporting a Vulnerability
 
 If you discover a security vulnerability in this project, please report it
-responsibly by emailing security@pertsfoundry.com.
+responsibly by emailing contact@pertsfoundry.com.
 
 Please do not open a public GitHub issue for security vulnerabilities.
 
