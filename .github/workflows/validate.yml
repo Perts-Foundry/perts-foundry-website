@@ -319,6 +319,20 @@ jobs:
             echo "GHEOF"
           } >> "$GITHUB_OUTPUT"
 
+      # ── TruffleHog ────────────────────────────────────────────
+      - name: Run TruffleHog
+        id: trufflehog
+        run: |
+          set +e
+          docker run --rm -v "$(pwd):/src" trufflesecurity/trufflehog:latest git file:///src --only-verified --no-update 2>&1 | tee /tmp/trufflehog.out
+          EXIT_CODE=${PIPESTATUS[0]}
+          echo "exit_code=$EXIT_CODE" >> "$GITHUB_OUTPUT"
+          {
+            echo "output<<GHEOF"
+            tail -30 /tmp/trufflehog.out
+            echo "GHEOF"
+          } >> "$GITHUB_OUTPUT"
+
       # ── markdownlint ────────────────────────────────────────────
       - name: Run markdownlint
         id: markdownlint
@@ -379,6 +393,7 @@ jobs:
           EXIT_HTMLTEST: ${{ steps.htmltest.outputs.exit_code }}
           EXIT_PA11Y: ${{ steps.pa11y.outputs.exit_code }}
           EXIT_GITLEAKS: ${{ steps.gitleaks.outputs.exit_code }}
+          EXIT_TRUFFLEHOG: ${{ steps.trufflehog.outputs.exit_code }}
           EXIT_MDLINT: ${{ steps.markdownlint.outputs.exit_code }}
           EXIT_PRETTIER: ${{ steps.prettier.outputs.exit_code }}
           EXIT_ACTIONLINT: ${{ steps.actionlint.outputs.exit_code }}
@@ -395,6 +410,7 @@ jobs:
             "htmltest:HTML:$EXIT_HTMLTEST"
             "pa11y:A11y:$EXIT_PA11Y"
             "gitleaks:Security:$EXIT_GITLEAKS"
+            "trufflehog:Verified:$EXIT_TRUFFLEHOG"
             "markdownlint:Lint:$EXIT_MDLINT"
             "prettier:Format:$EXIT_PRETTIER"
             "actionlint:CI:$EXIT_ACTIONLINT"
@@ -435,6 +451,7 @@ jobs:
           EXIT_HTMLTEST: ${{ steps.htmltest.outputs.exit_code }}
           EXIT_PA11Y: ${{ steps.pa11y.outputs.exit_code }}
           EXIT_GITLEAKS: ${{ steps.gitleaks.outputs.exit_code }}
+          EXIT_TRUFFLEHOG: ${{ steps.trufflehog.outputs.exit_code }}
           EXIT_MDLINT: ${{ steps.markdownlint.outputs.exit_code }}
           EXIT_PRETTIER: ${{ steps.prettier.outputs.exit_code }}
           EXIT_ACTIONLINT: ${{ steps.actionlint.outputs.exit_code }}
@@ -445,6 +462,7 @@ jobs:
           OUTPUT_HTMLTEST: ${{ steps.htmltest.outputs.output }}
           OUTPUT_PA11Y: ${{ steps.pa11y.outputs.output }}
           OUTPUT_GITLEAKS: ${{ steps.gitleaks.outputs.output }}
+          OUTPUT_TRUFFLEHOG: ${{ steps.trufflehog.outputs.output }}
           OUTPUT_MDLINT: ${{ steps.markdownlint.outputs.output }}
           OUTPUT_PRETTIER: ${{ steps.prettier.outputs.output }}
           OUTPUT_ACTIONLINT: ${{ steps.actionlint.outputs.output }}
@@ -477,6 +495,7 @@ jobs:
             const htmltest = process.env.EXIT_HTMLTEST || '';
             const pa11y = process.env.EXIT_PA11Y || '';
             const gitleaks = process.env.EXIT_GITLEAKS || '';
+            const trufflehog = process.env.EXIT_TRUFFLEHOG || '';
             const mdlint = process.env.EXIT_MDLINT || '';
             const prettier = process.env.EXIT_PRETTIER || '';
             const actionlint = process.env.EXIT_ACTIONLINT || '';
@@ -489,6 +508,7 @@ jobs:
             const htmltestOutput = process.env.OUTPUT_HTMLTEST || 'Skipped (build failed)';
             const pa11yOutput = process.env.OUTPUT_PA11Y || 'Skipped (build failed)';
             const gitleaksOutput = process.env.OUTPUT_GITLEAKS || 'No issues found';
+            const trufflehogOutput = process.env.OUTPUT_TRUFFLEHOG || 'No issues found';
             const mdlintOutput = process.env.OUTPUT_MDLINT || 'No issues found';
             const prettierOutput = process.env.OUTPUT_PRETTIER || 'No issues found';
             const actionlintOutput = process.env.OUTPUT_ACTIONLINT || 'No issues found';
@@ -527,6 +547,7 @@ jobs:
               `| Check | Tool | Result |`,
               `|:------|:-----|:------:|`,
               `| **Secret Detection** | \`gitleaks\` | ${status(gitleaks)} |`,
+              `| **Verified Secrets** | \`trufflehog\` | ${status(trufflehog)} |`,
               '',
               '---',
               '',
@@ -609,6 +630,14 @@ jobs:
               '```',
               '',
               '</details>',
+              '',
+              '<details><summary><strong>Verified Secrets</strong> (<code>trufflehog</code>)</summary>',
+              '',
+              '```',
+              trufflehogOutput,
+              '```',
+              '',
+              '</details>',
             ].join('\n');
 
             const { data: comments } = await github.rest.issues.listComments({
@@ -645,6 +674,7 @@ jobs:
           EXIT_HTMLTEST: ${{ steps.htmltest.outputs.exit_code }}
           EXIT_PA11Y: ${{ steps.pa11y.outputs.exit_code }}
           EXIT_GITLEAKS: ${{ steps.gitleaks.outputs.exit_code }}
+          EXIT_TRUFFLEHOG: ${{ steps.trufflehog.outputs.exit_code }}
           EXIT_MDLINT: ${{ steps.markdownlint.outputs.exit_code }}
           EXIT_PRETTIER: ${{ steps.prettier.outputs.exit_code }}
           EXIT_ACTIONLINT: ${{ steps.actionlint.outputs.exit_code }}
@@ -665,6 +695,7 @@ jobs:
             echo "::error::pa11y-ci accessibility check failed" && FAILED=1
           fi
           [ "$EXIT_GITLEAKS" != "0" ] && echo "::error::Gitleaks detected potential secrets" && FAILED=1
+          [ "$EXIT_TRUFFLEHOG" != "0" ] && echo "::error::TruffleHog detected verified secrets" && FAILED=1
           [ "$EXIT_MDLINT" != "0" ] && echo "::error::markdownlint failed" && FAILED=1
           [ "$EXIT_ACTIONLINT" != "0" ] && echo "::error::actionlint failed" && FAILED=1
           [ "$EXIT_PRETTIER" != "0" ] && echo "::error::Prettier found formatting issues" && FAILED=1
