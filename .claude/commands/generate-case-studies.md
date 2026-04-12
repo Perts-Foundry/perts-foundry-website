@@ -45,8 +45,8 @@ Mine `work.yaml` for case study candidates and assess existing pages.
 
 Analyze all work.yaml highlights for case study potential. Prioritize sources:
 
-1. **`pf-*` work entries** (Perts Foundry consulting engagements). These map directly to case study candidates. Use the `summary` field text as a starting point for anonymized client descriptors (e.g., "[REDACTED]" from "Embedded with an [REDACTED]"), but the user will choose the final descriptor during Phase 2 review. Both `pf-*` entries share the same client; to reduce the anonymization correlation surface (SPEC-5), VARY the client descriptor across case studies from the same client (e.g., "enterprise data platform" for one, "enterprise SaaS platform" for another, "large SaaS company" for a third). Present descriptor options during Phase 2 for user selection.
-2. **Pre-founding entries** (AWS, [REDACTED]) are **legacy content and must not be regenerated**. Three pre-founding case studies already exist in the repo (`container-expertise-aws`, `agile-transformation-defense`, `cicd-modernization-defense`) and should be treated as read-only. Do not propose candidates from pre-founding work entries during Phase 2. If `work.yaml` adds new pre-founding highlights, flag them as "pre-founding; skipped per convention" in the Phase 2 report but do not generate pages for them. All newly generated case studies use the `pf-*` body structure and voice defined below.
+1. **`pf-*` work entries** (Perts Foundry consulting engagements). These map directly to case study candidates. Use the `summary` field text as a starting point for anonymized client descriptors (e.g., "enterprise data platform" from the work entry summary field), but the user will choose the final descriptor during Phase 2 review. Both `pf-*` entries share the same client; to reduce the anonymization correlation surface (SPEC-5), VARY the client descriptor across case studies from the same client (e.g., "enterprise data platform" for one, "enterprise SaaS platform" for another, "large SaaS company" for a third). Present descriptor options during Phase 2 for user selection.
+2. **Pre-founding entries** (AWS, defense) are **legacy content and must not be regenerated**. Three pre-founding case studies already exist in the repo (`container-expertise-aws`, `agile-transformation-defense`, `cicd-modernization-defense`) and should be treated as read-only. Do not propose candidates from pre-founding work entries during Phase 2. If `work.yaml` adds new pre-founding highlights, flag them as "pre-founding; skipped per convention" in the Phase 2 report but do not generate pages for them. All newly generated case studies use the `pf-*` body structure and voice defined below.
 
 Group related highlights thematically. A single work entry may yield multiple case studies, and a single case study may draw from multiple work entries. Many candidates will be narrative-rich rather than metric-rich; this is expected and not a deficiency. Strong candidates have any of:
 - Quantifiable outcomes ("$125K savings", "85% reduction", "zero downtime")
@@ -135,7 +135,7 @@ Do not write any pages to disk until the user has reviewed the report (batch) or
 - Use anonymized client descriptors chosen during Phase 2 review. The work.yaml `summary` field is a starting point, not the final descriptor. Do not introduce new identifying details beyond what work.yaml already contains.
 - Apply all anonymization boundaries defined in Phase 1, step 3 (the shared anonymization spec).
 - For AWS entries, the employer name is not confidential.
-- For [REDACTED] entries, use "a defense software organization" rather than the full department name.
+- For defense entries, use "a defense software organization" rather than the specific organization name.
 
 ## Phase 3: Generate
 
@@ -387,7 +387,7 @@ Flag any of these that apply:
 | Put the anonymization notice at the top of the body | Place it at the bottom, after Key Technologies and before the Related services callback | Matches the established convention across existing case studies |
 | Skip the Related service callback | End every page with `**Related service:**` linking the matching service page (singular is default; use `**Related services:**` plural only when two services genuinely apply) | Drives internal cross-linking for SEO and reader navigation |
 | Skip the anonymization notice | Include on every newly generated page: `_This case study has been anonymized at the client's request._` placed between Key Technologies and the Related service callback | Trust signal for current and prospective clients |
-| Regenerate pre-founding case studies (AWS, [REDACTED]) | Treat the three existing pre-founding pages as read-only; do not propose candidates from pre-founding work entries | Pre-founding case studies are legacy content with different voice conventions |
+| Regenerate pre-founding case studies (AWS, defense) | Treat the three existing pre-founding pages as read-only; do not propose candidates from pre-founding work entries | Pre-founding case studies are legacy content with different voice conventions |
 | Put after-only metrics in the before/after table | Weave after-only metrics into the narrative paragraph | Empty "before" cells undermine the table's credibility |
 | Generate content from assumed data | Flag gaps in Phase 5 rather than inventing details | Credibility depends on accuracy |
 | Leave orphaned directories after a slug change | Delete old directory before creating new | Orphaned pages create duplicate content |
