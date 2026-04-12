@@ -44,6 +44,8 @@ function jsonResponse(body, status = 200) {
       "Content-Type": "application/json",
       "X-Content-Type-Options": "nosniff",
       "Cache-Control": "no-store",
+      "Referrer-Policy": "strict-origin-when-cross-origin",
+      "X-Frame-Options": "DENY",
     },
   });
 }
@@ -139,7 +141,7 @@ async function handleContactForm(request, env) {
   } catch {
     return jsonResponse({ error: "Invalid request." }, 400);
   }
-  if (bodyText.length > 10000) {
+  if (bodyText.length > 4000) {
     return jsonResponse({ error: "Request too large." }, 413);
   }
 
@@ -150,20 +152,13 @@ async function handleContactForm(request, env) {
     return jsonResponse({ error: "Invalid request." }, 400);
   }
 
+  if (typeof data !== "object" || data === null || Array.isArray(data)) {
+    return jsonResponse({ error: "Invalid request." }, 400);
+  }
+
   // Honeypot check
   if (data.website) {
-    // Silently accept to avoid tipping off bots
     return jsonResponse({ success: true });
-  }
-
-  const errors = validateFields(data);
-  if (errors.length > 0) {
-    return jsonResponse({ error: errors[0] }, 400);
-  }
-
-  // Sanitize against email header injection (reply-to and subject)
-  if (hasCRLF(data.email) || hasCRLF(data.name)) {
-    return jsonResponse({ error: "Invalid characters in input." }, 400);
   }
 
   // Check that secrets are configured
@@ -176,7 +171,7 @@ async function handleContactForm(request, env) {
     );
   }
 
-  // Verify Turnstile token
+  // Verify Turnstile before field validation
   const turnstileToken = data["cf-turnstile-response"];
   if (!turnstileToken) {
     return jsonResponse(
@@ -204,6 +199,15 @@ async function handleContactForm(request, env) {
       { error: "Verification failed. Please try again." },
       403,
     );
+  }
+
+  const errors = validateFields(data);
+  if (errors.length > 0) {
+    return jsonResponse({ error: errors[0] }, 400);
+  }
+
+  if (hasCRLF(data.email) || hasCRLF(data.name)) {
+    return jsonResponse({ error: "Invalid characters in input." }, 400);
   }
 
   // Send the email with only validated, trimmed fields
