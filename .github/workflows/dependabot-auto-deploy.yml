@@ -18,11 +18,6 @@ permissions:
   pull-requests: write
   checks: read
 
-env:
-  # Set to "true" for dry-run mode (runs verification, skips deploy/merge).
-  # Remove after confirming the workflow works on the first Dependabot PR.
-  DRY_RUN: "true"
-
 jobs:
   auto-deploy:
     # Fires for ALL Validate completions; non-Dependabot runs show as "skipped"
@@ -117,9 +112,9 @@ jobs:
             }
 
       # ── Checkout PR branch ──────────────────────────────────────
-      # Always checkout (even in dry-run or after verify-step failure)
-      # so require() can resolve the shared retry helper in the
-      # merge/report and failure-report steps.
+      # Always checkout (even after verify-step failure) so require()
+      # can resolve the shared retry helper in the merge/report and
+      # failure-report steps.
       # Pins to the validated SHA (not branch name) to prevent TOCTOU
       # if someone force-pushes between verification and checkout.
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
@@ -130,7 +125,7 @@ jobs:
 
       # ── Build and deploy ────────────────────────────────────────
       - name: Build and Deploy
-        if: steps.pr.outputs.number && env.DRY_RUN != 'true'
+        if: steps.pr.outputs.number
         id: hugo-deploy
         uses: ./.github/actions/hugo-deploy
         with:
@@ -149,7 +144,6 @@ jobs:
           PR_BASE_REF: ${{ steps.pr.outputs.base_ref }}
           BUILD_OUTPUT: ${{ steps.hugo-deploy.outputs.build-output }}
           DEPLOY_OUTPUT: ${{ steps.hugo-deploy.outputs.deploy-output }}
-          IS_DRY_RUN: ${{ env.DRY_RUN }}
         with:
           script: |
             const { withRetry } = require('./.github/scripts/github-api-retry.js');
@@ -160,32 +154,6 @@ jobs:
             const ref = process.env.PR_REF;
             const baseRef = process.env.PR_BASE_REF;
             const runUrl = `${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}`;
-            const isDryRun = process.env.IS_DRY_RUN === 'true';
-
-            if (isDryRun) {
-              const body = [
-                '<!-- dependabot-auto-deploy -->',
-                '# Dependabot Auto-Deploy (Dry Run)',
-                '',
-                'Verification passed. Would have deployed, merged, and deleted the branch.',
-                '',
-                '| | |',
-                '|:--|:--|',
-                `| **Commit** | \`${sha}\` |`,
-                `| **Branch** | \`${ref}\` |`,
-                `| **Workflow run** | [#${context.runNumber}](${runUrl}) |`,
-                '',
-                'Remove the `DRY_RUN` env var in `dependabot-auto-deploy.yml` to enable live deploys.',
-              ].join('\n');
-
-              await github.rest.issues.createComment({
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                issue_number: prNumber,
-                body,
-              });
-              return;
-            }
 
             const buildOutput = process.env.BUILD_OUTPUT || 'No output captured.';
             const deployOutput = process.env.DEPLOY_OUTPUT || 'No output captured.';
