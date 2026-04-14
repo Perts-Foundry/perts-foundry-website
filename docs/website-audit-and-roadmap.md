@@ -1,8 +1,6 @@
 # Perts Foundry Website: Audit & Roadmap
 
 > **Last updated:** 2026-04-06
-> **Reference:** `docs/building-a-credible-solo-devops-consulting-website.md`
-> **Visual research:** `docs/archive/visual-enhancement-research.md`
 
 This document tracks every gap identified between the website and a credible solo DevOps consulting presence. The site launched publicly on 2026-04-05. All critical, high, and medium priority items are resolved. Remaining work is low priority, data-dependent (CWV after traffic), or blocked on external input (testimonials).
 
@@ -339,8 +337,6 @@ Every service and case study has a `description` in front matter, but only title
 
 ## Visual Enhancement Roadmap
 
-See `docs/archive/visual-enhancement-research.md` for detailed research with techniques, implementation guidance, and browser support.
-
 ### Tier 1: Quick Wins (CSS-only)
 
 - [x] **V1. Micro-interactions** on cards, buttons, links (hover lift, shadow, scale, glow)
@@ -425,7 +421,7 @@ Sample size is too small to act on confidently. Revisit after a week of real tra
 
 ### Monitoring & Uptime
 
-- [x] Investigate liveness probes / synthetic monitoring for the production site. Implemented via Checkly: 10 checks (9 GET page availability + 1 POST `/api/contact`), 60-min frequency from us-east-1, ~7,300 runs/month (73% of 10K free tier). Alert emails to `contact+checkly@pertsfoundry.com` on failure, recovery, and degraded states. Managed in Terraform (`Perts-Foundry/infrastructure` repo, `checkly.tf`).
+- [x] Investigate liveness probes / synthetic monitoring for the production site. Implemented via Checkly: 10 checks (9 GET page availability + 1 POST `/api/contact`), 60-min frequency from us-east-1, ~7,300 runs/month (73% of 10K free tier). Alert emails to a dedicated monitoring alias on failure, recovery, and degraded states. Managed in Terraform (`Perts-Foundry/infrastructure` repo, `checkly.tf`).
 - [x] Verify Checkly synthetic monitoring is working after site goes live. All 10 checks passing (Contact Form API required `should_fail = true` for expected 400 response; fixed in infrastructure#32). Check group unmuted, alerts active.
 
 ---
