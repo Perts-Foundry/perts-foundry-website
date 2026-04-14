@@ -801,7 +801,6 @@ When 3+ articles are ready to publish:
 - [ ] Optionally set `showRecent = true` in `params.toml` to surface recent posts on
   the homepage
 - [ ] Run full validation suite (all 10 PR checks pass)
-- [x] Mark C2 as complete in `docs/website-audit-and-roadmap.md`
 
 ---
 

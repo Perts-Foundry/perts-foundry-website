@@ -357,9 +357,7 @@ After generating pages and passing validation, present a structured report:
 
 ### Documentation Maintenance
 Flag any of these that apply:
-- [ ] `docs/website-audit-and-roadmap.md` references stale case study counts (update "What's Already Strong" table, M6)
 - [ ] `CLAUDE.md` needs updates for new conventions introduced by generated pages
-- [ ] pa11y-ci page count in roadmap "What's Already Strong" table is now stale
 
 ### Attention Needed
 - [Case studies without metrics tables (informational, not a deficiency)]
