@@ -1,7 +1,6 @@
 # Technical Blog Writing Guide
 
 > **Last updated:** 2026-04-06
-> **Reference:** `docs/building-a-credible-solo-devops-consulting-website.md`
 > **Roadmap items:** C2 (blog re-enablement), M6 (SEO optimization)
 
 This document is a comprehensive reference for writing technical blog posts that build
@@ -802,7 +801,6 @@ When 3+ articles are ready to publish:
 - [ ] Optionally set `showRecent = true` in `params.toml` to surface recent posts on
   the homepage
 - [ ] Run full validation suite (all 10 PR checks pass)
-- [x] Mark C2 as complete in `docs/website-audit-and-roadmap.md`
 
 ---
 
@@ -1096,7 +1094,3 @@ For a deeper look at how this played out in practice, read our case study on
 - lastweekinaws.com (Corey Quinn): AWS, FinOps, humor-driven brand
 - blog.jessfraz.com (Jessie Frazelle): containers, Linux, security
 
-### Credibility Guide
-
-- `docs/building-a-credible-solo-devops-consulting-website.md`: stale blog warning,
-  3-5 evergreen article recommendation, "mini-consulting session" test

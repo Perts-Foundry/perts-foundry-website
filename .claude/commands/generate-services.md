@@ -226,9 +226,7 @@ If any check fails, fix the issue and re-run before presenting the report.
 
 ### Documentation Maintenance
 Flag any of these that apply:
-- [ ] `docs/website-audit-and-roadmap.md` references stale service counts (update H1, M6, "What's Already Strong" table)
 - [ ] `CLAUDE.md` needs updates for new conventions introduced by generated pages (e.g., new front matter params)
-- [ ] pa11y-ci page count in roadmap "What's Already Strong" table is now stale
 
 ### Attention Needed
 - [Pages without featured images]

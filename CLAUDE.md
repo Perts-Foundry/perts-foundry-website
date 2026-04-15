@@ -115,7 +115,6 @@ scripts/             # Developer utilities (OG image generation)
 wrangler.toml        # Cloudflare Workers deployment config
 archetypes/          # Content templates (blog.md, case-studies.md, default.md)
 docs/                # Active project documentation (audit, research, guides)
-docs/archive/        # Completed/historical docs; do not reference unless explicitly asked
 .claude/commands/    # Claude Code slash commands (generate-services, generate-case-studies, generate-blog)
 .claude/commands/shared/  # Shared specs referenced by multiple commands (featured-image-processing, anonymization-spec, portfolio-repo-layout)
 .github/actions/     # Composite actions: hugo-deploy (shared build+deploy steps)
@@ -125,9 +124,7 @@ docs/archive/        # Completed/historical docs; do not reference unless explic
 
 ## Documentation
 
-Active documentation lives in `docs/`. Reference guides that inform ongoing work (credibility guide, accessibility compliance guide) remain in `docs/`. Completed plans, resolved decision docs, and superseded research live in `docs/archive/`.
-
-Do not read or reference archived documents unless the user explicitly asks for them. They contain outdated plans, completed research, or reference material that is no longer relevant to active work. Reading them wastes context and risks acting on stale information.
+Active documentation lives in `docs/`. Reference guides that inform ongoing work (accessibility compliance guide, technical blog writing guide, site audit/roadmap) remain there.
 
 ## Content Conventions
 
