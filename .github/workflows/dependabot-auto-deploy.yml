@@ -35,7 +35,7 @@ jobs:
       # ── Find PR and verify Dependabot author ────────────────────
       - name: Find PR and verify Dependabot author
         id: pr
-        uses: actions/github-script@ed597411d8f924073f98dfc5c65a23a2325f34cd # v8.0.0
+        uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9.0.0
         with:
           script: |
             const branch = context.payload.workflow_run.head_branch;
@@ -226,7 +226,7 @@ jobs:
       # ── Verify validation passed on HEAD commit ─────────────────
       - name: Verify validation passed
         if: steps.pr.outputs.number
-        uses: actions/github-script@ed597411d8f924073f98dfc5c65a23a2325f34cd # v8.0.0
+        uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9.0.0
         env:
           PR_SHA: ${{ steps.pr.outputs.sha }}
           TRIGGER_RUN_ID: ${{ steps.pr.outputs.trigger_run_id }}
@@ -297,7 +297,7 @@ jobs:
       # ── Merge PR and report success ─────────────────────────────
       - name: Merge PR and report success
         if: success() && steps.pr.outputs.number
-        uses: actions/github-script@ed597411d8f924073f98dfc5c65a23a2325f34cd # v8.0.0
+        uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9.0.0
         env:
           PR_NUMBER: ${{ steps.pr.outputs.number }}
           PR_SHA: ${{ steps.pr.outputs.sha }}
@@ -450,7 +450,7 @@ jobs:
       # ── Report failure ──────────────────────────────────────────
       - name: Report failure
         if: failure() && steps.pr.outputs.number
-        uses: actions/github-script@ed597411d8f924073f98dfc5c65a23a2325f34cd # v8.0.0
+        uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9.0.0
         env:
           PR_NUMBER: ${{ steps.pr.outputs.number }}
           PR_SHORT_SHA: ${{ steps.pr.outputs.short_sha }}
@@ -533,7 +533,7 @@ jobs:
       # in the Actions UI even without a PR comment.
       - name: Report pre-identification failure
         if: failure() && !steps.pr.outputs.number
-        uses: actions/github-script@ed597411d8f924073f98dfc5c65a23a2325f34cd # v8.0.0
+        uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9.0.0
         env:
           TRIGGER_BRANCH: ${{ github.event.workflow_run.head_branch }}
           TRIGGER_SHA: ${{ github.event.workflow_run.head_sha }}
