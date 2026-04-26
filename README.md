@@ -56,3 +56,5 @@ See [SECURITY.md](SECURITY.md) for vulnerability reporting.
 - **Content** (case studies, blog posts, service pages, data, images): [CC BY 4.0](LICENSE-CONTENT)
 
 Maintained by [Perts Foundry LLC](https://pertsfoundry.com).
+
+<!-- post-history-scrub CI smoke test, 2026-04-26T20:18:31Z -->
