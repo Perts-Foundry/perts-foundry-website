@@ -226,6 +226,101 @@ The `js-reveal-init` class on `<html>` gates visibility: without JS, all content
 
 Both `content/services/_index.md` and `content/case-studies/_index.md` use `orderByWeight: true` with cascading display settings (`showDate: false`, `showAuthor: false`, `showReadingTime: false`, `invertPagination: true`, `showHero: true`, `heroStyle: basic`). The blog section (`content/blog/_index.md`) uses cascade display settings (`showDate: true`, `showAuthor: false`, `showReadingTime: false`, `showHero: true`, `heroStyle: basic`) and uses Hugo's default date-based ordering instead of `orderByWeight`, so blog posts do not need a `weight` field. New pages in these sections must include a `weight` field or they will sort unpredictably. Both sections require a `featured.jpg` in each page bundle for the hero image. Both sections should include a `tags` field listing relevant technologies (e.g., `AWS`, `Terraform`, `Kubernetes`); these populate `<meta name="keywords">` and JSON-LD keywords for SEO. Case studies use weight increments of 10 (current range 10-120 for 12 case studies) to allow future insertions. Case studies also require `params.client`, `params.industry`, `params.challenge`, and `params.result` in front matter; these render as a structured metadata card at the top of each page. Hugo merges the `params:` YAML key into `.Params` automatically. The archetype at `archetypes/case-studies.md` scaffolds these fields.
 
+## Sensitive Content
+
+This repository is **public**. Real personal information, private business
+relationships, and operational secrets must never appear in the repo, git
+history, PRs, issues, comments, or release artifacts. The scope is broad on
+purpose: git history rewrites are expensive and `gh` API edits don't scrub
+everything. The only durable defense is to never let it land in the first
+place. Gitleaks (CI check #8) scans the full history for known secret
+patterns, but it does not catch employer names, addresses, or PII — those
+are the author's responsibility to keep out.
+
+### What is sensitive
+
+- **Real personal PII**: home address, personal phone, personal email,
+  full birthdate, SSN/ITIN, immigration status, salary numbers,
+  dependents' names. The visible contact email is intentionally absent
+  from the rendered page (anti-scraping); do not re-introduce it in
+  markdown.
+- **Past-employer or client names tied to confidential or cleared work**:
+  prior government contractor engagements (e.g., DoD / Navy customers and
+  the program names attached to them), NDA-bound private-sector clients,
+  and any vendor whose engagement has not been formally cleared for
+  publication. Default to "do not name." Published case studies under
+  `content/case-studies/` are the exception — they go through the
+  anonymization spec at `.claude/commands/shared/anonymization-spec.md`
+  before publishing. Drafts (`draft: true`) are NOT yet published; treat
+  them as private until the draft flag flips.
+- **Contact-form and lead data**: any real submission captured by the
+  Worker (`src/worker.js`). Never paste a real submission body into a
+  commit, comment, issue, or test fixture — use synthetic data.
+- **Worker secrets and other tokens**: `RESEND_API_KEY`,
+  `TURNSTILE_SECRET_KEY`, any Cloudflare API token, any GitHub PAT, any
+  Anthropic API key used by Claude Code commands. These belong in
+  `wrangler secret put` or repo Actions secrets, never in source. The
+  Turnstile *site key* is public and lives in `params.toml` — that is
+  not a secret.
+- **Local-only filesystem paths**: `~/repos/...`, `/home/<user>/...`,
+  internal corp paths from past jobs. These should not appear in code,
+  comments, commit messages, or PR bodies.
+- **Pre-publish or unanonymized content**: blog, case study, or
+  service-page drafts that still carry real client identifiers.
+
+### What is NOT sensitive (and is fine to commit)
+
+- The author's name and the consultancy's name — the repo identifies
+  itself.
+- Public Cloudflare zone IDs, the Turnstile *site* key, the public
+  GitHub org / username, the public Cal.com scheduling URL.
+- Synthetic test fixtures used by `src/worker.test.js` (e.g.,
+  `test@example.com`, `Acme Corp`).
+- Published case study content under `content/case-studies/` once it
+  has cleared the anonymization spec and the draft flag is off.
+- Vendor / theme references (Blowfish, Hugo, Resend, Cloudflare,
+  Checkly) — these are stack documentation.
+
+### Pre-push checklist
+
+Before every `git push`, every `gh pr create`, every `gh pr comment`,
+and every `gh issue create`:
+
+1. **Scan the full branch diff** (`git diff main..HEAD`) and **every
+   commit message** (`git log main..HEAD --format=%B`) for: real client
+   / employer / program names, personal PII, secrets / tokens, absolute
+   local paths, real contact-form submissions.
+2. **Scan the rendered PR / issue / comment body** for the same
+   categories — content typed into `gh pr create --body` does not pass
+   through the diff scan and is not covered by Gitleaks.
+3. **Confirm the Gitleaks check (#8) is green** on the latest CI run.
+   A red Gitleaks check means stop and triage before merging, not
+   "rebase past it."
+4. If anything sensitive is found:
+   - **Pre-push (history not yet on remote)**: rewrite history with
+     `git filter-branch --tree-filter` + `--msg-filter` (or
+     `git filter-repo` if available). Replace with a neutral
+     descriptor (`<redacted-client>`, `the prior engagement`, etc.).
+     Re-run all checks before pushing the rewritten branch.
+   - **Already on remote**: stop. Surface to the user before any
+     further action — force-pushing rewritten history to a public
+     repo is a visible event that warrants explicit consent. Removing
+     the content from the working tree without rewriting history does
+     not actually remove it from `main` or the cached PR diff. For a
+     confirmed secret, treat the secret as compromised and rotate it
+     in addition to (not instead of) history rewriting.
+5. Adopt a redacted-by-default mindset for **future** commit messages
+   and doc entries: describe the mechanism (what changed in templates,
+   data, or config) and not the real-world entity that prompted it.
+
+### Memory notes
+
+Memory files under `~/.claude/projects/.../memory/` may contain
+sensitive context (real client names, candidate-specific notes,
+past-employer details) **for the assistant's use only**. Never paste
+memory content into the public repo; treat memory as a private context
+store, not a documentation source.
+
 ## Code Style
 
 - Prettier with `proseWrap = "preserve"` — do not reflow markdown paragraphs
