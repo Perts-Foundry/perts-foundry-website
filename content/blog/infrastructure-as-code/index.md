@@ -58,3 +58,5 @@ If your infrastructure lives in a console and someone's memory, you're carrying 
 Infrastructure as Code isn't a nice-to-have for mature teams. It's the foundation that makes everything else (automated deployments, reliable environments, confident scaling) possible. The earlier you start, the less it costs.
 
 If your team is wrestling with when or how to make the switch, our [Infrastructure as Code consulting](/services/infrastructure-as-code/) engagements start with exactly this kind of assessment.
+
+{{< related-reading slugs="ai-accelerated-terraform-migrations, cloud-workload-identity-migration, zero-downtime-eks-upgrades" >}}

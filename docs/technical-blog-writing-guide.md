@@ -69,13 +69,13 @@ prospect confident you can solve their specific problem.
 
 ### Timeline to Results
 
-| Phase | Timeframe | What Happens |
-|-------|-----------|--------------|
-| Habit building | Months 1-3 | Establish voice, publish first articles, no meaningful traffic yet |
-| Early traction | Months 4-6 | Posts begin indexing, first comments and shares, small but growing organic traffic |
-| Measurable leads | Months 6-9 | SEO compounding begins, first consulting leads attributable to blog content |
-| Authority recognized | Months 12-18 | Inbound leads become predictable, content referenced by others in the space |
-| Compounding returns | Months 18+ | Evergreen posts generate traffic while you sleep, blog amplifies all other business activities |
+| Phase                | Timeframe    | What Happens                                                                                   |
+| -------------------- | ------------ | ---------------------------------------------------------------------------------------------- |
+| Habit building       | Months 1-3   | Establish voice, publish first articles, no meaningful traffic yet                             |
+| Early traction       | Months 4-6   | Posts begin indexing, first comments and shares, small but growing organic traffic             |
+| Measurable leads     | Months 6-9   | SEO compounding begins, first consulting leads attributable to blog content                    |
+| Authority recognized | Months 12-18 | Inbound leads become predictable, content referenced by others in the space                    |
+| Compounding returns  | Months 18+   | Evergreen posts generate traffic while you sleep, blog amplifies all other business activities |
 
 ### The Risk of a Stale Blog
 
@@ -97,33 +97,33 @@ Organize all blog content under 3-5 strategic pillars tied to service areas. Eve
 should ladder up to one of these pillars, reinforcing expertise over time. Search engines
 recognize topical authority when multiple posts cluster around a theme.
 
-| Pillar | Service Pages It Supports | Example Topics |
-|--------|--------------------------|----------------|
-| DevOps & Infrastructure | IaC, CI/CD, DevSecOps | Terraform patterns, pipeline design, security automation |
-| Cloud Architecture | Cloud Infrastructure, Cloud Migration, FinOps | Multi-cloud decisions, cost optimization, migration strategies |
-| AI-Augmented Engineering | AI-Augmented Engineering | AI code review tooling, AI-assisted infrastructure, adoption patterns |
-| Engineering Leadership | Agile Coaching, Incident Response | Team scaling, process improvement, reliability culture |
+| Pillar                   | Service Pages It Supports                     | Example Topics                                                        |
+| ------------------------ | --------------------------------------------- | --------------------------------------------------------------------- |
+| DevOps & Infrastructure  | IaC, CI/CD, DevSecOps                         | Terraform patterns, pipeline design, security automation              |
+| Cloud Architecture       | Cloud Infrastructure, Cloud Migration, FinOps | Multi-cloud decisions, cost optimization, migration strategies        |
+| AI-Augmented Engineering | AI-Augmented Engineering                      | AI code review tooling, AI-assisted infrastructure, adoption patterns |
+| Engineering Leadership   | Agile Coaching, Incident Response             | Team scaling, process improvement, reliability culture                |
 
 Three to five pillars is the sweet spot. Fewer leaves gaps in coverage; more dilutes
 the message and makes it harder to build depth in any single area.
 
 ### Publishing Cadence
 
-| Phase | Cadence | Rationale |
-|-------|---------|-----------|
-| Launch | 3-5 articles published as a batch | Credibility guide recommends launching with a collection, not a single post |
-| Post-launch | 1 article per month | Sustainable for a solo consultant; consistency matters more than frequency |
-| Scaling (optional) | 2 articles per month | Only if writing does not compete with billable work |
+| Phase              | Cadence                           | Rationale                                                                   |
+| ------------------ | --------------------------------- | --------------------------------------------------------------------------- |
+| Launch             | 3-5 articles published as a batch | Credibility guide recommends launching with a collection, not a single post |
+| Post-launch        | 1 article per month               | Sustainable for a solo consultant; consistency matters more than frequency  |
+| Scaling (optional) | 2 articles per month              | Only if writing does not compete with billable work                         |
 
 Consistency is more important than volume. Publishing 1 post per month for 12 months
 straight is far more effective than publishing 4 posts in a burst then going silent.
 
 ### Evergreen vs. Timely Content
 
-| Type | Definition | `showDate` | Update Strategy | Examples |
-|------|-----------|------------|-----------------|---------|
-| Evergreen | Remains relevant for 1+ years | `false` (hide date) | Update in-place every 6 months; note tool version changes | Architecture decision guides, methodology posts, cost optimization strategies |
-| Timely | Relevant to a specific moment | `true` (show date) | Do not update; write a follow-up if the landscape changes | Tool release reactions, conference takeaways, ecosystem opinion pieces |
+| Type      | Definition                    | `showDate`                                                                                                                  | Update Strategy                                                                            | Examples                                                                      |
+| --------- | ----------------------------- | --------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------ | ----------------------------------------------------------------------------- |
+| Evergreen | Remains relevant for 1+ years | Inherited `true` from blog cascade; override to `false` only if you specifically want to hide the date on a long-lived post | Update in-place every 6 months; add `showDateUpdated: true` when the update is substantial | Architecture decision guides, methodology posts, cost optimization strategies |
+| Timely    | Relevant to a specific moment | Inherited `true` from blog cascade; no override needed                                                                      | Do not update; write a follow-up if the landscape changes                                  | Tool release reactions, conference takeaways, ecosystem opinion pieces        |
 
 For a solo DevOps consulting blog, target **80% evergreen, 20% timely**. Evergreen
 content compounds in search value; timely content drives short-term social engagement.
@@ -184,36 +184,34 @@ overrides this to match the service and case study page convention.
 
 ### Front Matter Fields
 
-| Field | Required | Default | Notes |
-|-------|----------|---------|-------|
-| `title` | Yes | Auto-generated from directory name | Keep under 60 characters; include primary keyword early |
-| `date` | Yes | Auto-populated | Used for sort order; not displayed when `showDate: false` |
-| `draft` | Yes | `true` (archetype) | Command-generated posts use `false`; content approved during Phase 2 |
-| `description` | Yes | Empty | 150-160 characters; serves as meta description AND listing card text |
-| `slug` | Yes | Directory name | Must match directory name; forms the URL `/blog/<slug>/` |
-| `tags` | Yes | Empty | Use proper case (e.g., `Terraform`, not `terraform`); reuse existing tags to power related content cross-linking |
-| `showDate` | No | `false` (global default) | Override to `true` for timely content; credibility guide recommends hiding dates on evergreen articles |
+| Field         | Required                | Default                              | Notes                                                                                                                                          |
+| ------------- | ----------------------- | ------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------- |
+| `title`       | Yes                     | Auto-generated from directory name   | Keep under 60 characters; include primary keyword early                                                                                        |
+| `date`        | Yes                     | Auto-populated                       | Used for sort order and (since the blog cascade sets `showDate: true`) as the displayed "Published on" date                                    |
+| `publishDate` | Yes for scheduled posts | Auto-populated to today by archetype | Set to a future date (YYYY-MM-DD) to schedule publication. Keep `date` and `publishDate` aligned so the displayed date matches go-live         |
+| `draft`       | Yes                     | `true` (archetype)                   | Command-generated posts use `false`; content approved during Phase 2                                                                           |
+| `description` | Yes                     | Empty                                | 150-160 characters; serves as meta description AND listing card text                                                                           |
+| `slug`        | Yes                     | Directory name                       | Must match directory name; forms the URL `/blog/<slug>/`                                                                                       |
+| `tags`        | Yes                     | Empty                                | Use proper case (e.g., `Terraform`, not `terraform`); reuse existing tags to power related content cross-linking                               |
+| `showDate`    | No                      | Inherited `true` from blog cascade   | Do not include in individual post front matter unless overriding to `false` (rare; only when intentionally hiding the date on a specific post) |
 
 **Optional fields not in the archetype but available:**
 
-| Field | Purpose |
-|-------|---------|
-| `showDateUpdated` | Set to `true` to display the last-modified date when updating evergreen content |
-| `dateUpdated` | The date of the update (e.g., `2026-06-15`); Hugo uses this for the displayed "Updated" label. Pair with `showDateUpdated: true` |
-| `weight` | Manual sort order (lower = first); only needed if `orderByWeight: true` is added to `content/blog/_index.md` |
+| Field             | Purpose                                                                                                                          |
+| ----------------- | -------------------------------------------------------------------------------------------------------------------------------- |
+| `showDateUpdated` | Set to `true` to display the last-modified date when updating evergreen content                                                  |
+| `dateUpdated`     | The date of the update (e.g., `2026-06-15`); Hugo uses this for the displayed "Updated" label. Pair with `showDateUpdated: true` |
+| `weight`          | Manual sort order (lower = first); only needed if `orderByWeight: true` is added to `content/blog/_index.md`                     |
 
 ### Date Display Inheritance
 
-The `showDate` setting has four layers:
+The `showDate` setting has three relevant layers (the archetype no longer participates):
 
-1. **Global:** `config/_default/params.toml` sets `showDate = false` under `[article]`
-2. **Section cascade:** `content/blog/_index.md` sets `showDate: false` (along with `showAuthor: false`, `showReadingTime: false`, `showHero: true`, `heroStyle: basic`) via cascade, matching the convention used by services and case studies
-3. **Archetype:** `archetypes/blog.md` reinforces `showDate: false`
-4. **Per-post:** Individual posts can override with `showDate: true` for timely content. Do not include `showDate: false` in individual post front matter; the cascade handles the default
+1. **Global:** `config/_default/params.toml` sets `showDate = false` under `[article]`. This is the site-wide default for content types that do not override (services and case studies).
+2. **Section cascade:** `content/blog/_index.md` sets `showDate: true` via cascade (along with `showAuthor: false`, `showReadingTime: false`, `showHero: true`, `heroStyle: basic`). This is the effective default for every blog post and overrides the global setting.
+3. **Per-post:** Individual posts inherit `showDate: true` from the cascade. Do not include `showDate: true` in individual post front matter (it is redundant). Only set `showDate: false` if you specifically want to hide the date on one post.
 
-The credibility guide explicitly recommends hiding dates on evergreen articles. When
-a post is timely (tool release reaction, ecosystem opinion), override with `showDate:
-true` so readers can assess recency.
+The blog section displays dates because the date field doubles as the publication signal for the biweekly scheduled-publish workflow; hiding it would defeat the cadence. Services and case studies retain the hidden-date convention because their currency is not time-bound.
 
 ### Featured Images
 
@@ -267,9 +265,9 @@ in its "Related Content" section, and vice versa.
 
 ### Post Ordering
 
-The blog section uses Hugo's default date-based ordering (newest first). Since
-`showDate: false` hides the date from readers, the display order is controlled by the
-`date` field in front matter without exposing it.
+The blog section uses Hugo's default date-based ordering (newest first). The blog
+cascade sets `showDate: true`, so the date is visible to readers and matches the sort
+order; both are driven by the `date` field in front matter.
 
 If manual ordering is needed in the future, add `orderByWeight: true` to
 `content/blog/_index.md` and include `weight` fields in blog post front matter
@@ -289,14 +287,14 @@ Configured in `config/_default/hugo.toml` as `blog = "/blog/:slug/"`.
 
 ### Post Type Reference
 
-| Type | Description | When to Use | Audience | Lead Potential |
-|------|-------------|-------------|----------|---------------|
-| **Tutorial / How-To** | Step-by-step guide with working code | Targeting a specific search query ("how to migrate from ECR to GAR") | Practitioners | Medium (solves a problem; reader may need more help) |
-| **War Story / Case Study Extract** | Narrative from a real project with lessons learned | Extracting from existing case studies into a longer, more technical narrative | Mixed (practitioners + decision-makers) | High (demonstrates judgment and real experience) |
-| **Opinion / Thought Leadership** | Opinionated take backed by evidence | When you have a contrarian or expert perspective on a trending topic | Decision-makers | High (positions you as a thinker, not just a doer) |
-| **Comparison / Decision Guide** | Side-by-side analysis of tools or approaches | When readers face a technology choice ("ECS vs. EKS for multi-tenant workloads") | Mid-senior engineers, architects | High (reader is actively making a decision you can help with) |
-| **Deep Dive / Technical Analysis** | Comprehensive exploration of one topic | When you have deep, non-obvious knowledge about a tool or pattern | Advanced practitioners | Medium (builds authority; reader is usually self-sufficient) |
-| **Listicle / Roundup** | Numbered collection of tips, tools, or patterns | When covering breadth on a topic ("5 AWS cost leaks every startup ignores") | Broad | Medium (shareability is high; depth is lower) |
+| Type                               | Description                                        | When to Use                                                                      | Audience                                | Lead Potential                                                |
+| ---------------------------------- | -------------------------------------------------- | -------------------------------------------------------------------------------- | --------------------------------------- | ------------------------------------------------------------- |
+| **Tutorial / How-To**              | Step-by-step guide with working code               | Targeting a specific search query ("how to migrate from ECR to GAR")             | Practitioners                           | Medium (solves a problem; reader may need more help)          |
+| **War Story / Case Study Extract** | Narrative from a real project with lessons learned | Extracting from existing case studies into a longer, more technical narrative    | Mixed (practitioners + decision-makers) | High (demonstrates judgment and real experience)              |
+| **Opinion / Thought Leadership**   | Opinionated take backed by evidence                | When you have a contrarian or expert perspective on a trending topic             | Decision-makers                         | High (positions you as a thinker, not just a doer)            |
+| **Comparison / Decision Guide**    | Side-by-side analysis of tools or approaches       | When readers face a technology choice ("ECS vs. EKS for multi-tenant workloads") | Mid-senior engineers, architects        | High (reader is actively making a decision you can help with) |
+| **Deep Dive / Technical Analysis** | Comprehensive exploration of one topic             | When you have deep, non-obvious knowledge about a tool or pattern                | Advanced practitioners                  | Medium (builds authority; reader is usually self-sufficient)  |
+| **Listicle / Roundup**             | Numbered collection of tips, tools, or patterns    | When covering breadth on a topic ("5 AWS cost leaks every startup ignores")      | Broad                                   | Medium (shareability is high; depth is lower)                 |
 
 ### What Decision-Makers Prefer
 
@@ -351,17 +349,17 @@ Every post should follow this skeleton:
 
 ### Formatting Rules
 
-| Rule | Guideline | Why |
-|------|-----------|-----|
-| Paragraphs | 3-4 sentences max | Long paragraphs lose readers; web reading is scanning, not linear |
-| Headings | H2 for main sections, H3 for subsections; heading every 200-300 words | Heading hierarchy powers both readability and SEO |
-| Code blocks | Always include language annotation (` ```hcl `, ` ```yaml `, etc.) | Syntax highlighting aids comprehension; screen readers use language hints |
-| Code completeness | Every snippet must be complete and functional | Broken code destroys credibility instantly; version-annotate with tool versions |
-| Lists | Use bullet lists for 3+ related items | Scannable; break up wall-of-text patterns |
-| Bold | Use for key terms and stats on first mention | Aids scanning; draws attention to important data |
-| Blockquotes | Use for callouts, key takeaways, or important warnings | Visual break that signals "pay attention to this" |
-| Images/diagrams | Include 1-2 per major section if they clarify the concept | Diagrams improve comprehension and shareability; use Mermaid or Draw.io |
-| No em dashes | Restructure with commas, semicolons, parens, or periods | Project formatting convention |
+| Rule              | Guideline                                                             | Why                                                                             |
+| ----------------- | --------------------------------------------------------------------- | ------------------------------------------------------------------------------- |
+| Paragraphs        | 3-4 sentences max                                                     | Long paragraphs lose readers; web reading is scanning, not linear               |
+| Headings          | H2 for main sections, H3 for subsections; heading every 200-300 words | Heading hierarchy powers both readability and SEO                               |
+| Code blocks       | Always include language annotation (` ```hcl `, ` ```yaml `, etc.)    | Syntax highlighting aids comprehension; screen readers use language hints       |
+| Code completeness | Every snippet must be complete and functional                         | Broken code destroys credibility instantly; version-annotate with tool versions |
+| Lists             | Use bullet lists for 3+ related items                                 | Scannable; break up wall-of-text patterns                                       |
+| Bold              | Use for key terms and stats on first mention                          | Aids scanning; draws attention to important data                                |
+| Blockquotes       | Use for callouts, key takeaways, or important warnings                | Visual break that signals "pay attention to this"                               |
+| Images/diagrams   | Include 1-2 per major section if they clarify the concept             | Diagrams improve comprehension and shareability; use Mermaid or Draw.io         |
+| No em dashes      | Restructure with commas, semicolons, parens, or periods               | Project formatting convention                                                   |
 
 ### The Hook
 
@@ -452,11 +450,11 @@ Technical blog posts should target **long-tail keywords** that service pages do 
 Long-tail keywords (3+ words) have **2.5x higher conversion rates** than head terms
 because the searcher has a specific problem.
 
-| Layer | Keyword Type | Example | Owned By |
-|-------|-------------|---------|----------|
-| Head term | 1-2 words, high volume | "Terraform consulting" | Service page |
-| Mid-tail | 2-3 words, medium volume | "Terraform best practices" | Service page or blog (depends on competition) |
-| Long-tail | 3+ words, lower volume, higher intent | "how to fix Atlantis rate limiting GitHub" | Blog post |
+| Layer     | Keyword Type                          | Example                                    | Owned By                                      |
+| --------- | ------------------------------------- | ------------------------------------------ | --------------------------------------------- |
+| Head term | 1-2 words, high volume                | "Terraform consulting"                     | Service page                                  |
+| Mid-tail  | 2-3 words, medium volume              | "Terraform best practices"                 | Service page or blog (depends on competition) |
+| Long-tail | 3+ words, lower volume, higher intent | "how to fix Atlantis rate limiting GitHub" | Blog post                                     |
 
 **Content cannibalization warning:** Blog posts must not compete with service pages for
 the same keywords. Service pages own the primary commercial terms. Blog posts target
@@ -478,15 +476,15 @@ Without paid tools, use these free methods:
 
 ### On-Page SEO Checklist
 
-| Element | Requirement | Notes |
-|---------|------------|-------|
-| **Title** (`title` field) | Primary keyword in first 60 characters | Hugo uses this as the `<title>` tag and H1 |
-| **Meta description** (`description` field) | 150-160 characters with primary keyword | Also used as the listing card description on `/blog/` |
-| **URL** (`slug` field) | Short, keyword-rich, hyphenated | `/blog/fix-atlantis-rate-limiting/` not `/blog/how-we-fixed-the-atlantis-rate-limiting-problem-in-our-terraform-ci-cd/` |
-| **H2 headings** | 5-8 per post; keyword variations in headings | Headings every 200-300 words; never skip levels (H2 then H3, not H2 then H4) |
-| **Internal links** | 2-4 per 500 words | Every post links to at least 1 service page and 1 case study |
-| **Alt text on images** | Descriptive for content images; `alt=""` for decorative | Follows site-wide WCAG 2.1 AA conventions (see `docs/web-accessibility-compliance-guide.md`) |
-| **Code block language** | Always annotated (` ```hcl `, ` ```yaml `) | Helps search engines understand content type |
+| Element                                    | Requirement                                             | Notes                                                                                                                   |
+| ------------------------------------------ | ------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------- |
+| **Title** (`title` field)                  | Primary keyword in first 60 characters                  | Hugo uses this as the `<title>` tag and H1                                                                              |
+| **Meta description** (`description` field) | 150-160 characters with primary keyword                 | Also used as the listing card description on `/blog/`                                                                   |
+| **URL** (`slug` field)                     | Short, keyword-rich, hyphenated                         | `/blog/fix-atlantis-rate-limiting/` not `/blog/how-we-fixed-the-atlantis-rate-limiting-problem-in-our-terraform-ci-cd/` |
+| **H2 headings**                            | 5-8 per post; keyword variations in headings            | Headings every 200-300 words; never skip levels (H2 then H3, not H2 then H4)                                            |
+| **Internal links**                         | 2-4 per 500 words                                       | Every post links to at least 1 service page and 1 case study                                                            |
+| **Alt text on images**                     | Descriptive for content images; `alt=""` for decorative | Follows site-wide WCAG 2.1 AA conventions (see `docs/web-accessibility-compliance-guide.md`)                            |
+| **Code block language**                    | Always annotated (` ```hcl `, ` ```yaml `)              | Helps search engines understand content type                                                                            |
 
 ### Featured Snippets
 
@@ -507,11 +505,11 @@ answers are harder for AI to synthesize from multiple sources.
 
 ### Word Count by Keyword Difficulty
 
-| Keyword Difficulty | Recommended Word Count | Notes |
-|-------------------|----------------------|-------|
-| Low (0-30) | 800-1,500 words | Long-tail queries, niche topics |
-| Medium (30-60) | 1,500-2,500 words | Competitive but targeted |
-| High (60+) | 2,500+ words | Requires comprehensive coverage to compete |
+| Keyword Difficulty | Recommended Word Count | Notes                                      |
+| ------------------ | ---------------------- | ------------------------------------------ |
+| Low (0-30)         | 800-1,500 words        | Long-tail queries, niche topics            |
+| Medium (30-60)     | 1,500-2,500 words      | Competitive but targeted                   |
+| High (60+)         | 2,500+ words           | Requires comprehensive coverage to compete |
 
 For a new blog on a new domain, target low and medium difficulty keywords first. High
 difficulty keywords require domain authority that takes 12+ months to build.
@@ -551,14 +549,14 @@ requests, and search query data.
 
 ### Syndication Platforms
 
-| Platform | Audience | Strategy | Canonical URL | Timing |
-|----------|----------|----------|---------------|--------|
-| **Dev.to** | Developer community (broad) | Cross-post full article; high engagement rates | Supports `canonical_url` in front matter | Wait 7-10 days after publishing on pertsfoundry.com |
-| **Hashnode** | Developer community (similar to Dev.to) | Cross-post full article; can map custom domain | Supports canonical URL natively | Wait 7-10 days |
-| **LinkedIn Articles** | Decision-makers, hiring managers | Post a summary or key takeaway in-feed (not a link post) | N/A (use in-feed format, not external links) | Same day as syndication |
-| **Hacker News** | High-impact, unpredictable | Submit only strong opinion or deep technical pieces; link directly to site | N/A (direct link) | Any time; avoid weekends |
-| **Reddit** (r/devops, r/terraform, r/kubernetes, r/aws) | Practitioners in specific niches | Share as a discussion, not self-promotion; contribute the insight, link as source | N/A (direct link) | Any time; match subreddit norms |
-| **DZone** | Enterprise-leaning developer community | Submit for editorial review; averages 4,000+ pageviews per article | Supports canonical URL | After 7-10 days |
+| Platform                                                | Audience                                | Strategy                                                                          | Canonical URL                                | Timing                                              |
+| ------------------------------------------------------- | --------------------------------------- | --------------------------------------------------------------------------------- | -------------------------------------------- | --------------------------------------------------- |
+| **Dev.to**                                              | Developer community (broad)             | Cross-post full article; high engagement rates                                    | Supports `canonical_url` in front matter     | Wait 7-10 days after publishing on pertsfoundry.com |
+| **Hashnode**                                            | Developer community (similar to Dev.to) | Cross-post full article; can map custom domain                                    | Supports canonical URL natively              | Wait 7-10 days                                      |
+| **LinkedIn Articles**                                   | Decision-makers, hiring managers        | Post a summary or key takeaway in-feed (not a link post)                          | N/A (use in-feed format, not external links) | Same day as syndication                             |
+| **Hacker News**                                         | High-impact, unpredictable              | Submit only strong opinion or deep technical pieces; link directly to site        | N/A (direct link)                            | Any time; avoid weekends                            |
+| **Reddit** (r/devops, r/terraform, r/kubernetes, r/aws) | Practitioners in specific niches        | Share as a discussion, not self-promotion; contribute the insight, link as source | N/A (direct link)                            | Any time; match subreddit norms                     |
+| **DZone**                                               | Enterprise-leaning developer community  | Submit for editorial review; averages 4,000+ pageviews per article                | Supports canonical URL                       | After 7-10 days                                     |
 
 ### Canonical URL Protocol
 
@@ -578,11 +576,11 @@ content without canonical attribution hurts both sites.
 
 ### Social Media Resource Allocation
 
-| Platform | Allocation | Why |
-|----------|-----------|-----|
-| **LinkedIn** | 65-70% | Where DevOps decision-makers and hiring managers are; 80% of B2B social leads come from LinkedIn |
-| **Twitter/X** | 15-20% | Developer community; good for technical discussions; developer audience is 4x larger than LinkedIn |
-| **Experimental** (Bluesky, Mastodon, niche communities) | 10-15% | Hedge against platform risk; explore emerging channels |
+| Platform                                                | Allocation | Why                                                                                                |
+| ------------------------------------------------------- | ---------- | -------------------------------------------------------------------------------------------------- |
+| **LinkedIn**                                            | 65-70%     | Where DevOps decision-makers and hiring managers are; 80% of B2B social leads come from LinkedIn   |
+| **Twitter/X**                                           | 15-20%     | Developer community; good for technical discussions; developer audience is 4x larger than LinkedIn |
+| **Experimental** (Bluesky, Mastodon, niche communities) | 10-15%     | Hedge against platform risk; explore emerging channels                                             |
 
 ### LinkedIn Strategy
 
@@ -624,14 +622,14 @@ stack.
 
 ### KPIs for a Solo Consulting Blog
 
-| Metric | Tool | 6-Month Target | Why It Matters |
-|--------|------|---------------|----------------|
-| Organic sessions per post | Cloudflare Web Analytics | 100+ per month per evergreen post | Validates keyword targeting and SEO |
-| Service page clicks from blog | Cloudflare Web Analytics (referrer paths) | 5%+ click-through rate | Validates the blog-to-service funnel |
-| Contact page visits from blog | Cloudflare Web Analytics | Trending up monthly | Tracks movement toward conversion |
-| Contact form submissions | Manual tracking | 1+ per quarter attributable to blog | The actual business conversion metric |
-| Syndication views | Dev.to dashboard / LinkedIn analytics | 2-5x site views per post | Validates distribution strategy |
-| Search impressions and clicks | Google Search Console (when set up) | Trending up monthly | Validates SEO compounding |
+| Metric                        | Tool                                      | 6-Month Target                      | Why It Matters                        |
+| ----------------------------- | ----------------------------------------- | ----------------------------------- | ------------------------------------- |
+| Organic sessions per post     | Cloudflare Web Analytics                  | 100+ per month per evergreen post   | Validates keyword targeting and SEO   |
+| Service page clicks from blog | Cloudflare Web Analytics (referrer paths) | 5%+ click-through rate              | Validates the blog-to-service funnel  |
+| Contact page visits from blog | Cloudflare Web Analytics                  | Trending up monthly                 | Tracks movement toward conversion     |
+| Contact form submissions      | Manual tracking                           | 1+ per quarter attributable to blog | The actual business conversion metric |
+| Syndication views             | Dev.to dashboard / LinkedIn analytics     | 2-5x site views per post            | Validates distribution strategy       |
+| Search impressions and clicks | Google Search Console (when set up)       | Trending up monthly                 | Validates SEO compounding             |
 
 ### Attribution Model
 
@@ -662,13 +660,13 @@ traffic reach service pages, and do service page visitors reach the contact page
 
 ### When to Adjust
 
-| Signal | Diagnosis | Action |
-|--------|-----------|--------|
-| Post gets traffic but no service page clicks | Weak or missing CTA | Add or improve the in-post CTA linking to a service page |
-| Post gets no traffic after 3 months | Keyword targeting issue | Re-evaluate the target keyword; update title and description; check if the query has search volume |
-| Post gets social engagement but no search traffic | Good for authority, not for SEO | Write a search-optimized companion piece targeting the specific long-tail query |
-| Post ranks on page 2 (positions 11-20) | Striking distance | Expand the post (add depth, examples, internal links); build 1-2 inbound links from syndication |
-| Multiple posts on a topic, none ranking | Content cannibalization | Consolidate into a single comprehensive post; redirect the others |
+| Signal                                            | Diagnosis                       | Action                                                                                             |
+| ------------------------------------------------- | ------------------------------- | -------------------------------------------------------------------------------------------------- |
+| Post gets traffic but no service page clicks      | Weak or missing CTA             | Add or improve the in-post CTA linking to a service page                                           |
+| Post gets no traffic after 3 months               | Keyword targeting issue         | Re-evaluate the target keyword; update title and description; check if the query has search volume |
+| Post gets social engagement but no search traffic | Good for authority, not for SEO | Write a search-optimized companion piece targeting the specific long-tail query                    |
+| Post ranks on page 2 (positions 11-20)            | Striking distance               | Expand the post (add depth, examples, internal links); build 1-2 inbound links from syndication    |
+| Multiple posts on a topic, none ranking           | Content cannibalization         | Consolidate into a single comprehensive post; redirect the others                                  |
 
 ---
 
@@ -677,15 +675,15 @@ traffic reach service pages, and do service page visitors reach the contact page
 **Purpose:** Concrete models to learn from. Each entry explains which pattern to
 extract, not just who to read.
 
-| Author / Blog | Focus Area | What to Study | Key Pattern |
-|---------------|-----------|---------------|-------------|
-| **Charity Majors** (charity.wtf) | Observability, engineering leadership | Opinionated framing, personal voice, "this is what I believe and here is why" structure | Opinion pieces that challenge industry assumptions and drive discussion |
-| **Julia Evans** (jvns.ca) | Systems, networking, programming | Visual explanations (zines), making complex topics accessible, deceptively short posts that teach one concept clearly | "Explain one thing clearly" posts that rank for years with minimal word count |
-| **Kelsey Hightower** | Kubernetes, cloud-native infrastructure | Demonstration-as-content (live demos, repos), minimal words with maximum impact | "Show, don't tell" with working examples; identified knowledge gaps early and filled them |
-| **Mitchell Hashimoto** (mitchellh.com) | Developer tools, infrastructure | Deep technical architecture posts, building authority through implementation detail | Credibility through explaining how something works under the hood |
-| **Cindy Sridharan** (copyconstruct.medium.com) | Distributed systems, observability | Long-form deep dives, comprehensive reference posts that become canonical resources | "The definitive guide to X" that everyone links to; published O'Reilly book from blog authority |
-| **Corey Quinn** (lastweekinaws.com) | AWS, FinOps, cloud economics | Humor as differentiator, newsletter-to-consulting pipeline, personality-driven brand | Built a consulting business on the back of a consistently entertaining newsletter |
-| **Jessie Frazelle** (blog.jessfraz.com) | Containers, Linux, security | Deeply technical posts with working code, practitioner credibility | Authority through implementation detail that proves hands-on experience |
+| Author / Blog                                  | Focus Area                              | What to Study                                                                                                         | Key Pattern                                                                                     |
+| ---------------------------------------------- | --------------------------------------- | --------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------- |
+| **Charity Majors** (charity.wtf)               | Observability, engineering leadership   | Opinionated framing, personal voice, "this is what I believe and here is why" structure                               | Opinion pieces that challenge industry assumptions and drive discussion                         |
+| **Julia Evans** (jvns.ca)                      | Systems, networking, programming        | Visual explanations (zines), making complex topics accessible, deceptively short posts that teach one concept clearly | "Explain one thing clearly" posts that rank for years with minimal word count                   |
+| **Kelsey Hightower**                           | Kubernetes, cloud-native infrastructure | Demonstration-as-content (live demos, repos), minimal words with maximum impact                                       | "Show, don't tell" with working examples; identified knowledge gaps early and filled them       |
+| **Mitchell Hashimoto** (mitchellh.com)         | Developer tools, infrastructure         | Deep technical architecture posts, building authority through implementation detail                                   | Credibility through explaining how something works under the hood                               |
+| **Cindy Sridharan** (copyconstruct.medium.com) | Distributed systems, observability      | Long-form deep dives, comprehensive reference posts that become canonical resources                                   | "The definitive guide to X" that everyone links to; published O'Reilly book from blog authority |
+| **Corey Quinn** (lastweekinaws.com)            | AWS, FinOps, cloud economics            | Humor as differentiator, newsletter-to-consulting pipeline, personality-driven brand                                  | Built a consulting business on the back of a consistently entertaining newsletter               |
+| **Jessie Frazelle** (blog.jessfraz.com)        | Containers, Linux, security             | Deeply technical posts with working code, practitioner credibility                                                    | Authority through implementation detail that proves hands-on experience                         |
 
 ### Patterns Worth Extracting
 
@@ -797,9 +795,9 @@ When 3+ articles are ready to publish:
 - [x] All posts have `draft: false`
 - [x] All posts have a `featured.jpg` in their page bundle
 - [x] Add Blog to nav menu in `config/_default/menus.en.toml` (weight: 30, between
-  Case Studies and About)
+      Case Studies and About)
 - [ ] Optionally set `showRecent = true` in `params.toml` to surface recent posts on
-  the homepage
+      the homepage
 - [ ] Run full validation suite (all 10 PR checks pass)
 
 ---
@@ -813,7 +811,7 @@ frequently referenced section for ongoing use.
 
 - [ ] Topic aligns with a content pillar ([Section 2](#2-content-strategy))
 - [ ] Target keyword identified (long-tail, not competing with service pages)
-  ([Section 6](#6-seo-optimization))
+      ([Section 6](#6-seo-optimization))
 - [ ] Post type selected ([Section 4](#4-post-types-that-work))
 - [ ] At least 1 service page and 1 case study identified to link to
 - [ ] Featured image sourced or created for the page bundle
@@ -821,7 +819,7 @@ frequently referenced section for ongoing use.
 ### During Writing
 
 - [ ] Hook in first 2 sentences (pain point, counter-intuitive, or specific metric)
-  ([Section 5](#5-writing-craft))
+      ([Section 5](#5-writing-craft))
 - [ ] H2 sections with keyword-rich headings; heading every 200-300 words
 - [ ] 2-4 internal links per 500 words ([Section 6](#6-seo-optimization))
 - [ ] At least 1 link to a service page and 1 link to a case study
@@ -830,9 +828,9 @@ frequently referenced section for ongoing use.
 - [ ] No em dashes (project formatting convention)
 - [ ] No raw HTML (will be stripped by Goldmark; use shortcodes instead)
 - [ ] CTA at the end linking to a service page or contact page
-  ([Section 5](#5-writing-craft))
+      ([Section 5](#5-writing-craft))
 - [ ] Answer-first pattern used for any question-based H2 headings
-  ([Section 6](#6-seo-optimization))
+      ([Section 6](#6-seo-optimization))
 
 ### Accessibility
 
@@ -850,9 +848,9 @@ Reference: `docs/web-accessibility-compliance-guide.md` for full WCAG 2.1 AA det
 - [ ] `description`: 150-160 characters with primary keyword
 - [ ] `slug`: Matches directory name, URL-friendly
 - [ ] `tags`: Proper case, reusing existing tags where possible
-  ([Section 14](#14-quick-reference-card) has the full list)
+      ([Section 14](#14-quick-reference-card) has the full list)
 - [ ] `draft: false` (when ready to publish)
-- [ ] No `showDate` in front matter (cascade default is `false`; override to `true` for timely content only)
+- [ ] No `showDate` in front matter (blog cascade default is `true`; only add `showDate: false` if you specifically want to hide the date on this post)
 - [ ] `featured.jpg` present in the page bundle directory
 
 ### Before Publishing
@@ -872,7 +870,7 @@ Reference: `docs/web-accessibility-compliance-guide.md` for full WCAG 2.1 AA det
 - [ ] Submit to relevant Reddit/HN if the post warrants it
 - [ ] Log post in the editorial calendar ([Section 13](#13-editorial-calendar-template))
 - [ ] Update any related existing pages to include a link to the new post (bidirectional
-  linking)
+      linking)
 
 ---
 
@@ -883,20 +881,20 @@ table as posts move through the pipeline.
 
 ### Calendar
 
-| Month | Topic | Post Type | Pillar | Status | Target Keywords | Linked Service | Linked Case Study |
-|-------|-------|-----------|--------|--------|-----------------|----------------|-------------------|
-| | (populated by generate-blog command) | | | | | | |
+| Month | Topic                                | Post Type | Pillar | Status | Target Keywords | Linked Service | Linked Case Study |
+| ----- | ------------------------------------ | --------- | ------ | ------ | --------------- | -------------- | ----------------- |
+|       | (populated by generate-blog command) |           |        |        |                 |                |                   |
 
 ### Status Values
 
-| Status | Meaning |
-|--------|---------|
-| Idea | Topic identified, not yet outlined |
-| Planned | Outline written, ready to draft |
+| Status       | Meaning                                           |
+| ------------ | ------------------------------------------------- |
+| Idea         | Topic identified, not yet outlined                |
+| Planned      | Outline written, ready to draft                   |
 | Draft exists | Draft in progress or completed, not yet published |
-| In review | Draft complete, undergoing review |
-| Published | Live on pertsfoundry.com |
-| Syndicated | Cross-posted to external platforms |
+| In review    | Draft complete, undergoing review                 |
+| Published    | Live on pertsfoundry.com                          |
+| Syndicated   | Cross-posted to external platforms                |
 
 ### Recommended Post-Launch Cadence
 
@@ -941,74 +939,86 @@ tags:
 
 ### Quick Formatting Rules
 
-| Rule | Value |
-|------|-------|
-| No em dashes | Use commas, semicolons, parens, or periods instead |
-| Tag casing | Proper case: `Terraform`, `AWS`, `Kubernetes` (not lowercase) |
-| Meta description | 150-160 characters with primary keyword |
-| `showDate` default | `false` (override to `true` for timely content only) |
-| Permalink pattern | `/blog/<slug>/` |
-| Markdown only | No raw HTML; `goldmark.renderer.unsafe = false` |
-| Internal links | At least 1 service page + 1 case study per post |
+| Rule                | Value                                                                                                                                        |
+| ------------------- | -------------------------------------------------------------------------------------------------------------------------------------------- |
+| No em dashes        | Use commas, semicolons, parens, or periods instead                                                                                           |
+| Tag casing          | Proper case: `Terraform`, `AWS`, `Kubernetes` (not lowercase)                                                                                |
+| Meta description    | 150-160 characters with primary keyword                                                                                                      |
+| `showDate` for blog | Inherited `true` from blog cascade in `content/blog/_index.md` (do not include in individual post front matter unless overriding to `false`) |
+| Permalink pattern   | `/blog/<slug>/`                                                                                                                              |
+| Markdown only       | No raw HTML; `goldmark.renderer.unsafe = false`                                                                                              |
+| Internal links      | At least 1 service page + 1 case study per post                                                                                              |
 
-### Existing Tags (45 total)
+### Existing Tags (48 total)
 
 Tags are used for related content cross-linking. Reuse these before creating new ones.
 
-| Tag | Tag | Tag | Tag |
-|-----|-----|-----|-----|
-| Agile | AI | ArgoCD | Atlantis |
-| AWS | Azure | Bash | CI/CD |
-| Claude | CloudFormation | CodeRabbit | Confluence |
-| Containers | Cursor | DevOps | Docker |
-| ECR | ECS | EKS | FinOps |
-| GAR | GCR | GCP | GCS |
-| GKE | GitLab | GitHub | GitHub Actions |
-| GitHub Copilot | HCP | Helm | Incident Response |
-| Infrastructure | Jenkins | Jira | Jira Service Desk |
-| Kanban | Kubernetes | NFS | Renovatebot |
-| RHEL | Snyk | Snowflake | Terraform |
-| Vault | | | |
+| Tag               | Tag            | Tag            | Tag            |
+| ----------------- | -------------- | -------------- | -------------- |
+| Agile             | AI             | ArgoCD         | Atlantis       |
+| AWS               | Azure          | Bash           | CI/CD          |
+| Claude            | CloudFormation | CodeRabbit     | Confluence     |
+| Containers        | Cursor         | DevOps         | Distroless     |
+| Docker            | ECR            | ECS            | EKS            |
+| FinOps            | GAR            | GCP            | GCR            |
+| GCS               | GitHub         | GitHub Actions | GitHub Copilot |
+| GitLab            | GKE            | HCP            | Helm           |
+| Incident Response | Infrastructure | Jenkins        | Jira           |
+| Jira Service Desk | Kanban         | Kubernetes     | Kyverno        |
+| NFS               | Renovatebot    | RHEL           | Snowflake      |
+| Snyk              | SRE            | Terraform      | Vault          |
 
 ### Service Page URLs (10)
 
-| Service | URL |
-|---------|-----|
-| Agile Coaching & Process Improvement | `/services/agile-coaching/` |
-| AI-Augmented Engineering | `/services/ai-augmented-engineering/` |
-| CI/CD & Automation | `/services/cicd-automation/` |
-| Cloud Infrastructure | `/services/cloud-infrastructure/` |
-| Cloud Migration | `/services/cloud-migration/` |
-| DevSecOps & DevOps | `/services/devsecops-devops/` |
-| FinOps & Cloud Cost Optimization | `/services/finops/` |
-| Incident Response & Reliability | `/services/incident-response/` |
-| Infrastructure as Code | `/services/infrastructure-as-code/` |
-| Kubernetes & Containers | `/services/kubernetes-containers/` |
+| Service                              | URL                                   |
+| ------------------------------------ | ------------------------------------- |
+| Agile Coaching & Process Improvement | `/services/agile-coaching/`           |
+| AI-Augmented Engineering             | `/services/ai-augmented-engineering/` |
+| CI/CD & Automation                   | `/services/cicd-automation/`          |
+| Cloud Infrastructure                 | `/services/cloud-infrastructure/`     |
+| Cloud Migration                      | `/services/cloud-migration/`          |
+| DevSecOps & DevOps                   | `/services/devsecops-devops/`         |
+| FinOps & Cloud Cost Optimization     | `/services/finops/`                   |
+| Incident Response & Reliability      | `/services/incident-response/`        |
+| Infrastructure as Code               | `/services/infrastructure-as-code/`   |
+| Kubernetes & Containers              | `/services/kubernetes-containers/`    |
 
 ### Case Study URLs (12)
 
-| Case Study | URL |
-|------------|-----|
-| Led Organization-Wide Agile Adoption | `/case-studies/agile-transformation-defense/` |
-| AI-Accelerated Infrastructure Delivery | `/case-studies/ai-accelerated-infrastructure-delivery/` |
-| Modernized CI/CD for Defense Org | `/case-studies/cicd-modernization-defense/` |
-| Deep Container Expertise, Forged at AWS | `/case-studies/container-expertise-aws/` |
-| Drove the Shift from DevOps to DevSecOps | `/case-studies/devops-to-devsecops-transformation/` |
-| Drove Enterprise AI Tooling Adoption | `/case-studies/enterprise-ai-tooling-adoption/` |
-| Saved Over $125,000 in Cloud Spend | `/case-studies/finops-cloud-cost-savings/` |
-| Led P0 Incident Resolution | `/case-studies/incident-response-leadership/` |
-| Built Multi-Tenant Kubernetes Platform | `/case-studies/kubernetes-multi-tenancy-scaling/` |
-| Scaled Terraform Across 200+ Projects | `/case-studies/terraform-infrastructure-at-scale/` |
-| Zero-Downtime Platform Upgrades | `/case-studies/zero-downtime-platform-upgrades/` |
-| 5+ PB Registry Migration | `/case-studies/zero-downtime-registry-migration/` |
+| Case Study                               | URL                                                     |
+| ---------------------------------------- | ------------------------------------------------------- |
+| Led Organization-Wide Agile Adoption     | `/case-studies/agile-transformation-defense/`           |
+| AI-Accelerated Infrastructure Delivery   | `/case-studies/ai-accelerated-infrastructure-delivery/` |
+| Modernized CI/CD for Defense Org         | `/case-studies/cicd-modernization-defense/`             |
+| Deep Container Expertise, Forged at AWS  | `/case-studies/container-expertise-aws/`                |
+| Drove the Shift from DevOps to DevSecOps | `/case-studies/devops-to-devsecops-transformation/`     |
+| Drove Enterprise AI Tooling Adoption     | `/case-studies/enterprise-ai-tooling-adoption/`         |
+| Saved Over $125,000 in Cloud Spend       | `/case-studies/finops-cloud-cost-savings/`              |
+| Led P0 Incident Resolution               | `/case-studies/incident-response-leadership/`           |
+| Built Multi-Tenant Kubernetes Platform   | `/case-studies/kubernetes-multi-tenancy-scaling/`       |
+| Scaled Terraform Across 200+ Projects    | `/case-studies/terraform-infrastructure-at-scale/`      |
+| Zero-Downtime Platform Upgrades          | `/case-studies/zero-downtime-platform-upgrades/`        |
+| 5+ PB Registry Migration                 | `/case-studies/zero-downtime-registry-migration/`       |
 
-### Blog Post URLs (3)
+### Blog Post URLs (15)
 
-| Blog Post | URL |
-|-----------|-----|
-| What Engineering Teams Get Wrong About AI Tooling Adoption | `/blog/ai-tooling-adoption/` |
-| How We Fixed Atlantis Rate Limiting with a GitHub App | `/blog/atlantis-rate-limiting-github-app/` |
-| Why Your Startup Needs Infrastructure as Code | `/blog/infrastructure-as-code/` |
+| Blog Post                                                  | URL                                                 |
+| ---------------------------------------------------------- | --------------------------------------------------- |
+| AI Code Review at Scale: 30+ Repos with CodeRabbit         | `/blog/ai-code-review-at-scale/`                    |
+| Anatomy of a 6-Hour P0 NFS Outage                          | `/blog/p0-nfs-outage-postmortem/`                   |
+| Building an Internal AI Best-Practices Guide for Engineers | `/blog/ai-best-practices-guide-engineering/`        |
+| Cutting 14 Critical CVEs by Going Distroless               | `/blog/distroless-container-hardening/`             |
+| Designing SLOs Engineering Teams Actually Use              | `/blog/slo-design-engineering-teams/`               |
+| Hardening Multi-Tenant Kubernetes with AI-Paired Kyverno   | `/blog/ai-paired-kyverno-policies/`                 |
+| How to Upgrade EKS Without Downtime                        | `/blog/zero-downtime-eks-upgrades/`                 |
+| How We Fixed Atlantis Rate Limiting with a GitHub App      | `/blog/atlantis-rate-limiting-github-app/`          |
+| How We Saved $125K Annually with FinOps                    | `/blog/finops-125k-cost-savings/`                   |
+| Migrating 5+ PB of Container Registry with Zero Downtime   | `/blog/zero-downtime-container-registry-migration/` |
+| Replacing Static Cloud Credentials with Workload Identity  | `/blog/cloud-workload-identity-migration/`          |
+| Using AI to Accelerate Terraform Migrations                | `/blog/ai-accelerated-terraform-migrations/`        |
+| What Engineering Teams Get Wrong About AI Tooling Adoption | `/blog/ai-tooling-adoption/`                        |
+| When to Switch from Scrum to Kanban                        | `/blog/scrum-to-kanban-migration/`                  |
+| Why Your Startup Needs Infrastructure as Code              | `/blog/infrastructure-as-code/`                     |
 
 ### CTA Templates
 
@@ -1038,13 +1048,14 @@ For a deeper look at how this played out in practice, read our case study on
 
 ### Available Shortcodes
 
-| Shortcode | Usage | Notes |
-|-----------|-------|-------|
-| `{{</* tech-tags "A, B, C" */>}}` | Comma-separated technology pill tags | Used in case studies; can be used in blog posts for technology sections |
-| `{{</* steps */>}}...{{</* /steps */>}}` | Wraps an ordered list with numbered circle badges | Used in service pages; good for step-by-step blog sections |
-| `{{% metric "key" %}}` | Inline metric from `data/metrics.toml` | Available keys: savings, terraform, migrations, ai-repos |
-| `{{</* faqs */>}}` | FAQ accordion from front matter `faqs` array | Renders `<details>/<summary>` HTML; also emits FAQPage JSON-LD |
-| `{{</* certification-badges */>}}` | Certification badge images | Typically not used in blog posts |
+| Shortcode                                  | Usage                                             | Notes                                                                                                                                                                                                        |
+| ------------------------------------------ | ------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `{{</* tech-tags "A, B, C" */>}}`          | Comma-separated technology pill tags              | Used in case studies; can be used in blog posts for technology sections                                                                                                                                      |
+| `{{</* steps */>}}...{{</* /steps */>}}`   | Wraps an ordered list with numbered circle badges | Used in service pages; good for step-by-step blog sections                                                                                                                                                   |
+| `{{% metric "key" %}}`                     | Inline metric from `data/metrics.toml`            | Available keys: savings, terraform, migrations, ai-repos                                                                                                                                                     |
+| `{{</* faqs */>}}`                         | FAQ accordion from front matter `faqs` array      | Renders `<details>/<summary>` HTML; also emits FAQPage JSON-LD                                                                                                                                               |
+| `{{</* related-reading slugs="a, b" */>}}` | Filtered "Related reading:" list                  | Skips slugs whose target page is excluded from the current build (e.g., scheduled posts before their `publishDate`); use for cross-linking from published posts to scheduled posts without breaking htmltest |
+| `{{</* certification-badges */>}}`         | Certification badge images                        | Typically not used in blog posts                                                                                                                                                                             |
 
 ---
 
@@ -1093,4 +1104,3 @@ For a deeper look at how this played out in practice, read our case study on
 - copyconstruct.medium.com (Cindy Sridharan): distributed systems, observability
 - lastweekinaws.com (Corey Quinn): AWS, FinOps, humor-driven brand
 - blog.jessfraz.com (Jessie Frazelle): containers, Linux, security
-

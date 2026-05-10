@@ -60,6 +60,22 @@
     },
     "http://localhost:8080/blog/",
     {
+      "url": "http://localhost:8080/blog/ai-accelerated-terraform-migrations/",
+      "ignore": ["color-contrast"]
+    },
+    {
+      "url": "http://localhost:8080/blog/ai-best-practices-guide-engineering/",
+      "ignore": ["color-contrast"]
+    },
+    {
+      "url": "http://localhost:8080/blog/ai-code-review-at-scale/",
+      "ignore": ["color-contrast"]
+    },
+    {
+      "url": "http://localhost:8080/blog/ai-paired-kyverno-policies/",
+      "ignore": ["color-contrast"]
+    },
+    {
       "url": "http://localhost:8080/blog/ai-tooling-adoption/",
       "ignore": ["color-contrast"]
     },
@@ -68,7 +84,39 @@
       "ignore": ["color-contrast"]
     },
     {
+      "url": "http://localhost:8080/blog/cloud-workload-identity-migration/",
+      "ignore": ["color-contrast"]
+    },
+    {
+      "url": "http://localhost:8080/blog/distroless-container-hardening/",
+      "ignore": ["color-contrast"]
+    },
+    {
+      "url": "http://localhost:8080/blog/finops-125k-cost-savings/",
+      "ignore": ["color-contrast"]
+    },
+    {
       "url": "http://localhost:8080/blog/infrastructure-as-code/",
+      "ignore": ["color-contrast"]
+    },
+    {
+      "url": "http://localhost:8080/blog/p0-nfs-outage-postmortem/",
+      "ignore": ["color-contrast"]
+    },
+    {
+      "url": "http://localhost:8080/blog/scrum-to-kanban-migration/",
+      "ignore": ["color-contrast"]
+    },
+    {
+      "url": "http://localhost:8080/blog/slo-design-engineering-teams/",
+      "ignore": ["color-contrast"]
+    },
+    {
+      "url": "http://localhost:8080/blog/zero-downtime-container-registry-migration/",
+      "ignore": ["color-contrast"]
+    },
+    {
+      "url": "http://localhost:8080/blog/zero-downtime-eks-upgrades/",
       "ignore": ["color-contrast"]
     },
     "http://localhost:8080/case-studies/",
