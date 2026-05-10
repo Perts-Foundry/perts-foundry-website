@@ -6,6 +6,23 @@ CheckTelephone: false
 IgnoreURLs:
   - "https://pertsfoundry.com"
   - "/api/contact"
+
+  # Scheduled blog posts. Existing posts cross-link to these via "Related
+  # reading" sections, but the targets are excluded from production builds
+  # (buildFuture intentionally unset) until each publishDate passes. Remove
+  # each entry as its corresponding scheduled-deploy.yml cron run lands.
+  - "^/blog/distroless-container-hardening/$" # publishes 2026-05-15
+  - "^/blog/p0-nfs-outage-postmortem/$" # publishes 2026-06-01
+  - "^/blog/finops-125k-cost-savings/$" # publishes 2026-06-15
+  - "^/blog/ai-code-review-at-scale/$" # publishes 2026-07-01
+  - "^/blog/zero-downtime-container-registry-migration/$" # publishes 2026-07-15
+  - "^/blog/slo-design-engineering-teams/$" # publishes 2026-08-01
+  - "^/blog/ai-accelerated-terraform-migrations/$" # publishes 2026-08-15
+  - "^/blog/ai-paired-kyverno-policies/$" # publishes 2026-09-01
+  - "^/blog/cloud-workload-identity-migration/$" # publishes 2026-09-15
+  - "^/blog/zero-downtime-eks-upgrades/$" # publishes 2026-10-01
+  - "^/blog/ai-best-practices-guide-engineering/$" # publishes 2026-10-15
+  - "^/blog/scrum-to-kanban-migration/$" # publishes 2026-11-01
 IgnoreAltEmpty: true
 IgnoreInternalEmptyHash: true
 IgnoreDirectoryMissingTrailingSlash: true

@@ -30,11 +30,12 @@ Ask the user which mode they want after completing Phase 1.
 
 **Calendar mode notes.** Calendar mode runs the explicit sequence: Phase 1 once → Phase 2 once (producing an editorial calendar of N candidate topics with assigned `publishDate` slots and per-post mode tags) → loop Phase 3 across all N posts → Phase 4 once as a batch (all N image prompts presented in one message, then all N processed) → Phase 5 once → Phase 6 once → Phase 7 once. Phase 4 must complete before Phase 5 because the audit table checks for `featured.jpg` per post. Word count and quality checks run per post within Phase 5; Hugo build, prettier, markdownlint, and PR creation run once over the batch.
 
-Calendar mode also adds three operational rules:
+Calendar mode also adds four operational rules:
 
 - **`publishDate` collision check.** Before generating, list existing posts' `publishDate` values. Each new post's `publishDate` must be unique across the existing set and across the other new posts in the batch.
 - **Per-post failure recovery.** If a post fails the Phase 5 audit, surface the failure with the post's slug and the specific check that failed, and ask the user whether to (a) hold the entire batch for fixes, (b) ship the passing subset and defer the failing post, or (c) skip Phase 5 for that one post with explicit acknowledgment. Do not silently drop a failing post from the batch.
 - **Idempotency on re-runs.** Before writing to the writing guide's Section 14 in Phase 7, check whether each tag or blog URL row is already present. Add only missing rows. Re-running Calendar mode on an already-shipped batch should produce no Section 14 diff.
+- **htmltest IgnoreURLs entries for back-links to scheduled posts.** When the bidirectional-linking step adds `**Related reading:**` links from existing blog posts to scheduled (future-dated) posts in the same batch, the production CI build excludes the scheduled posts (because `buildFuture` is unset by design), and htmltest will report those internal links as broken. For each scheduled post that an existing post will link to, add an `IgnoreURLs` regex entry to `.htmltest.yml` of the form `^/blog/<slug>/$` with a comment naming the `publishDate`. Remove each entry as its post publishes. Skipping this step causes a CI failure on the validate workflow's htmltest job.
 
 The post-count threshold for using Calendar mode rather than looping the standard mode is 4 or more posts; below that, the per-post overhead is acceptable.
 
