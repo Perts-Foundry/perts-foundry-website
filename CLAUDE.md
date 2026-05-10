@@ -35,59 +35,76 @@ The dev server is not needed for non-visual changes (CI config, worker code, doc
 All ten checks must pass before a PR can merge. Run these locally before pushing:
 
 ### 1. Vitest (Worker unit tests)
+
 Runs the 43 Worker unit/integration tests. Config: `vitest.config.mjs`.
+
 ```bash
 npx vitest run
 ```
 
 ### 2. Hugo Build
+
 ```bash
 hugo --gc --minify --cleanDestinationDir
 ```
 
 ### 3. htmltest (link/image validation)
+
 Runs against the `public/` build output. Config: `.htmltest.yml`.
 Only checks internal links — external URLs are skipped.
+
 ```bash
 htmltest
 ```
 
 ### 4. pa11y-ci (accessibility)
+
 Runs WCAG 2.1 AA checks (via axe-core) against the built site. Config: `.pa11yci`.
 Requires a local server on port 8080 serving `public/`.
+
 ```bash
 npx serve public -l 8080 &
 npx pa11y-ci
 ```
 
 ### 5. markdownlint
+
 Lints all content markdown. Config: `.markdownlint-cli2.jsonc`.
 Disabled rules: MD041 (first-line heading), MD013 (line length), MD033 (inline HTML).
+
 ```bash
 npx markdownlint-cli2 "content/**/*.md"
 ```
 
 ### 6. Prettier
+
 Checks formatting of content markdown, workflow YAML, and Worker JS. Config: `.prettierrc.toml`.
+
 ```bash
 npx prettier --check "content/**/*.md" ".github/**/*.yml" ".github/scripts/**/*.js" "src/**/*.js" "scripts/**/*.js"
 ```
 
 ### 7. actionlint
+
 Validates GitHub Actions workflow files.
+
 ```bash
 actionlint
 ```
 
 ### 8. Gitleaks (secret detection)
+
 Scans the full git history for leaked secrets.
+
 ```bash
 gitleaks git --log-opts="--all" --no-banner
 ```
 
 ### 9. Homepage smoke test
+
 Verifies 9 homepage section IDs (across 8 partials), carousel infrastructure DOM IDs, section ordering, and data bindings in the built HTML.
 Runs automatically in CI after the Hugo build. To check locally after building:
+
 ```bash
 hugo --gc --minify --cleanDestinationDir
 for id in hero-heading problem-heading tech-bar-heading metrics-heading certs-heading services-heading cases-heading process-heading cta-heading; do
@@ -96,6 +113,7 @@ done
 ```
 
 ### 10. Inner page smoke test
+
 Verifies structural elements on inner pages: `tech-tags` in every case study, `numbered-steps-wrapper` in every service page, `certification-badges` on the about page, and `data-reveal-stagger` on list pages.
 Runs automatically in CI after the Hugo build.
 
@@ -137,6 +155,7 @@ Active documentation lives in `docs/`. Reference guides that inform ongoing work
 - Tags use proper case (`Terraform`, `AWS`, `Kubernetes`, not `terraform`, `aws`)
 - Permalinks for case studies use the `slug` field: `/case-studies/:slug/`
 - Content `slug` values must match their directory name (e.g., `content/services/cloud-infrastructure/` uses `slug: "cloud-infrastructure"`). Structured breadcrumb data relies on this alignment.
+- **Blog cross-linking policy.** Every blog post has a mandatory forward CTA linking to at least one service page and one case study (template lives in `.claude/commands/generate-blog.md`, CTA templates section). Bidirectional "Related reading" back-links are applied selectively: always between blog posts (natural slot before/after the CTA); skipped by default for case studies and service pages (their footers have no natural slot, and service pages link forward to case studies by Blowfish convention). Note deferred service/case-study back-links in the PR report rather than restructuring those page templates inline. Full policy and override semantics in `.claude/commands/generate-blog.md`.
 - **Exception: contact page.** The contact page uses a custom template (`layouts/contact/simple.html`) that hardcodes all content in HTML for two-column layout control. The markdown file (`content/contact/index.md`) contains only front matter. Editing the contact page content requires modifying the template, not the markdown file. The layout has two cards: a contact form (left column on desktop, top on mobile) and a scheduling CTA card (right column, bottom on mobile). DOM source order matches visual order. The Turnstile CAPTCHA widget uses explicit render mode (`render=explicit` + `onloadTurnstileCallback` in `extend-head-uncached.html`) because Blowfish's DOM manipulation triggers Turnstile's MutationObserver auto-render multiple times, causing duplicate widgets. The callback renders exactly once and passes `size: 'flexible'` programmatically; the `.cf-turnstile` div in `simple.html` is a bare mount target with no `data-*` attributes. Renaming the `.cf-turnstile` class requires updating the render selector in `extend-head-uncached.html` and the CSS scaling rules in `_08_contact-page.css`. Do not revert to implicit (auto) render mode. CSS `transform: scale()` fallbacks at viewports below 500px (`assets/css/modules/_08_contact-page.css`) prevent the 300px-wide iframe from overflowing narrow screens. The email address is intentionally absent from the visible page (anti-scraping) and appears only in hidden error fallback elements.
 - **Exception: homepage.** The homepage uses a custom layout (`layouts/partials/home/custom.html`) that dispatches to 8 section sub-partials in `layouts/partials/homepage/`. Section order: hero (with inline problem statement), tech bar, metrics band, certifications, services grid, featured cases, process timeline, final CTA. Content comes from 5 sources: `hero.headline`, `hero.subheadline` from `content/_index.md` front matter; the problem statement from `content/_index.md` body (rendered inline in the hero); metrics, process steps, technologies, and certifications from `data/*.toml` files; services and case studies from Hugo section queries. All case studies and services appear on the homepage via paginated carousels (sorted by weight). Services display as image cards using their `featured*` image. The `.homepage` wrapper uses `display: flex; flex-direction: column; gap: 3rem` for consistent inter-section spacing. Three carousels (tech bar, services, cases) depend on specific DOM IDs: `tech-carousel-items`, `services-carousel-grid`, `cases-carousel-grid` and their corresponding `-dots` containers. Renaming these IDs in templates will silently break carousel navigation. Each carousel uses a responsive `perPage` function in `extend-footer.html` that checks `window.innerWidth < 640` to switch between mobile and desktop item counts. This 640px threshold must stay in sync with the CSS `@media (min-width: 640px)` breakpoints that control grid column counts; changing one without the other will cause layout/pagination mismatches. Note: `perPage` is evaluated once at page load and is not recalculated on resize or orientation change.
 
@@ -165,40 +184,41 @@ The site meets WCAG 2.1 AA alt-text requirements. Follow these patterns when add
 
 Five Blowfish theme templates are overridden locally. On theme upgrades, re-diff each override against the new vendor version.
 
-| Local override | Vendor original | Modification | Base version |
-|----------------|----------------|--------------|--------------|
-| `layouts/partials/article-link/simple.html` | `article-link/simple.html` | Decorative alt on featured images, description fallback | v2.100.0 |
-| `layouts/partials/article-link/card-related.html` | `article-link/card-related.html` | Added `alt=""` to decorative featured images for htmltest compliance | v2.100.0 |
-| `layouts/_default/list.html` | `_default/list.html` | `data-reveal-stagger` attribute for scroll-reveal cascade | v2.100.0 |
-| `layouts/contact/simple.html` | `_default/simple.html` | Full custom two-column contact page layout | v2.100.0 |
-| `layouts/partials/head.html` | `partials/head.html` | CSS loading via explicit module enumeration over `assets/css/modules/` (search `LOCAL OVERRIDE` for the exact delta) | v2.100.0 |
+| Local override                                    | Vendor original                  | Modification                                                                                                         | Base version |
+| ------------------------------------------------- | -------------------------------- | -------------------------------------------------------------------------------------------------------------------- | ------------ |
+| `layouts/partials/article-link/simple.html`       | `article-link/simple.html`       | Decorative alt on featured images, description fallback                                                              | v2.100.0     |
+| `layouts/partials/article-link/card-related.html` | `article-link/card-related.html` | Added `alt=""` to decorative featured images for htmltest compliance                                                 | v2.100.0     |
+| `layouts/_default/list.html`                      | `_default/list.html`             | `data-reveal-stagger` attribute for scroll-reveal cascade                                                            | v2.100.0     |
+| `layouts/contact/simple.html`                     | `_default/simple.html`           | Full custom two-column contact page layout                                                                           | v2.100.0     |
+| `layouts/partials/head.html`                      | `partials/head.html`             | CSS loading via explicit module enumeration over `assets/css/modules/` (search `LOCAL OVERRIDE` for the exact delta) | v2.100.0     |
 
 ### Vendor CSS Contrast Overrides
 
 Two Blowfish Tailwind utility class combinations fail WCAG AA contrast and are overridden in `assets/css/modules/_04_shared-components.css` with `!important`. On theme upgrades, verify these class names still exist in the vendor templates.
 
-| CSS selector | Vendor usage | Override | Base version |
-|-------------|--------------|----------|--------------|
-| `.px-2.text-primary-500` | Article-meta middot separators | `primary-400` dark / `primary-700` light | v2.100.0 |
-| `.px-1.text-primary-500` | Breadcrumb separators | `primary-400` dark / `primary-700` light | v2.100.0 |
+| CSS selector             | Vendor usage                   | Override                                 | Base version |
+| ------------------------ | ------------------------------ | ---------------------------------------- | ------------ |
+| `.px-2.text-primary-500` | Article-meta middot separators | `primary-400` dark / `primary-700` light | v2.100.0     |
+| `.px-1.text-primary-500` | Breadcrumb separators          | `primary-400` dark / `primary-700` light | v2.100.0     |
 
 ### CSS Module Organization
 
 Custom CSS is split into 9 topic-scoped modules in `assets/css/modules/` and loaded via `layouts/partials/head.html` (the 5th vendor override). Modules are concatenated in explicit numeric order into a single minified + fingerprinted bundle.
 
-| Module | Scope |
-|--------|-------|
-| `_01_global.css` | `:root` variables, base resets, header/footer normalization, global reduced-motion |
-| `_02_typography.css` | Responsive `clamp()` heading sizes, prose sizing, hero image constraints |
-| `_03_animations.css` | All `@keyframes` (heroGradientShift, ctaPulse, techItemExit, techEnterScale, dotProgress) + scroll-reveal base rules |
-| `_04_shared-components.css` | Contrast overrides, `.cta`, `.numbered-steps`, headshot styling |
-| `_05_homepage.css` | Hero, services carousel, metrics band, homepage layout shell |
-| `_06_homepage-cards.css` | Certification badges, case cards, cases carousel, process timeline, final CTA card |
-| `_07_tech-bar.css` | Tech bar carousel, item animations, tech-specific reduced-motion |
-| `_08_contact-page.css` | Contact two-column layout, contact cards, Turnstile scaling, form styling |
-| `_09_article-details.css` | Article-link hovers, results table, tech tags, FAQ accordion, H2 reveal |
+| Module                      | Scope                                                                                                                |
+| --------------------------- | -------------------------------------------------------------------------------------------------------------------- |
+| `_01_global.css`            | `:root` variables, base resets, header/footer normalization, global reduced-motion                                   |
+| `_02_typography.css`        | Responsive `clamp()` heading sizes, prose sizing, hero image constraints                                             |
+| `_03_animations.css`        | All `@keyframes` (heroGradientShift, ctaPulse, techItemExit, techEnterScale, dotProgress) + scroll-reveal base rules |
+| `_04_shared-components.css` | Contrast overrides, `.cta`, `.numbered-steps`, headshot styling                                                      |
+| `_05_homepage.css`          | Hero, services carousel, metrics band, homepage layout shell                                                         |
+| `_06_homepage-cards.css`    | Certification badges, case cards, cases carousel, process timeline, final CTA card                                   |
+| `_07_tech-bar.css`          | Tech bar carousel, item animations, tech-specific reduced-motion                                                     |
+| `_08_contact-page.css`      | Contact two-column layout, contact cards, Turnstile scaling, form styling                                            |
+| `_09_article-details.css`   | Article-link hovers, results table, tech tags, FAQ accordion, H2 reveal                                              |
 
 **Where to add new CSS:**
+
 - New homepage section → `_05_homepage.css` or `_06_homepage-cards.css` (depending on whether it's a card/timeline).
 - New page-specific styles → create a new module (e.g. `_10_new-page.css`) and add it to the enumerated list in `layouts/partials/head.html`.
 - New `@keyframes` → always in `_03_animations.css` (keyframe names resolve globally, so placement is independent of usage).
@@ -260,7 +280,7 @@ are the author's responsibility to keep out.
   `TURNSTILE_SECRET_KEY`, any Cloudflare API token, any GitHub PAT, any
   Anthropic API key used by Claude Code commands. These belong in
   `wrangler secret put` or repo Actions secrets, never in source. The
-  Turnstile *site key* is public and lives in `params.toml` — that is
+  Turnstile _site key_ is public and lives in `params.toml` — that is
   not a secret.
 - **Local-only filesystem paths**: `~/repos/...`, `/home/<user>/...`,
   internal corp paths from past jobs. These should not appear in code,
@@ -272,7 +292,7 @@ are the author's responsibility to keep out.
 
 - The author's name and the consultancy's name — the repo identifies
   itself.
-- Public Cloudflare zone IDs, the Turnstile *site* key, the public
+- Public Cloudflare zone IDs, the Turnstile _site_ key, the public
   GitHub org / username, the public Cal.com scheduling URL.
 - Synthetic test fixtures used by `src/worker.test.js` (e.g.,
   `test@example.com`, `Acme Corp`).
@@ -340,7 +360,7 @@ Set via `wrangler secret put`:
 - `RESEND_API_KEY` -- Resend API key for email delivery
 - `TURNSTILE_SECRET_KEY` -- Cloudflare Turnstile secret key for CAPTCHA verification
 
-The Turnstile *site key* (public) is in `config/_default/params.toml` as `turnstileSiteKey`.
+The Turnstile _site key_ (public) is in `config/_default/params.toml` as `turnstileSiteKey`.
 
 The `extend-head-uncached.html` partial serves multiple purposes: DNS-prefetch hints for external domains (challenges.cloudflare.com, cal.com), Turnstile explicit rendering on the contact page (the `onloadTurnstileCallback` function is the single point of widget configuration, including sitekey, theme, and size; the widget ID is stored on `window.turnstileWidgetId` for use by the form submission code in `simple.html`), and custom JSON-LD structured data (Organization schema on the homepage, Service schema on individual service pages, FAQPage schema on any page with `faqs` front matter data). This partial receives the full page context (not the cached `.Site`), so page-level conditionals like `.IsHome` and `.Section` work correctly. String values in JSON-LD use Hugo's `jsonify | safeJS` pipeline: `jsonify` produces valid JSON escaping of quotes, backslashes, and special characters, and `safeJS` marks the output as already-safe JavaScript so Hugo's `html/template` context-aware escaping does not re-escape it (without `safeJS`, Hugo detects the JSON is inside a `<script>` tag and wraps string values in literal quote characters, producing doubly-quoted output that degrades structured-data parsing). Individual service pages can override the default `serviceType` ("DevOps Consulting") in the Service JSON-LD by setting `params.serviceType` in front matter. The Organization schema's `knowsAbout` array lists expertise areas for search engines; update it when adding new service categories.
 

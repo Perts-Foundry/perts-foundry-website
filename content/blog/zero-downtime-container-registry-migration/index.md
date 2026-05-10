@@ -34,8 +34,8 @@ We wrote a small set of scripts that ran across every project in the organizatio
 ```bash
 #!/usr/bin/env bash
 # Tested with gcloud SDK 460+, jq 1.7
-# Lists every image in every project's GCR with age and last-pulled timestamp.
-# Output: project, host, repo, image, last_pulled_days, size_bytes
+# Lists every image in every project's GCR, one row per image.
+# Output columns (tab-separated): project, host, image_path
 
 set -euo pipefail
 

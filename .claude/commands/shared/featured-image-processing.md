@@ -37,7 +37,7 @@ For each new page missing a `featured.jpg`:
 
 Present the prompt to the user and ask them to generate the image and provide the file path.
 
-**Batch hand-off convention (for multi-image runs).** When generating more than 3 images in one session, suggest the user save them with a known naming convention (e.g., `1-<slug>.png`, `2-<slug>.png` ...) so the slug-to-source mapping is unambiguous. If the user instead provides opaque vendor filenames (Gemini emits hashes), sort by file mtime and confirm the mapping with the user before processing.
+**Batch hand-off convention (for multi-image runs).** When generating 4 or more images in one session, suggest the user save them with a known naming convention (e.g., `1-<slug>.png`, `2-<slug>.png` ...) so the slug-to-source mapping is unambiguous. If the user instead provides opaque vendor filenames (Gemini emits hashes), sort by file mtime and confirm the mapping with the user before processing.
 
 **Step 3: Process the image.** When the user provides the generated image path, process it using a Node.js script with the sharp library (do not use the sharp CLI, it has unreliable argument parsing for composite operations). Run the script from the project root so `sharp` resolves from the project's `node_modules`; `node -e` from outside the project root will fail with `Cannot find module 'sharp'`.
 
