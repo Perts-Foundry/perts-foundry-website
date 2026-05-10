@@ -43,23 +43,72 @@ jobs:
             const triggerRunId = context.payload.workflow_run.id;
 
             async function skipAndComment(prNumber, reason) {
+              const marker = '<!-- dependabot-auto-deploy-skip -->';
               core.info(`PR #${prNumber}: ${reason}`);
+              // Sanitize so attacker-controlled content (e.g. crafted file paths
+              // in the reason text) cannot escape the rendered code fence.
+              const safe = String(reason)
+                .replace(/```/g, '​```')
+                .replace(/[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]/g, '');
+              const body = [
+                marker,
+                '# Dependabot Auto-Deploy Skipped',
+                '',
+                safe,
+                '',
+                'Resolve the reason above, then push a new commit (or remove the blocking label) to re-trigger.',
+              ].join('\n');
+              // Dedup: list every comment with the marker, keep the oldest one
+              // as canonical (preserves thread position; subscribers don't get
+              // re-notified by an updateComment), update its body, delete the
+              // rest. List failure falls back to a plain createComment so the
+              // user always sees a signal that auto-deploy declined.
+              let existing = [];
               try {
-                await github.rest.issues.createComment({
+                const comments = await github.paginate(github.rest.issues.listComments, {
                   owner: context.repo.owner,
                   repo: context.repo.repo,
                   issue_number: prNumber,
-                  body: [
-                    '<!-- dependabot-auto-deploy-skip -->',
-                    '# Dependabot Auto-Deploy Skipped',
-                    '',
-                    reason,
-                    '',
-                    'Resolve the reason above, then push a new commit (or remove the blocking label) to re-trigger.',
-                  ].join('\n'),
+                  per_page: 100,
                 });
+                existing = comments
+                  .filter((c) => c.body && c.body.includes(marker))
+                  .sort((a, b) => a.id - b.id);
+              } catch (e) {
+                core.warning(`listComments failed on PR #${prNumber}; will post without dedup: ${e.message}`);
+              }
+              const [keep, ...dupes] = existing;
+              try {
+                if (keep) {
+                  await github.rest.issues.updateComment({
+                    owner: context.repo.owner,
+                    repo: context.repo.repo,
+                    comment_id: keep.id,
+                    body,
+                  });
+                } else {
+                  await github.rest.issues.createComment({
+                    owner: context.repo.owner,
+                    repo: context.repo.repo,
+                    issue_number: prNumber,
+                    body,
+                  });
+                }
               } catch (e) {
                 core.warning(`Failed to post skip comment on PR #${prNumber}: ${e.message}`);
+              }
+              for (const d of dupes) {
+                try {
+                  await github.rest.issues.deleteComment({
+                    owner: context.repo.owner,
+                    repo: context.repo.repo,
+                    comment_id: d.id,
+                  });
+                } catch (e) {
+                  // Best-effort cleanup; log at debug so persistent failure is
+                  // observable without spamming run logs every skip.
+                  core.debug(`Failed to delete duplicate skip comment ${d.id}: ${e.message}`);
+                }
               }
             }
 
@@ -193,7 +242,13 @@ jobs:
               return;
             }
 
-            const bumpRegex = /from\s+v?(\d+)(?:\.\d+){0,2}[^\s]*\s+to\s+v?(\d+)(?:\.\d+){0,2}/gi;
+            // Anchor on Dependabot's canonical phrasing for both single-package
+            // PRs ("Bump(s) <pkg> from X.Y.Z to X.Y.Z") and grouped PR per-package
+            // lines ("Updates `<pkg>` from X.Y.Z to X.Y.Z"). \S* after the third
+            // digit accepts pre-release suffixes like `-rc.1` or `+build.5`.
+            // Apply against title+body. The /g flag captures every match;
+            // if ANY matched bump crosses majors, the PR is held.
+            const bumpRegex = /\b(?:bumps?|updates?)\s+\S+\s+from\s+v?(\d+)\.\d+\.\d+\S*\s+to\s+v?(\d+)\.\d+\.\d+/gi;
             const haystack = `${pr.title}\n${pr.body || ''}`;
             const majorBumps = [];
             let m;
@@ -446,6 +501,47 @@ jobs:
                 }),
               { attempts: 3, delayMs: 2000, label: 'Post deploy comment', core }
             );
+
+      # ── Clean up stale skip comments after successful deploy ────
+      # When a stuck PR (e.g. one previously held by the major-bump regex
+      # bug) finally auto-deploys, prior `dependabot-auto-deploy-skip`
+      # comments become misleading. Delete them so the success report is
+      # the only auto-deploy signal on the PR.
+      - name: Clean up stale skip comments
+        if: success() && steps.pr.outputs.number
+        continue-on-error: true
+        uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9.0.0
+        env:
+          PR_NUMBER: ${{ steps.pr.outputs.number }}
+        with:
+          script: |
+            const marker = '<!-- dependabot-auto-deploy-skip -->';
+            const prNumber = parseInt(process.env.PR_NUMBER, 10);
+            try {
+              const comments = await github.paginate(github.rest.issues.listComments, {
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: prNumber,
+                per_page: 100,
+              });
+              const stale = comments.filter((c) => c.body && c.body.includes(marker));
+              for (const c of stale) {
+                try {
+                  await github.rest.issues.deleteComment({
+                    owner: context.repo.owner,
+                    repo: context.repo.repo,
+                    comment_id: c.id,
+                  });
+                } catch (e) {
+                  core.warning(`Failed to delete skip comment ${c.id}: ${e.message}`);
+                }
+              }
+              if (stale.length > 0) {
+                core.info(`Deleted ${stale.length} stale skip comment(s).`);
+              }
+            } catch (e) {
+              core.warning(`Failed to list comments for cleanup: ${e.message}`);
+            }
 
       # ── Report failure ──────────────────────────────────────────
       - name: Report failure
