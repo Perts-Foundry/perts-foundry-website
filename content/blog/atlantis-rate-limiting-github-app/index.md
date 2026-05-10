@@ -79,7 +79,4 @@ For a deeper look at how this fit into a broader effort to professionalize Terra
 
 If your team's CI/CD workflows are hitting similar friction, our [CI/CD & Automation consulting](/services/cicd-automation/) engagements start with exactly this kind of assessment.
 
-**Related reading:**
-
-- [Using AI to Accelerate Terraform Migrations](/blog/ai-accelerated-terraform-migrations/)
-- [Hardening Multi-Tenant Kubernetes with AI-Paired Kyverno](/blog/ai-paired-kyverno-policies/)
+{{< related-reading slugs="ai-accelerated-terraform-migrations, ai-paired-kyverno-policies" >}}

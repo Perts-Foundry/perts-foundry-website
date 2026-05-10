@@ -1048,13 +1048,14 @@ For a deeper look at how this played out in practice, read our case study on
 
 ### Available Shortcodes
 
-| Shortcode                                | Usage                                             | Notes                                                                   |
-| ---------------------------------------- | ------------------------------------------------- | ----------------------------------------------------------------------- |
-| `{{</* tech-tags "A, B, C" */>}}`        | Comma-separated technology pill tags              | Used in case studies; can be used in blog posts for technology sections |
-| `{{</* steps */>}}...{{</* /steps */>}}` | Wraps an ordered list with numbered circle badges | Used in service pages; good for step-by-step blog sections              |
-| `{{% metric "key" %}}`                   | Inline metric from `data/metrics.toml`            | Available keys: savings, terraform, migrations, ai-repos                |
-| `{{</* faqs */>}}`                       | FAQ accordion from front matter `faqs` array      | Renders `<details>/<summary>` HTML; also emits FAQPage JSON-LD          |
-| `{{</* certification-badges */>}}`       | Certification badge images                        | Typically not used in blog posts                                        |
+| Shortcode                                  | Usage                                             | Notes                                                                                                                                                                                                        |
+| ------------------------------------------ | ------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `{{</* tech-tags "A, B, C" */>}}`          | Comma-separated technology pill tags              | Used in case studies; can be used in blog posts for technology sections                                                                                                                                      |
+| `{{</* steps */>}}...{{</* /steps */>}}`   | Wraps an ordered list with numbered circle badges | Used in service pages; good for step-by-step blog sections                                                                                                                                                   |
+| `{{% metric "key" %}}`                     | Inline metric from `data/metrics.toml`            | Available keys: savings, terraform, migrations, ai-repos                                                                                                                                                     |
+| `{{</* faqs */>}}`                         | FAQ accordion from front matter `faqs` array      | Renders `<details>/<summary>` HTML; also emits FAQPage JSON-LD                                                                                                                                               |
+| `{{</* related-reading slugs="a, b" */>}}` | Filtered "Related reading:" list                  | Skips slugs whose target page is excluded from the current build (e.g., scheduled posts before their `publishDate`); use for cross-linking from published posts to scheduled posts without breaking htmltest |
+| `{{</* certification-badges */>}}`         | Certification badge images                        | Typically not used in blog posts                                                                                                                                                                             |
 
 ---
 

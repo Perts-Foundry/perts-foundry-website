@@ -6,3 +6,9 @@ go.sum
 # Hugo archetypes use {{ }} template delimiters that prettier reformats as
 # YAML object syntax ({ { .Date } }), which breaks `hugo new content`.
 archetypes/
+
+# Hugo layouts (shortcodes, partials, _default templates) use {{ }} template
+# delimiters and embed example tag-like text inside doc comments. Prettier
+# treats the .html extension as plain HTML and reformats both, breaking
+# the templates (e.g. interpreting <slug> inside a comment as an HTML tag).
+layouts/

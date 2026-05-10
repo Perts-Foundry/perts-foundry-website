@@ -59,8 +59,4 @@ Infrastructure as Code isn't a nice-to-have for mature teams. It's the foundatio
 
 If your team is wrestling with when or how to make the switch, our [Infrastructure as Code consulting](/services/infrastructure-as-code/) engagements start with exactly this kind of assessment.
 
-**Related reading:**
-
-- [Using AI to Accelerate Terraform Migrations](/blog/ai-accelerated-terraform-migrations/)
-- [Replacing Static Cloud Credentials with Workload Identity](/blog/cloud-workload-identity-migration/)
-- [How to Upgrade EKS Without Downtime](/blog/zero-downtime-eks-upgrades/)
+{{< related-reading slugs="ai-accelerated-terraform-migrations, cloud-workload-identity-migration, zero-downtime-eks-upgrades" >}}

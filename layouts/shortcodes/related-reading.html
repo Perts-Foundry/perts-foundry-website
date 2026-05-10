@@ -1,0 +1,38 @@
+{{/*
+  Renders a "Related reading:" list filtered to pages that exist in the
+  current build. Future-dated blog posts (publishDate in the future, with
+  buildFuture unset) are silently skipped, so the rendered HTML contains
+  no broken internal links. Once a scheduled post publishes, the next
+  rebuild includes its link automatically with no edits to the calling
+  page required.
+
+  Usage in a blog post body (use the angle-bracket form so the emitted
+  HTML is not re-parsed as markdown):
+
+    [related-reading slugs="slug-one, slug-two, slug-three"]
+
+  Slugs are blog post slugs (the directory name under content/blog).
+  Each is looked up via site.GetPage at /blog/SLUG/. Pages not present
+  in the current build are filtered out. Empty entries (missing slugs
+  argument, trailing commas, blank-only entries) are also skipped so
+  the shortcode never accidentally links to the blog section index.
+  If every supplied slug is filtered, the shortcode emits nothing.
+*/}}
+{{- $rawSlugs := .Get "slugs" -}}
+{{- $items := slice -}}
+{{- range $slug := split $rawSlugs "," -}}
+  {{- $trimmed := strings.TrimSpace $slug -}}
+  {{- if $trimmed -}}
+    {{- with site.GetPage (printf "/blog/%s" $trimmed) -}}
+      {{- $items = $items | append . -}}
+    {{- end -}}
+  {{- end -}}
+{{- end -}}
+{{- if $items -}}
+<p><strong>Related reading:</strong></p>
+<ul>
+{{- range $items }}
+<li><a href="{{ .RelPermalink }}">{{ .Title }}</a></li>
+{{- end }}
+</ul>
+{{- end -}}
