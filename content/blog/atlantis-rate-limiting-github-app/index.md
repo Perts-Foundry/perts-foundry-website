@@ -78,3 +78,8 @@ The GitHub App migration is a well-scoped change with significant payoff. It doe
 For a deeper look at how this fit into a broader effort to professionalize Terraform operations across hundreds of projects, read our case study on [scaling Terraform across 200+ projects](/case-studies/terraform-infrastructure-at-scale/).
 
 If your team's CI/CD workflows are hitting similar friction, our [CI/CD & Automation consulting](/services/cicd-automation/) engagements start with exactly this kind of assessment.
+
+**Related reading:**
+
+- [Using AI to Accelerate Terraform Migrations](/blog/ai-accelerated-terraform-migrations/)
+- [Hardening Multi-Tenant Kubernetes with AI-Paired Kyverno](/blog/ai-paired-kyverno-policies/)

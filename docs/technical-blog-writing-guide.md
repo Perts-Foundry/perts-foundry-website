@@ -951,7 +951,7 @@ tags:
 | Markdown only | No raw HTML; `goldmark.renderer.unsafe = false` |
 | Internal links | At least 1 service page + 1 case study per post |
 
-### Existing Tags (45 total)
+### Existing Tags (48 total)
 
 Tags are used for related content cross-linking. Reuse these before creating new ones.
 
@@ -960,15 +960,15 @@ Tags are used for related content cross-linking. Reuse these before creating new
 | Agile | AI | ArgoCD | Atlantis |
 | AWS | Azure | Bash | CI/CD |
 | Claude | CloudFormation | CodeRabbit | Confluence |
-| Containers | Cursor | DevOps | Docker |
-| ECR | ECS | EKS | FinOps |
-| GAR | GCR | GCP | GCS |
-| GKE | GitLab | GitHub | GitHub Actions |
-| GitHub Copilot | HCP | Helm | Incident Response |
-| Infrastructure | Jenkins | Jira | Jira Service Desk |
-| Kanban | Kubernetes | NFS | Renovatebot |
-| RHEL | Snyk | Snowflake | Terraform |
-| Vault | | | |
+| Containers | Cursor | DevOps | Distroless |
+| Docker | ECR | ECS | EKS |
+| FinOps | GAR | GCR | GCP |
+| GCS | GKE | GitLab | GitHub |
+| GitHub Actions | GitHub Copilot | HCP | Helm |
+| Incident Response | Infrastructure | Jenkins | Jira |
+| Jira Service Desk | Kanban | Kubernetes | Kyverno |
+| NFS | Renovatebot | RHEL | Snyk |
+| Snowflake | SRE | Terraform | Vault |
 
 ### Service Page URLs (10)
 
@@ -1002,12 +1002,24 @@ Tags are used for related content cross-linking. Reuse these before creating new
 | Zero-Downtime Platform Upgrades | `/case-studies/zero-downtime-platform-upgrades/` |
 | 5+ PB Registry Migration | `/case-studies/zero-downtime-registry-migration/` |
 
-### Blog Post URLs (3)
+### Blog Post URLs (15)
 
 | Blog Post | URL |
 |-----------|-----|
-| What Engineering Teams Get Wrong About AI Tooling Adoption | `/blog/ai-tooling-adoption/` |
+| AI Code Review at Scale: 30+ Repos with CodeRabbit | `/blog/ai-code-review-at-scale/` |
+| Anatomy of a 6-Hour P0 NFS Outage | `/blog/p0-nfs-outage-postmortem/` |
+| Building an Internal AI Best-Practices Guide for Engineers | `/blog/ai-best-practices-guide-engineering/` |
+| Cutting 14 Critical CVEs by Going Distroless | `/blog/distroless-container-hardening/` |
+| Designing SLOs Engineering Teams Actually Use | `/blog/slo-design-engineering-teams/` |
+| Hardening Multi-Tenant Kubernetes with AI-Paired Kyverno | `/blog/ai-paired-kyverno-policies/` |
+| How to Upgrade EKS Without Downtime | `/blog/zero-downtime-eks-upgrades/` |
 | How We Fixed Atlantis Rate Limiting with a GitHub App | `/blog/atlantis-rate-limiting-github-app/` |
+| How We Saved $125K Annually with FinOps | `/blog/finops-125k-cost-savings/` |
+| Migrating 5+ PB of Container Registry with Zero Downtime | `/blog/zero-downtime-container-registry-migration/` |
+| Replacing Static Cloud Credentials with Workload Identity | `/blog/cloud-workload-identity-migration/` |
+| Using AI to Accelerate Terraform Migrations | `/blog/ai-accelerated-terraform-migrations/` |
+| What Engineering Teams Get Wrong About AI Tooling Adoption | `/blog/ai-tooling-adoption/` |
+| When to Switch from Scrum to Kanban | `/blog/scrum-to-kanban-migration/` |
 | Why Your Startup Needs Infrastructure as Code | `/blog/infrastructure-as-code/` |
 
 ### CTA Templates

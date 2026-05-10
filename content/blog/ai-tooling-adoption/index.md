@@ -62,4 +62,10 @@ The organizations that get this right don't just have AI tools. They have AI as 
 
 If that pattern sounds familiar, our [AI-Augmented Engineering](/services/ai-augmented-engineering/) engagements start with exactly this kind of assessment.
 
+**Related reading:**
+
+- [AI Code Review at Scale: 30+ Repos with CodeRabbit](/blog/ai-code-review-at-scale/)
+- [Building an Internal AI Best-Practices Guide for Engineers](/blog/ai-best-practices-guide-engineering/)
+- [Using AI to Accelerate Terraform Migrations](/blog/ai-accelerated-terraform-migrations/)
+
 For a deeper look at how this played out in practice, read our case study on [driving enterprise AI tooling adoption across engineering](/case-studies/enterprise-ai-tooling-adoption/).

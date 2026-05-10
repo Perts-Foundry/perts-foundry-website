@@ -2,3 +2,7 @@ public/
 resources/
 hugo_stats.json
 go.sum
+
+# Hugo archetypes use {{ }} template delimiters that prettier reformats as
+# YAML object syntax ({ { .Date } }), which breaks `hugo new content`.
+archetypes/
