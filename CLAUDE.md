@@ -152,6 +152,7 @@ Active documentation lives in `docs/`. Reference guides that inform ongoing work
 - Front matter uses YAML delimiters (`---`)
 - Archetypes default to `draft: true` for manual authoring. The generate commands (`generate-services`, `generate-case-studies`, `generate-blog`) override to `draft: false` because content is approved interactively during their Phase 2.
 - **Scheduled publishing:** Set `publishDate` to a future date and `draft: false` to schedule a blog post. Hugo excludes pages with a future `publishDate` by default. The `buildFuture` config overrides this exclusion and should remain unset so that scheduled posts stay hidden until the next rebuild after their `publishDate` passes. Set both `date` and `publishDate` to the desired go-live date so the displayed date matches. The `scheduled-deploy.yml` workflow rebuilds the site on the 1st and 15th of each month, publishing any posts whose `publishDate` has passed.
+- **No concrete engagement timelines.** Do not list specific durations for consulting engagements (e.g. "2-4 weeks", "3-6 months") in FAQ answers, service descriptions, or any client-facing content. Each engagement is unique, and timelines depend on scope and complexity. Describe the approach qualitatively ("depends on scope", "varies by complexity") rather than quantitatively. Describing early vs. long-term outcomes without attaching specific durations is fine.
 - Tags use proper case (`Terraform`, `AWS`, `Kubernetes`, not `terraform`, `aws`)
 - Permalinks for case studies use the `slug` field: `/case-studies/:slug/`
 - Content `slug` values must match their directory name (e.g., `content/services/cloud-infrastructure/` uses `slug: "cloud-infrastructure"`). Structured breadcrumb data relies on this alignment.
@@ -390,6 +391,14 @@ npx wrangler dev
 ## Infrastructure
 
 All infrastructure changes (DNS, Workers config, R2 buckets, etc.) must be codified in Terraform in the [Perts-Foundry/infrastructure](https://github.com/Perts-Foundry/infrastructure) repo. Never make manual infrastructure changes -- always create a PR in that repo instead.
+
+### Security headers
+
+Security headers are applied at the Cloudflare edge via HTTP Response Header Modification Transform Rules, codified in Terraform (`cloudflare_ruleset.com_response_headers`) in the infrastructure repo, not in this repo. The ruleset has two rules: (1) global security headers (CSP, HSTS, X-Frame-Options, Referrer-Policy, Permissions-Policy, X-Content-Type-Options, X-XSS-Protection); (2) immutable `Cache-Control` for `/css/*` and `/js/*`. A `static/_headers` file does NOT work with Workers Static Assets (`binding = "ASSETS"` + `run_worker_first`) and has been removed; do not re-add it. Header changes go in `cloudflare.tf` in the infrastructure repo. The Worker's `jsonResponse()` still sets its own headers on API responses as defense-in-depth. The CSP `connect-src` allows `https://cloudflareinsights.com` for the analytics beacon.
+
+### Analytics
+
+Cloudflare Web Analytics is enabled via zone-based auto-injection in the Cloudflare dashboard (Web Analytics > pertsfoundry.com), with EU visitor data excluded. No code configuration is involved: Cloudflare's edge rewrites HTML responses to inject the beacon script before they reach the browser, so `curl` will not show the beacon in the HTML even though the dashboard still records real-browser traffic. The Blowfish theme has no native Cloudflare analytics integration. The commented `[analytics.cloudflare]` block in `config/production/params.toml` is dead config that nothing reads; it is kept only as an explanatory comment. If zone-based injection ever stops working (e.g. a Workers config change), fall back to a JS beacon added via a `layouts/partials/extend-head.html` partial.
 
 ## Git Workflow
 
