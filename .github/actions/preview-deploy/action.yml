@@ -1,0 +1,145 @@
+name: Preview deploy to Cloudflare Workers
+description: |
+  Build the Hugo site (preview environment) and upload a *preview* version of the
+  Worker (does NOT touch production), then expose its preview URL. Uses
+  `wrangler versions upload --preview-alias pr-<N>`, which assigns a stable alias
+  URL of the form `https://pr-<N>-<worker-name>.<subdomain>.workers.dev`. The alias
+  is reused on every push to the same PR, so the URL in the PR comment never goes
+  stale.
+
+  Because the Worker runs with `workers_dev = false`, Cloudflare's one-time opt-in
+  change left Preview URLs disabled on the live Worker, and a `versions upload` does
+  not flip that Worker-level setting (only a deploy/dashboard/API call does). So this
+  action first ensures Preview URLs are enabled via the Workers Script Subdomain API
+  (`previews_enabled: true`, `enabled: false` so the production workers.dev route
+  stays off). This is idempotent and does not deploy code or change production
+  routing; production is served via a custom-domain Worker route, which is
+  independent of the workers.dev subdomain toggle.
+
+inputs:
+  cloudflare-api-token:
+    description: Cloudflare API token (needs Workers Scripts:Edit; the same token used for production deploys).
+    required: true
+  cloudflare-account-id:
+    description: Cloudflare account ID.
+    required: true
+  pr-number:
+    description: PR number, used for the `pr-<N>` preview alias.
+    required: true
+
+outputs:
+  preview-url:
+    description: The preview alias URL (empty if it could not be parsed from wrangler output).
+    value: ${{ steps.parse.outputs.preview-url }}
+  deploy-output:
+    description: Wrangler stdout (ANSI-stripped, last 30 lines).
+    value: ${{ steps.parse.outputs.deploy-output }}
+  deploy-stderr:
+    description: Wrangler stderr.
+    value: ${{ steps.wrangler.outputs.command-stderr }}
+
+runs:
+  using: composite
+  steps:
+    - name: Build Hugo site (preview)
+      uses: ./.github/actions/hugo-build
+      with:
+        hugo-environment: preview
+
+    - name: Ensure Preview URLs are enabled
+      shell: bash
+      env:
+        CF_API_TOKEN: ${{ inputs.cloudflare-api-token }}
+        CF_ACCOUNT_ID: ${{ inputs.cloudflare-account-id }}
+      run: |
+        set -euo pipefail
+
+        # Worker/script name comes from wrangler.toml (single source of truth)
+        # so this never drifts from the production worker name.
+        script="$(grep -E '^name[[:space:]]*=' wrangler.toml | head -n1 \
+          | sed -E 's/.*=[[:space:]]*"([^"]+)".*/\1/')"
+        if [ -z "$script" ]; then
+          echo "::error::Could not read worker name from wrangler.toml"
+          exit 1
+        fi
+
+        # Enable Preview URLs without enabling the production workers.dev route:
+        #   previews_enabled=true  -> version preview URLs are served
+        #   enabled=false          -> no production *.workers.dev route (we use a
+        #                             custom-domain Worker route instead)
+        # Idempotent: re-POSTing the same settings is a no-op.
+        url="https://api.cloudflare.com/client/v4/accounts/${CF_ACCOUNT_ID}/workers/scripts/${script}/subdomain"
+        # `|| true` + `--retry` so a transient transport failure (DNS/reset)
+        # falls through to the warning branch below instead of aborting the
+        # whole step under `set -e`. HTTP 4xx/5xx already return 0 under -sS.
+        resp="$(curl -sS --retry 3 -X POST "$url" \
+          -H "Authorization: Bearer ${CF_API_TOKEN}" \
+          -H "Content-Type: application/json" \
+          --data '{"enabled":false,"previews_enabled":true}' || true)"
+
+        if printf '%s' "$resp" | jq -e '.success == true' >/dev/null 2>&1; then
+          echo "Preview URLs enabled for '$script' (production workers.dev route left disabled)."
+        else
+          # Most likely cause: the account has no registered workers.dev
+          # subdomain (an account-level, one-time setup). Surface it loudly but
+          # don't hard-fail: the upload still runs and the URL-parse step will
+          # post a no-URL warning comment, so the PR shows actionable signal.
+          errs="$(printf '%s' "$resp" | jq -r '.errors // [] | map("\(.code): \(.message)") | join("; ")' 2>/dev/null || true)"
+          echo "::warning::Could not enable Preview URLs for '$script': ${errs:-$resp}. If this is a 'workers.dev subdomain' error, register one for the account (account-level, one time) and re-run."
+        fi
+
+    - name: Upload preview version
+      id: wrangler
+      uses: cloudflare/wrangler-action@da0e0dfe58b7a431659754fdf3f186c529afbe65 # v3
+      with:
+        apiToken: ${{ inputs.cloudflare-api-token }}
+        accountId: ${{ inputs.cloudflare-account-id }}
+        # Pin wrangler so `--preview-alias` (a recent flag) is always available.
+        wranglerVersion: "4.100.0"
+        # `versions upload` stages a new version without promoting it to the
+        # production route; `--preview-alias` gives it a stable, PR-scoped URL.
+        command: versions upload --preview-alias pr-${{ inputs.pr-number }}
+
+    - name: Parse preview URL
+      id: parse
+      # Run even if the upload step failed, so the workflow's failure comment
+      # still gets the captured wrangler output (deploy-output) rather than an
+      # empty section.
+      if: always()
+      shell: bash
+      env:
+        STDOUT: ${{ steps.wrangler.outputs.command-output }}
+        STDERR: ${{ steps.wrangler.outputs.command-stderr }}
+        PR_NUMBER: ${{ inputs.pr-number }}
+      run: |
+        set -euo pipefail
+
+        # Combine streams (wrangler prints the URL to stdout, but be tolerant)
+        # and strip ANSI colour codes so the grep/regex below is reliable.
+        combined="$(printf '%s\n%s\n' "$STDOUT" "$STDERR" | sed 's/\x1b\[[0-9;]*m//g')"
+
+        # Match only the PR-scoped alias URL. We deliberately do NOT fall back to
+        # a generic *.workers.dev match: at the pinned wrangler version the alias
+        # line is always present, and a generic match would grab the per-version
+        # preview URL, which goes stale on the next push and would silently
+        # contradict the "URL never goes stale" contract. No alias match means a
+        # real misconfig, so surface it as the empty-URL warning instead.
+        url="$(printf '%s\n' "$combined" \
+          | grep -oE "https://pr-${PR_NUMBER}-[a-z0-9.-]+\.workers\.dev" \
+          | head -n1 || true)"
+
+        if [ -z "$url" ]; then
+          echo "::warning::Could not parse a pr-${PR_NUMBER} preview URL from wrangler output. Preview URLs are auto-enabled by the prior step, so the likely cause is the account having no registered workers.dev subdomain (account-level, one-time setup)."
+        else
+          echo "Preview URL: $url"
+        fi
+
+        # Randomized heredoc delimiter so a literal 'GHEOF' line in wrangler
+        # output can't terminate the block early and corrupt step outputs.
+        delim="GHEOF_$(openssl rand -hex 8)"
+        {
+          echo "preview-url=$url"
+          echo "deploy-output<<$delim"
+          printf '%s\n' "$combined" | tail -30
+          echo "$delim"
+        } >> "$GITHUB_OUTPUT"
