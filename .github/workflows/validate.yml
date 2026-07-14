@@ -220,8 +220,8 @@ jobs:
               ERRORS="${ERRORS}Missing tech-tags: $name\n"
             fi
           done
-          # Services: numbered-steps-wrapper in every page
-          for f in public/services/*/index.html; do
+          # Services and small business: numbered-steps-wrapper in every page
+          for f in public/services/*/index.html public/small-business/*/index.html; do
             name=$(basename "$(dirname "$f")")
             if ! grep -q 'numbered-steps-wrapper' "$f"; then
               ERRORS="${ERRORS}Missing numbered-steps-wrapper: $name\n"
@@ -237,6 +237,9 @@ jobs:
           fi
           if ! grep -q 'data-reveal-stagger' public/case-studies/index.html; then
             ERRORS="${ERRORS}Missing data-reveal-stagger on case-studies list\n"
+          fi
+          if ! grep -q 'data-reveal-stagger' public/small-business/index.html; then
+            ERRORS="${ERRORS}Missing data-reveal-stagger on small-business list\n"
           fi
           if [ -n "$ERRORS" ]; then
             printf '%b' "$ERRORS"
@@ -480,8 +483,8 @@ jobs:
             const allPassed = fail === '0' && skip === '0';
 
             const banner = allPassed
-              ? '✅ **All checks passed** — comment `deploy` to deploy and merge.'
-              : `❌ **${fail} Failure(s)** — please review the details below. All checks must pass before this PR can be merged.`;
+              ? '✅ **All checks passed**. Comment `deploy` to deploy and merge.'
+              : `❌ **${fail} Failure(s)**. Please review the details below. All checks must pass before this PR can be merged.`;
 
             const status = (code, skipCondition) => {
               if (skipCondition) return '⏭️';

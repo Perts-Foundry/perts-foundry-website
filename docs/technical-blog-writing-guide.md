@@ -207,11 +207,11 @@ overrides this to match the service and case study page convention.
 
 The `showDate` setting has three relevant layers (the archetype no longer participates):
 
-1. **Global:** `config/_default/params.toml` sets `showDate = false` under `[article]`. This is the site-wide default for content types that do not override (services and case studies).
+1. **Global:** `config/_default/params.toml` sets `showDate = false` under `[article]`. This is the site-wide default for content types that do not override (services, case studies, and small-business pages).
 2. **Section cascade:** `content/blog/_index.md` sets `showDate: true` via cascade (along with `showAuthor: false`, `showReadingTime: false`, `showHero: true`, `heroStyle: basic`). This is the effective default for every blog post and overrides the global setting.
 3. **Per-post:** Individual posts inherit `showDate: true` from the cascade. Do not include `showDate: true` in individual post front matter (it is redundant). Only set `showDate: false` if you specifically want to hide the date on one post.
 
-The blog section displays dates because the date field doubles as the publication signal for the biweekly scheduled-publish workflow; hiding it would defeat the cadence. Services and case studies retain the hidden-date convention because their currency is not time-bound.
+The blog section displays dates because the date field doubles as the publication signal for the biweekly scheduled-publish workflow; hiding it would defeat the cadence. Services, case studies, and small-business pages retain the hidden-date convention because their currency is not time-bound.
 
 ### Featured Images
 

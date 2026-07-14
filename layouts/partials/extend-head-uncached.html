@@ -44,7 +44,9 @@
     "DevOps", "Cloud Infrastructure", "CI/CD", "Kubernetes",
     "Terraform", "AWS", "GCP", "Infrastructure as Code",
     "DevSecOps", "FinOps", "AI-Augmented Engineering",
-    "AI Code Review", "AI Developer Tools"
+    "AI Code Review", "AI Developer Tools",
+    "Website Design", "Website Hosting", "IT Support",
+    "Business Systems Integration", "Business Automation"
   ],
   "contactPoint": {
     "@type": "ContactPoint",
@@ -55,8 +57,9 @@
 </script>
 {{- end }}
 
-{{/* Service JSON-LD on individual service pages */}}
-{{- if and (eq .Section "services") (eq .Kind "page") }}
+{{/* Service JSON-LD on individual service and small-business pages */}}
+{{- if and (in (slice "services" "small-business") .Section) (eq .Kind "page") }}
+{{- $serviceTypeDefaults := dict "services" "DevOps Consulting" "small-business" "Small Business IT Services" }}
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -68,7 +71,13 @@
     "name": {{ site.Title | jsonify | safeJS }},
     "url": "{{ site.Home.Permalink }}"
   },
-  "serviceType": {{ with .Params.serviceType }}{{ . | jsonify | safeJS }}{{ else }}"DevOps Consulting"{{ end }},
+  "serviceType": {{ .Params.serviceType | default (index $serviceTypeDefaults .Section) | jsonify | safeJS }},
+  {{- if eq .Section "small-business" }}
+  "audience": {
+    "@type": "Audience",
+    "audienceType": "Small businesses"
+  },
+  {{- end }}
   "url": "{{ .Permalink }}"
 }
 </script>

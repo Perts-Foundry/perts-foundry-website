@@ -9,6 +9,11 @@
   weight = 10
 
 [[main]]
+  name = "Small Business"
+  pageRef = "small-business"
+  weight = 15
+
+[[main]]
   name = "Case Studies"
   pageRef = "case-studies"
   weight = 20

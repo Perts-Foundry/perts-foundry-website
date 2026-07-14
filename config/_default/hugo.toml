@@ -14,10 +14,12 @@ enableGitInfo = true
     blog = "/blog/:slug/"
     services = "/services/:slug/"
     case-studies = "/case-studies/:slug/"
+    small-business = "/small-business/:slug/"
   [permalinks.section]
     blog = "/blog/"
     services = "/services/"
     case-studies = "/case-studies/"
+    small-business = "/small-business/"
 
 [sitemap]
   changefreq = ""

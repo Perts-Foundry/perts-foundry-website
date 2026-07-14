@@ -58,6 +58,23 @@
       "url": "http://localhost:8080/services/agile-coaching/",
       "ignore": ["color-contrast"]
     },
+    "http://localhost:8080/small-business/",
+    {
+      "url": "http://localhost:8080/small-business/website-design/",
+      "ignore": ["color-contrast"]
+    },
+    {
+      "url": "http://localhost:8080/small-business/site-care-hosting/",
+      "ignore": ["color-contrast"]
+    },
+    {
+      "url": "http://localhost:8080/small-business/it-support/",
+      "ignore": ["color-contrast"]
+    },
+    {
+      "url": "http://localhost:8080/small-business/integrations-automation/",
+      "ignore": ["color-contrast"]
+    },
     "http://localhost:8080/blog/",
     {
       "url": "http://localhost:8080/blog/ai-accelerated-terraform-migrations/",
