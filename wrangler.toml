@@ -3,6 +3,10 @@ main = "src/worker.js"
 compatibility_date = "2026-03-07"
 compatibility_flags = ["nodejs_compat"]
 workers_dev = false
+# Enables per-version preview URLs (wrangler versions upload --preview-alias)
+# used by the PR preview workflow. Does not enable the production workers.dev
+# route (that stays off via workers_dev = false). See .github/workflows/preview.yml.
+preview_urls = true
 
 [assets]
 directory = "./public"
