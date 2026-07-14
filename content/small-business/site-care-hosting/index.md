@@ -44,6 +44,10 @@ One point of contact for everything that keeps your website healthy. We host it,
 
 {{< /steps >}}
 
+**Who you'll work with:** You deal directly with Seth, the founder, start to finish. Not a call center, not a rotating cast of contractors, just one person who learns your business and stays accountable for the work.
+
+**Need the site built first?** Start with [Website Design & Build](/small-business/website-design/).
+
 **Ready to talk?** [Tell us what you need](/contact/) and we'll get back to you.
 
 {{< faqs >}}

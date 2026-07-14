@@ -44,6 +44,10 @@ Your tools connected so information flows on its own. Form submissions land in t
 
 {{< /steps >}}
 
+**Who you'll work with:** You deal directly with Seth, the founder, start to finish. Not a call center, not a rotating cast of contractors, just one person who learns your business and stays accountable for the work.
+
+**Need the accounts and tools set up first?** Start with [IT Support & Tooling Setup](/small-business/it-support/).
+
 **Ready to talk?** [Tell us what you need](/contact/) and we'll get back to you.
 
 {{< faqs >}}

@@ -14,7 +14,7 @@ faqs:
   - question: "Should we use Google or Microsoft?"
     answer: "It depends on what your business already uses and what your team is comfortable with. Both are excellent. We help you pick one, set it up properly, and avoid paying for both."
   - question: "Can you help when something breaks later?"
-    answer: "Yes. Once your setup is documented, most problems are quick to diagnose, and you have one number to call instead of a different support line for every product."
+    answer: "Yes. Once your setup is documented, most problems are quick to diagnose, and you have one place to reach us instead of a different support line for every product."
 ---
 
 ## What You're Dealing With
@@ -41,9 +41,13 @@ A tidy technology setup that the business actually owns. Professional email on y
 1. **Inventory**: we map every account, domain, device, and subscription the business touches
 2. **Fix**: we transfer ownership, close gaps, and set up what is missing
 3. **Document**: you get a plain-English record of the whole setup and how to access it
-4. **Support**: when something breaks or someone new joins, you have one place to call
+4. **Support**: when something breaks or someone new joins, you have one place to reach us
 
 {{< /steps >}}
+
+**Who you'll work with:** You deal directly with Seth, the founder, start to finish. Not a call center, not a rotating cast of contractors, just one person who learns your business and stays accountable for the work.
+
+**Want those tools working together?** See [Integrations & Automation](/small-business/integrations-automation/).
 
 **Ready to talk?** [Tell us what you need](/contact/) and we'll get back to you.
 

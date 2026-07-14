@@ -1,5 +1,5 @@
 ---
-title: "Services"
+title: "Consulting"
 description: "DevOps, cloud infrastructure, and AI-augmented engineering consulting services."
 orderByWeight: true
 cascade:

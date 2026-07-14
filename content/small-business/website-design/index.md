@@ -44,6 +44,10 @@ We design and build a website that presents your business the way you would pres
 
 {{< /steps >}}
 
+**Who you'll work with:** You deal directly with Seth, the founder, start to finish. Not a call center, not a rotating cast of contractors, just one person who learns your business and stays accountable for the work.
+
+**Once it's live:** keep it healthy and current with [Site Care & Hosting](/small-business/site-care-hosting/).
+
 **Ready to talk?** [Tell us what you need](/contact/) and we'll get back to you.
 
 {{< faqs >}}
