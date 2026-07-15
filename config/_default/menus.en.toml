@@ -4,9 +4,14 @@
   weight = 1
 
 [[main]]
-  name = "Services"
+  name = "Consulting"
   pageRef = "services"
   weight = 10
+
+[[main]]
+  name = "Small Business"
+  pageRef = "small-business"
+  weight = 15
 
 [[main]]
   name = "Case Studies"

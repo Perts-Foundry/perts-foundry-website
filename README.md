@@ -6,7 +6,7 @@
 
 Source code for [pertsfoundry.com](https://pertsfoundry.com), the portfolio and credibility site for Perts Foundry LLC, a DevOps, Cloud Engineering, and Automation consultancy.
 
-It is a Hugo static site (Blowfish theme) served from Cloudflare Workers. Everything is static HTML except a single serverless endpoint, `POST /api/contact`, which validates contact submissions, checks a Cloudflare Turnstile challenge, rate-limits, and relays the message via Resend. The content (case studies, blog posts, service pages) is the product; the engineering scaffolding around it (CI gates, accessibility enforcement, scheduled publishing) is a working sample of the consultancy's own practices.
+It is a Hugo static site (Blowfish theme) served from Cloudflare Workers. Everything is static HTML except a single serverless endpoint, `POST /api/contact`, which validates contact submissions, checks a Cloudflare Turnstile challenge, rate-limits, and relays the message via Resend. The content (case studies, blog posts, service and small-business pages) is the product; the engineering scaffolding around it (CI gates, accessibility enforcement, scheduled publishing) is a working sample of the consultancy's own practices.
 
 **Status:** Live in production at <https://pertsfoundry.com>, maintained on `main`.
 
@@ -16,7 +16,7 @@ It is a Hugo static site (Blowfish theme) served from Cloudflare Workers. Everyt
 |---|---|
 | **What** | Marketing and portfolio website for a DevOps / Cloud / Automation consultancy |
 | **Stack** | Hugo 0.157.0 (extended) + Blowfish v2 theme, Cloudflare Worker (`src/worker.js`), Resend, Cloudflare Turnstile |
-| **Content** | 15 blog posts, 12 case studies, 10 service pages (each a Hugo page bundle) |
+| **Content** | 15 blog posts, 12 case studies, 10 service pages, 4 small-business pages (each a Hugo page bundle) |
 | **Build** | `hugo --gc --minify --cleanDestinationDir` (matches CI) |
 | **Tests** | 43 Worker tests via Vitest (`npx vitest run`) |
 | **CI** | 11 validation checks gate every PR (see [Validation suite](#validation-suite)) |
@@ -168,7 +168,7 @@ Every PR runs 11 checks (`.github/workflows/validate.yml`). All must pass before
 | Worker unit tests | `vitest` | The 43 contact-API tests. |
 | Site compilation | `hugo` | The production build succeeds. |
 | Homepage smoke test | shell `grep` | Section IDs, carousel DOM IDs, data bindings, and section order in `public/index.html`. |
-| Inner page smoke test | shell `grep` | Tech tags on every case study, numbered steps on every service page, cert badges on the about page, stagger attributes on list pages. |
+| Inner page smoke test | shell `grep` | Tech tags on every case study, numbered steps on every service and small-business page, cert badges on the about page, stagger attributes on list pages. |
 | Link & image validation | `htmltest` | Internal links and image references in `public/`. |
 | Accessibility | `pa11y-ci` | WCAG 2.1 AA via axe-core against the built site. |
 | Secret detection | `gitleaks` | Known secret patterns across full git history. |
@@ -191,20 +191,20 @@ Deploys spend on Cloudflare Workers and send live email through Resend. Full rul
 
 ## Content authoring
 
-Content lives under `content/` as page bundles (a directory containing `index.md` plus a `featured.jpg`). Scaffold new pages from the archetypes:
+Content lives under `content/` as page bundles (a directory containing `index.md`, plus a `featured.jpg` in most sections). Scaffold new pages from the archetypes:
 
 ```bash
 hugo new content blog/<slug>/index.md          # uses archetypes/blog.md
 hugo new content case-studies/<slug>/index.md  # uses archetypes/case-studies.md
 ```
 
-Front matter uses YAML delimiters. Blog and case-study pages need a `featured.jpg`; case studies and services use a `weight` field for ordering. Detailed conventions (tags, permalinks, scheduled publishing, cross-linking policy, shortcodes) are in [CLAUDE.md](CLAUDE.md).
+Front matter uses YAML delimiters. Blog and case-study pages need a `featured.jpg`; case studies, services, and small-business pages use a `weight` field for ordering. Detailed conventions (tags, permalinks, scheduled publishing, cross-linking policy, shortcodes) are in [CLAUDE.md](CLAUDE.md).
 
 ## Project structure
 
 ```
 config/      Hugo config (hugo.toml, params.toml, menus) + production/development overrides
-content/     Markdown content: about, blog, case-studies, services, contact, legal pages
+content/     Markdown content: about, blog, case-studies, services, small-business, contact, legal pages
 data/        Structured TOML (metrics, technologies, certifications, process) for the homepage
 assets/css/  9 numbered CSS modules in modules/, loaded in order via a head.html override
 layouts/     Hugo layout overrides, shortcodes, homepage sub-partials
@@ -246,6 +246,6 @@ This repository is public. Keep secrets out of it: secret values never belong in
 ## License
 
 - **Code** (templates, Worker, scripts, CSS, workflows): [MIT](LICENSE)
-- **Content** (case studies, blog posts, service pages, data, images): [CC BY 4.0](LICENSE-CONTENT)
+- **Content** (case studies, blog posts, service and small-business pages, data, images): [CC BY 4.0](LICENSE-CONTENT)
 
 Maintained by [Perts Foundry LLC](https://pertsfoundry.com).
