@@ -12,9 +12,9 @@ faqs:
   - question: "What if I already have a website?"
     answer: "We can rebuild it, refresh it, or move it somewhere better. We start by looking at what you have and telling you honestly what is worth keeping."
   - question: "Will I be able to update it myself?"
-    answer: "If you want to. We set things up so routine changes are simple, show you how to make them, and stay available for anything you would rather hand off."
-  - question: "Who owns the website when it's done?"
-    answer: "You do. The domain, the content, and every account behind the site are registered in your name, and we hand over all credentials and documentation at launch."
+    answer: "However suits you. Some owners like to make routine changes themselves, so we set the site up to keep that simple and show you how. Others would rather not log in at all and leave everything to us. We can be as hands-on or hands-off as you want, and you can change that balance at any time."
+  - question: "How involved do I need to be after launch?"
+    answer: "Entirely up to you. We can hand over the keys and step back, stay on to handle updates and changes, or land somewhere in between. Either way the domain, the content, and every account are registered in your name, so nothing is locked to us and the site is always yours to take elsewhere."
 ---
 
 ## What You're Dealing With
