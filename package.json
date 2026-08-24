@@ -1,12 +1,12 @@
 {
   "private": true,
   "devDependencies": {
-    "@cloudflare/vitest-pool-workers": "^0.21.3",
+    "@cloudflare/vitest-pool-workers": "^0.22.0",
     "markdownlint-cli2": "^0.23.0",
     "pa11y-ci": "^4.1.1",
     "prettier": "^3.9.5",
     "serve": "^14.2.6",
     "sharp": "^0.35.3",
-    "vitest": "^4.1.10"
+    "vitest": "^4.1.11"
   }
 }
