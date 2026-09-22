@@ -32,7 +32,7 @@ The dev server is not needed for non-visual changes (CI config, worker code, doc
 
 ## PR Validation Checks
 
-All ten checks must pass before a PR can merge. Run these locally before pushing:
+All eleven checks must pass before a PR can merge. Run these locally before pushing:
 
 ### 1. Vitest (Worker unit tests)
 
@@ -117,6 +117,14 @@ done
 Verifies structural elements on inner pages: `tech-tags` in every case study, `numbered-steps-wrapper` in every service and small-business page, `certification-badges` on the about page, and `data-reveal-stagger` on list pages (services, case studies, small-business).
 Runs automatically in CI after the Hugo build.
 
+### 11. Search Console tooling tests
+
+Runs the unit tests for the read-only `search-console` skill's deterministic tooling (capture schema, checks, report, cli, baseline, sitemap, known-surfaces, contract). Config: none beyond Node's built-in test runner. Fetch is injected and refuses; no browser and no network access.
+
+```bash
+npm run search-console:test
+```
+
 ## Project Structure
 
 ```
@@ -135,6 +143,8 @@ archetypes/          # Content templates (blog.md, case-studies.md, default.md)
 docs/                # Active project documentation (audit, research, guides)
 .claude/commands/    # Claude Code slash commands (generate-services, generate-case-studies, generate-blog)
 .claude/commands/shared/  # Shared specs referenced by multiple commands (featured-image-processing, anonymization-spec, portfolio-repo-layout)
+.claude/skills/      # Claude Code skills (search-console: Google Search Console audit)
+scripts/search-console/  # Deterministic tooling for the search-console skill (review.mjs, lib/*.mjs, test/*.test.mjs)
 .github/actions/     # Composite actions: hugo-build (shared Hugo build), hugo-deploy (build+deploy to production), preview-deploy (build+versions upload for PR previews)
 .github/scripts/     # Shared JS helpers for workflow scripts (retry logic)
 .github/workflows/   # CI: validate.yml (PR checks), preview.yml (per-PR preview deploy), deploy.yml (PR comment deploy), dependabot-auto-deploy.yml (auto-deploy Dependabot PRs), scheduled-deploy.yml (cron rebuild)
@@ -400,13 +410,23 @@ Security headers are applied at the Cloudflare edge via HTTP Response Header Mod
 
 Cloudflare Web Analytics is enabled via zone-based auto-injection in the Cloudflare dashboard (Web Analytics > pertsfoundry.com), with EU visitor data excluded. No code configuration is involved: Cloudflare's edge rewrites HTML responses to inject the beacon script before they reach the browser, so `curl` will not show the beacon in the HTML even though the dashboard still records real-browser traffic. The Blowfish theme has no native Cloudflare analytics integration. The commented `[analytics.cloudflare]` block in `config/production/params.toml` is dead config that nothing reads; it is kept only as an explanatory comment. If zone-based injection ever stops working (e.g. a Workers config change), fall back to a JS beacon added via a `layouts/partials/extend-head.html` partial.
 
+## Search Console
+
+The `search-console` skill audits Google Search Console for pertsfoundry.com and reads its reports
+read-only, through the operator's logged-in browser in an attended session. It writes nothing to the
+repo except a capture and run record outside version control. Its browser consent STOP and its Google
+sign-in STOP are in `.claude/skills/search-console/SKILL.md`, so read that before opening Search
+Console. Commands, the capture schema, the check table and the state dir are in
+`scripts/search-console/README.md`. Captures and run files hold live property data and search query
+text, and never enter the repo.
+
 ## Git Workflow
 
 - Main branch: `main`
 - Feature branches merge via PR after all validation checks pass
 - Deployment is triggered by commenting `deploy` on a PR (not automatic on merge)
 - **PR previews (`preview.yml`):** on every push to a non-draft, same-repo, non-Dependabot PR, the site is built (`HUGO_ENVIRONMENT=preview`) and uploaded as a non-production Cloudflare Worker *version* via `wrangler versions upload --preview-alias pr-<N>` (see `.github/actions/preview-deploy`). This stages the version behind a stable per-PR URL (`https://pr-<N>-perts-foundry-website.<subdomain>.workers.dev`) **without** promoting it to the live route, so production is untouched. The URL is surfaced as a sticky `<!-- preview -->` PR comment (updated in place on each push); on PR close/merge a `cleanup` job rewrites the comment to a terminal state (no Cloudflare teardown, as preview aliases are superseded, not deletable). Requires `preview_urls = true` in `wrangler.toml`; the action also idempotently enables preview URLs via the Workers Script Subdomain API without turning on the production workers.dev route. The preview is a version of the *same* worker script, so it shares the script's `RESEND_API_KEY`/`TURNSTILE_SECRET_KEY` secrets (submitting the contact form from a preview sends a real email). The Hugo build is shared with production via the `hugo-build` composite action; only the environment (`preview` vs `production`) and the wrangler command (`versions upload` vs `deploy`) differ. Uses a per-PR concurrency group separate from `deploy-production`, so preview churn never serializes behind or cancels a production deploy. `preview.yml` uses no GitHub environment (the Cloudflare secrets are repo-level).
-- Dependabot PRs that pass all 10 validation checks are auto-deployed and merged by `dependabot-auto-deploy.yml` (no `deploy` comment needed). The workflow's `workflow_run` trigger is scoped to `branches: ["dependabot/**"]`, so non-Dependabot Validate completions do not appear in the Actions tab. Auto-deploy is refused (with a skip comment posted on the PR) when any of the following are true: HEAD commit signature is unverified, HEAD commit author is not `dependabot[bot]`, the PR touches `.github/workflows/`, `.github/actions/`, or `.github/scripts/`, the base branch advanced since the PR was built, the PR contains a major-version bump without the `auto-deploy-major` label, or the PR has the `manual-review` label. To prevent auto-deploy manually, add the `manual-review` label before validation completes.
+- Dependabot PRs that pass all 11 validation checks are auto-deployed and merged by `dependabot-auto-deploy.yml` (no `deploy` comment needed). The workflow's `workflow_run` trigger is scoped to `branches: ["dependabot/**"]`, so non-Dependabot Validate completions do not appear in the Actions tab. Auto-deploy is refused (with a skip comment posted on the PR) when any of the following are true: HEAD commit signature is unverified, HEAD commit author is not `dependabot[bot]`, the PR touches `.github/workflows/`, `.github/actions/`, or `.github/scripts/`, the base branch advanced since the PR was built, the PR contains a major-version bump without the `auto-deploy-major` label, or the PR has the `manual-review` label. To prevent auto-deploy manually, add the `manual-review` label before validation completes.
 - **Branch-protection coupling (`main`):** the auto-deploy workflow squash-merges Dependabot PRs using `GITHUB_TOKEN` (as `github-actions[bot]`). If branch protection is added to `main` requiring reviews, additional status checks beyond Validate, or CODEOWNERS approval, auto-deploy will fail at the merge step. The deploy will still be live; the PR must be merged manually. Before enabling branch protection, either (a) grant `github-actions[bot]` a bypass role, (b) use a GitHub App / PAT with sufficient scope for the merge step, or (c) accept the manual-merge fallback.
 - **Production environment:** the `production` environment in GitHub repo settings is attached at job level in all three production deploy workflows (`deploy.yml`, `scheduled-deploy.yml`, `dependabot-auto-deploy.yml`); `preview.yml` intentionally uses none (its Cloudflare secrets are repo-level, so no environment protection applies to it). It currently has no required reviewers (Dependabot auto-deploy must not stall on approval). If reviewers are added later, auto-deploy will hang on every Dependabot PR. Consider adding a deployment-branch policy restricting the `production` environment to `main` and `dependabot/**` so Cloudflare secrets are not accessible from arbitrary feature branches.
 - Scheduled deploys run on the 1st and 15th of each month at 9 AM ET via `scheduled-deploy.yml`, rebuilding from `main` to publish any content whose `publishDate` has passed

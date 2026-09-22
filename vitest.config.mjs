@@ -8,6 +8,6 @@ export default defineConfig({
     }),
   ],
   test: {
-    exclude: ["**/node_modules/**", "**/.claude/**"],
+    exclude: ["**/node_modules/**", "**/.claude/**", "scripts/**"],
   },
 });
