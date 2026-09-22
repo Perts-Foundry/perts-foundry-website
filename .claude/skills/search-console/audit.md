@@ -2,10 +2,10 @@
 
 The surfaces a run visits, in visit order, with what healthy and failing look like, which checks
 each feeds, who fixes it, and which capture report it fills: 25 surfaces. Anchor text and the
-left-navigation shape are as observed on the live property on 2026-09-22 (see the plan's "Live
-check of the property" section); a day-one property shows "Processing data" or "No data" almost
-everywhere, and that is `not-ready`, not a failure. Where a surface was not covered by that walk,
-its entry says so plainly: not yet observed on this property; the first live run records it.
+left-navigation shape are as observed on a live walk of pertsfoundry.com's Search Console property
+on 2026-09-22; a day-one property shows "Processing data" or "No data" almost everywhere, and that
+is `not-ready`, not a failure. Where a surface was not covered by that walk, its entry says so
+plainly: not yet observed on this property; the first live run records it.
 
 Severities are named by their constant in `scripts/search-console/lib/checks.mjs`
 (`SEVERITY['<check id>']`, or `REASON_SEVERITY['<slug>']` for the page indexing reasons), never as

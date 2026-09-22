@@ -119,7 +119,7 @@ Runs automatically in CI after the Hugo build.
 
 ### 11. Search Console tooling tests
 
-Runs the unit tests for the read-only `search-console` skill's deterministic tooling (capture schema, checks, report, cli, baseline, sitemap, known-surfaces, contract). Config: none beyond Node's built-in test runner. Fetch is injected and refuses; no browser and no network access.
+Runs the unit tests for the read-only `search-console` skill's deterministic tooling (capture schema, normalise, checks, report, cli, baseline, sitemap, known-surfaces, template, contract). Config: none beyond Node's built-in test runner. Fetch is injected and refuses; no browser and no network access.
 
 ```bash
 npm run search-console:test
