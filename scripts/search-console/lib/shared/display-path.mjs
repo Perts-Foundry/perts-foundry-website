@@ -17,8 +17,8 @@ import path from 'node:path';
 /**
  * `$HOME` collapsed to `~`, or the path unchanged when it lies outside the home directory.
  *
- * The comparison is a PATH match, not a prefix match: `/home/tester-other/x` is not inside
- * `/home/tester`, and collapsing it would rewrite an unrelated path. An empty or unknown home
+ * The comparison is a PATH match, not a prefix match: `/srv/app-other/x` is not inside
+ * `/srv/app`, and collapsing it would rewrite an unrelated path. An empty or unknown home
  * collapses nothing, rather than collapsing everything.
  *
  * @param {string} absolute
