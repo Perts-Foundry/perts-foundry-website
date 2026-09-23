@@ -7,7 +7,7 @@
     "prettier": "^3.9.8",
     "serve": "^14.2.6",
     "sharp": "^0.35.4",
-    "vitest": "^4.1.11"
+    "vitest": "^5.0.1"
   },
   "scripts": {
     "search-console:test": "node --test scripts/search-console/test/*.test.mjs"
