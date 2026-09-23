@@ -375,6 +375,35 @@ jobs:
             echo "GHEOF"
           } >> "$GITHUB_OUTPUT"
 
+      # ── Search Console tooling tests ───────────────────────────
+      # `scripts/search-console/` is the deterministic half of the read-only
+      # search-console skill. Its capture schema is the guard against
+      # transcription slips and its contract test holds the skill docs to the
+      # code, so both are gated here. Unit-only; fetch is injected and refuses;
+      # no browser and no network access.
+      - name: Search Console tests
+        id: search-console
+        run: |
+          set +e
+          OUTPUT=$(npm run search-console:test 2>&1)
+          EXIT_CODE=$?
+          echo "$OUTPUT"
+
+          # `node --test <glob>` exits 0 when the glob matches nothing, so
+          # assert the suite actually ran.
+          TESTS_RUN=$(printf '%s\n' "$OUTPUT" | grep -oE '\btests [0-9]+' | tail -1 | grep -oE '[0-9]+')
+          if [ "${TESTS_RUN:-0}" -lt 1 ]; then
+            echo "::error::search-console suite reported ${TESTS_RUN:-0} tests. The glob in the search-console:test script has probably stopped matching."
+            EXIT_CODE=1
+          fi
+
+          echo "exit_code=$EXIT_CODE" >> "$GITHUB_OUTPUT"
+          {
+            echo "output<<GHEOF"
+            echo "$OUTPUT" | sed 's/\x1b\[[0-9;]*m//g' | tail -30
+            echo "GHEOF"
+          } >> "$GITHUB_OUTPUT"
+
       # ── actionlint ──────────────────────────────────────────────
       - name: Run actionlint
         id: actionlint
@@ -407,6 +436,7 @@ jobs:
           EXIT_TRUFFLEHOG: ${{ steps.trufflehog.outputs.exit_code }}
           EXIT_MDLINT: ${{ steps.markdownlint.outputs.exit_code }}
           EXIT_PRETTIER: ${{ steps.prettier.outputs.exit_code }}
+          EXIT_SEARCH_CONSOLE: ${{ steps.search-console.outputs.exit_code }}
           EXIT_ACTIONLINT: ${{ steps.actionlint.outputs.exit_code }}
         run: |
           PASS=0
@@ -424,6 +454,7 @@ jobs:
             "trufflehog:Verified:$EXIT_TRUFFLEHOG"
             "markdownlint:Lint:$EXIT_MDLINT"
             "prettier:Format:$EXIT_PRETTIER"
+            "search-console:SearchConsole:$EXIT_SEARCH_CONSOLE"
             "actionlint:CI:$EXIT_ACTIONLINT"
           )
 
@@ -465,6 +496,7 @@ jobs:
           EXIT_TRUFFLEHOG: ${{ steps.trufflehog.outputs.exit_code }}
           EXIT_MDLINT: ${{ steps.markdownlint.outputs.exit_code }}
           EXIT_PRETTIER: ${{ steps.prettier.outputs.exit_code }}
+          EXIT_SEARCH_CONSOLE: ${{ steps.search-console.outputs.exit_code }}
           EXIT_ACTIONLINT: ${{ steps.actionlint.outputs.exit_code }}
           OUTPUT_VITEST: ${{ steps.vitest.outputs.output }}
           OUTPUT_HUGO: ${{ steps.hugo-build.outputs.output }}
@@ -476,6 +508,7 @@ jobs:
           OUTPUT_TRUFFLEHOG: ${{ steps.trufflehog.outputs.output }}
           OUTPUT_MDLINT: ${{ steps.markdownlint.outputs.output }}
           OUTPUT_PRETTIER: ${{ steps.prettier.outputs.output }}
+          OUTPUT_SEARCH_CONSOLE: ${{ steps.search-console.outputs.output }}
           OUTPUT_ACTIONLINT: ${{ steps.actionlint.outputs.output }}
         with:
           script: |
@@ -509,6 +542,7 @@ jobs:
             const trufflehog = process.env.EXIT_TRUFFLEHOG || '';
             const mdlint = process.env.EXIT_MDLINT || '';
             const prettier = process.env.EXIT_PRETTIER || '';
+            const searchConsole = process.env.EXIT_SEARCH_CONSOLE || '';
             const actionlint = process.env.EXIT_ACTIONLINT || '';
             const htmlSkipped = hugoBuild !== '0';
 
@@ -522,6 +556,7 @@ jobs:
             const trufflehogOutput = process.env.OUTPUT_TRUFFLEHOG || 'No issues found';
             const mdlintOutput = process.env.OUTPUT_MDLINT || 'No issues found';
             const prettierOutput = process.env.OUTPUT_PRETTIER || 'No issues found';
+            const searchConsoleOutput = process.env.OUTPUT_SEARCH_CONSOLE || 'No output';
             const actionlintOutput = process.env.OUTPUT_ACTIONLINT || 'No issues found';
 
             const body = [
@@ -551,6 +586,7 @@ jobs:
               `|:------|:-----|:------:|`,
               `| **Markdown Style** | \`markdownlint\` | ${status(mdlint)} |`,
               `| **Code Formatting** | \`prettier\` | ${status(prettier)} |`,
+              `| **Search Console tooling** | \`search-console:test\` | ${status(searchConsole)} |`,
               `| **Workflow Validation** | \`actionlint\` | ${status(actionlint)} |`,
               '',
               '### Security',
@@ -626,6 +662,14 @@ jobs:
               '',
               '</details>',
               '',
+              '<details><summary><strong>Search Console tooling</strong> (<code>search-console:test</code>)</summary>',
+              '',
+              '```',
+              searchConsoleOutput,
+              '```',
+              '',
+              '</details>',
+              '',
               '<details><summary><strong>Workflow Validation</strong> (<code>actionlint</code>)</summary>',
               '',
               '```',
@@ -688,6 +732,7 @@ jobs:
           EXIT_TRUFFLEHOG: ${{ steps.trufflehog.outputs.exit_code }}
           EXIT_MDLINT: ${{ steps.markdownlint.outputs.exit_code }}
           EXIT_PRETTIER: ${{ steps.prettier.outputs.exit_code }}
+          EXIT_SEARCH_CONSOLE: ${{ steps.search-console.outputs.exit_code }}
           EXIT_ACTIONLINT: ${{ steps.actionlint.outputs.exit_code }}
         run: |
           FAILED=0
@@ -710,6 +755,7 @@ jobs:
           [ "$EXIT_MDLINT" != "0" ] && echo "::error::markdownlint failed" && FAILED=1
           [ "$EXIT_ACTIONLINT" != "0" ] && echo "::error::actionlint failed" && FAILED=1
           [ "$EXIT_PRETTIER" != "0" ] && echo "::error::Prettier found formatting issues" && FAILED=1
+          [ "$EXIT_SEARCH_CONSOLE" != "0" ] && echo "::error::Search Console tooling tests failed" && FAILED=1
           if [ "$FAILED" -eq 1 ]; then
             exit 1
           fi

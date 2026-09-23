@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
+  <url><loc>https://pertsfoundry.com/services/sample-service/</loc><image:image><image:loc>https://cdn.example.test/a.jpg</image:loc></image:image></url>
+  <url><loc>https://pertsfoundry.com/services/sample-service-2/</loc></url>
+  <url><loc>https://pertsfoundry.com/case-studies/sample-case-study/</loc></url>
+  <url><loc>https://pertsfoundry.com/case-studies/sample-case-study-2/</loc></url>
+  <url><loc>https://pertsfoundry.com/small-business/sample-page/</loc></url>
+  <url><loc>https://pertsfoundry.com/small-business/sample-page-2/</loc></url>
+  <url><loc>https://pertsfoundry.com/services/sample-service/</loc></url>
+</urlset>
