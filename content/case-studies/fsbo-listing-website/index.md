@@ -9,7 +9,7 @@ draft: false
 params:
   client: "homeowner selling by owner"
   industry: "Real Estate / For Sale by Owner"
-  challenge: "A homeowner selling without an agent needed a website that could present the property well and serve as the listing's home base."
+  challenge: "A homeowner selling by owner needed a website that could present the property well and serve as the listing's home base."
   result: "The home was listed on the MLS in July 2026 and sold in under three months, with the website as the listing's home base."
 tags:
   - Cloudflare
@@ -18,7 +18,7 @@ tags:
 
 ## The Challenge
 
-A homeowner decided to sell by owner. Without an agent to present the property, the listing needed a home base of its own: a website that showed the house well on any device, worked for every visitor, and was easy for the owner to keep current.
+A homeowner decided to sell by owner, and the listing needed a home base of its own: a website that showed the house well on phones and desktops, met accessibility standards, and let the owner edit the content.
 
 ## Our Approach
 
