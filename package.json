@@ -1,13 +1,13 @@
 {
   "private": true,
   "devDependencies": {
-    "@cloudflare/vitest-pool-workers": "^0.22.0",
+    "@cloudflare/vitest-pool-workers": "^0.23.0",
     "markdownlint-cli2": "^0.24.0",
     "pa11y-ci": "^4.1.1",
     "prettier": "^3.9.9",
     "serve": "^14.2.6",
     "sharp": "^0.35.5",
-    "vitest": "^4.1.11"
+    "vitest": "^5.0.5"
   },
   "scripts": {
     "search-console:test": "node --test scripts/search-console/test/*.test.mjs"
